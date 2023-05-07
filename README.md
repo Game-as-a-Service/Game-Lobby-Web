@@ -10,6 +10,11 @@ The frontend of the Game as a Service lobby.
 3. Docker compose up
 ```
 
+Git Cooperation
+- Branch Name: `feature/ticket-name`
+  - `git checkout -b feature/[ticket-name]`
+- Commit: `feat: ticket-name`
+
 # Contributor
 
 <a href="https://github.com/Game-as-a-Service/Game-Lobby/graphs/contributors">
