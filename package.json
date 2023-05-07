@@ -15,21 +15,6 @@
     "pre-commit": "lint-staged",
     "test": "jest --watch"
   },
-  "lint-staged": {
-    "*.{js,ts,tsx,json,md}": [
-      "prettier --write",
-      "eslint",
-      "git add"
-    ]
-  },
-  "prettier": {
-    "trailingComma": "es5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
     "next": "^13.3.4",
     "react": "^18.2.0",
