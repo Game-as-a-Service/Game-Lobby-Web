@@ -1,5 +1,14 @@
 # Game-Lobby
+
 The frontend of the Game as a Service lobby.
+
+## Getting Started
+
+```bash
+1. Install Docker and Docker compose
+2. Docker compose build
+3. Docker compose up
+```
 
 # Contributor
 

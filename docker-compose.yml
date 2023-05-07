@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.${NODE_ENV}
+    ports:
+      - 3030:3030
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    command: yarn dev
