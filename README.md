@@ -6,14 +6,20 @@ The frontend of the Game as a Service lobby.
 
 ```bash
 1. Install Docker and Docker compose
-2. Docker compose build
-3. Docker compose up
+2. docker compose build
+3. docker compose up
 ```
 
-Git Cooperation
+## Git Cooperation
+
 - Branch Name: `feature/ticket-name`
   - `git checkout -b feature/[ticket-name]`
 - Commit: `feat: ticket-name`
+
+## Naming Convention
+
+- Route: snake-case
+- Components: Pascal Case
 
 # Contributor
 

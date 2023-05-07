@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import Layout from "@/shared/components/layout";
+import Layout from "@/shared/components/Layout";
 import "@/styles/reset.css";
 import "@/styles/global.css";
 

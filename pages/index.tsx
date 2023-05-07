@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { siteTitle } from "@/shared/components/layout";
-import Button from "@/shared/components/button/button";
+import { siteTitle } from "@/shared/components/Layout";
+import Button from "@/shared/components/Button/Button";
 
 export default function Home() {
   return (
