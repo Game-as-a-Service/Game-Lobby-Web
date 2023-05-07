@@ -21,6 +21,17 @@ The frontend of the Game as a Service lobby.
 - Route: snake-case
 - Components: Pascal Case
 
+## Components DoD
+
+1. Test
+2. Implementation
+3. Doc(Storybook) - WIP
+
+## Things to know
+
+1. Atomic Design
+2. MVVM
+
 # Contributor
 
 <a href="https://github.com/Game-as-a-Service/Game-Lobby/graphs/contributors">
