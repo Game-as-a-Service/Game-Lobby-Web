@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --white: #fff;
+    --black: #000;
+    --red: rgb(239 68 68)
+}
+
+.error {
+    color: var(--red);
+}
