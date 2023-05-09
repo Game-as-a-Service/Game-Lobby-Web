@@ -1,50 +1,69 @@
-import { useState } from 'react';
+import { 
+    useState, 
+    useEffect, 
+    PropsWithChildren, 
+    FormEvent, 
+    ChangeEvent 
+} from 'react';
 
 type Props = {
-    name: string
+    name?: string;
+    submit: (name: string) => void;
 }
 
-export default function FormValidation(props: Props) {
+export default function FormValidation({ name = '', submit }: PropsWithChildren<Props>) {
     const [inputValue, setInputValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [errorSpecialCharacter, setErrorSpecialCharacter] = useState('');
     const [count, setCount] = useState(0);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+    useEffect(() => {
+        setInputValue(name);
+    }, [name])
+
+    const limitCharacters = (length: number) => {
         const maxLength = 16;
         const minLength = 4;
+
+        if (length < minLength) return setErrorMessage('請輸入至少 4 個英文字符或 2 個中文字符');
+        if (length > maxLength) return setErrorMessage('請輸入最多 16 個英文字符或 8 個中文字符');
+        
+        setErrorMessage('');
+    }
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
         const length = value
         .split('')
         .map( char => (/[^\x00-\xff]/.test(char) ? 2 : 1))
         .reduce((acc, curr) => acc + curr, 0)
         
-        const isDuplicate = value === props.name
-
         setInputValue(value);
         setCount(length);
-
-        if (length < minLength) return setErrorMessage('請輸入至少 4 個英文字符或 2 個中文字符');
-        if (length > maxLength) return setErrorMessage('請輸入最多 16 個英文字符或 8 個中文字符');
-        if (isDuplicate) return setErrorMessage('暱稱不可重複');
-
-        setErrorMessage('');
+        limitCharacters(length);
     }
 
-    const handleInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleInputKeyUp = (e: FormEvent<HTMLInputElement>) => {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-        if (specialChars.test(inputValue)) setErrorSpecialCharacter('請勿使用特殊字元');
+        if (specialChars.test(inputValue))  setErrorSpecialCharacter('請勿使用特殊字元');
         else setErrorSpecialCharacter('');
+
         if (count === 0) setErrorMessage('');
     }
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const isDuplicate = inputValue === name;
+        if (isDuplicate) return setErrorMessage('暱稱不可重複');
+        if (errorMessage === '') submit(inputValue);
+    }
 
     return (
-        <form className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+        <form className="px-6 py-24 bg-white isolate sm:py-32 lg:px-8" onSubmit={handleSubmit}>
             <div className="col-span-full">
                 <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-900">
-                暱稱
+                {name ? '您的暱稱' : '請輸入暱稱'}
                 </label>
 
                 <div className="mt-2.5">
@@ -61,6 +80,8 @@ export default function FormValidation(props: Props) {
                         name="nickname"
                         type="text" 
                         value={inputValue} 
+                        maxLength={16}
+                        minLength={4}
                         onChange={handleInputChange}
                         onKeyUp={handleInputKeyUp}
                         required
@@ -68,7 +89,7 @@ export default function FormValidation(props: Props) {
                 </div>
             </div>
 
-            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
+            <div className="grid grid-cols-1 mt-2 gap-x-6 gap-y-8 sm:grid-cols-4">
                 
                  <div className={`sm:col-span-2 text-sm leading-6 ${count < 4 || count > 16 ? 'text-red-500' : 'text-gray-500'}`}>
                     {count > 0 && count + '/16 '} 
@@ -76,10 +97,13 @@ export default function FormValidation(props: Props) {
                     {errorSpecialCharacter && <span className="text-red-500"> {errorSpecialCharacter}</span>}
                 </div>
 
-                <div className="sm:col-span-2 flex justify-end">
+                <div className="flex justify-end sm:col-span-2">
                     <button
                         type="submit"
-                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className={`
+                            rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold 
+                            text-gray-900 shadow-sm ring-1 ring-inset marker:transition duration-150 ease-in-out
+                        `}
                     >
                         送出
                     </button>
