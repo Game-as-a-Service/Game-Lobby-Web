@@ -1,3 +1,5 @@
-export default function Button() {
-  return <button>Button</button>;
-}
+import Button from "./Button";
+
+export * from "./Button";
+
+export default Button;

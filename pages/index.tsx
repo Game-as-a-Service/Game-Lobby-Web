@@ -10,7 +10,7 @@ export default function Home() {
         <title>{siteTitle}</title>
       </Head>
       <h1>遊戲大廳！</h1>
-      <Button></Button >
+      <Button>進入</Button>
     </>
   );
 }
