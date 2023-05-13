@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Define CSS variables */
+:root {
+    --dark: #1E1F22;
+    --white: #fff;
+    --body-bg-color: #212123;
+}
+
+body {
+    color: var(--white);
+    background-color: var(--body-bg-color);
+}
