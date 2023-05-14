@@ -1,6 +1,6 @@
 module.exports = {
     images: {
-        domains: ['images.unsplash.com'],
+        domains: ['localhost','images.unsplash.com'],
     },
     env: {
       UNSPLASH_ACCESS_KEY: process.env.UNSPLASH_ACCESS_KEY

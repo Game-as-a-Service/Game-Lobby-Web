@@ -40,7 +40,7 @@ const Card: React.FC<CardProps> = ( {
       style={style}
     >
       {/* card-cover start */}
-      <Cover src={src} width={210} height={123} alt={alt} />
+      <Cover src={src} className="h-[125px]" fill={true} alt={alt} />
       {/* card-cover end */}
 
       {/* card-body start */}
