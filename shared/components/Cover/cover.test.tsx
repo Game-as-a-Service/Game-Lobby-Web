@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import "whatwg-fetch";
 import Cover from './'
 
 describe('Cover', () => {
