@@ -2,7 +2,7 @@ import React, { SyntheticEvent, CSSProperties } from 'react';
 import Image from 'next/image';
 import Button from '../Button';
 import Cover from '../Cover';
-import Tag from '../Tag';
+import Tag, { COLOR } from "../Tag/Tag";
 
 type Image = {
   src: string;
@@ -49,7 +49,7 @@ const Card: React.FC<CardProps> = ( {
         {/* tags start */}
         {tags ? (
           <div className="tags flex gap-[10px]">
-            {tags.map( (tag, index) => ( <Tag key={index} bgColor="#5865F2">{tag}</Tag>) )}
+            {tags.map( (tag, index) => ( <Tag key={index} color={index % 2 === 0 ? COLOR.COLOR2 : COLOR.COLOR1}>{tag}</Tag>) )}
           </div>
         ): null}
         {/* tags end */}

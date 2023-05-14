@@ -31,6 +31,7 @@ export default function Home({ games }: { games: Game[] }) {
     }
   }
 
+
   return (
     <>
       <h1>遊戲大廳！</h1>
