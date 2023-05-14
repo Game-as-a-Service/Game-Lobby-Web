@@ -36,7 +36,7 @@ export default function Home({ games }: { games: Game[] }) {
       <h1>遊戲大廳！</h1>
       
       <div 
-        className="container mx-auto grid grid-cols-[repeat(2,minmax(100px,1fr))]  md:grid-cols-[repeat(4,minmax(100px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5 my-5 h-full"
+        className="mx-auto grid grid-auto-fit gap-2.5 my-5 h-full"
       >
         {games ? (
           games.map((game) => (
