@@ -62,7 +62,7 @@ const Card: React.FC<CardProps> = ( {
 
         {/* card-footer start */}
         <div className="flex justify-between card-footer">
-          <div className="flex rating align-center text-[#FF9110] gap-1">
+          <div className="flex align-center text-[#FF9110] gap-1 rating">
             <Image src="images/star.svg" width={16} height={16} alt="Rating" /> {rating}
           </div>
           <span className="text-[#618DFF] price">價格: {price}</span>
