@@ -71,7 +71,6 @@ const Cover: React.FC<CoverProps> = ({
             placeholder="blur"
             onLoadingComplete={() => setLoaded(true)}
             loading="lazy"
-            fill={fill}
             {...rest}
           />
         )}
