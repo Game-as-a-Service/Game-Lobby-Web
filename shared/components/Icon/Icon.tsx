@@ -1,5 +1,6 @@
 import React from "react";
 import { IconVariants } from "./types/types";
+import {cn} from '@/lib/utils';
 
 export interface IconProps extends React.ComponentPropsWithRef<"i"> {
   className?: string;
@@ -17,11 +18,12 @@ export default function Icon(props: IconProps) {
     ...rest
   } = props;
   const { definition } = icon;
+  const transformClassName = cn(className)
   return (
     <i
       style={style}
       aria-hidden
-      className={`${spin ? "animate-spin" : ""} ${color ? color : ""} ${className ? className : ""}`}
+      className={transformClassName}
       data-icon-name={icon.name}
       {...rest}
     >
