@@ -1,40 +1,33 @@
-import React, { useMemo } from "react";
-import styles from "./badge.module.css";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export interface BadgeProps {
-  /**
-   * 顯示在徽章上的數字或內容。它可以是一個React元素，例如一個圖標，或者一個字符串或數字。默認值為null。
-   */
+  /** The number or content displayed on the badge. It can be a React element, such as an icon, or a string or number. Default value is 0. */
   count?: React.ReactNode;
-  /**
-   * 當count的值大於overflowCount時，顯示在徽章上的數字會被截斷，以 ${overflowCount}+ 代替。默認值為99。
-   */
+  /** When the value of count exceeds overflowCount, it will be truncated and replaced with ${overflowCount}+. Default value is 99.*/
   overflowCount?: number;
-  /**
-   * 如果為true，則徽章將只顯示一個點，而不是數字或內容。如果為false，徽章將顯示count的內容。默認為false。
-   */
+  /** If true, the badge will display a dot instead of the number or content. If false, the badge will display the content of count. Default is false. */
   dot?: boolean;
-  /**
-   * 徽章的背景顏色。可以是CSS顏色值或任何合法的CSS背景值。默認為#f85149。
-   */
+  /** The background color of the badge. It can be a CSS color value or any valid CSS background value. Default value is #f85149. */
   color?: string;
-  /**
-   * 徽章的位置。可以是"top-left"，"top-right"，"bottom-left"或"bottom-right"。默認為"top-right"。
-   */
+  /** The placement of the badge. It can be "top-left", "top-right", "bottom-left", or "bottom-right". Default is "top-right". */
   placement?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-  /**
-   * 用於設置徽章的CSS樣式的對象。這是一個可選的屬性。
-   */
+  /** An object used to set the CSS styles of the badge. This is an optional property. */
   style?: React.CSSProperties;
-  /**
-   * 用於包裝徽章內容的元素。這可以是一個React元素或一個包含其他元素的數組。
-   */
+  /** The element used to wrap the badge content. It can be a React element or an array containing other elements. */
   children?: React.ReactNode;
-  /**
-   * 如果為true，即使count的值為0，徽章也會顯示。如果為false，當count的值為0時，徽章將不會顯示。默認為false。
-   */
+  /** If true, the badge will be displayed even when the value of count is 0. If false, the badge will not be displayed when the value of count is 0. Default is false. */
   showZero?: boolean;
+  /** For badge class name */
+  className?: string;
 }
+
+export const positionVariants = {
+  "top-right": "top-0 right-0",
+  "top-left": "top-0 left-0",
+  "bottom-left": "bottom-0 left-0",
+  "bottom-right": "bottom-0 right-0",
+} as const;
 
 const InternalBadge: React.ForwardRefRenderFunction<
   HTMLSpanElement,
@@ -42,34 +35,40 @@ const InternalBadge: React.ForwardRefRenderFunction<
 > = (props, ref) => {
   const {
     children,
-    count = null,
+    count = 0,
     overflowCount = 99,
     dot = false,
     style,
     color = "#f85149",
     placement = "top-right",
-    showZero,
+    showZero = true,
+    className,
     ...restProps
   } = props;
 
   const displayCount =
-    count && (count as number) > overflowCount ? `${overflowCount}+` : count; // 處理過後的數字
-  const hidden = !showZero && (displayCount === 0 || displayCount === "0"); // 是否隱藏
-  const isZero = displayCount === "0" || displayCount === 0; // 是否為零
-  const showAsDot = dot && !isZero; // 如果數字為零且剛好又是dot模式顯示，就不用顯示dot了
+    count && (count as number) > overflowCount ? `${overflowCount}+` : count;
+  const hidden = !showZero && (displayCount === 0 || displayCount === "0");
+  const isZero = displayCount === "0" || displayCount === 0;
+  const showAsDot = dot && !isZero;
 
-  const badgeWrapperClassName = useMemo(() => styles["badge-wrapper"], []);
-  const badgeClassName = useMemo(() => {
-    const baseClassName = styles[placement];
-    const dotClassName = showAsDot ? ` ${styles["badge-dot"]}` : "";
-    const countClassName = !showAsDot ? ` ${styles["badge-count"]}` : "";
-    const hiddenClassName = hidden ? ` ${styles["badge-hidden"]}` : "";
-    return baseClassName + dotClassName + countClassName + hiddenClassName;
-  }, [placement, showAsDot, hidden]);
+  const badgeClassName = cn(
+    "badge__content",
+    positionVariants[placement],
+    showAsDot && "badge__dot absolute w-2 h-2 rounded-full",
+    !showAsDot &&
+      "badge__count flex flex-row flex-wrap justify-center items-center absolute box-border font-medium text-xs min-w-fit px-1.5 h-5 rounded-full z-10 text-white",
+    hidden && "hidden",
+    className
+  );
 
   return (
-    <div>
-      <span className={badgeWrapperClassName} ref={ref} {...restProps}>
+    <>
+      <span
+        className="badge__container relative inline-flex"
+        ref={ref}
+        {...restProps}
+      >
         {children}
         <div
           className={badgeClassName}
@@ -78,14 +77,16 @@ const InternalBadge: React.ForwardRefRenderFunction<
           {!showAsDot && !hidden && <span>{displayCount}</span>}
         </div>
       </span>
-    </div>
+    </>
   );
 };
 
 /**
- * `Badge` 可以讓我們在其 children element 的右上角(預設位置)顯示一個小徽章，
- * 通常用來表示需要處理的訊息數量，透過醒目的視覺形式來吸引用戶處理，
- * 在遊戲微服務被用來表示用戶狀態(上線、閒置、繁忙)
+ * `Badge` component allows us to display a small badge in the top-right corner (default position) of its children element.
+ * It is commonly used to indicate the number of pending messages or notifications that require attention.
+ * In GaaS, it is often used to represent user states such as online, idle, or busy.
  */
-const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(InternalBadge);
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+  InternalBadge
+);
 export default Badge;
