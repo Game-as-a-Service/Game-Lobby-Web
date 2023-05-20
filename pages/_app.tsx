@@ -1,12 +1,27 @@
 import { AppProps } from "next/app";
-import Layout from "@/shared/components/Layout";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+
 import "@/styles/reset.css";
 import "@/styles/global.css";
 
-export default function App({ Component, pageProps }: AppProps) {
+import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
+import AppLayout from "@/shared/containers/layout/AppLayout";
+
+export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppWithProps = AppProps & {
+  Component: NextPageWithProps;
+};
+
+export default function App({ Component, pageProps }: AppWithProps) {
+  const getLayout =
+    Component.getLayout ??
+    ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
+
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <AxiosProvider>{getLayout(<Component {...pageProps} />)} </AxiosProvider>
   );
 }
