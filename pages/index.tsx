@@ -7,13 +7,8 @@ export default function Home() {
     <>
       <h1>遊戲大廳！</h1>
       <Button></Button>
-      <Toast
-        state={"success"}
-        size={"lg"}
-        length={"md"}
-        className={"justify-end"}
-      >
-        GG, EZ
+      <Toast state={"success"} size={"lg"} length={"md"}>
+        GG EZ
       </Toast>
     </>
   )
