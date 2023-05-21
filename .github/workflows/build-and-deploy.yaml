@@ -53,4 +53,4 @@ jobs:
           script: |
             cd ${{ env.APPLICATION_FOLDER }}
             fuser -k 3000/tcp
-            yarn start
+            nohup yarn start > output.log 2>&1 &
