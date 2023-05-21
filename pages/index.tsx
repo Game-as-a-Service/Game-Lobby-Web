@@ -1,7 +1,7 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps } from "next"
 
-import Button from "@/shared/components/Button";
-import Toast from "@/shared/components/Toast";
+import Button from "@/shared/components/Button"
+import Toast from "@/shared/components/Toast"
 export default function Home() {
   return (
     <>
@@ -16,11 +16,11 @@ export default function Home() {
         GG, EZ
       </Toast>
     </>
-  );
+  )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
-  };
-};
+  }
+}

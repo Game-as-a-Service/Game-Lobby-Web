@@ -8,6 +8,8 @@ The frontend of the Game as a Service lobby.
 1. Install Docker and Docker compose
 2. docker compose build
 3. docker compose up
+
+For husky pre push: chmod ug+x .husky/*
 ```
 
 ## Git Cooperation
@@ -31,6 +33,11 @@ The frontend of the Game as a Service lobby.
 
 1. Atomic Design
 2. MVVM
+
+## TODO
+
+1. Bundle Optimization
+2. Test Speed(?)
 
 # Contributor
 

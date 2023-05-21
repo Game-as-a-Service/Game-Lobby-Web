@@ -1,0 +1,56 @@
+name: Build and Deploy to AWS
+
+on: [push, workflow_dispatch]
+
+env:
+  APPLICATION_FOLDER: ~/game-lobby/frontend
+
+jobs:
+  cicd:
+    name: Build and Test and Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.event_name == 'push' && github.ref_name == 'main'
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Test
+        run: |
+          yarn install --frozen-lockfile
+          yarn test
+
+      - name: Build
+        run: yarn build
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ vars.EC2_HOST }}
+          username: ${{ vars.EC2_USERNAME }}
+          port: ${{ vars.EC2_PORT }}
+          key: ${{ secrets.EC2_KEY }}
+          source: '.next,public,package.json,yarn.lock'
+          target: ${{ env.APPLICATION_FOLDER }}
+
+      - name: Install dependencies
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.EC2_HOST }}
+          username: ${{ vars.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ env.APPLICATION_FOLDER }}
+            yarn install --frozen-lockfile
+
+      - name: Start the app on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.EC2_HOST }}
+          username: ${{ vars.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ env.APPLICATION_FOLDER }}
+            fuser -k 3000/tcp
+            nohup yarn start > output.log 2>&1 &
