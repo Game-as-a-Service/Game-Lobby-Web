@@ -10,7 +10,7 @@ jobs:
     name: Build and Test and Deploy to AWS EC2
     runs-on: ubuntu-latest
     environment: production
-    if: github.event_name == 'push' && github.ref_name == 'main'
+    # if: github.event_name == 'push' && github.ref_name == 'main'
 
     steps:
       - name: Git checkout
@@ -34,17 +34,7 @@ jobs:
           source: '.next,public,package.json,yarn.lock'
           target: ${{ env.APPLICATION_FOLDER }}
 
-      - name: Install dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.EC2_HOST }}
-          username: ${{ vars.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd ${{ env.APPLICATION_FOLDER }}
-            yarn install --frozen-lockfile
-
-      - name: Start the app on EC2
+      - name: Install dependencies and Start the app on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.EC2_HOST }}
@@ -52,4 +42,9 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             fuser -k 3000/tcp
+            cd ${{ env.APPLICATION_FOLDER }}
+            yarn install --frozen-lockfile
+            echo "Dependencies installed successfully"
             yarn start
+            echo "Application started"
+            exit 0
