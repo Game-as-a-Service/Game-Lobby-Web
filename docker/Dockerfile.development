@@ -2,7 +2,7 @@ FROM node:18-alpine as base
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
 RUN yarn
 
