@@ -1,23 +1,23 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import type { NextApiRequest, NextApiResponse } from "next"
+import { createProxyMiddleware } from "http-proxy-middleware"
 // import getEnv from "@/utils/env";
 
 const proxyMiddleware = createProxyMiddleware({
   // target: getEnv().NEXT_PUBLIC_BACKEND_ENDPOINT,
   changeOrigin: true,
   pathRewrite: { "^/api/internal": "/api" },
-}) as any;
+}) as any
 
 export const config = {
   api: {
     bodyParser: false,
   },
-};
+}
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   proxyMiddleware(req, res, (result: unknown) => {
     if (result instanceof Error) {
-      throw result;
+      throw result
     }
-  });
+  })
 }

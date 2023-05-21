@@ -9,7 +9,7 @@ describe("Button", () => {
 
     const button = screen.getByRole("button", {
       name: /Button/i,
-    });
+    })
 
     expect(button).toBeInTheDocument();
   });

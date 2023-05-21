@@ -1,6 +1,6 @@
-import { Html, Head, Main, NextScript } from "next/document";
+import { Html, Head, Main, NextScript } from "next/document"
 
-export const siteTitle = "遊戲微服務大廳";
+export const siteTitle = "遊戲微服務大廳"
 
 export default function Document() {
   return (
@@ -17,5 +17,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  );
+  )
 }
