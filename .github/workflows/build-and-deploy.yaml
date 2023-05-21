@@ -34,17 +34,23 @@ jobs:
           source: '.next,public,package.json,yarn.lock'
           target: ${{ env.APPLICATION_FOLDER }}
 
-      - name: Install dependencies and Start the app on EC2
+      - name: Install dependencies
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.EC2_HOST }}
           username: ${{ vars.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            fuser -k 3000/tcp
             cd ${{ env.APPLICATION_FOLDER }}
             yarn install --frozen-lockfile
-            echo "Dependencies installed successfully"
+
+      - name: Start the app on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.EC2_HOST }}
+          username: ${{ vars.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ env.APPLICATION_FOLDER }}
+            fuser -k 3000/tcp
             yarn start
-            echo "Application started"
-            exit 0
