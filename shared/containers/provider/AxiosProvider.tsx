@@ -2,49 +2,49 @@ import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from "axios";
-import type { AxiosInstance } from "axios";
-import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+} from "axios"
+import type { AxiosInstance } from "axios"
+import { FC, ReactNode, useEffect, useMemo, useState } from "react"
 
-import { axios as axiosConfig } from "@/configs/axios";
-import AxiosContext from "@/shared/contexts/AxiosContext";
+import { axios as axiosConfig } from "@/configs/axios"
+import AxiosContext from "@/shared/contexts/AxiosContext"
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 const AxiosProvider: FC<Props> = ({ children }) => {
-  const [axInstance, setAxInstance] = useState<AxiosInstance | null>(null);
+  const [axInstance, setAxInstance] = useState<AxiosInstance | null>(null)
 
   const axInterceptor = useMemo(() => {
     const onRequest = (
       config: InternalAxiosRequestConfig
     ): InternalAxiosRequestConfig => {
-      return config;
-    };
+      return config
+    }
     const onResponse = (response: AxiosResponse): AxiosResponse => {
-      return response;
-    };
+      return response
+    }
     const onError = (error: AxiosError): Promise<AxiosError> => {
-      return Promise.reject(error);
-    };
-    return { onRequest, onResponse, onError };
-  }, []);
+      return Promise.reject(error)
+    }
+    return { onRequest, onResponse, onError }
+  }, [])
 
   useEffect(() => {
     setAxInstance(() => {
-      const instance = axios.create(axiosConfig);
+      const instance = axios.create(axiosConfig)
       instance.interceptors.request.use(
         axInterceptor.onRequest,
         axInterceptor.onError
-      );
+      )
       instance.interceptors.response.use(
         axInterceptor.onResponse,
         axInterceptor.onError
-      );
-      return instance;
-    });
-  }, [axInterceptor]);
+      )
+      return instance
+    })
+  }, [axInterceptor])
 
   return (
     axInstance && (
@@ -52,7 +52,7 @@ const AxiosProvider: FC<Props> = ({ children }) => {
         {children}
       </AxiosContext.Provider>
     )
-  );
-};
+  )
+}
 
-export default AxiosProvider;
+export default AxiosProvider

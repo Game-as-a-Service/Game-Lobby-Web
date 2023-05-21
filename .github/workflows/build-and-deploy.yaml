@@ -10,7 +10,7 @@ jobs:
     name: Build and Test and Deploy to AWS EC2
     runs-on: ubuntu-latest
     environment: production
-    if: github.event_name == 'push' && github.ref_name == 'main'
+    # if: github.event_name == 'push' && github.ref_name == 'main'
 
     steps:
       - name: Git checkout
@@ -51,5 +51,6 @@ jobs:
           username: ${{ vars.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            cd ${{ env.APPLICATION_FOLDER }}
             fuser -k 3000/tcp
-            yarn start
+            nohup yarn start > output.log 2>&1 &
