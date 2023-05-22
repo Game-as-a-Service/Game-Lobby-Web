@@ -7,9 +7,9 @@ import {
   hide,
   remove,
   useModal,
-} from "./ModalManagerBase";
+} from "./ModalManagerBase"
 
-import { Provider } from "./ModalStore";
+import { Provider } from "./ModalStore"
 
 export {
   ModalDef,
@@ -21,6 +21,6 @@ export {
   remove,
   useModal,
   Provider,
-};
+}
 
-export * from "./Modal.types";
+export * from "./typings"
