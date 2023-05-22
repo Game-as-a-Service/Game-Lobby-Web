@@ -37,5 +37,5 @@ export default function App({ Component, pageProps }: AppWithProps) {
         </AuthProvider>
       </AxiosProvider>
     </ModalManager.Provider>
-  );
+  )
 }

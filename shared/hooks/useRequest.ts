@@ -19,7 +19,8 @@ const useRequest = () => {
         }
         return requestWrapper
           .executor(axios, additionalToRequest)
-          .then((res) => res.data);
+          .then((res) => res.data)
+          .catch((err) => Promise.reject(err))
       },
     [axios, token]
   );
