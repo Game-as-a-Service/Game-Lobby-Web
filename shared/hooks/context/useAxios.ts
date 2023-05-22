@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext } from "react"
 
-import AxiosContext from "@/shared/contexts/AxiosContext";
+import AxiosContext from "@/shared/contexts/AxiosContext"
 
 const useAxios = () => {
-  return useContext(AxiosContext);
-};
+  return useContext(AxiosContext)
+}
 
-export default useAxios;
+export default useAxios
