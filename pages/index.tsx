@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps } from "next"
 
 import Button from "@/shared/components/Button";
 import ModalExample1 from "@/shared/components/Modal/example/ModalExample1";
@@ -14,11 +14,11 @@ export default function Home() {
       <ModalExample2 />
       <ModalExample3 />
     </>
-  );
+  )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {},
-  };
-};
+  }
+}
