@@ -1,12 +1,12 @@
-import * as React from "react";
-import ModalManager, { useModal } from "./ModalManager";
-import type { ModalHandler } from "./ModalManager/src/Modal.types";
+import * as React from "react"
+import ModalManager, { useModal } from "./ModalManager"
+import type { ModalHandler } from "./ModalManager/src/typings"
 
 interface BaseModalProps {
-  visible: boolean;
-  onDismiss: () => void;
-  onResolve: (payload: any) => void;
-  modalContent?: React.ReactNode | string;
+  visible: boolean
+  onDismiss: () => void
+  onResolve: (payload: any) => void
+  modalContent?: React.ReactNode | string
 }
 
 const BaseModal = ({
@@ -42,8 +42,8 @@ const BaseModal = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const MyModal = ModalManager.create(
   (modal: BaseModalProps & ModalHandler): JSX.Element => {
@@ -54,6 +54,6 @@ export const MyModal = ModalManager.create(
         onDismiss={modal.keepMounted ? modal.hide : modal.remove}
         onResolve={modal.resolve}
       />
-    );
+    )
   }
-);
+)
