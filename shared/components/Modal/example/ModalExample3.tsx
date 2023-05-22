@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
-import ModalManager from "@/shared/components/Modal/ModalManager";
-import { MyModal } from "@/shared/components/Modal";
+import React, { useEffect, useState } from "react"
+import ModalManager from "@/shared/components/Modal/ModalManager"
+import { MyModal } from "@/shared/components/Modal"
 
 const ModalExample1 = () => {
   const [modalContent, setModalContent] = useState(
     "Lorem ipsum dolor sit amet consectetur adipisicing elit."
-  );
+  )
 
   const showModal = () => {
     ModalManager.show("modal-3", { modalContent, setModalContent }).then(
-      (payload) => {
-        console.log(payload);
-      }
-    );
-  };
+      (payload) => {}
+    )
+  }
 
   return (
     <>
@@ -27,7 +25,7 @@ const ModalExample1 = () => {
         <MyModal id="modal-3" keepMounted={true} />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ModalExample1;
+export default ModalExample1

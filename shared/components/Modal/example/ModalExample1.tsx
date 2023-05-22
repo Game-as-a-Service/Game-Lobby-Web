@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from "react";
-import ModalManager from "@/shared/components/Modal/ModalManager";
-import { MyModal } from "@/shared/components/Modal";
+import React, { useEffect, useState } from "react"
+import ModalManager from "@/shared/components/Modal/ModalManager"
+import { MyModal } from "@/shared/components/Modal"
 
 const ModalExample1 = () => {
   const [modalContent, setModalContent] = useState(
     "Lorem ipsum dolor sit amet consectetur adipisicing elit."
-  );
+  )
 
   useEffect(() => {
     ModalManager.register("modal-1", MyModal, {
       keepMounted: true,
-    });
+    })
     return () => {
-      ModalManager.unregister("modal-1");
-    };
-  }, []);
+      ModalManager.unregister("modal-1")
+    }
+  }, [])
 
   const showModal = () => {
     ModalManager.show("modal-1", {
       modalContent,
-    }).then((payload) => {
-      console.log(payload);
-    });
-  };
+    }).then((payload) => {})
+  }
 
   return (
     <button
@@ -31,7 +29,7 @@ const ModalExample1 = () => {
     >
       Modal Example 1 Open
     </button>
-  );
-};
+  )
+}
 
-export default ModalExample1;
+export default ModalExample1
