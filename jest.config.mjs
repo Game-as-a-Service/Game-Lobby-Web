@@ -15,6 +15,11 @@ const config = {
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
   },
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.test.json'
+    }
+  }
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
