@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import React, { useState } from "react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
@@ -101,21 +101,27 @@ describe("SearchBar", () => {
 
     expect(inputElement).toBeInTheDocument();
 
-    await userEvent.type(inputElement, "{Enter}");
+    await act(async () => {
+      await userEvent.type(inputElement, "{Enter}");
+    });
 
     expect(mockEnter).toHaveBeenCalledTimes(1);
     expect(mockEnter).toHaveBeenLastCalledWith(initValue);
 
     fireEvent.compositionStart(inputElement);
-    await userEvent.type(inputElement, "{Enter}");
+    await act(async () => {
+      await userEvent.type(inputElement, "{Enter}");
+    });
 
     expect(mockEnter).toHaveBeenCalledTimes(1);
 
     const typingValue = "-complete";
 
     fireEvent.compositionEnd(inputElement);
-    await userEvent.type(inputElement, typingValue);
-    await userEvent.type(inputElement, "{Enter}");
+    await act(async () => {
+      await userEvent.type(inputElement, typingValue);
+      await userEvent.type(inputElement, "{Enter}");
+    });
 
     expect(mockEnter).toHaveBeenCalledTimes(2);
     expect(mockEnter).toHaveBeenLastCalledWith(initValue + typingValue);
