@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { render, screen } from "@testing-library/react";
+import React, { useState } from "react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import Input, { ChangeHandler } from "./Input";
@@ -28,7 +28,9 @@ describe("Input", () => {
 
     const typingValue = "value";
 
-    await userEvent.type(inputElement, typingValue);
+    await act(async () => {
+      await userEvent.type(inputElement, typingValue);
+    });
 
     expect(mockChange).toHaveBeenCalledTimes(typingValue.length);
     expect(mockChange).toHaveBeenCalledWith(
@@ -115,7 +117,9 @@ describe("Input", () => {
 
       const typingValue = "value";
 
-      await userEvent.type(inputElement, typingValue);
+      await act(async () => {
+        await userEvent.type(inputElement, typingValue);
+      });
 
       expect(mockChange).not.toHaveBeenCalled();
       expect(inputElement.value).toBe(initValue);

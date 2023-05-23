@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Tabs, { TabsProps } from "./Tabs";
 import { Key } from "react";
