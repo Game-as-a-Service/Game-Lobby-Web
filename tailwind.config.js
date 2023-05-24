@@ -10,5 +10,5 @@ module.exports = {
       backgroundColor: {},
     },
   },
-  plugins: [],
-}
+  plugins: [require("@shrutibalasa/tailwind-grid-auto-fit")],
+};
