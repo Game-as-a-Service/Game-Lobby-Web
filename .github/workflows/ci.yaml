@@ -21,8 +21,10 @@ jobs:
       - name: Cache dependencies
         id: cache
         uses: actions/cache@v3
-        with:
-          path: node_modules
+        with: 
+          path: |
+            node_modules
+            ~/.cache/Cypress
           key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
