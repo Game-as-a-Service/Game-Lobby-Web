@@ -1,23 +1,38 @@
-import { ReactNode, ReactPortal, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { ReactElement } from "react";
+import { useCtxToastQueue } from "@/shared/components/Toast/CtxToastQueue";
+import { ToastProps } from "@/shared/components/Toast/Toast";
 
-export interface UseToast {
-  (props: { Component: ReactNode }): ReactPortal;
+export interface UseToastOptions {
+  // The target Toast bound to (ref.current) element.
+  // If undefined, it is bound to the body element, and Toast has a fixed position.
+  // Otherwise, it has an absolute position.
+  // When targetEl is set, please ensure that targetEl has a "position: relative;" setting.
+  targetEl?: HTMLElement | null;
+  // The duration in milliseconds (ms) for which the Toast stays visible.
+  // Values outside the range of 0 <= duration < 600000 (10 minutes) will be considered as non-automatic closing.
+  // The manualClosePlan cannot be set to "none".
+  duration?: number;
+  position?:
+    | "top"
+    | "top-left"
+    | "top-right"
+    | "bottom"
+    | "bottom-left"
+    | "bottom-right";
+  manualClosePlan?: "fullBody" | "closeButton" | "none";
 }
 
-export const useToast: UseToast = ({ Component }) => {
-  const [toasts, setToasts] = useState<ReactNode[]>([]);
+export type UseToastComponent = ToastProps | ReactElement;
+export interface Toaster {
+  (component: UseToastComponent, toastOption?: UseToastOptions): void;
+}
 
-  useEffect(() => {}, []);
+export interface UseToast {
+  (): Toaster;
+}
 
-  return createPortal(
-    <div
-      className={
-        "fixed left-1/2 -translate-x-1/2 bottom-[11px] flex justify-center z-[1400]"
-      }
-    >
-      {Component}
-    </div>,
-    document.body
-  );
+export const useToast: UseToast = () => {
+  const { addToast } = useCtxToastQueue();
+
+  return addToast;
 };

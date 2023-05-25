@@ -8,6 +8,7 @@ import "@/styles/global.css";
 import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
 import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
+import { CtxToastQueueProvider } from "@/shared/components/Toast/CtxToastQueue";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -24,7 +25,11 @@ export default function App({ Component, pageProps }: AppWithProps) {
 
   return (
     <ModalManager.Provider>
-      <AxiosProvider>{getLayout(<Component {...pageProps} />)} </AxiosProvider>
+      <CtxToastQueueProvider>
+        <AxiosProvider>
+          {getLayout(<Component {...pageProps} />)}{" "}
+        </AxiosProvider>
+      </CtxToastQueueProvider>
     </ModalManager.Provider>
   );
 }
