@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import { GameType } from "@/pages/components/GamePickModal";
 
 type CreateRoomForm = {
   roomName: string;
