@@ -2,24 +2,35 @@ import { GetStaticProps } from "next";
 import GamePickModal from "./components/GamePickModal";
 import Button from "@/shared/components/Button";
 import { useState } from "react";
+import Modalow from "@/shared/components/Modalow";
+import CreateGameRoomModal from "./components/CreateGameRoom";
 
 export default function Home() {
   const [show, setShow] = useState(false);
-  const [activeGameId, setActiveGameId] = useState("string3");
+  // const [activeGameId, setActiveGameId] = useState("string3");
   return (
     <>
       <h1>遊戲大廳！</h1>
       <Button onClick={() => setShow(true)}>open</Button>
       {/* TODO 還在研究 ModalManager 怎麼使用 */}
-      {activeGameId}
-      {show && (
+      {/* {activeGameId} */}
+      {/* {show && (
         <GamePickModal
           activeGameId={activeGameId}
           gameList={mockGameList}
           onGameChange={(id) => setActiveGameId(id)}
           onClose={() => setShow(false)}
         />
-      )}
+      )} */}
+      <Modalow
+        title="title"
+        hasTitle={false}
+        isOpen={show}
+        onClose={() => setShow(false)}
+        size="extraLarge"
+      >
+        <CreateGameRoomModal />
+      </Modalow>
     </>
   );
 }
