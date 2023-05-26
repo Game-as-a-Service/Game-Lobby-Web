@@ -12,7 +12,7 @@ const InternalBody: ForwardRefRenderFunction<HTMLDivElement, BodyProps> = (
 
   const dialogContentClassName = cn(
     "modal__container__dialog__content",
-    "flex px-8 py-3 text-white flex-auto"
+    "px-8 py-3 text-white"
   );
 
   return (
