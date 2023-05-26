@@ -1,11 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { createProxyMiddleware } from "http-proxy-middleware"
-// import getEnv from "@/utils/env";
+
+import { getEnv } from "@/lib/env"
+
+const env = getEnv()
 
 const proxyMiddleware = createProxyMiddleware({
-  // target: getEnv().NEXT_PUBLIC_BACKEND_ENDPOINT,
+  target: env.internalEndpoint,
   changeOrigin: true,
-  pathRewrite: { "^/api/internal": "/api" },
+  pathRewrite: { "^/api/internal": env.isMock ? "/api/mock" : "/" },
 }) as any
 
 export const config = {

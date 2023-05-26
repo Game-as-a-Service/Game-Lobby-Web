@@ -3,6 +3,6 @@
   "parser": "@typescript-eslint/parser",
   "ignorePatterns": ["!.storybook"],
   "rules": {
-    "no-console": "warn"
+    "no-console": "error"
   }
 }
