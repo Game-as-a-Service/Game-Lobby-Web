@@ -17,3 +17,12 @@ export const createRoomEndpoint = (
     data,
   });
 };
+
+export const getRoomInfoEndpoint = (
+  roomId: string
+): IRequestWrapper<{ url: string }> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}`,
+    method: "GET",
+  });
+};
