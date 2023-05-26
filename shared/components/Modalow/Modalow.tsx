@@ -76,7 +76,7 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     "modal__container",
     fullScreen
       ? "fixed z-20 top-0 left-0"
-      : "fixed z-20 left-1/2 transform -translate-x-1/2"
+      : "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2"
   );
 
   const dialogClassName = cn(
