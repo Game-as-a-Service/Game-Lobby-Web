@@ -1,0 +1,58 @@
+.modal__dialog {
+  background: #292a2d;
+  border-radius: 10px;
+}
+
+@keyframes showMaskAnime {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes hideMaskAnime {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.hideMask {
+  animation: hideMaskAnime 200ms ease-in-out forwards;
+}
+
+.showMask {
+  animation: showMaskAnime 200ms ease-in-out forwards;
+}
+
+@keyframes showDialogAnime {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes hideDialogAnime {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+}
+
+.hideDialog {
+  animation: hideDialogAnime 200ms ease-in-out forwards;
+}
+
+.showDialog {
+  animation: showDialogAnime 200ms ease-in-out forwards;
+}
