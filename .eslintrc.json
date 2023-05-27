@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "plugin:storybook/recommended"],
   "parser": "@typescript-eslint/parser",
-  "ignorePatterns": ["!.storybook"],
+  "ignorePatterns": ["!.storybook", "lint-staged.config.js"],
   "rules": {
     "no-console": "error"
   }
