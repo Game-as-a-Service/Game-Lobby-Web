@@ -1,19 +1,21 @@
 import { cn } from "@/lib/utils";
 
 export interface UserCardProps {
-  userName?: string;
+  nickName?: string;
   isReady?: boolean;
   isSelf?: boolean;
   isHost?: boolean;
+  isWating?: boolean;
   disabled?: boolean;
 }
 
 function UserCard({
+  nickName,
   isReady,
   isSelf,
   isHost,
+  isWating,
   disabled,
-  userName,
 }: UserCardProps) {
   const hostClass = "border-[4px] border-[#23A55A]";
 
@@ -27,9 +29,9 @@ function UserCard({
 
   function getNameText() {
     if (disabled) return "";
-    if (!userName) return "等待中...";
+    if (isWating) return "等待中...";
     const suffix = isHost ? "(房主)" : "";
-    const name = isSelf ? "你" : userName;
+    const name = isSelf ? "你" : nickName;
     return name + suffix;
   }
   const nameText = getNameText();

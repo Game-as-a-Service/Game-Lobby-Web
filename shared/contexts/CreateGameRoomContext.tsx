@@ -3,7 +3,7 @@ import { createContext } from "react";
 type defaultRoomForm = {
   name: string;
   gameId: string;
-  password: undefined | number;
+  password: null | number;
   minPlayers: number;
   maxPlayers: number;
 };
@@ -16,7 +16,7 @@ interface ICreateGameRoomContext {
 export const defaultRoomForm: defaultRoomForm = {
   name: "",
   gameId: "",
-  password: undefined,
+  password: null,
   minPlayers: 3,
   maxPlayers: 6,
 };

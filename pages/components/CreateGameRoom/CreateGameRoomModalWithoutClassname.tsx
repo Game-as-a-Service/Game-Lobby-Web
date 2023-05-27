@@ -71,14 +71,14 @@ export default function CreateGameRoomModal() {
           onClose={() => setPickGame(false)}
         />
       ) : (
-        <form className="w-[937px] h-[500px] mt-[36.5px] ml-[55px]">
-          <div className="flex flex-col">
-            <div className="flex flex-row items-center">
-              <label htmlFor="name" className="w-[119px] h-[24px]">
+        <form className="">
+          <div className="">
+            <div className="">
+              <label htmlFor="name" className="">
                 請輸入房間名稱
               </label>
               <input
-                className="w-[651px] h-[34px] bg-[#1E1F22] ml-[57px] rounded-[10px]"
+                className=""
                 onChange={handleinputChange}
                 value={roomForm.name}
                 name="name"
@@ -86,12 +86,12 @@ export default function CreateGameRoomModal() {
                 required
               />
             </div>
-            <div className="mt-[25px] flex flex-row items-center">
-              <label htmlFor="gameId" className="w-[119px] h-[24px]">
+            <div className="">
+              <label htmlFor="gameId" className="">
                 請選擇遊戲
               </label>
               <input
-                className="w-[651px] h-[34px] bg-[#1E1F22] ml-[57px] rounded-[10px]"
+                className=""
                 onChange={handleinputChange}
                 value={roomForm.gameId}
                 name="gameId"
@@ -142,7 +142,7 @@ export default function CreateGameRoomModal() {
               </button>
             </div>
           </div>
-          <div className="flex flex-row justify-between">
+          <div className="">
             <span>請選擇人數</span>
             <label htmlFor="one" id="one" className="">
               1人
@@ -152,7 +152,7 @@ export default function CreateGameRoomModal() {
               name="minPlayers"
               id="one"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -172,7 +172,7 @@ export default function CreateGameRoomModal() {
               name="minPlayers"
               id="three"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -182,7 +182,7 @@ export default function CreateGameRoomModal() {
               name="minPlayers"
               id="four"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -192,7 +192,7 @@ export default function CreateGameRoomModal() {
               name="minPlayers"
               id="five"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -202,7 +202,7 @@ export default function CreateGameRoomModal() {
               name="playerCount"
               id="six"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -212,7 +212,7 @@ export default function CreateGameRoomModal() {
               name="playerCount"
               id="seven"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
@@ -222,14 +222,11 @@ export default function CreateGameRoomModal() {
               name="playerCount"
               id="eight"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
-            <label
-              htmlFor="nine"
-              className={`w-[45px] h-[34px] border border-solid border-[#1E1F22] rounded-[10px] text-center leading-[32px]}`}
-            >
+            <label htmlFor="nine" className="">
               9人
             </label>
             <input
@@ -237,14 +234,11 @@ export default function CreateGameRoomModal() {
               name="playerCount"
               id="nine"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
 
-            <label
-              htmlFor="ten"
-              className="w-[45px] h-[34px] border border-solid border-[#1E1F22] rounded-[10px] text-center leading-[32px]"
-            >
+            <label htmlFor="ten" className="">
               10人
             </label>
             <input
@@ -252,14 +246,14 @@ export default function CreateGameRoomModal() {
               name="playerCount"
               id="ten"
               type="radio"
-              className="hidden"
+              className=""
               onChange={handleinputChange}
             />
           </div>
           <div className="flex flex-row">
             <span>請選擇房間類型</span>
             <div>
-              <label htmlFor="public" className="flex flex-col">
+              <label htmlFor="public" className="">
                 <span>公開房間</span>
                 <span>不須輸入密碼</span>
                 <span>任何人都能加入此房間</span>
@@ -274,8 +268,8 @@ export default function CreateGameRoomModal() {
               />
             </div>
             <div>
-              <label htmlFor="private" className="flex flex-col">
-                <span className="mr-2">私人房間</span>
+              <label htmlFor="private" className="">
+                <span className="">私人房間</span>
                 <span>請輸入此房間密碼</span>
               </label>
               <input
@@ -283,14 +277,14 @@ export default function CreateGameRoomModal() {
                 name="password"
                 type="radio"
                 value="1234"
-                className="hidden"
+                className=""
                 onChange={handleinputChange}
               />
               <span>{roomForm.password}</span>
               <span>{roomForm.password}</span>
               <span>{roomForm.password}</span>
               <span>{roomForm.password}</span>
-              <input type="text" maxLength={1} className="text-black" />
+              <input type="text" maxLength={1} className="" />
               {/* <label></label>
               <input />
               <label></label>

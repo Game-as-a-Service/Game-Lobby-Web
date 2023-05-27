@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
 interface Game {
   id: string;
   name: string;
@@ -23,15 +22,15 @@ export interface CreateRoomResponseType {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.json({
-    id: "roomid",
+    id: "3345678",
     name: "roomName",
     game: {
-      id: "gameId",
-      name: "gameName",
+      id: "1",
+      name: "wolfKiller",
     },
     host: {
-      id: "userId",
-      nickname: "userName",
+      id: "abc",
+      nickname: "哈",
     },
     isLocked: false,
     currentPlayers: 1,
