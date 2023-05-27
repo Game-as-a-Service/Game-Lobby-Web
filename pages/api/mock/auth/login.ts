@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { mock_loginEndpoint } from "@/mocks/auth";
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     return res.json({
-      url: "/auth/login",
+      url: mock_loginEndpoint,
     });
   }
 

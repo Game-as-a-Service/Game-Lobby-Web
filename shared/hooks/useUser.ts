@@ -1,3 +1,4 @@
+import { getCurrentUser as getCurrentUserReq } from "@/requests/auth/user";
 import {
   LoginType,
   getLoginEndpoint as getLoginEndpointReq,
@@ -21,8 +22,8 @@ const useUser = () => {
     return await fetch(getMockTokenReq());
   };
 
-  const authentication = async () => {
-    return await fetch(authenticationReq());
+  const authentication = async (token: string) => {
+    return await fetch(authenticationReq(token));
   };
 
   const login = (token: string) => {
@@ -45,6 +46,10 @@ const useUser = () => {
     }
   };
 
+  const getCurrentUser = async () => {
+    return await fetch(getCurrentUserReq());
+  };
+
   return {
     getLoginEndpoint,
     getMockToken,
@@ -53,6 +58,7 @@ const useUser = () => {
     logout,
     getTokenInCookie,
     updateTokenInCookie,
+    getCurrentUser,
   };
 };
 

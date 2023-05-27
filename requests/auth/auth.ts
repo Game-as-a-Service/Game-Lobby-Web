@@ -8,24 +8,38 @@ export enum LoginType {
 }
 
 export const getLoginEndpoint = (
-  data: LoginType
+  type: LoginType
 ): IRequestWrapper<{ url: string }> => {
-  return requestWrapper({
-    url: `/api/internal/auth/login?type=${data}`,
-    method: "GET",
-  });
+  return requestWrapper(
+    {
+      url: "/api/internal/auth/login",
+      method: "GET",
+      params: { type },
+    },
+    {
+      isPublic: true,
+    }
+  );
 };
 
 export const getMockToken = (): IRequestWrapper<{ token: string }> => {
-  return requestWrapper({
-    url: `/api/internal/auth/token`,
-    method: "POST",
-  });
+  return requestWrapper(
+    {
+      url: `/api/internal/auth/token`,
+      method: "POST",
+    },
+    {
+      isPublic: true,
+    }
+  );
 };
 
-export const authentication = (): IRequestWrapper<{ token: string }> => {
+export const authentication = (
+  token: string
+): IRequestWrapper<{ token: string }> => {
   return requestWrapper({
     url: `/api/internal/auth/authentication`,
     method: "POST",
+    data: { token },
   });
 };
