@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import useAuth from "@/shared/hooks/context/useAuth";
 import useUser from "@/shared/hooks/useUser";
-import { useRouter } from "next/router";
 
 type Props = {
   isAnonymous: boolean;
@@ -10,8 +10,13 @@ type Props = {
 };
 
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
-  const { token, setToken } = useAuth();
-  const { authentication, getTokenInCookie, updateTokenInCookie } = useUser();
+  const { token, setToken, setCurrentUser, currentUser } = useAuth();
+  const {
+    authentication,
+    getTokenInCookie,
+    updateTokenInCookie,
+    getCurrentUser,
+  } = useUser();
   const { push } = useRouter();
   const [pageDone, setPageDone] = useState(false);
 
@@ -19,7 +24,7 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
     async function fetch() {
       const jwt = getTokenInCookie();
       if (jwt) {
-        const res = await authentication();
+        const res = await authentication(jwt);
         if (res.token) {
           setToken(res.token);
         }
@@ -32,23 +37,30 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
   }, []);
 
   useEffect(() => {
-    if (token === null) {
-      updateTokenInCookie();
-    } else if (token === undefined) {
-    } else {
-      updateTokenInCookie(token);
+    async function fetch() {
+      if (token === null) {
+        updateTokenInCookie();
+        setCurrentUser(null);
+      } else if (token === undefined) {
+      } else {
+        updateTokenInCookie(token);
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+      }
     }
+
+    fetch();
   }, [token]);
 
   useEffect(() => {
     if (token === null && !isAnonymous) {
       push("/login");
-    } else if (token) {
+    } else if (token && currentUser) {
       setPageDone(true);
     } else if (isAnonymous) {
       setPageDone(true);
     }
-  }, [token, isAnonymous]);
+  }, [token, currentUser, isAnonymous]);
 
   return pageDone ? <>{children}</> : <></>;
 };
