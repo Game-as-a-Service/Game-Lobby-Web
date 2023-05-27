@@ -67,7 +67,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
-    },
+    }
   },
   "resolutions": {
     "@types/react": "^18.2.7"
