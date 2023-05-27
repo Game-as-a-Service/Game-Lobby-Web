@@ -26,7 +26,8 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
+            ${{ github.workspace }}/.next/cache
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
