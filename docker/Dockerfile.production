@@ -1,4 +1,5 @@
-FROM node:18-alpine as base
+# Base Stage
+FROM node:18-alpine AS base
 
 WORKDIR /app
 
@@ -6,10 +7,33 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
+# Build Stage
+FROM node:18-alpine AS builder
+
 ENV NODE_ENV=production
 
-RUN yarn build
+WORKDIR /app
 
 COPY . .
+
+COPY --from=base /app/node_modules ./node_modules
+
+# Build the application using the appropriate build script (defined in package.json)
+# Remove the Next.js cache to reduce memory usage
+RUN yarn build \
+    && rm -rf ./.next/cache
+
+# Run Stage
+FROM node:18-alpine AS production
+
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.js ./next.config.js
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
 
 CMD ["yarn", "start"]
