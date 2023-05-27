@@ -1,9 +1,11 @@
 import { PropsWithChildren, useReducer, useCallback } from "react";
-import RoomContext from "@/shared/contexts/RoomContext";
-import { initRoomInfo } from "@/shared/contexts/RoomContext";
+import RoomContext, { initRoomInfo } from "@/shared/contexts/RoomContext";
 import { REDUCER_ACTION_TYPE, ReducerAction, RoomInfoType, User } from "./type";
 
-const reducer = (state: RoomInfoType, action: ReducerAction): RoomInfoType => {
+const useRoomReducer = (
+  state: RoomInfoType,
+  action: ReducerAction
+): RoomInfoType => {
   switch (action.type) {
     case REDUCER_ACTION_TYPE.INITIALIZE_ROOM: {
       return action.payload;
@@ -64,7 +66,7 @@ const reducer = (state: RoomInfoType, action: ReducerAction): RoomInfoType => {
       return { ...state, status: payload.status };
     }
 
-    case REDUCER_ACTION_TYPE.CLEAN_ROOM: {
+    case REDUCER_ACTION_TYPE.CLEAN_UP_ROOM: {
       return { ...initRoomInfo };
     }
     default:
@@ -73,9 +75,9 @@ const reducer = (state: RoomInfoType, action: ReducerAction): RoomInfoType => {
 };
 
 function useRoomCore(initState: RoomInfoType) {
-  const [roomInfo, dispatch] = useReducer(reducer, initState);
+  const [roomInfo, dispatch] = useReducer(useRoomReducer, initState);
 
-  const initialize = useCallback((roomInfo: RoomInfoType) => {
+  const initializeRoom = useCallback((roomInfo: RoomInfoType) => {
     dispatch({ type: REDUCER_ACTION_TYPE.INITIALIZE_ROOM, payload: roomInfo });
   }, []);
 
@@ -111,19 +113,19 @@ function useRoomCore(initState: RoomInfoType) {
     });
   }, []);
 
-  const cleanRoom = useCallback(() => {
-    dispatch({ type: REDUCER_ACTION_TYPE.CLEAN_ROOM });
+  const cleanUpRoom = useCallback(() => {
+    dispatch({ type: REDUCER_ACTION_TYPE.CLEAN_UP_ROOM });
   }, []);
 
   return {
     roomInfo,
-    initialize,
+    initializeRoom,
     addPlayer,
     removePlayer,
     updateHost,
     updateRoomStatus,
     toggleUserReadyStatus,
-    cleanRoom,
+    cleanUpRoom,
   };
 }
 

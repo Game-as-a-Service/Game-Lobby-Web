@@ -16,13 +16,13 @@ export const initRoomInfo: UseRoomContextType["roomInfo"] = {
 
 const RoomContext = createContext<UseRoomContextType>({
   roomInfo: initRoomInfo,
-  initialize: () => {},
+  initializeRoom: () => {},
   addPlayer: () => {},
   removePlayer: () => {},
   updateHost: () => {},
   updateRoomStatus: () => {},
   toggleUserReadyStatus: () => {},
-  cleanRoom: () => {},
+  cleanUpRoom: () => {},
 });
 
 export default RoomContext;

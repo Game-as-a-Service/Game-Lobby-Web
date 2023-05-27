@@ -29,7 +29,7 @@ export const enum REDUCER_ACTION_TYPE {
   UPDATE_HOST,
   UPDATE_ROOM_STATUS,
   TOGGLE_USER_READY_STATUS,
-  CLEAN_ROOM,
+  CLEAN_UP_ROOM,
 }
 
 export type Initialize_ROOMAction = {
@@ -62,8 +62,8 @@ export type UpdateUserReadyStatus = {
   payload: Pick<User, "id">;
 };
 
-export type CleanRoomAction = {
-  type: REDUCER_ACTION_TYPE.CLEAN_ROOM;
+export type CleanUpRoomAction = {
+  type: REDUCER_ACTION_TYPE.CLEAN_UP_ROOM;
 };
 
 export type ReducerAction =
@@ -73,4 +73,4 @@ export type ReducerAction =
   | UpdateHostAction
   | UpdateRoomStatus
   | UpdateUserReadyStatus
-  | CleanRoomAction;
+  | CleanUpRoomAction;

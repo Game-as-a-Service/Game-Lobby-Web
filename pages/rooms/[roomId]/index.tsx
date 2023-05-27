@@ -12,16 +12,16 @@ const SEAT_AMOUNT = 10;
 export default function Room() {
   const {
     roomInfo,
-    initialize,
+    initializeRoom,
     addPlayer,
     removePlayer,
     updateHost,
     updateRoomStatus,
     toggleUserReadyStatus,
-    cleanRoom,
+    cleanUpRoom,
   } = useRoom();
   const { fetch } = useRequest();
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const roomId = query.roomId as string;
 
   useEffect(() => {
@@ -29,11 +29,15 @@ export default function Room() {
       const roomInfo = (await fetch(
         getRoomInfoEndpoint(roomId)
       )) as any as RoomInfoType;
-      initialize(roomInfo);
+      initializeRoom(roomInfo);
     }
 
     getRoomInfo();
-  }, [fetch, initialize, roomId]);
+
+    return () => {
+      cleanUpRoom();
+    };
+  }, [fetch, initializeRoom, cleanUpRoom, roomId]);
 
   // mock behavior start
   useEffect(() => {
@@ -70,9 +74,6 @@ export default function Room() {
     }, 7000);
   }, [toggleUserReadyStatus]);
 
-  useEffect(() => {
-    setTimeout(() => cleanRoom(), 8000);
-  }, [cleanRoom]);
   // mock behavior end
 
   function renderUserCards(users: RoomInfoType["players"]) {
@@ -119,7 +120,10 @@ export default function Room() {
           <Button className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white">
             退出房間
           </Button>
-          <Button className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white">
+          <Button
+            className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white"
+            onClick={() => push("/")}
+          >
             關閉房間
           </Button>
         </div>
