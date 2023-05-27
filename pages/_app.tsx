@@ -1,30 +1,35 @@
-import { AppProps } from "next/app"
-import { NextPage } from "next"
-import { ReactElement, ReactNode } from "react"
+import { AppProps } from "next/app";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+import CreateGameRoomProvider from "@/shared/containers/provider/CreateGameRoomProvider";
 
-import "@/styles/reset.css"
-import "@/styles/global.css"
+import "@/styles/reset.css";
+import "@/styles/global.css";
 
 import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
 import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 type AppWithProps = AppProps & {
-  Component: NextPageWithProps
-}
+  Component: NextPageWithProps;
+};
 
 export default function App({ Component, pageProps }: AppWithProps) {
   const getLayout =
     Component.getLayout ??
-    ((page: ReactElement) => <AppLayout>{page}</AppLayout>)
+    ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
 
   return (
     <ModalManager.Provider>
-      <AxiosProvider>{getLayout(<Component {...pageProps} />)} </AxiosProvider>
+      <AxiosProvider>
+        <CreateGameRoomProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </CreateGameRoomProvider>
+      </AxiosProvider>
     </ModalManager.Provider>
   );
 }

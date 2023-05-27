@@ -21,7 +21,7 @@ export interface InputProps
     "prefix" | "className" | "onChange"
   > {
   /** The current value of the input */
-  value: string;
+  value?: string;
 
   /** The label text */
   label?: string;
@@ -117,7 +117,7 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     "px-4 py-1.5 bg-gray-950 focus:outline-none",
     inputClassNameProp
   );
-  
+
   const labelClassName = cn("select-none", labelClassNameProp);
 
   const errorClassName = cn("ml-3 text-red-500", errorClassNameProp);

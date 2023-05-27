@@ -1,21 +1,29 @@
 import { createContext } from "react";
 
-type CreateRoomForm = {
-  roomName: string;
-  choosedGame: string;
-  players: string;
-  roomType: string;
-  password?: null | number;
+type defaultRoomForm = {
+  name: string;
+  gameId: string;
+  password: undefined | number;
+  minPlayers: number;
+  maxPlayers: number;
 };
 
-const createGameRoomDefault: CreateRoomForm = {
-  roomName: "",
-  choosedGame: "",
-  players: "",
-  roomType: "",
-  password: null,
+interface ICreateGameRoomContext {
+  roomForm: defaultRoomForm;
+  setRoomForm: ({}: defaultRoomForm) => void;
+}
+
+export const defaultRoomForm: defaultRoomForm = {
+  name: "",
+  gameId: "",
+  password: undefined,
+  minPlayers: 3,
+  maxPlayers: 6,
 };
 
-const CreateGameRoom = createContext(createGameRoomDefault);
+const CreateGameRoomContext = createContext<ICreateGameRoomContext>({
+  roomForm: defaultRoomForm,
+  setRoomForm: () => {},
+});
 
-export default CreateGameRoom;
+export default CreateGameRoomContext;
