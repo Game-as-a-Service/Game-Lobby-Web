@@ -1,4 +1,4 @@
-import type { ClassValue } from "clsx"; 
+import type { ClassValue } from "clsx";
 import {
   ComponentProps,
   ElementType,
@@ -20,9 +20,10 @@ declare module "react" {
 }
 
 export enum ButtonVariant {
-  primary = "primary",
-  secondary = "secondary",
-  danger = "danger",
+  PRIMARY = "primary",
+  SECONDARY = "secondary",
+  DANGER = "danger",
+  DARK = "dark",
 }
 
 export interface BaseButtonProps<C extends ElementType = "button"> {
@@ -30,7 +31,7 @@ export interface BaseButtonProps<C extends ElementType = "button"> {
   component?: C | "button";
 
   /** Button variant @default primary */
-  variant?: keyof typeof ButtonVariant | ButtonVariant;
+  variant?: Lowercase<keyof typeof ButtonVariant> | ButtonVariant;
 
   /** If `true`, the button will be in disabled mode */
   disabled?: boolean;
@@ -44,10 +45,10 @@ export interface BaseButtonProps<C extends ElementType = "button"> {
   /** Can be replcaed loading component @default LoadingIcon */
   loadingComponent?: ReactNode;
 
-  /** Button prefix icon */
+  /** Button prefix */
   prefix?: ReactNode;
 
-  /** Button suffix icon */
+  /** Button suffix */
   suffix?: ReactNode;
 
   /** The content of the component */
@@ -99,20 +100,23 @@ const InteralButton = <C extends ElementType = "button">(
     string
   > = {
     primary:
-      "bg-indigo-500 outline-indigo-500/60 hover:shadow-indigo-500/40 active:bg-indigo-500/80",
-    primary_active: "bg-indigo-500/80 shadow-indigo-500/40 hover:bg-indigo-500",
+      "bg-[#2F88FF] outline-[#2F88FF]/60 hover:shadow-[#2F88FF]/40 active:bg-[#2173DD]",
+    primary_active: "bg-[#2173DD] hover:bg-[#2173DD]",
     secondary:
-      "bg-green-500 outline-green-500/60 hover:shadow-green-500/40 active:bg-green-500/80",
-    secondary_active: "bg-green-500/80 shadow-green-500/40 hover:bg-green-500",
+      "bg-[#23A55A] outline-[#23A55A]/60 hover:shadow-[#23A55A]/40 active:bg-[#1D8C4C]",
+    secondary_active: "bg-[#1D8C4C] hover:bg-[#1D8C4C]",
     danger:
-      "bg-red-500 outline-red-500/60 hover:shadow-red-500/40 active:bg-red-500/80",
-    danger_active: "bg-red-500/80 shadow-red-500/40 hover:bg-red-500",
+      "bg-[#CC2431] outline-[#CC2431]/60 hover:shadow-[#CC2431]/40 active:bg-[#B01C29]",
+    danger_active: "bg-[#B01C29] hover:bg-[#B01C29]",
+    dark: "bg-[#2D2D2E] outline-[#2D2D2E]/60 hover:shadow-[#2D2D2E]/40 active:bg-[#1F1F20]",
+    dark_active: "bg-[#1F1F20] hover:bg-[#1F1F20]",
   };
 
   const buttonClassName = cn(
-    "relative px-4 py-1.5 flex items-center gap-1.5 rounded-lg shadow-lg text-white/90 focus:outline-8 transition-[box-shadow,background] ease-in",
+    "relative px-4 py-1.5 inline-flex items-center gap-1.5 rounded-lg shadow-md text-white/90 focus:outline-8 transition-[box-shadow,background,opacity] ease-in",
     buttonVariants[variant],
-    (disabled || loading) && "opacity-60 pointer-events-none select-none",
+    (disabled || loading) &&
+      "opacity-70 pointer-events-none select-none text-gray-200",
     active && buttonVariants[`${variant}_active`],
     className
   );
