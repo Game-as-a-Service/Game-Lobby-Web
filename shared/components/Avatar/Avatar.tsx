@@ -1,13 +1,15 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import Image from "next/image"
-import Link from "next/link"
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-export type AvatarType = "link" | "button" | "image"
+export type AvatarType = "link" | "button" | "image";
 
-export type AvatarSizeType = "small" | "large" | "default"
+export type AvatarSizeType = "default" | "small" | "large";
+
+export type AvatarShape = "circle" | "square";
 
 // Currently, the design only supports the default size,
 // we retain the small and large size in advance for future use.
@@ -15,65 +17,91 @@ const AVATAR_SIZES: Record<AvatarSizeType, number> = {
   default: 34,
   small: 28,
   large: 40,
+};
+
+export interface BaseAvatarProps {
+  /** If true, an online badge will be displayed. */
+  isOnline?: boolean;
+  /** The address of avatar image. If the src is invalid or empty, the avatar fallback will be displayed instead. */
+  src: string | StaticImageData;
+  /** The size of avatar */
+  size?: AvatarSizeType;
+  /** The type based on the usage of avatar */
+  type: AvatarType;
+  /** The shape of avatar */
+  shape?: AvatarShape;
 }
 
-interface BaseAvatarProps {
-  isOnline: boolean
-  src: string
-  size: AvatarSizeType
-  type: AvatarType
+export interface AvatarLinkProps extends BaseAvatarProps {
+  type: "link";
+  /** The href attribute limited to the "link" avatar */
+  href: string;
+  onClick?: never;
 }
 
-interface AvatarLinkProps extends BaseAvatarProps {
-  type: "link"
-  href: string
-  onClick?: never
+export interface AvatarButtonProps extends BaseAvatarProps {
+  type: "button";
+  href?: never;
+  /** The onclick handler limited to the "button" avatar */
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-interface AvatarButtonProps extends BaseAvatarProps {
-  type: "button"
-  href?: never
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+export interface AvatarImageProps extends BaseAvatarProps {
+  type: "image";
+  href?: never;
+  onClick?: never;
 }
 
-interface AvatarImageProps extends BaseAvatarProps {
-  type: "image"
-  href?: never
-  onClick?: never
-}
-
-export type AvatarProps = AvatarLinkProps | AvatarButtonProps | AvatarImageProps
+export type AvatarProps =
+  | AvatarLinkProps
+  | AvatarButtonProps
+  | AvatarImageProps;
 
 // #TODO
 // Configure image hostname in `next.config.js`
 export default function Avatar({
-  isOnline,
+  isOnline = false,
   type,
   src,
-  size,
+  size = "default",
+  shape = "circle",
   href,
   onClick,
 }: AvatarProps) {
-  const avatarSize = AVATAR_SIZES[size]
+  const avatarSize = AVATAR_SIZES[size];
 
-  const avatarVariants = {
+  const avatarSizeVariants = {
     default: `w-[34px] h-[34px]`,
     small: `w-[28px] h-[28px]`,
     large: `w-[40px] h-[40px]`,
-  }
+  };
 
-  const avatarWrapperClassName = "block rounded-full w-fit h-fit relative"
-  const avatarClassName = cn(avatarVariants[size], "rounded-full")
+  const avatarShapeVariants = {
+    circle: "rounded-full",
+    square: "rounded-[10px]",
+  };
+
+  const avatarWrapperClassName = cn(
+    avatarShapeVariants[shape],
+    "block w-fit h-fit relative"
+  );
+
+  const avatarClassName = cn(
+    avatarSizeVariants[size],
+    avatarShapeVariants[shape]
+  );
+
   const avatarFallbackClassName = cn(
-    avatarVariants[size],
-    "rounded-full bg-[#D9D9D9]"
-  )
+    avatarSizeVariants[size],
+    avatarShapeVariants[shape],
+    "bg-[#D9D9D9]"
+  );
 
-  const [isImgError, setIsImgError] = useState(false)
+  const [isImgError, setIsImgError] = useState(false);
 
   const handleImageError = () => {
-    setIsImgError(true)
-  }
+    setIsImgError(true);
+  };
 
   const avatarImage =
     isImgError || !src ? (
@@ -87,7 +115,7 @@ export default function Avatar({
         className={avatarClassName}
         onError={handleImageError}
       />
-    )
+    );
 
   // #TODO
   // replace this with the badge component
@@ -98,7 +126,7 @@ export default function Avatar({
         data-testid="online-badge"
       />
     </div>
-  )
+  );
 
   return (
     <>
@@ -120,5 +148,5 @@ export default function Avatar({
         </div>
       )}
     </>
-  )
+  );
 }
