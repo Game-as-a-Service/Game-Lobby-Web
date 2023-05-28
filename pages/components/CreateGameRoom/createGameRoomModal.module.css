@@ -6,3 +6,8 @@
   border: 1px solid #353a41;
   color: #353a41;
 }
+
+.radio__isPublic:checked ~ label {
+  border: 1px solid #2f88ff;
+  box-shadow: 0 0 0 1px #2f88ff inset;
+}
