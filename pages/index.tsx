@@ -2,8 +2,7 @@ import { GetStaticProps } from "next";
 import Button from "@/shared/components/Button";
 import { useState, useContext } from "react";
 import Modalow from "@/shared/components/Modalow";
-import CreateGameRoomModal from "./components/CreateGameRoom";
-import CreateGameRoomModalWithoutClassname from "./components/CreateGameRoom/CreateGameRoomModalWithoutClassname";
+import CreateRoomModal from "./components/CreateGameRoom/CreateRoomModal";
 import CreateGameRoomContext from "@/shared/contexts/CreateGameRoomContext";
 const mockUserSelectGameData = {
   gameId: "string2",
@@ -27,7 +26,7 @@ export default function Home() {
   return (
     <>
       <h1>遊戲大廳！</h1>
-      <Button onClick={handleClickCreateRoom}>open</Button>
+      <Button onClick={handleClickCreateRoom}>開創房間</Button>
 
       <Modalow
         title="title"
@@ -36,7 +35,7 @@ export default function Home() {
         onClose={() => setShow(false)}
         size="extraLarge"
       >
-        <CreateGameRoomModalWithoutClassname />
+        <CreateRoomModal />
       </Modalow>
     </>
   );

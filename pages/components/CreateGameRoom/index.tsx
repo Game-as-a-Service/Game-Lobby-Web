@@ -1,3 +1,3 @@
-import CreateGameRoomModal from "./CreateGameRoomModal";
+import CreateRoomModal from "./CreateRoomModal";
 
-export default CreateGameRoomModal;
+export default CreateRoomModal;
