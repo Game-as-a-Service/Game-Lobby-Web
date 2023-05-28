@@ -2,14 +2,34 @@
 
 The frontend of the Game as a Service lobby.
 
-## Getting Started
+## Commands
 
 ```bash
+# Host by Yarn
+1. yarn
+2. yarn dev
+
+# Host by Docker
 1. Install Docker and Docker compose
 2. docker compose build
 3. docker compose up
 
-For husky pre push: chmod ug+x .husky/*
+# Lint
+yarn pre-commit
+
+# Runs All Test
+yarn test
+
+## Unit Test
+yarn unit-test
+### Test singel files/folder
+yarn jest $PATH
+
+## E2E Test
+yarn e2e-test
+
+# Storybook
+yarn storybook
 ```
 
 ## Git Cooperation
@@ -21,23 +41,18 @@ For husky pre push: chmod ug+x .husky/*
 ## Naming Convention
 
 - Route: snake-case
-- Components: Pascal Case
+- Components: PascalCase
 
 ## Components DoD
 
 1. Test
 2. Implementation
-3. Doc(Storybook) - WIP
+3. Doc(Storybook)
 
 ## Things to know
 
 1. Atomic Design
 2. MVVM
-
-## TODO
-
-1. Bundle Optimization
-2. Test Speed(?)
 
 # Contributor
 

@@ -14,7 +14,7 @@ jobs:
     name: Build and Test and Deploy to AWS EC2
     runs-on: ubuntu-latest
     environment: production
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: Git checkout
@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ${{ env.APPLICATION_FOLDER }}
-            yarn install --frozen-lockfile
+            yarn install --production --frozen-lockfile
 
       - name: Start the app on EC2
         uses: appleboy/ssh-action@master

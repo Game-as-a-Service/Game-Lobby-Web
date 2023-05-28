@@ -15,12 +15,12 @@ export const config = {
   api: {
     bodyParser: false,
   },
-}
+};
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   proxyMiddleware(req, res, (result: unknown) => {
     if (result instanceof Error) {
-      throw result
+      throw result;
     }
-  })
+  });
 }
