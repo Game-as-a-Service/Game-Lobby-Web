@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ${{ env.APPLICATION_FOLDER }}
-            yarn install --frozen-lockfile
+            yarn install --production --frozen-lockfile
 
       - name: Start the app on EC2
         uses: appleboy/ssh-action@master
