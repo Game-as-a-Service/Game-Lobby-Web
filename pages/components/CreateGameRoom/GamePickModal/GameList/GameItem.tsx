@@ -1,6 +1,6 @@
 import Avatar from "@/shared/components/Avatar";
-import styles from "./gamePickModal.module.css";
-import type { GameType } from ".";
+import styles from "../gamePickModal.module.css";
+import type { GameType } from "../../type";
 
 interface GameItemProp {
   game: GameType;

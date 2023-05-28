@@ -1,6 +1,6 @@
-import { createContext } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
-type defaultRoomForm = {
+type CreateRoomFormType = {
   name: string;
   gameId: string;
   password: null | number;
@@ -9,11 +9,11 @@ type defaultRoomForm = {
 };
 
 interface ICreateGameRoomContext {
-  roomForm: defaultRoomForm;
-  setRoomForm: ({}: defaultRoomForm) => void;
+  roomForm: CreateRoomFormType;
+  setRoomForm: Dispatch<SetStateAction<CreateRoomFormType>>;
 }
 
-export const defaultRoomForm: defaultRoomForm = {
+export const initCreateRoomForm: CreateRoomFormType = {
   name: "",
   gameId: "",
   password: null,
@@ -22,7 +22,7 @@ export const defaultRoomForm: defaultRoomForm = {
 };
 
 const CreateGameRoomContext = createContext<ICreateGameRoomContext>({
-  roomForm: defaultRoomForm,
+  roomForm: initCreateRoomForm,
   setRoomForm: () => {},
 });
 

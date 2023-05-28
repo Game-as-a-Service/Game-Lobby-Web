@@ -1,14 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export type GameType = {
-  id: string;
-  displayName: string;
-  imageUrl: string;
-  minPlayers: number;
-  maxPlayers: number;
-  category?: string;
-};
-
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.json([
     {

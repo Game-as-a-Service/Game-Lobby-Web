@@ -1,6 +1,6 @@
 import CategoryTitle from "./CategoryTitle";
 import PickGameItem from "./GameItem";
-import type { GameType } from ".";
+import type { GameType } from "../../type";
 
 export interface GameListProp {
   activeGameId: string;
@@ -27,7 +27,7 @@ function GameList({ gameList, onGameChange, activeGameId }: GameListProp) {
       {Object.entries(groupedGames).map(([category, games]) => (
         <div key={category} className="pt-[50px] first-of-type:pt-0">
           <CategoryTitle title={category} />
-          <ul className="grid grid-cols-4 gap-x-[14px] gap-y-[15px] mt-[14.5px]">
+          <ul className="grid grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-[15px] mt-[14.5px]">
             {games.map((game) => (
               <PickGameItem
                 key={game.id}

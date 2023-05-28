@@ -9,7 +9,7 @@ import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
 import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
 import RoomContextProvider from "@/shared/containers/provider/RoomProvider/RoomProvider";
-import CreateGameRoomProvider from "@/shared/containers/provider/CreateGameRoomProvider";
+import CreateGameRoomProvider from "@/shared/containers/provider/CreateRoomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

@@ -1,6 +1,6 @@
 import CreateGameRoomContext, {
-  defaultRoomForm,
-} from "@/shared/contexts/CreateGameRoomContext";
+  initCreateRoomForm,
+} from "@/shared/contexts/CreateRoomContext";
 import { FC, ReactNode, useState } from "react";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 const CreateGameRoomContextProvider: FC<Props> = ({ children }) => {
-  const [roomForm, setRoomForm] = useState(defaultRoomForm);
+  const [roomForm, setRoomForm] = useState(initCreateRoomForm);
 
   return (
     <CreateGameRoomContext.Provider
