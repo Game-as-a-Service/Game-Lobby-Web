@@ -1,4 +1,4 @@
-import { LoginType, getLoginEndpoint } from "@/requests/auth/auth";
+import { LoginType } from "@/requests/auth";
 import Button from "@/shared/components/Button";
 import useUser from "@/shared/hooks/useUser";
 import { NextPageWithProps } from "./_app";

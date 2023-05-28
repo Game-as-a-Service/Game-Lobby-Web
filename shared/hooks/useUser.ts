@@ -1,10 +1,10 @@
-import { getCurrentUser as getCurrentUserReq } from "@/requests/auth/user";
 import {
   LoginType,
   getLoginEndpoint as getLoginEndpointReq,
   getMockToken as getMockTokenReq,
   authentication as authenticationReq,
-} from "@/requests/auth/auth";
+} from "@/requests/auth";
+import { getCurrentUser as getCurrentUserReq } from "@/requests/users/index";
 import useRequest from "./useRequest";
 import useAuth from "./context/useAuth";
 import useCookie from "./useCookie";
