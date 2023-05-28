@@ -70,6 +70,7 @@
     }
   },
   "resolutions": {
-    "@types/react": "^18.2.7"
+    "@types/react": "^18.2.7",
+    "@babel/core": "^7.0.0"
   }
 }
