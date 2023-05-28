@@ -7,16 +7,18 @@ import useRequest from "@/shared/hooks/useRequest";
 import { useRouter } from "next/router";
 import { CreateRoomResponseType } from "@/pages/api/mock/rooms";
 import { GameType } from "@/pages/api/mock/games";
-import { values } from "cypress/types/lodash";
 import CreateGameRoomContext from "@/shared/contexts/CreateGameRoomContext";
+import styles from "./createGameRoomModal.module.css";
 
-export default function CreateGameRoomModal() {
+export default function CreateGameRoomModalWithoutClassname() {
   const [gameList, setGameList] = useState<GameType[]>([]);
-  const [pickGame, setPickGame] = useState(false);
-  const [activeGameId, setActiveGameId] = useState("string3");
+  const [showPickGameModal, setShowPickGameModal] = useState(false);
   const { fetch } = useRequest();
   const { push } = useRouter();
   const { roomForm, setRoomForm } = useContext(CreateGameRoomContext);
+  const [currentGame, setCurrentGame] = useState<GameType | undefined>(
+    undefined
+  );
 
   // 取得遊戲清單
   useEffect(() => {
@@ -27,6 +29,11 @@ export default function CreateGameRoomModal() {
     handleGetAllGame();
   }, [fetch]);
 
+  useEffect(() => {
+    const game = gameList.find((game) => game.id === roomForm.gameId);
+    game && setCurrentGame(game);
+  }, [roomForm.gameId, gameList]);
+
   // 建立房間使用的假資料，要取代為你建立的 form state
   const mockCreateData: createRoomData = {
     name: "歡迎進場",
@@ -36,10 +43,20 @@ export default function CreateGameRoomModal() {
     maxPlayers: 6,
   };
 
+  // 變更遊戲事件
+  function handleChangeGame(gameId: string) {
+    setRoomForm({ ...roomForm, gameId });
+  }
+
+  // 變更遊戲最大人數事件
+  function handleChangeMaxplayers(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    setRoomForm({ ...roomForm, maxPlayers: Number(value) });
+  }
+
   // input handler
   const handleinputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
     if (name === "minPlayers") {
       return setRoomForm({ ...roomForm, [name]: Number(value) });
     } else if (name === "password" && value === "null") {
@@ -48,7 +65,6 @@ export default function CreateGameRoomModal() {
     } else if (name === "password") {
       return setRoomForm({ ...roomForm, [name]: Number(value) });
     }
-
     setRoomForm({ ...roomForm, [name]: value });
   };
 
@@ -63,12 +79,12 @@ export default function CreateGameRoomModal() {
 
   return (
     <>
-      {pickGame ? (
+      {showPickGameModal ? (
         <GamePickModal
-          activeGameId={activeGameId}
+          activeGameId={roomForm.gameId}
           gameList={gameList}
-          onGameChange={(id) => setActiveGameId(id)}
-          onClose={() => setPickGame(false)}
+          onGameChange={handleChangeGame}
+          onClose={() => setShowPickGameModal(false)}
         />
       ) : (
         <form className="">
@@ -100,7 +116,7 @@ export default function CreateGameRoomModal() {
               />
               <button
                 className="w-[28.11px] h-[28.11px] ml-[9px]"
-                onClick={() => setPickGame(true)}
+                onClick={() => setShowPickGameModal(true)}
               >
                 <svg
                   className="stroke-[2.8116] stroke-[#1E1F22] hover:stroke-[#2F88FF]"
@@ -142,113 +158,33 @@ export default function CreateGameRoomModal() {
               </button>
             </div>
           </div>
-          <div className="">
+          <div className="flex gap-5">
             <span>請選擇人數</span>
-            <label htmlFor="one" id="one" className="">
-              1人
-            </label>
-            <input
-              value="1"
-              name="minPlayers"
-              id="one"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="two">2人</label>
-            <input
-              value="2"
-              name="minPlayers"
-              id="two"
-              type="radio"
-              className="hidden"
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="three">3人</label>
-            <input
-              value="3"
-              name="minPlayers"
-              id="three"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="four">4人</label>
-            <input
-              value="4"
-              name="minPlayers"
-              id="four"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="five">5人</label>
-            <input
-              value="5"
-              name="minPlayers"
-              id="five"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="six">6人</label>
-            <input
-              value="6"
-              name="playerCount"
-              id="six"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="seven">7人</label>
-            <input
-              value="7"
-              name="playerCount"
-              id="seven"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="eight">8人</label>
-            <input
-              value="8"
-              name="playerCount"
-              id="eight"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="nine" className="">
-              9人
-            </label>
-            <input
-              value="9"
-              name="playerCount"
-              id="nine"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
-
-            <label htmlFor="ten" className="">
-              10人
-            </label>
-            <input
-              value="10"
-              name="playerCount"
-              id="ten"
-              type="radio"
-              className=""
-              onChange={handleinputChange}
-            />
+            <div className="flex gap-[13px]">
+              {Object.keys(Array.from({ length: 10 })).map((_, index) => (
+                <div key={index + 1}>
+                  <input
+                    value={index + 1}
+                    name="maxPlayers"
+                    id={`radio-maxPlayers-${index + 1}`}
+                    type="radio"
+                    className={`radio__maxPlayers hidden ${styles.radio__maxPlayers}`}
+                    checked={roomForm.maxPlayers === index + 1}
+                    onChange={handleChangeMaxplayers}
+                    disabled={
+                      (currentGame && index + 1 > currentGame.maxPlayers) ||
+                      (currentGame && index + 1 < currentGame.minPlayers)
+                    }
+                  />
+                  <label
+                    htmlFor={`radio-maxPlayers-${index + 1}`}
+                    className="flex items-center justify-center h-[34px] w-[45px] border-[#1E1F22] border rounded-[10px] text-base cursor-pointer hover:border-[#2F88FF] hover:border-2 transition-colors"
+                  >
+                    {index + 1}人
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="flex flex-row">
             <span>請選擇房間類型</span>

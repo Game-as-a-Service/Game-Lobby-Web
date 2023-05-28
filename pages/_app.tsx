@@ -25,14 +25,14 @@ export default function App({ Component, pageProps }: AppWithProps) {
     ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
 
   return (
-    <RoomContextProvider>
-      <ModalManager.Provider>
-        <AxiosProvider>
+    <ModalManager.Provider>
+      <AxiosProvider>
+        <RoomContextProvider>
           <CreateGameRoomProvider>
             {getLayout(<Component {...pageProps} />)}
           </CreateGameRoomProvider>
-        </AxiosProvider>
-      </ModalManager.Provider>
-    </RoomContextProvider>
+        </RoomContextProvider>
+      </AxiosProvider>
+    </ModalManager.Provider>
   );
 }
