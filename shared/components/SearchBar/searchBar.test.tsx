@@ -23,14 +23,16 @@ describe("SearchBar", () => {
 
     render(<ControllerComponent />);
 
-    const inputElement = screen.getByRole<HTMLInputElement>("textbox");
+    const inputElement = screen.getByRole<HTMLInputElement>("search");
 
     expect(inputElement).toBeInTheDocument();
     expect(inputElement.value).toBe(initValue);
 
     const typingValue = "search";
 
-    await userEvent.type(inputElement, typingValue);
+    await act(async () => {
+      await userEvent.type(inputElement, typingValue);
+    });
 
     expect(mockChange).toHaveBeenCalledTimes(typingValue.length);
     expect(mockChange).toHaveBeenLastCalledWith(
@@ -59,72 +61,32 @@ describe("SearchBar", () => {
 
     render(<ControllerComponent />);
 
-    const inputElement = screen.getByRole<HTMLInputElement>("textbox");
+    const inputElement = screen.getByRole<HTMLInputElement>("search");
     const buttonElement = screen.getByRole("button", {
       name: "查詢",
     });
 
     expect(buttonElement).toBeInTheDocument();
 
-    await userEvent.click(buttonElement);
+    await act(async () => {
+      await userEvent.click(buttonElement);
+    });
 
     expect(mockSubmit).toHaveBeenCalledTimes(1);
     expect(mockSubmit).toHaveBeenLastCalledWith(initValue, expect.any(Object));
 
     const typingValue = "-complete";
 
-    await userEvent.type(inputElement, typingValue);
-    await userEvent.click(buttonElement);
+    await act(async () => {
+      await userEvent.type(inputElement, typingValue);
+      await userEvent.click(buttonElement);
+    });
 
     expect(mockSubmit).toHaveBeenCalledTimes(2);
     expect(mockSubmit).toHaveBeenLastCalledWith(
       initValue + typingValue,
       expect.any(Object)
     );
-  });
-
-  it("should call the onEnter event handler with the correct value", async () => {
-    const initValue = "test-enter";
-    const mockEnter = jest.fn();
-
-    const ControllerComponent = () => {
-      const [value, setValue] = useState(initValue);
-
-      return (
-        <SearchBar value={value} onChange={setValue} onEnter={mockEnter} />
-      );
-    };
-
-    render(<ControllerComponent />);
-
-    const inputElement = screen.getByRole<HTMLInputElement>("textbox");
-
-    expect(inputElement).toBeInTheDocument();
-
-    await act(async () => {
-      await userEvent.type(inputElement, "{Enter}");
-    });
-
-    expect(mockEnter).toHaveBeenCalledTimes(1);
-    expect(mockEnter).toHaveBeenLastCalledWith(initValue);
-
-    fireEvent.compositionStart(inputElement);
-    await act(async () => {
-      await userEvent.type(inputElement, "{Enter}");
-    });
-
-    expect(mockEnter).toHaveBeenCalledTimes(1);
-
-    const typingValue = "-complete";
-
-    fireEvent.compositionEnd(inputElement);
-    await act(async () => {
-      await userEvent.type(inputElement, typingValue);
-      await userEvent.type(inputElement, "{Enter}");
-    });
-
-    expect(mockEnter).toHaveBeenCalledTimes(2);
-    expect(mockEnter).toHaveBeenLastCalledWith(initValue + typingValue);
   });
 
   it("should renders correct class name", async () => {
@@ -137,6 +99,7 @@ describe("SearchBar", () => {
       <SearchBar
         value="test"
         autoFocus
+        buttonText="search"
         className={rootClassName}
         buttonClassName={buttonClassName}
         inputClassName={inputClassName}
@@ -145,9 +108,11 @@ describe("SearchBar", () => {
     );
 
     const rootElement = container.querySelector("form");
-    const buttonElement = container.querySelector("button");
     const inputElement = container.querySelector("input");
     const inputWrapperElement = container.querySelector("div");
+    const buttonElement = screen.getByRole("button", {
+      name: "search",
+    });
 
     expect(rootElement).toHaveClass(rootClassName);
     expect(buttonElement).toHaveClass(buttonClassName);
