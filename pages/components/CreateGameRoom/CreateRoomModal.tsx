@@ -23,14 +23,22 @@ export default function CreateRoomModal() {
   const [gameList, setGameList] = useState<GameType[]>([]);
   const { fetch } = useRequest();
   const { push } = useRouter();
-  const { roomForm, setRoomForm } = useContext(CreateRoomContext);
-  const [currentGame, setCurrentGame] = useState<GameType | undefined>(
-    undefined
-  );
+  const {
+    currentGame,
+    roomForm,
+    updateGame,
+    updateRoomName,
+    updateMaxplayers,
+    updatePassword,
+  } = useContext(CreateRoomContext);
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [passwords, setPasswords] = useState(["", "", "", ""]);
 
-  // 取得遊戲清單
+  const checkIsPasswordDone = () => passwords.every((digit) => digit !== "");
+
+  const isNumeric = (value: string) => /[0-9]/.test(value);
+
+  // get game list
   useEffect(() => {
     async function handleGetAllGame() {
       const result = (await fetch(getAllGamesEndpoint())) as any as GameType[];
@@ -39,61 +47,49 @@ export default function CreateRoomModal() {
     handleGetAllGame();
   }, [fetch]);
 
-  // 變更遊戲事件
   function handleChangeGame(gameId: string) {
     const game = gameList.find((game) => game.id === gameId);
-    if (game) {
-      setCurrentGame(game);
-      setRoomForm((prev) => ({
-        ...prev,
-        gameId: game.id,
-        minPlayers: game.minPlayers,
-        maxPlayers: game.maxPlayers,
-      }));
-    }
+    game && updateGame(game);
   }
 
-  // 變更遊戲最大人數事件
+  function handleChangeRoomName(e: ChangeEvent<HTMLInputElement>) {
+    updateRoomName(e.target.value);
+  }
+
   function handleChangeMaxplayers(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value;
-    setRoomForm({ ...roomForm, maxPlayers: Number(value) });
+    updateMaxplayers(Number(event.target.value));
   }
 
-  // 變更房間類型事件
   function handleChangeIsPublic(event: ChangeEvent<HTMLInputElement>) {
     const isPublic = event.target.value === "public";
     if (isPublic) {
       setPasswords(["", "", "", ""]);
+      updatePassword(null);
     }
     setIsPublic(isPublic);
   }
 
-  const isNumeric = (value: string) => {
-    const regExp = /[0-9]/;
-    return regExp.test(value);
-  };
-
-  // 變更密碼 keyup 事件
   function handlePasswordKeyUp(e: KeyboardEvent, index: number) {
     if (!isNumeric(e.key)) return;
     handlePasswordChange(e.key, index);
   }
-  // 變更密碼 change 事件
+
   function handlePasswordChange(value: string, index: number) {
     if (!isNumeric(value) && value !== "") return;
     const nextPasswords = [...passwords];
-    nextPasswords[Number(index)] = value;
+    nextPasswords[index] = value;
     setPasswords(nextPasswords);
+    checkIsPasswordDone() && updatePassword(Number(nextPasswords.join("")));
   }
 
-  // 創建房間事件
   async function handleCreateRoom(event: FormEvent) {
     event.preventDefault();
+    // valid
     if (!roomForm.gameId) return;
-    const password = isPublic ? null : Number(passwords.join(""));
-    setRoomForm({ ...roomForm, password });
+    if (!isPublic && !checkIsPasswordDone()) return;
+    // send request
     const result = (await fetch(
-      createRoomEndpoint({ ...roomForm, password })
+      createRoomEndpoint(roomForm)
     )) as any as CreateRoomResponseType;
     push(`/rooms/${result.id}`);
   }
@@ -119,9 +115,7 @@ export default function CreateRoomModal() {
             </label>
             <input
               className="text-base py-[5px] px-[9px] border-[#1E1F22] border rounded-[10px] bg-[#1E1F22] w-full focus:outline focus:outline-[#2F88FF] focus:outline-2"
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, name: e.target.value })
-              }
+              onChange={handleChangeRoomName}
               value={roomForm.name}
               name="name"
               id="name"
@@ -133,7 +127,7 @@ export default function CreateRoomModal() {
               請選擇遊戲
             </label>
             <div className="relative w-full text-base py-[5px] px-[9px] border-[#1E1F22] border rounded-[10px] bg-[#1E1F22] h-[34px]">
-              <span>{roomForm.gameId}</span>
+              <span>{currentGame?.displayName}</span>
               <button
                 type="button"
                 className="w-[28.11px] h-[28.11px] ml-[9px] absolute right-[-8px] translate-x-[100%] "

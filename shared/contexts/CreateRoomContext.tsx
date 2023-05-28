@@ -1,6 +1,7 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
+import { GameType } from "@/pages/components/CreateGameRoom/type";
 
-type CreateRoomFormType = {
+export type CreateRoomFormType = {
   name: string;
   gameId: string;
   password: null | number;
@@ -9,8 +10,12 @@ type CreateRoomFormType = {
 };
 
 interface ICreateGameRoomContext {
+  currentGame: GameType | undefined;
   roomForm: CreateRoomFormType;
-  setRoomForm: Dispatch<SetStateAction<CreateRoomFormType>>;
+  updateGame: (game: GameType) => void;
+  updateRoomName: (name: string) => void;
+  updateMaxplayers: (maxPlayers: number) => void;
+  updatePassword: (password: CreateRoomFormType["password"]) => void;
 }
 
 export const initCreateRoomForm: CreateRoomFormType = {
@@ -22,8 +27,12 @@ export const initCreateRoomForm: CreateRoomFormType = {
 };
 
 const CreateGameRoomContext = createContext<ICreateGameRoomContext>({
+  currentGame: undefined,
   roomForm: initCreateRoomForm,
-  setRoomForm: () => {},
+  updateGame: () => {},
+  updateRoomName: () => {},
+  updateMaxplayers: () => {},
+  updatePassword: () => {},
 });
 
 export default CreateGameRoomContext;
