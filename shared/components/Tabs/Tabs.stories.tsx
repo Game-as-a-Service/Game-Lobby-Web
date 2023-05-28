@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Tabs, { TabsProps } from ".";
 
 const meta: Meta<typeof Tabs> = {
-  title: "General/Tabs",
+  title: "Navigation/Tabs",
   component: Tabs,
   tags: ["autodocs"],
 };
@@ -10,7 +10,7 @@ const meta: Meta<typeof Tabs> = {
 export default meta;
 type Story = StoryObj<TabsProps>;
 
-export const Lobby: Story = {
+export const Playground: Story = {
   args: {
     tabs: [
       { key: 0, label: "熱門遊戲" },
@@ -18,7 +18,7 @@ export const Lobby: Story = {
       { key: 2, label: "好評遊戲" },
     ],
     defaultActiveKey: 2,
-    size: "large",
+    size: "default",
     renderTabPaneContent: (tabItem) => (
       <div>This is {tabItem.label} TabPane.</div>
     ),
@@ -26,7 +26,7 @@ export const Lobby: Story = {
   },
 };
 
-export const ChatRoom: Story = {
+export const Size: Story = {
   args: {
     tabs: [
       { key: 0, label: "公開聊天" },
@@ -35,9 +35,25 @@ export const ChatRoom: Story = {
     ],
     defaultActiveKey: 0,
     size: "default",
-    renderTabPaneContent: (tabItem) => (
-      <div>This is {tabItem.label} chat room.</div>
-    ),
-    children: <div>This is children prop.</div>,
   },
+  render: () => (
+    <div className="flex flex-col gap-5">
+      <Tabs
+        tabs={[
+          { key: 0, label: "公開聊天" },
+          { key: 1, label: "遊戲隊聊" },
+          { key: 2, label: "好友聊天" },
+        ]}
+        size="default"
+      />
+      <Tabs
+        tabs={[
+          { key: 0, label: "公開聊天" },
+          { key: 1, label: "遊戲隊聊" },
+          { key: 2, label: "好友聊天" },
+        ]}
+        size="large"
+      />
+    </div>
+  ),
 };
