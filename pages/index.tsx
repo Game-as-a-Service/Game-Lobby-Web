@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "@/shared/components/Button";
 import useUser from "@/shared/hooks/useUser";
 import UserInfoModal from "@/core/lobby/components/UserInfoModal";
-import CreateRoomModal from "@/core/lobby/components/CreateGameRoom";
+import CreateRoomModal from "@/core/lobby/components/CreateRoomModal";
 
 export default function Home() {
   const { logout } = useUser();

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { GameType } from "@/core/lobby/components/CreateGameRoom/type";
+import { GameType } from "@/requests/games";
 
 export type CreateRoomFormType = {
   name: string;

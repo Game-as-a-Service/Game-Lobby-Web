@@ -1,11 +1,11 @@
 import { PropsWithChildren, useReducer, useCallback } from "react";
 import RoomContext, { initRoomInfo } from "@/shared/contexts/RoomContext";
-import { REDUCER_ACTION_TYPE, ReducerAction, RoomInfoType, User } from "./type";
-
+import { REDUCER_ACTION_TYPE, ReducerAction } from "./type";
+import { Room } from "@/requests/rooms";
 const useRoomReducer = (
-  state: RoomInfoType,
+  state: Room.Infomation,
   action: ReducerAction
-): RoomInfoType => {
+): Room.Infomation => {
   switch (action.type) {
     case REDUCER_ACTION_TYPE.INITIALIZE_ROOM: {
       return action.payload;
@@ -13,7 +13,7 @@ const useRoomReducer = (
 
     case REDUCER_ACTION_TYPE.ADD_PLAYER: {
       const { payload } = action;
-      const nextPlayers: RoomInfoType["players"] = [
+      const nextPlayers: Room.User[] = [
         ...state.players,
         { ...payload, isReady: false },
       ];
@@ -26,7 +26,7 @@ const useRoomReducer = (
 
     case REDUCER_ACTION_TYPE.REMOVE_PLAYER: {
       const { payload } = action;
-      const nextPlayers: RoomInfoType["players"] = state.players.filter(
+      const nextPlayers: Room.User[] = state.players.filter(
         (player) => player.id !== payload.id
       );
       return {
@@ -74,39 +74,39 @@ const useRoomReducer = (
   }
 };
 
-function useRoomCore(initState: RoomInfoType) {
+function useRoomCore(initState: Room.Infomation) {
   const [roomInfo, dispatch] = useReducer(useRoomReducer, initState);
 
-  const initializeRoom = useCallback((roomInfo: RoomInfoType) => {
+  const initializeRoom = useCallback((roomInfo: Room.Infomation) => {
     dispatch({ type: REDUCER_ACTION_TYPE.INITIALIZE_ROOM, payload: roomInfo });
   }, []);
 
-  const addPlayer = useCallback((payload: Omit<User, "isReady">) => {
+  const addPlayer = useCallback((payload: Omit<Room.User, "isReady">) => {
     dispatch({ type: REDUCER_ACTION_TYPE.ADD_PLAYER, payload });
   }, []);
 
-  const removePlayer = useCallback((userId: User["id"]) => {
+  const removePlayer = useCallback((userId: Room.User["id"]) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.REMOVE_PLAYER,
       payload: { id: userId },
     });
   }, []);
 
-  const updateHost = useCallback((userId: User["id"]) => {
+  const updateHost = useCallback((userId: Room.User["id"]) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.UPDATE_HOST,
       payload: { id: userId },
     });
   }, []);
 
-  const updateRoomStatus = useCallback((status: RoomInfoType["status"]) => {
+  const updateRoomStatus = useCallback((status: Room.Infomation["status"]) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.UPDATE_ROOM_STATUS,
       payload: { status },
     });
   }, []);
 
-  const toggleUserReadyStatus = useCallback((userId: User["id"]) => {
+  const toggleUserReadyStatus = useCallback((userId: Room.User["id"]) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS,
       payload: { id: userId },

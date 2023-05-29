@@ -5,7 +5,7 @@ import UserCard, { UserCardProps } from "@/core/rooms/components/UserCard";
 import useRequest from "@/shared/hooks/useRequest";
 import useRoom from "@/shared/hooks/context/useRoom";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
-import { RoomInfoType } from "@/shared/containers/provider/RoomProvider/type";
+import type { Room } from "@/requests/rooms";
 // import useUser from "@/shared/hooks/useUser";
 // import { User } from "@/requests/auth/user";
 
@@ -30,9 +30,7 @@ export default function Room() {
 
   useEffect(() => {
     async function getRoomInfo() {
-      const roomInfo = (await fetch(
-        getRoomInfoEndpoint(roomId)
-      )) as any as RoomInfoType;
+      const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
       initializeRoom(roomInfo);
     }
     getRoomInfo();
@@ -50,7 +48,7 @@ export default function Room() {
     // getCurrentUserInfo();
   }, []);
 
-  function renderUserCards(users: RoomInfoType["players"]) {
+  function renderUserCards(users: Room.User[]) {
     const userCount = users.length;
 
     const userCards = users.map((user) => {
@@ -88,14 +86,21 @@ export default function Room() {
           聊天室區塊
         </div>
         <div className="flex flex-col gap-[18px] font-normal text-sm leading-[22px] ml-[40px] mr-[52px]">
-          <Button className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white">
+          <Button
+            variant="dark"
+            className="rounded-[21px] w-[165px] h-10 flex justify-center"
+          >
             準備
           </Button>
-          <Button className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white">
+          <Button
+            variant="dark"
+            className="rounded-[21px] w-[165px] h-10 flex justify-center"
+          >
             退出房間
           </Button>
           <Button
-            className="bg-[#2D2D2E] rounded-[21px] w-[165px] h-10 flex justify-center text-white"
+            variant="dark"
+            className="rounded-[21px] w-[165px] h-10 flex justify-center"
             onClick={() => push("/")}
           >
             關閉房間

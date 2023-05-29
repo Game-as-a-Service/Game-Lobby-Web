@@ -1,10 +1,10 @@
-import { GameType } from "@/core/lobby/components/CreateGameRoom/type";
+import { GameType } from "@/requests/games";
 import CreateGameRoomContext, {
   initCreateRoomForm,
   CreateRoomFormType,
 } from "@/shared/contexts/CreateRoomContext";
 import { FC, ReactNode, useState } from "react";
-import { createRoomEndpoint } from "@/requests/rooms";
+
 type Props = {
   children: ReactNode;
 };

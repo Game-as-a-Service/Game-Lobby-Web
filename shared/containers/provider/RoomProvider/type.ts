@@ -1,26 +1,4 @@
-export type Game = {
-  id: string;
-  name: string;
-};
-
-export type User = {
-  id: string;
-  nickname: string;
-  isReady: boolean;
-};
-
-export type RoomInfoType = {
-  id: string;
-  name: string;
-  status: "WATTING" | "PLAYING";
-  game: Game;
-  host: User;
-  isLocked: boolean;
-  players: User[];
-  currentPlayers: number;
-  minPlayers: number;
-  maxPlayers: number;
-};
+import { Room } from "@/requests/rooms";
 
 export const enum REDUCER_ACTION_TYPE {
   INITIALIZE_ROOM,
@@ -34,32 +12,32 @@ export const enum REDUCER_ACTION_TYPE {
 
 export type Initialize_ROOMAction = {
   type: REDUCER_ACTION_TYPE.INITIALIZE_ROOM;
-  payload: RoomInfoType;
+  payload: Room.Infomation;
 };
 
 export type AddPlayerAction = {
   type: REDUCER_ACTION_TYPE.ADD_PLAYER;
-  payload: Omit<User, "isReady">;
+  payload: Omit<Room.User, "isReady">;
 };
 
 export type RemovePlayerAction = {
   type: REDUCER_ACTION_TYPE.REMOVE_PLAYER;
-  payload: Pick<User, "id">;
+  payload: Pick<Room.User, "id">;
 };
 
 export type UpdateHostAction = {
   type: REDUCER_ACTION_TYPE.UPDATE_HOST;
-  payload: Pick<User, "id">;
+  payload: Pick<Room.User, "id">;
 };
 
 export type UpdateRoomStatus = {
   type: REDUCER_ACTION_TYPE.UPDATE_ROOM_STATUS;
-  payload: Pick<RoomInfoType, "status">;
+  payload: Pick<Room.Infomation, "status">;
 };
 
 export type UpdateUserReadyStatus = {
   type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS;
-  payload: Pick<User, "id">;
+  payload: Pick<Room.User, "id">;
 };
 
 export type CleanUpRoomAction = {
