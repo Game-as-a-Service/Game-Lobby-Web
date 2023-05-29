@@ -18,10 +18,13 @@ export type ChangeHandler = (
 export interface InputProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
-    "prefix" | "className" | "onChange"
+    "maxLength" | "prefix" | "className" | "onChange"
   > {
   /** The current value of the input */
   value?: string;
+
+  /** The default value of the input */
+  defaultValue?: string;
 
   /** The label text */
   label?: string;
@@ -42,7 +45,10 @@ export interface InputProps
   error?: boolean;
 
   /** Display error message */
-  errorMessage?: string;
+  errorMessage?: string | string[];
+
+  /** Display the current length of the value and the maximum length */
+  maxLength?: string | number;
 
   /** Input prefix */
   prefix?: ReactNode;
@@ -80,6 +86,7 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     required,
     error,
     errorMessage,
+    maxLength,
     prefix,
     suffix,
     className,
@@ -107,20 +114,34 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   const inputId = inputAttributes.id || `input_${reactId}`;
 
   const rootClassName = cn(
-    "group m-1 flex items-center bg-gray-950 text-white/90 border border-indigo-500 focus-within:outline outline-indigo-500/20",
+    "relative flex items-center gap-2 text-white/90",
     error && "border-red-500 outline-red-500/20",
     disabled && "opacity-50 pointer-events-none",
     className
   );
 
   const inputClassName = cn(
-    "px-4 py-1.5 bg-gray-950 focus:outline-none",
+    "px-3 py-0.5 flex-[3] box-border bg-[#1E1F22] border-2 border-[#1E1F22] rounded-[10px] transition-[border] duration-200 ease-in focus:border-[#2F88FF]/60 focus:outline-none",
+    error && "border-[#CC2431]",
     inputClassNameProp
   );
 
-  const labelClassName = cn("select-none", labelClassNameProp);
+  const labelClassName = cn(
+    "pl-1 flex-1 border-l-4 border-l-[#2F88FF] font-black leading-tight select-none transition-[border] duration-200 ease-in",
+    error && "border-l-[#CC2431]",
+    labelClassNameProp
+  );
 
-  const errorClassName = cn("ml-3 text-red-500", errorClassNameProp);
+  const errorClassName = cn(
+    "ml-2 text-white/90 text-sm",
+    error && "text-[#CC2431]",
+    errorClassNameProp
+  );
+
+  const maxLengthClassName = cn(
+    "absolute bottom-0.5 right-1.5 text-xs text-white/60",
+    value && value.length > Number(maxLength) && "text-[#CC2431]/80"
+  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -131,12 +152,12 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   return (
     <>
       <div ref={ref} className={rootClassName}>
-        {prefix}
         {label && (
           <label htmlFor={inputId} className={labelClassName}>
             {label}
           </label>
         )}
+        {prefix}
         <input
           ref={inputRef}
           id={inputId}
@@ -145,8 +166,23 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           {...inputAttributes}
         />
         {suffix}
+        {value && maxLength && (
+          <div className={maxLengthClassName}>
+            {value.length} / {maxLength}
+          </div>
+        )}
       </div>
-      {errorMessage && <span className={errorClassName}>{errorMessage}</span>}
+      {errorMessage && (
+        <div className={errorClassName}>
+          {Array.isArray(errorMessage)
+            ? errorMessage.map((message) => (
+                <div key={message} className="leading-tight">
+                  {message}
+                </div>
+              ))
+            : errorMessage}
+        </div>
+      )}
     </>
   );
 };
