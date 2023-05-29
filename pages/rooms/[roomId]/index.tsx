@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Button from "@/shared/components/Button";
-import UserCard, { UserCardProps } from "./components/UserCard";
+import UserCard, { UserCardProps } from "@/core/rooms/components/UserCard";
 import useRequest from "@/shared/hooks/useRequest";
 import useRoom from "@/shared/hooks/context/useRoom";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
 import { RoomInfoType } from "@/shared/containers/provider/RoomProvider/type";
+// import useUser from "@/shared/hooks/useUser";
+// import { User } from "@/requests/auth/user";
 
 const SEAT_AMOUNT = 10;
 
@@ -23,6 +25,8 @@ export default function Room() {
   const { fetch } = useRequest();
   const { query, push } = useRouter();
   const roomId = query.roomId as string;
+  // const { getCurrentUser } = useUser();
+  // const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     async function getRoomInfo() {
@@ -31,50 +35,20 @@ export default function Room() {
       )) as any as RoomInfoType;
       initializeRoom(roomInfo);
     }
-
     getRoomInfo();
-
     return () => {
       cleanUpRoom();
     };
   }, [fetch, initializeRoom, cleanUpRoom, roomId]);
 
-  // mock behavior start
   useEffect(() => {
-    setTimeout(() => {
-      addPlayer({ id: "bcd", nickname: "第二位進來啦" });
-    }, 2000);
-
-    setTimeout(() => {
-      addPlayer({ id: "bcde", nickname: "第三位進來啦" });
-    }, 3000);
-  }, [addPlayer]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      updateHost("bcd");
-    }, 4000);
-  }, [updateHost]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      updateRoomStatus("PLAYING");
-    }, 5000);
-  }, [updateRoomStatus]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      removePlayer("bcd");
-    }, 6000);
-  }, [removePlayer]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      toggleUserReadyStatus("abc");
-    }, 7000);
-  }, [toggleUserReadyStatus]);
-
-  // mock behavior end
+    // BUG: (maybe) the usage below would cause infinity re-render
+    // async function getCurrentUserInfo() {
+    //   const user = await getCurrentUser();
+    //   user && setCurrentUser(user);
+    // }
+    // getCurrentUserInfo();
+  }, []);
 
   function renderUserCards(users: RoomInfoType["players"]) {
     const userCount = users.length;
@@ -83,7 +57,7 @@ export default function Room() {
       const props: UserCardProps = {
         nickName: user.nickname,
         isReady: user.isReady,
-        // TODO: 假設使用者本人的 id 為 abc
+        // isSelf: user.id === currentUser?.uid,
         isSelf: user.id === "abc",
         isHost: user.id === roomInfo.host.id,
       };

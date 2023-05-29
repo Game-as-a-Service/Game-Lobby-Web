@@ -272,15 +272,15 @@ export default function CreateRoomModal() {
           >
             開設新房間
           </Button>
+          {showPickGameModal && (
+            <GamePickModal
+              activeGameId={roomForm.gameId}
+              gameList={gameList}
+              onGameChange={handleChangeGame}
+              onClose={() => setShowPickGameModal(false)}
+            />
+          )}
         </form>
-        {showPickGameModal && (
-          <GamePickModal
-            activeGameId={roomForm.gameId}
-            gameList={gameList}
-            onGameChange={handleChangeGame}
-            onClose={() => setShowPickGameModal(false)}
-          />
-        )}
       </Modalow>
     </>
   );

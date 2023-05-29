@@ -16,13 +16,14 @@ export enum ModalSizeVariant {
   small = "small",
   medium = "medium",
   large = "large",
+  xLarge = "xLarge",
   extraLarge = "extraLarge",
 }
 export interface ModalProps {
   isOpen: boolean;
   size?: keyof typeof ModalSizeVariant;
   fullScreen?: boolean;
-  title: string;
+  title?: string;
   hideCloseIcon?: boolean;
   hasTitle?: boolean;
   hasMask?: boolean;
@@ -67,6 +68,7 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     small: "max-w-[320px]",
     medium: "max-w-[460px]",
     large: " max-w-[600px]",
+    xLarge: "max-w-[960px]",
     extraLarge: "max-w-[1100px]",
   };
 
@@ -74,7 +76,7 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     "modal__container",
     fullScreen
       ? "fixed z-20 top-0 left-0"
-      : "fixed z-20 left-1/2 transform -translate-x-1/2"
+      : "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2"
   );
 
   const dialogClassName = cn(

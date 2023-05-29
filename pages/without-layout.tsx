@@ -1,10 +1,20 @@
-import { ReactElement } from "react"
-import { NextPageWithProps } from "./_app"
+import { ReactElement } from "react";
+import { NextPageWithProps } from "./_app";
+import Button from "@/shared/components/Button";
+import Link from "next/link";
 
-const Home: NextPageWithProps = () => {
-  return <h1>這頁沒Layout</h1>
-}
+const WithoutLayout: NextPageWithProps = () => {
+  return (
+    <>
+      <h1>這頁沒Layout</h1>
+      <Button component={Link} href={"/"}>
+        to Index
+      </Button>
+    </>
+  );
+};
 
-Home.getLayout = (page: ReactElement) => page
+WithoutLayout.getLayout = (page: ReactElement) => page;
+WithoutLayout.Anonymous = true;
 
-export default Home
+export default WithoutLayout;

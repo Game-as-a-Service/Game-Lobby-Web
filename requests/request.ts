@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-type HttpMethod = "GET" | "POST";
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface IRequestWrapper<T> {
   executor: (

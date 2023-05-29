@@ -1,0 +1,92 @@
+name: CI workflow
+
+on:
+  pull_request:
+    branches: '**'
+  workflow_dispatch:
+
+env:
+  APPLICATION_FOLDER: ~/game-lobby/frontend
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+            ${{ github.workspace }}/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+  
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+            ${{ github.workspace }}/.next/cache
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+            
+      - name: Test
+        run: yarn test
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+            ${{ github.workspace }}/.next/cache
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+        
+      - name: lint
+        run: npx eslint@7.32.0 --no-error-on-unmatched-pattern -c .eslintrc.json $(git diff --name-only --relative --diff-filter=ACMRTUXB HEAD~1 | grep  -E ".(js|jsx|ts|tsx)$")

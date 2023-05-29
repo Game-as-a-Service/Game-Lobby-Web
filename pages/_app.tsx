@@ -10,9 +10,12 @@ import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
 import RoomContextProvider from "@/shared/containers/provider/RoomProvider/RoomProvider";
 import CreateGameRoomProvider from "@/shared/containers/provider/CreateRoomProvider";
+import AuthProvider from "@/shared/containers/provider/AuthProvider";
+import Startup from "@/shared/containers/util/Startup";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
+  Anonymous?: boolean;
 };
 
 type AppWithProps = AppProps & {
@@ -20,6 +23,8 @@ type AppWithProps = AppProps & {
 };
 
 export default function App({ Component, pageProps }: AppWithProps) {
+  const isAnonymous = Component.Anonymous || false;
+
   const getLayout =
     Component.getLayout ??
     ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
@@ -27,11 +32,15 @@ export default function App({ Component, pageProps }: AppWithProps) {
   return (
     <ModalManager.Provider>
       <AxiosProvider>
-        <RoomContextProvider>
-          <CreateGameRoomProvider>
-            {getLayout(<Component {...pageProps} />)}
-          </CreateGameRoomProvider>
-        </RoomContextProvider>
+        <AuthProvider>
+          <Startup isAnonymous={isAnonymous}>
+            <RoomContextProvider>
+              <CreateGameRoomProvider>
+                {getLayout(<Component {...pageProps} />)}
+              </CreateGameRoomProvider>
+            </RoomContextProvider>
+          </Startup>
+        </AuthProvider>
       </AxiosProvider>
     </ModalManager.Provider>
   );

@@ -1,4 +1,4 @@
-import { GameType } from "@/pages/components/CreateGameRoom/type";
+import { GameType } from "@/core/lobby/components/CreateGameRoom/type";
 import CreateGameRoomContext, {
   initCreateRoomForm,
   CreateRoomFormType,
