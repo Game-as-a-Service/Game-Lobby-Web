@@ -1,11 +1,12 @@
-import { User } from "@/requests/auth/user";
 import { createContext } from "react";
+
+import { UserInfo } from "@/requests/users";
 
 interface IAuthContext {
   token: string | null | undefined;
   setToken: (token: string | null | undefined) => unknown;
-  currentUser: User | null;
-  setCurrentUser: (user: User | null) => unknown;
+  currentUser: UserInfo | null;
+  setCurrentUser: (user: UserInfo | null) => unknown;
 }
 
 const AuthContext = createContext<IAuthContext>({
