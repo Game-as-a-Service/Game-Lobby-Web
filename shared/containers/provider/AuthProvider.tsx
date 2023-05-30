@@ -1,6 +1,7 @@
-import { User } from "@/requests/auth/user";
-import AuthContext from "@/shared/contexts/AuthContext";
 import { FC, ReactNode, useState } from "react";
+
+import AuthContext from "@/shared/contexts/AuthContext";
+import { UserInfo } from "@/requests/users";
 
 type Props = {
   children: ReactNode;
@@ -8,7 +9,7 @@ type Props = {
 
 const AuthProvider: FC<Props> = ({ children }) => {
   const [token, setToken] = useState<string | null | undefined>();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserInfo | null>(null);
 
   return (
     <AuthContext.Provider
@@ -16,7 +17,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
         token,
         setToken: (token: string | undefined | null) => setToken(token),
         currentUser,
-        setCurrentUser: (currentUser: User | null) =>
+        setCurrentUser: (currentUser: UserInfo | null) =>
           setCurrentUser(currentUser),
       }}
     >
