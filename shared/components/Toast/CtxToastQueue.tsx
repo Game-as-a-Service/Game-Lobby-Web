@@ -6,7 +6,9 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
@@ -58,8 +60,11 @@ export const CtxToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   children,
 }) => {
   const [toastQueueMap, setToastQueueMap] = useState<ToastQueueMap>(new Map());
-  const [toastTimeoutSet, setToastTimeoutSet] = useState<Set<string>>(
-    new Set()
+  const [toastTimeoutMap, setToastTimeoutMap] = useState<
+    Map<string, NodeJS.Timeout>
+  >(new Map());
+  const cleanRef = useRef(() =>
+    toastTimeoutMap.forEach((timeout) => clearTimeout(timeout))
   );
 
   const addToast = useCallback<Toaster>(
@@ -80,40 +85,32 @@ export const CtxToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
         ...targetQueue,
       ];
       setToastQueueMap(new Map(toastQueueMap.set(targetEl, newQueue)));
-
-      //
     },
     [toastQueueMap]
   );
 
   const removeToast = useCallback(
     (id: string) => {
-      const newToastQueueMap = new Map(toastQueueMap);
-      newToastQueueMap.forEach((queue, key) => {
-        const newQueue = queue.filter((toast) => toast.id !== id);
-        newToastQueueMap.set(key, newQueue);
-      });
-      setToastQueueMap(newToastQueueMap);
-      if (toastTimeoutSet.has(id))
-        setToastTimeoutSet((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(id);
-          return newSet;
+      setToastQueueMap((prev) => {
+        const newMap = new Map(prev);
+        newMap.forEach((queue) => {
+          const index = queue.findIndex((toast) => toast.id === id);
+          if (index !== -1) queue.splice(index, 1);
         });
-    },
-    [toastQueueMap, toastTimeoutSet]
-  );
-
-  const findToastQueueValue = useCallback(
-    (id: string) => {
-      let toastQueueValue: ToastQueueValue | undefined;
-      toastQueueMap.forEach((queue) => {
-        const toast = queue.find((toast) => toast.id === id);
-        if (toast) toastQueueValue = toast;
+        return newMap;
       });
-      return toastQueueValue;
+      // clear timeout
+      const timeout = toastTimeoutMap.get(id);
+      if (timeout) {
+        clearTimeout(timeout);
+        setToastTimeoutMap((prev) => {
+          const newMap = new Map(prev);
+          newMap.delete(id);
+          return newMap;
+        });
+      }
     },
-    [toastQueueMap]
+    [toastTimeoutMap]
   );
 
   const mappedToasts = useMemo(() => {
@@ -125,7 +122,6 @@ export const CtxToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
           // If the value is a ReactElement, it is a custom toast component.
           const component = "key" in value ? value : <Toast {...value} />;
           const targetEl: HTMLElement = options?.targetEl ?? document.body;
-          const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
           const position = options?.position ?? DEFAULT_TOAST_POSITION;
           const manualClosePlan =
             options?.manualClosePlan ?? DEFAULT_TOAST_MANUAL_CLOSE_PLAN;
@@ -178,7 +174,31 @@ export const CtxToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
     return allToasts;
   }, [removeToast, toastQueueMap]);
 
-  // set toast remove timeout
+  // set toast lifetime timeout
+  useEffect(() => {
+    toastQueueMap.forEach((queue) => {
+      // only set timeout for the last MAX_TOAST_MOUNT_SIZE toasts
+      queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, options }) => {
+        // ignore if the toast timeout is already set.
+        if (toastTimeoutMap.has(id)) return;
+
+        const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
+        const removeToastHandler = () => {
+          removeToast(id);
+        };
+
+        const timeout = setTimeout(removeToastHandler, duration);
+
+        setToastTimeoutMap((prev) => new Map(prev.set(id, timeout)));
+      });
+    });
+  }, [removeToast, toastQueueMap, toastTimeoutMap]);
+
+  // remove all timeout when unmount
+  useEffect(() => {
+    return cleanRef.current;
+  }, []);
+
   // useEffect(() => {
   //   toastQueueMap.forEach((queue) => {
   //     queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, options }, i) => {
