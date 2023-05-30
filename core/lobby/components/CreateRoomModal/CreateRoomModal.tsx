@@ -9,7 +9,7 @@ import {
 import Button from "@/shared/components/Button";
 import GameListModal from "./GameListModal";
 import Modalow from "@/shared/components/Modalow";
-import { createRoomEndpoint, CreateRoomResponseType } from "@/requests/rooms";
+import { createRoomEndpoint } from "@/requests/rooms";
 import { getAllGamesEndpoint, GameType } from "@/requests/games";
 import useRequest from "@/shared/hooks/useRequest";
 import { useRouter } from "next/router";
@@ -88,9 +88,7 @@ export default function CreateRoomModal() {
     if (!roomForm.gameId) return;
     if (!isPublic && !checkIsPasswordDone()) return;
     // send request
-    const result = (await fetch(
-      createRoomEndpoint(roomForm)
-    )) as any as CreateRoomResponseType;
+    const result = await fetch(createRoomEndpoint(roomForm));
     push(`/rooms/${result.id}`);
   }
 
@@ -266,8 +264,9 @@ export default function CreateRoomModal() {
                             id={`input-password-${index}`}
                             type="text"
                             maxLength={1}
-                            inputClassName="w-[34px] aspect-square rounded-[10px] text-[#2F88FF] text-center cursor-default caret-transparent"
+                            inputClassName="w-[34px] aspect-square rounded-[10px] text-[#2F88FF] text-center cursor-default caret-transparent p-0"
                             value={password}
+                            maxLengthClassName="hidden"
                             onKeyUp={(e) => handlePasswordKeyUp(e, index)}
                             onChange={(value) =>
                               handlePasswordChange(value, index)

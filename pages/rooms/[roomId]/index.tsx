@@ -5,9 +5,7 @@ import UserCard, { UserCardProps } from "@/core/rooms/components/UserCard";
 import useRequest from "@/shared/hooks/useRequest";
 import useRoom from "@/shared/hooks/context/useRoom";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
-import type { Room } from "@/requests/rooms";
-// import useUser from "@/shared/hooks/useUser";
-// import { User } from "@/requests/auth/user";
+import type { RoomInfo } from "@/requests/rooms";
 
 const SEAT_AMOUNT = 10;
 
@@ -25,8 +23,6 @@ export default function Room() {
   const { fetch } = useRequest();
   const { query, push } = useRouter();
   const roomId = query.roomId as string;
-  // const { getCurrentUser } = useUser();
-  // const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     async function getRoomInfo() {
@@ -39,23 +35,13 @@ export default function Room() {
     };
   }, [fetch, initializeRoom, cleanUpRoom, roomId]);
 
-  useEffect(() => {
-    // BUG: (maybe) the usage below would cause infinity re-render
-    // async function getCurrentUserInfo() {
-    //   const user = await getCurrentUser();
-    //   user && setCurrentUser(user);
-    // }
-    // getCurrentUserInfo();
-  }, []);
-
-  function renderUserCards(users: Room.User[]) {
+  function renderUserCards(users: RoomInfo.User[]) {
     const userCount = users.length;
 
     const userCards = users.map((user) => {
       const props: UserCardProps = {
         nickName: user.nickname,
         isReady: user.isReady,
-        // isSelf: user.id === currentUser?.uid,
         isSelf: user.id === "abc",
         isHost: user.id === roomInfo.host.id,
       };

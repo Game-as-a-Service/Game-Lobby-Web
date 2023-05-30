@@ -45,17 +45,20 @@ describe("Input", () => {
     const labelClassName = "test-label";
     const inputClassName = "test-input";
     const errorClassName = "test-error";
+    const maxLengthClassName = "test-error";
 
     const { container } = render(
       <Input
         value="test"
         label="label"
+        maxLength={1}
         error
         errorMessage="error message"
         className={rootClassName}
         labelClassName={labelClassName}
         inputClassName={inputClassName}
         errorClassName={errorClassName}
+        maxLengthClassName={maxLengthClassName}
       />
     );
 
@@ -63,11 +66,13 @@ describe("Input", () => {
     const inputElement = container.querySelector("input");
     const labelElement = container.querySelector("label");
     const errorElement = screen.getByText("error message");
+    const maxLengthElement = container.querySelector("div.absolute");
 
     expect(rootElement).toHaveClass(rootClassName);
     expect(labelElement).toHaveClass(labelClassName);
     expect(inputElement).toHaveClass(inputClassName);
     expect(errorElement).toHaveClass(errorClassName);
+    expect(maxLengthElement).toHaveClass(maxLengthClassName);
   });
 
   it("should render prefix and suffix", async () => {

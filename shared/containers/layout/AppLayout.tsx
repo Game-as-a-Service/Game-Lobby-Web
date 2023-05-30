@@ -1,5 +1,5 @@
-import Sidebar from "@/shared/components/Sidebar"
-import Footer from "@/shared/components/Footer"
+import Sidebar from "@/shared/components/Sidebar";
+import Footer from "@/shared/components/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,5 +8,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="">{children}</main>
       <Footer />
     </div>
-  )
+  );
 }

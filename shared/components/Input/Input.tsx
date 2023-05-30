@@ -68,6 +68,9 @@ export interface InputProps
   /** For error message class name */
   errorClassName?: ClassValue;
 
+  /** For error message class name */
+  maxLengthClassName?: ClassValue;
+
   /**
    * Callback function that is called when the value of the input changes.
    * @param value - The new value of the input.
@@ -93,6 +96,7 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     labelClassName: labelClassNameProp,
     inputClassName: inputClassNameProp,
     errorClassName: errorClassNameProp,
+    maxLengthClassName: maxLengthClassNameProp,
     onChange,
     ...attributes
   },
@@ -140,7 +144,8 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
 
   const maxLengthClassName = cn(
     "absolute bottom-0.5 right-1.5 text-xs text-white/60",
-    value && value.length > Number(maxLength) && "text-[#CC2431]/80"
+    value && value.length > Number(maxLength) && "text-[#CC2431]/80",
+    maxLengthClassNameProp
   );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
