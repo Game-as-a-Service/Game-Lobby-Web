@@ -56,7 +56,7 @@ export type ToastQueueValue = {
 };
 export type ToastQueueMapValue = ToastQueueValue[];
 export type ToastQueueMap = Map<null | HTMLElement, ToastQueueMapValue>;
-export const CtxToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
+export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   children,
 }) => {
   const [toastQueueMap, setToastQueueMap] = useState<ToastQueueMap>(new Map());

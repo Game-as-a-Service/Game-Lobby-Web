@@ -8,7 +8,7 @@ import "@/styles/global.css";
 import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
 import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
-import { CtxToastQueueProvider } from "@/shared/components/Toast/CtxToastQueue";
+import { ToastQueueProvider } from "@/shared/components/Toast";
 
 import AuthProvider from "@/shared/containers/provider/AuthProvider";
 import Startup from "@/shared/containers/util/Startup";
@@ -31,7 +31,7 @@ export default function App({ Component, pageProps }: AppWithProps) {
 
   return (
     <ModalManager.Provider>
-      <CtxToastQueueProvider>
+      <ToastQueueProvider>
         <AxiosProvider>
           <AuthProvider>
             <Startup isAnonymous={isAnonymous}>
@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppWithProps) {
             </Startup>
           </AuthProvider>
         </AxiosProvider>
-      </CtxToastQueueProvider>
+      </ToastQueueProvider>
     </ModalManager.Provider>
   );
 }
