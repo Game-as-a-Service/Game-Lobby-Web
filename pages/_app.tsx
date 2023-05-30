@@ -10,8 +10,12 @@ import AppLayout from "@/shared/containers/layout/AppLayout";
 import ModalManager from "@/shared/components/Modal/ModalManager";
 import { CtxToastQueueProvider } from "@/shared/components/Toast/CtxToastQueue";
 
+import AuthProvider from "@/shared/containers/provider/AuthProvider";
+import Startup from "@/shared/containers/util/Startup";
+
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
+  Anonymous?: boolean;
 };
 
 type AppWithProps = AppProps & {
@@ -19,6 +23,8 @@ type AppWithProps = AppProps & {
 };
 
 export default function App({ Component, pageProps }: AppWithProps) {
+  const isAnonymous = Component.Anonymous || false;
+
   const getLayout =
     Component.getLayout ??
     ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
@@ -27,7 +33,11 @@ export default function App({ Component, pageProps }: AppWithProps) {
     <ModalManager.Provider>
       <CtxToastQueueProvider>
         <AxiosProvider>
-          {getLayout(<Component {...pageProps} />)}{" "}
+          <AuthProvider>
+            <Startup isAnonymous={isAnonymous}>
+              {getLayout(<Component {...pageProps} />)}
+            </Startup>
+          </AuthProvider>
         </AxiosProvider>
       </CtxToastQueueProvider>
     </ModalManager.Provider>

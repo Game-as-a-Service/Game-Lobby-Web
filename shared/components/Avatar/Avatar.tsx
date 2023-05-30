@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
 export type AvatarType = "link" | "button" | "image";
 
-export type AvatarSizeType = "small" | "large" | "default";
+export type AvatarSizeType = "default" | "small" | "large";
+
+export type AvatarShape = "circle" | "square";
 
 // Currently, the design only supports the default size,
 // we retain the small and large size in advance for future use.
@@ -17,26 +19,34 @@ const AVATAR_SIZES: Record<AvatarSizeType, number> = {
   large: 40,
 };
 
-interface BaseAvatarProps {
-  isOnline: boolean;
-  src: string;
-  size: AvatarSizeType;
+export interface BaseAvatarProps {
+  /** If true, an online badge will be displayed. */
+  isOnline?: boolean;
+  /** The address of avatar image. If the src is invalid or empty, the avatar fallback will be displayed instead. */
+  src: string | StaticImageData;
+  /** The size of avatar */
+  size?: AvatarSizeType;
+  /** The type based on the usage of avatar */
   type: AvatarType;
+  /** The shape of avatar */
+  shape?: AvatarShape;
 }
 
-interface AvatarLinkProps extends BaseAvatarProps {
+export interface AvatarLinkProps extends BaseAvatarProps {
   type: "link";
+  /** The href attribute limited to the "link" avatar */
   href: string;
   onClick?: never;
 }
 
-interface AvatarButtonProps extends BaseAvatarProps {
+export interface AvatarButtonProps extends BaseAvatarProps {
   type: "button";
   href?: never;
+  /** The onclick handler limited to the "button" avatar */
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-interface AvatarImageProps extends BaseAvatarProps {
+export interface AvatarImageProps extends BaseAvatarProps {
   type: "image";
   href?: never;
   onClick?: never;
@@ -50,26 +60,41 @@ export type AvatarProps =
 // #TODO
 // Configure image hostname in `next.config.js`
 export default function Avatar({
-  isOnline,
+  isOnline = false,
   type,
   src,
-  size,
+  size = "default",
+  shape = "circle",
   href,
   onClick,
 }: AvatarProps) {
   const avatarSize = AVATAR_SIZES[size];
 
-  const avatarVariants = {
+  const avatarSizeVariants = {
     default: `w-[34px] h-[34px]`,
     small: `w-[28px] h-[28px]`,
     large: `w-[40px] h-[40px]`,
   };
 
-  const avatarWrapperClassName = "block rounded-full w-fit h-fit relative";
-  const avatarClassName = cn(avatarVariants[size], "rounded-full");
+  const avatarShapeVariants = {
+    circle: "rounded-full",
+    square: "rounded-[10px]",
+  };
+
+  const avatarWrapperClassName = cn(
+    avatarShapeVariants[shape],
+    "block w-fit h-fit relative"
+  );
+
+  const avatarClassName = cn(
+    avatarSizeVariants[size],
+    avatarShapeVariants[shape]
+  );
+
   const avatarFallbackClassName = cn(
-    avatarVariants[size],
-    "rounded-full bg-[#D9D9D9]"
+    avatarSizeVariants[size],
+    avatarShapeVariants[shape],
+    "bg-[#D9D9D9]"
   );
 
   const [isImgError, setIsImgError] = useState(false);

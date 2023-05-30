@@ -4,3 +4,8 @@ node_modules
 Dockerfile
 .git
 .gitignore
+.github
+.env
+.husky
+.swc
+docker

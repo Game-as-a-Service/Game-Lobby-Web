@@ -1,50 +1,44 @@
 import { GetStaticProps } from "next";
+import { useState } from "react";
 
 import Button from "@/shared/components/Button";
-import Toast from "@/shared/components/Toast";
-import { useCallback, useRef, useState } from "react";
-import { useToast } from "@/shared/components/Toast/useToast";
+import UserInfoModal from "@/core/lobby/components/UserInfoModal";
+import usePagination from "@/shared/hooks/usePagination";
+import useRequest from "@/shared/hooks/useRequest";
+import { getRooms } from "@/requests/rooms";
+
 export default function Home() {
-  const ref = useRef<HTMLDivElement>(null);
-  const toast = useToast();
-  const [toastCount, setToastCount] = useState(0);
+  const { fetch } = useRequest();
 
-  const handleAddToast = useCallback(() => {
-    setToastCount((prev) => prev + 1);
-    toast(
-      <Toast state={"success"} size={"lg"} length={"md"}>
-        GG EZ
-      </Toast>
-    );
-  }, [toast]);
+  const [showUserInfoModal, setShowUserInfoModal] = useState(true);
 
-  const handleAddRefToast = () => {
-    setToastCount((prev) => prev + 1);
-    toast(
-      {
-        state: "info",
-        size: "md",
-        length: "sm",
-        children: toastCount + ": Capitalism, Ho!",
-      },
-      { targetEl: ref.current, position: "bottom-right" }
-    );
+  const { nextPage, backPage, setPerPage, data } = usePagination({
+    source: (page: number, perPage: number) =>
+      fetch(getRooms({ page, perPage })),
+    defaultPerPage: 10,
+  });
+
+  const nextPerPage = () => {
+    setPerPage(10);
+  };
+
+  const backPerPage = () => {
+    setPerPage(-10);
   };
 
   return (
     <>
       <h1>遊戲大廳！</h1>
-      <Button onClick={handleAddToast}>
-        What is the best thing to say after victory?
-      </Button>
-      <div className={"fixed right-0 top-0 bottom-0"}>
-        <div
-          ref={ref}
-          className={"p-[9px] h-full w-[300px] bg-amber-200 relative"}
-        >
-          <Button onClick={handleAddRefToast}>useToast with targetEl</Button>
-        </div>
-      </div>
+
+      {data &&
+        data.length &&
+        data.map((item) => <p key={item.id}>{JSON.stringify(item)}</p>)}
+
+      <Button onClick={backPage}>上一頁</Button>
+      <Button onClick={nextPage}>下一頁</Button>
+      <Button onClick={nextPerPage}>我要+10筆</Button>
+      <Button onClick={backPerPage}>我要-10筆</Button>
+      {showUserInfoModal && <UserInfoModal isOpen={showUserInfoModal} />}
     </>
   );
 }

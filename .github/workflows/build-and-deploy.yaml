@@ -1,26 +1,41 @@
 name: Build and Deploy to AWS
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 env:
   APPLICATION_FOLDER: ~/game-lobby/frontend
 
 jobs:
-  cicd:
+  build_and_deploy:
     name: Build and Test and Deploy to AWS EC2
     runs-on: ubuntu-latest
     environment: production
-    if: (github.event_name == 'push' && github.ref_name == 'main') || github.event_name == 'workflow_dispatch'
-
+    timeout-minutes: 10
 
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
 
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+            ${{ github.workspace }}/.next/cache
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
       - name: Test
-        run: |
-          yarn install --frozen-lockfile
-          yarn test
+        run: yarn test
 
       - name: Build
         run: yarn build
@@ -43,7 +58,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ${{ env.APPLICATION_FOLDER }}
-            yarn install --frozen-lockfile
+            yarn install --production --frozen-lockfile
 
       - name: Start the app on EC2
         uses: appleboy/ssh-action@master
