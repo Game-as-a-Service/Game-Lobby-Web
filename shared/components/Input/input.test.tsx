@@ -60,9 +60,9 @@ describe("Input", () => {
     );
 
     const rootElement = container.querySelector("div");
-    const labelElement = container.querySelector("label");
     const inputElement = container.querySelector("input");
-    const errorElement = container.querySelector("span");
+    const labelElement = container.querySelector("label");
+    const errorElement = screen.getByText("error message");
 
     expect(rootElement).toHaveClass(rootClassName);
     expect(labelElement).toHaveClass(labelClassName);

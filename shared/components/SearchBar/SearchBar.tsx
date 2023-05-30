@@ -1,5 +1,5 @@
 import type { ClassValue } from "clsx";
-import { FormEvent, ForwardedRef, KeyboardEvent, useRef } from "react";
+import { FormEvent, ForwardedRef } from "react";
 import { cn } from "@/lib/utils";
 
 import Button from "../Button";
@@ -57,12 +57,6 @@ export interface SearchBarProps {
    * @param event - The form submission event.
    */
   onSubmit?: SubmitHandler;
-
-  /**
-   * Callback function triggered when the Enter key is pressed.
-   * @param value - The current value of the input.
-   */
-  onEnter?: (value: string) => void;
 }
 
 export const SearchBar = ({
@@ -79,39 +73,23 @@ export const SearchBar = ({
   buttonClassName: buttonClassNameProps,
   onChange,
   onSubmit,
-  onEnter,
 }: SearchBarProps) => {
-  const isComposingRef = useRef(false);
-
-  const setIsComposing = (value: boolean) => {
-    isComposingRef.current = value;
-  };
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit?.(value, e);
   };
 
-  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!isComposingRef.current && e.code === "Enter") {
-      onEnter?.(value);
-    }
-  };
-
   const rootClassName = cn(
-    "group m-2 flex rounded-lg border border-gray-800 shadow-lg outline-indigo-600 focus-within:outline focus-within:border-indigo-600 focus-within:shadow-indigo-500/40 transition-[box-shadow,outline]",
+    "group flex rounded-[10px] border border-[#2D2D2E] shadow focus-within:border-[#2F88FF]/80 focus-within:shadow-[#2F88FF]/40 transition-[box-shadow,border]",
     className
   );
 
-  const inputWrapperClassName = cn(
-    "m-0 rounded-l-lg border-none focus-within:outline-none",
-    inputWrapperClassNameProps
-  );
+  const inputWrapperClassName = cn("flex-1", inputWrapperClassNameProps);
 
-  const inputClassName = cn("rounded-l-lg w-96", inputClassNameProps);
+  const inputClassName = cn("rounded-r-none border-0", inputClassNameProps);
 
   const buttonClassName = cn(
-    "bg-gray-800 rounded-l-none rounded-r shadow-none group-focus-within:bg-indigo-600 active:group-focus-within:bg-indigo-700",
+    "leading-none bg-[#2D2D2E] rounded-l-none rounded-r shadow-none group-focus-within:bg-[#2F88FF]/80 active:group-focus-within:bg-[#2173DD]",
     buttonClassNameProps
   );
 
@@ -119,15 +97,13 @@ export const SearchBar = ({
     <form onSubmit={handleSubmit} className={rootClassName}>
       <Input
         ref={inputRef}
+        role="search"
         value={value}
         placeholder={placeholder}
         autoFocus={autoFocus}
         className={inputWrapperClassName}
         inputClassName={inputClassName}
-        onCompositionStart={() => setIsComposing(true)}
-        onCompositionEnd={() => setIsComposing(false)}
         onChange={onChange}
-        onKeyUp={handleKeyUp}
       />
       <Button ref={buttonRef} className={buttonClassName} loading={loading}>
         {buttonText}
