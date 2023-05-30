@@ -12,7 +12,7 @@ export const getLoginEndpoint = (
 ): IRequestWrapper<{ url: string }> => {
   return requestWrapper(
     {
-      url: "/api/internal/auth/login",
+      url: "/api/internal/login",
       method: "GET",
       params: { type },
     },
@@ -25,7 +25,7 @@ export const getLoginEndpoint = (
 export const getMockToken = (): IRequestWrapper<{ token: string }> => {
   return requestWrapper(
     {
-      url: `/api/internal/auth/token`,
+      url: `/api/internal/token`,
       method: "POST",
     },
     {
@@ -38,7 +38,7 @@ export const authentication = (
   token: string
 ): IRequestWrapper<{ token: string }> => {
   return requestWrapper({
-    url: `/api/internal/auth/authentication`,
+    url: `/api/internal/authenticate`,
     method: "POST",
     data: { token },
   });

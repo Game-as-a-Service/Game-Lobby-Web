@@ -7,11 +7,20 @@ export type UserInfo = {
   avatar?: string;
 };
 
+const currentUserEndpoint = `/api/internal/users/me`;
+
+export const getCurrentUser = (): IRequestWrapper<UserInfo> => {
+  return requestWrapper({
+    url: currentUserEndpoint,
+    method: "GET",
+  });
+};
+
 export const putNicknameEndpoint = (
   data: UserInfo
 ): IRequestWrapper<UserInfo> => {
   return requestWrapper({
-    url: "/api/internal/users/me",
+    url: currentUserEndpoint,
     method: "PUT",
     data,
   });
@@ -21,7 +30,7 @@ export const createNicknameEndpoint = (
   data: UserInfo
 ): IRequestWrapper<UserInfo> => {
   return requestWrapper({
-    url: "/api/internal/users/me",
+    url: currentUserEndpoint,
     method: "POST",
     data,
   });
