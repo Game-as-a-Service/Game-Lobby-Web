@@ -12,7 +12,7 @@ const TOAST_STATE_CLS = {
   success: "bg-green-500",
   error: "bg-red-500",
   warning: "bg-yellow-500",
-  info: "bg-blue-500",
+  info: "bg-blue",
   default: "bg-gray-500",
 } as const;
 
@@ -23,9 +23,11 @@ const TOAST_SIZE_CLS = {
 } as const;
 
 const TOAST_ROUNDED_CLS = {
+  none: "rounded-none",
   sm: "rounded-[5px]",
   md: "rounded-[10px]",
-  lg: "rounded-[21px]",
+  lg: "rounded-[15px]",
+  full: "rounded-full",
 } as const;
 
 const TOAST_LENGTH_CLS = {
@@ -60,31 +62,26 @@ const InternalToast: ForwardRefRenderFunction<HTMLDivElement, ToastProps> = (
   },
   ref
 ) => {
-  const toastBgCls = TOAST_STATE_CLS[state];
-  const toastSizeCls = TOAST_SIZE_CLS[size];
-  const toastRoundedCls = TOAST_ROUNDED_CLS[rounded];
-  const toastLengthCls = TOAST_LENGTH_CLS[length];
-
-  const cls = twMerge(
-    clsx(
-      [
-        "text-white",
-        "shadow-lg",
-        "px-4",
-        "py-2",
-        "flex items-center",
-        "justify-center",
-      ],
-      toastBgCls,
-      toastSizeCls,
-      toastRoundedCls,
-      toastLengthCls,
-      className
-    )
-  );
-
   return (
-    <div ref={ref} className={cls} {...restProps}>
+    <div
+      ref={ref}
+      className={twMerge(
+        clsx(
+          "text-white",
+          "shadow-lg",
+          "px-4",
+          "py-2",
+          "flex items-center",
+          "justify-center",
+          TOAST_STATE_CLS[state],
+          TOAST_SIZE_CLS[size],
+          TOAST_ROUNDED_CLS[rounded],
+          TOAST_LENGTH_CLS[length]
+        ),
+        className
+      )}
+      {...restProps}
+    >
       {children}
     </div>
   );
