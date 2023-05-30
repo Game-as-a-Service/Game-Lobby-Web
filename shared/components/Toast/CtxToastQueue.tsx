@@ -157,7 +157,9 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
                   {component}
                   {manualClosePlan === "closeButton" ? (
                     <Button
-                      className={"absolute top-0 right-0"}
+                      className={
+                        "absolute top-0 right-0 bg-transparent shadow-none text-sm font-bold px-1 py-0.5"
+                      }
                       onClick={removeToastHandler}
                     >
                       X
@@ -198,20 +200,6 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   useEffect(() => {
     return cleanRef.current;
   }, []);
-
-  // useEffect(() => {
-  //   toastQueueMap.forEach((queue) => {
-  //     queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, options }, i) => {
-  //       const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
-  //       const removeToastHandler = removeToast.bind(null, id);
-  //       setToastTimeoutSet((prev) => {
-  //         if (prev.has(id)) return prev;
-  //         setTimeout(removeToastHandler, duration);
-  //         return new Set(prev.add(id));
-  //       });
-  //     });
-  //   });
-  // }, [removeToast, toastQueueMap]);
 
   return (
     <CtxToastQueue.Provider value={{ addToast }}>
