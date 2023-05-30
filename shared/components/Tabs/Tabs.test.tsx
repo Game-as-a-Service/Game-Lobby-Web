@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import Tabs, { TabsProps } from "./Tabs";
-import { Key } from "react";
+import Tabs, { TabsProps, TabItemType } from "./Tabs";
 
 describe("Tabs", () => {
   const tabs: TabsProps["tabs"] = [
@@ -10,8 +9,8 @@ describe("Tabs", () => {
     { key: "3", label: "Tab 3" },
   ];
   const tabPaneText = "Tab Pane Text";
-  const renderTabPaneContent = (key: Key) => (
-    <div>{`${tabPaneText} ${key}`}</div>
+  const renderTabPaneContent = (tabItem: TabItemType) => (
+    <div>{`${tabPaneText} ${tabItem.key}`}</div>
   );
 
   it("should renders all Tabs and the first TabPane when not given 'defaultActiveKey' prop", () => {
