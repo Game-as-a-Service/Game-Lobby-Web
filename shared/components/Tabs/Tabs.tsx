@@ -22,7 +22,7 @@ export interface TabsProps {
    */
   tabsClass?: string;
   /**
-   * The className of tabBar
+   * The className of tabBar that wraps the tab
    */
   tabBarClass?: string;
   /**
@@ -30,7 +30,7 @@ export interface TabsProps {
    */
   tabClass?: string;
   /**
-   * The className of tabPan
+   * The className of tabPane
    */
   tabPaneClass?: string;
   /**
@@ -38,13 +38,13 @@ export interface TabsProps {
    */
   size?: TabSizeType;
   /**
-   * Custom the content of tabPane
+   * Custom content of tabPane
    */
   children?: ReactNode | undefined;
   /**
-   * Function that render content of tabPane by tabKey
+   * Function that recieved activeTabItem and render content of tabPane
    */
-  renderTabPaneContent?: (tabKey: Key) => ReactNode;
+  renderTabPaneContent?: (tabItem: TabItemType) => ReactNode;
   /**
    * Callback executed when tab is clicked
    */
@@ -71,7 +71,7 @@ export default function Tabs(props: TabsProps) {
   const tabsWrapperClass = cn("flex flex-col", tabsClass);
 
   const tabBarClass = cn(
-    "flex bg-[#322121]",
+    "flex bg-[#292A2D]",
     isLageSize ? "gap-[40px]" : "gap-[14px] px-3",
     customTabBarClass
   );
@@ -103,7 +103,7 @@ export default function Tabs(props: TabsProps) {
         role="tabpanel"
         aria-labelledby={`${activeTabItem.label}`}
       >
-        {renderTabPaneContent && renderTabPaneContent(activeKey)}
+        {renderTabPaneContent && renderTabPaneContent(activeTabItem)}
         {children}
       </div>
     </div>
