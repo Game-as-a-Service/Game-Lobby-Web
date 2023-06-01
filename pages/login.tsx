@@ -1,9 +1,9 @@
 import { LoginType } from "@/requests/auth";
-import Button from "@/shared/components/Button";
-import useUser from "@/shared/hooks/useUser";
+import Button from "@/components/shared/Button";
+import useUser from "@/hooks/useUser";
 import { NextPageWithProps } from "./_app";
 import { useEffect, useState } from "react";
-import useAuth from "@/shared/hooks/context/useAuth";
+import useAuth from "@/hooks/context/useAuth";
 import { useRouter } from "next/router";
 
 const Login: NextPageWithProps = () => {

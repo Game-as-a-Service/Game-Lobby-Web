@@ -2,7 +2,7 @@ import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { NextPageWithProps } from "../_app";
-import useUser from "@/shared/hooks/useUser";
+import useUser from "@/hooks/useUser";
 
 // This page is for mock redirect
 const Login: NextPageWithProps = () => {
