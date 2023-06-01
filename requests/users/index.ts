@@ -16,7 +16,7 @@ export const getCurrentUser = (): IRequestWrapper<UserInfo> => {
   });
 };
 
-export const putNicknameEndpoint = (
+export const putUserinfoEndpoint = (
   data: UserInfo
 ): IRequestWrapper<UserInfo> => {
   return requestWrapper({
