@@ -49,10 +49,25 @@ yarn storybook
 2. Implementation
 3. Doc(Storybook)
 
-## Things to know
+## Things to Know
 
 1. Atomic Design
 2. MVVM
+3. Storybook Reference
+   1. [Material UI](https://mui.com/material-ui/react-button/)
+   2. Demo: Playground + Props (Size, color, ...)
+4. mocks/：放 mock 資料，提供給 pages/api/mock 使用
+
+## Directory Structure - By Type
+
+- 根據類型（如：requests, components）來分類
+- 而不是根據功能（如： auth, lobby）來分類
+
+## Github Projects
+
+1. 原訂要做的直接開 Issues （Story Points, AC, Assignee, API）
+2. 未捕捉到的：開 PR 時綁 Github Projects
+   > 這樣在 Github Projects 就能看到原本的 User Story 跟 Sprint 過程中多做的 bugs，如果這週沒辦法完成的就開 Issues 在下次開會時納入討論
 
 # Contributor
 
