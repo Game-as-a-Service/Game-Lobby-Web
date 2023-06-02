@@ -19,7 +19,8 @@
     "test": "npx jest && npx cypress run",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "analyze-bundle": "cross-env ANALYZE=true next build"
+    "analyze-bundle": "cross-env ANALYZE=true next build",
+    "knip": "knip --no-exit-code"
   },
   "dependencies": {
     "@svgr/webpack": "^8.0.1",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^13.4.4",
+    "@octokit/core": "^4.2.1",
     "@storybook/addon-essentials": "^7.0.12",
     "@storybook/addon-interactions": "^7.0.12",
     "@storybook/addon-links": "^7.0.12",
@@ -61,6 +63,7 @@
     "husky": "^8.0.3",
     "jest": "29.5.0",
     "jest-environment-jsdom": "^29.5.0",
+    "knip": "^2.13.0",
     "lint-staged": "^11.2.6",
     "postcss": "^8.4.21",
     "prettier": "2.4.0",

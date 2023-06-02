@@ -40,3 +40,6 @@ package-lock.json
 
 # env
 .env
+
+# knip scan report
+knipScanResult.txt
