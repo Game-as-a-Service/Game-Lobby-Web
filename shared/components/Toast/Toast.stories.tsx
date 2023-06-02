@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Toast from "@/shared/components/Toast";
+import { toastStoryArgTypes } from "@/shared/components/Toast/toastStoryArgTypes";
 
 const meta: Meta<typeof Toast> = {
   title: "feedback/Toast",
@@ -16,24 +17,7 @@ const meta: Meta<typeof Toast> = {
   args: {
     children: "TOAST YOU",
   },
-  argTypes: {
-    state: {
-      control: { type: "select" },
-      options: [undefined, "default", "success", "warning", "error", "info"],
-    },
-    size: {
-      control: { type: "select" },
-      options: [undefined, "sm", "md", "lg"],
-    },
-    length: {
-      control: { type: "select" },
-      options: [undefined, "auto", "sm", "md", "lg"],
-    },
-    rounded: {
-      control: { type: "select" },
-      options: [undefined, "none", "sm", "md", "lg", "full"],
-    },
-  },
+  argTypes: toastStoryArgTypes,
 };
 
 export default meta;
@@ -41,7 +25,7 @@ export default meta;
 type Story = StoryObj<typeof Toast>;
 
 export const Playground: Story = {
-  render: (args) => <Toast {...args}>{args.children}</Toast>,
+  render: (args) => <Toast {...args} />,
 };
 
 export const State: Story = {
