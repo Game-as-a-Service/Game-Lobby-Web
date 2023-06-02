@@ -116,6 +116,8 @@ jobs:
         run: yarn install --frozen-lockfile
         
       - name: knip
+        env: 
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
           yarn run knip > knipScanResult.txt
           node ./scripts/knipScanReporter.js
