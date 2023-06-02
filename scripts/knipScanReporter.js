@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 const { Octokit } = require("@octokit/core");
-
+const { context } = require("@actions/github");
+console.log("context  ", context);
 const knipScanResultPath = path.join(process.cwd(), "knipScanResult.txt");
 
 const HOST_NAME = "https://github.com/";
@@ -70,7 +71,7 @@ const addOrUpdateComment = (resultSections) => {
     commentBody += `<details>\n<summary>${section}</summary>\n\n`;
     commentBody += lines.join("\n") + "\n</details>\n\n";
   }
-  console.log("commentBody: ", commentBody);
+
   // octokit
   //   .request(`GET /repos/${DRONE_REPO}/issues/${DRONE_PULL_REQUEST}/comments`)
   //   .then((response) => {
