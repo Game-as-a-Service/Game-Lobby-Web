@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { NextPageWithProps } from "./_app";
-import Button from "@/shared/components/Button";
+import Button from "@/components/shared/Button";
 import Link from "next/link";
 
 const WithoutLayout: NextPageWithProps = () => {

@@ -5,13 +5,13 @@ import { ReactElement, ReactNode } from "react";
 import "@/styles/reset.css";
 import "@/styles/global.css";
 
-import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
-import AppLayout from "@/shared/containers/layout/AppLayout";
-import ModalManager from "@/shared/components/Modal/ModalManager";
-import RoomContextProvider from "@/shared/containers/provider/RoomProvider/RoomProvider";
-import CreateGameRoomProvider from "@/shared/containers/provider/CreateRoomProvider";
-import AuthProvider from "@/shared/containers/provider/AuthProvider";
-import Startup from "@/shared/containers/util/Startup";
+import AxiosProvider from "@/containers/provider/AxiosProvider";
+import AppLayout from "@/containers/layout/AppLayout";
+import ModalManager from "@/components/shared/Modal/ModalManager";
+import AuthProvider from "@/containers/provider/AuthProvider";
+import Startup from "@/containers/util/Startup";
+import RoomContextProvider from "@/containers/provider/RoomProvider";
+import CreateRoomContextProvider from "@/containers/provider/CreateRoomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -35,9 +35,9 @@ export default function App({ Component, pageProps }: AppWithProps) {
         <AuthProvider>
           <Startup isAnonymous={isAnonymous}>
             <RoomContextProvider>
-              <CreateGameRoomProvider>
+              <CreateRoomContextProvider>
                 {getLayout(<Component {...pageProps} />)}
-              </CreateGameRoomProvider>
+              </CreateRoomContextProvider>
             </RoomContextProvider>
           </Startup>
         </AuthProvider>

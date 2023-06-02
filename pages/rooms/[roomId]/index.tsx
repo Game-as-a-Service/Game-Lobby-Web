@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import Button from "@/shared/components/Button";
-import UserCard, { UserCardProps } from "@/core/rooms/components/UserCard";
-import useRequest from "@/shared/hooks/useRequest";
-import useRoom from "@/shared/hooks/context/useRoom";
+import Button from "@/components/shared/Button";
+import UserCard, { UserCardProps } from "@/components/rooms/UserCard/UserCard";
+import useRequest from "@/hooks/useRequest";
+import useRoom from "@/hooks/context/useRoom";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
 import type { RoomInfo } from "@/requests/rooms";
 
