@@ -4,8 +4,7 @@ import {
   HTMLAttributes,
   ReactNode,
 } from "react";
-import clsx from "clsx";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
 // Toast background color defined by state prop
 const TOAST_STATE_CLS = {
@@ -65,19 +64,17 @@ const InternalToast: ForwardRefRenderFunction<HTMLDivElement, ToastProps> = (
   return (
     <div
       ref={ref}
-      className={twMerge(
-        clsx(
-          "text-white",
-          "shadow-lg",
-          "px-4",
-          "py-2",
-          "flex items-center",
-          "justify-center",
-          TOAST_STATE_CLS[state],
-          TOAST_SIZE_CLS[size],
-          TOAST_ROUNDED_CLS[rounded],
-          TOAST_LENGTH_CLS[length]
-        ),
+      className={cn(
+        "text-white",
+        "shadow-lg",
+        "px-4",
+        "py-2",
+        "flex items-center",
+        "justify-center",
+        TOAST_STATE_CLS[state],
+        TOAST_SIZE_CLS[size],
+        TOAST_ROUNDED_CLS[rounded],
+        TOAST_LENGTH_CLS[length],
         className
       )}
       {...restProps}
