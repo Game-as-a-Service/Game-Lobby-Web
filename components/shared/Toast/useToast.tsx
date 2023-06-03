@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import { useCtxToastQueue } from "@/shared/components/Toast/CtxToastQueue";
-import { ToastProps } from "@/shared/components/Toast/Toast";
+import { useToastQueueContext } from "@/components/shared/Toast/ToastQueueContext";
+import { ToastProps } from "@/components/shared/Toast/Toast";
 
 export interface UseToastOptions {
   // The target Toast bound to (ref.current) element.
@@ -32,7 +32,7 @@ export interface UseToast {
 }
 
 export const useToast: UseToast = () => {
-  const { addToast } = useCtxToastQueue();
+  const { addToast } = useToastQueueContext();
 
   return addToast;
 };

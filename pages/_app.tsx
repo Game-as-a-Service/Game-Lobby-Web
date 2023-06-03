@@ -10,7 +10,7 @@ import AppLayout from "@/containers/layout/AppLayout";
 import ModalManager from "@/components/shared/Modal/ModalManager";
 import AuthProvider from "@/containers/provider/AuthProvider";
 import Startup from "@/containers/util/Startup";
-import { ToastQueueProvider } from "@/shared/components/Toast";
+import { ToastQueueProvider } from "@/components/shared/Toast";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -29,8 +29,8 @@ export default function App({ Component, pageProps }: AppWithProps) {
     ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
 
   return (
-    <ModalManager.Provider>
-      <ToastQueueProvider>
+    <ToastQueueProvider>
+      <ModalManager.Provider>
         <AxiosProvider>
           <AuthProvider>
             <Startup isAnonymous={isAnonymous}>
@@ -38,7 +38,7 @@ export default function App({ Component, pageProps }: AppWithProps) {
             </Startup>
           </AuthProvider>
         </AxiosProvider>
-      </ToastQueueProvider>
-    </ModalManager.Provider>
+      </ModalManager.Provider>
+    </ToastQueueProvider>
   );
 }

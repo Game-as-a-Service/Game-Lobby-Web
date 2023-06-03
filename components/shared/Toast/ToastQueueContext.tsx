@@ -12,21 +12,21 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import Toast from "@/shared/components/Toast/index";
+import Toast from "@/components/shared/Toast/index";
 import {
   Toaster,
   UseToastComponent,
   UseToastOptions,
-} from "@/shared/components/Toast/useToast";
+} from "@/components/shared/Toast/useToast";
 import clsx from "clsx";
-import { Button } from "@/shared/components/Button";
+import { Button } from "@/components/shared/Button";
 
 export interface CtxToastQueueValue {
   addToast: Toaster;
 }
 
-export const CtxToastQueue = createContext<CtxToastQueueValue>({} as any);
-export const useCtxToastQueue = () => useContext(CtxToastQueue);
+export const ToastQueueContext = createContext<CtxToastQueueValue>({} as any);
+export const useToastQueueContext = () => useContext(ToastQueueContext);
 
 export const MAX_TOAST_QUEUE_SIZE = 100;
 export const MAX_TOAST_MOUNT_SIZE = 6;
@@ -202,9 +202,9 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   }, []);
 
   return (
-    <CtxToastQueue.Provider value={{ addToast }}>
+    <ToastQueueContext.Provider value={{ addToast }}>
       {children}
       {mappedToasts}
-    </CtxToastQueue.Provider>
+    </ToastQueueContext.Provider>
   );
 };

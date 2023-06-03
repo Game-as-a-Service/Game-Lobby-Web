@@ -7,13 +7,13 @@ import {
   useToast,
   UseToastComponent,
   UseToastOptions,
-} from "@/shared/components/Toast";
-import Toast from "@/shared/components/Toast";
-import type { ToastProps } from "@/shared/components/Toast";
-import { ToastQueueProvider } from "@/shared/components/Toast";
+} from "@/components/shared/Toast/index";
+import Toast from "@/components/shared/Toast/index";
+import type { ToastProps } from "@/components/shared/Toast/index";
+import { ToastQueueProvider } from "@/components/shared/Toast/index";
 import { FC, useEffect, useRef, useState } from "react";
-import { Button, ButtonVariant } from "@/shared/components/Button";
-import { toastStoryArgTypes } from "@/shared/components/Toast/toastStoryArgTypes";
+import { Button, ButtonVariant } from "@/components/shared/Button";
+import { toastStoryArgTypes } from "@/components/shared/Toast/toastStoryArgTypes";
 
 interface DemoUseToastProps
   extends ToastProps,

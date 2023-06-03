@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Toast from "@/shared/components/Toast";
-import { toastStoryArgTypes } from "@/shared/components/Toast/toastStoryArgTypes";
+import Toast from "@/components/shared/Toast/index";
+import { toastStoryArgTypes } from "@/components/shared/Toast/toastStoryArgTypes";
 
 const meta: Meta<typeof Toast> = {
   title: "feedback/Toast",

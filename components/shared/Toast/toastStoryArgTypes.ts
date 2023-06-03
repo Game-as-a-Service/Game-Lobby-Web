@@ -1,6 +1,6 @@
 // share toast storybook arg types
 import { RefAttributes } from "react";
-import type { ToastProps } from "@/shared/components/Toast/Toast";
+import type { ToastProps } from "@/components/shared/Toast/Toast";
 import type { ArgTypes } from "@storybook/csf";
 
 export const toastStoryArgTypes: Partial<
