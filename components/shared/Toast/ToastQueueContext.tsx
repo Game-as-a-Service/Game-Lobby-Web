@@ -49,9 +49,19 @@ export interface CtxToastQueueProviderProps {
   children?: ReactNode;
 }
 
+export const TOAST_QUEUE_STATE = {
+  entering: "entering",
+  entered: "entered",
+  exiting: "exiting",
+} as const;
+
+export type ToastQueueState =
+  typeof TOAST_QUEUE_STATE[keyof typeof TOAST_QUEUE_STATE];
+
 export type ToastQueueValue = {
   id: string;
   value: UseToastComponent;
+  state?: ToastQueueState;
   options?: UseToastOptions;
 };
 export type ToastQueueMapValue = ToastQueueValue[];
@@ -113,12 +123,30 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
     [toastTimeoutMap]
   );
 
+  const changeToastState = useCallback((id: string, state: ToastQueueState) => {
+    setToastQueueMap((prev) => {
+      const newMap = new Map(prev);
+      newMap.forEach((queue) => {
+        const index = queue.findIndex((toast) => toast.id === id);
+        if (index !== -1) queue[index].state = state;
+      });
+      return newMap;
+    });
+    // cleat timeout
+    setToastTimeoutMap((prev) => {
+      const newMap = new Map(prev);
+      newMap.delete(id);
+      return newMap;
+    });
+  }, []);
+
+  //
   const mappedToasts = useMemo(() => {
     const allToasts: ReactElement[] = [];
     toastQueueMap.forEach((queue) => {
       queue
         .slice(-MAX_TOAST_MOUNT_SIZE)
-        .forEach(({ id, value, options }, i) => {
+        .forEach(({ id, value, state, options }, i) => {
           // If the value is a ReactElement, it is a custom toast component.
           const component = "key" in value ? value : <Toast {...value} />;
           const targetEl: HTMLElement = options?.targetEl ?? document.body;
@@ -144,7 +172,10 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
                   `flex justify-center z-[1400] transition-all duration-500`,
                   targetEl === document.body ? "fixed" : "absolute",
                   INITIAL_TOAST_POSITION[position],
-                  { "cursor-pointer": manualClosePlan === "fullBody" }
+                  { "cursor-pointer": manualClosePlan === "fullBody" },
+                  {
+                    "opacity-0": !state || state === TOAST_QUEUE_STATE.exiting,
+                  }
                 )}
                 style={style}
                 onClick={
@@ -176,25 +207,43 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
     return allToasts;
   }, [removeToast, toastQueueMap]);
 
-  // set toast lifetime timeout
+  // set toast timeout to change state or remove toast
   useEffect(() => {
     toastQueueMap.forEach((queue) => {
       // only set timeout for the last MAX_TOAST_MOUNT_SIZE toasts
-      queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, options }) => {
+      queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, state, options }) => {
         // ignore if the toast timeout is already set.
         if (toastTimeoutMap.has(id)) return;
 
-        const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
-        const removeToastHandler = () => {
-          removeToast(id);
-        };
+        let timeout: NodeJS.Timeout;
 
-        const timeout = setTimeout(removeToastHandler, duration);
+        // if state undefined, set state to entering
+        switch (state) {
+          case undefined:
+            changeToastState(id, TOAST_QUEUE_STATE.entering);
+            // no need to set timeout yet
+            return;
+          case TOAST_QUEUE_STATE.entering:
+            timeout = setTimeout(
+              () => changeToastState(id, TOAST_QUEUE_STATE.entered),
+              150
+            );
+            break;
+          case TOAST_QUEUE_STATE.entered:
+            const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
+            timeout = setTimeout(
+              () => changeToastState(id, TOAST_QUEUE_STATE.exiting),
+              duration
+            );
+            break;
+          case TOAST_QUEUE_STATE.exiting:
+            timeout = setTimeout(() => removeToast(id), 150);
+        }
 
         setToastTimeoutMap((prev) => new Map(prev.set(id, timeout)));
       });
     });
-  }, [removeToast, toastQueueMap, toastTimeoutMap]);
+  }, [changeToastState, removeToast, toastQueueMap, toastTimeoutMap]);
 
   // remove all timeout when unmount
   useEffect(() => {
