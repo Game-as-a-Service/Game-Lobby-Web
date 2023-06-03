@@ -23,6 +23,19 @@ export interface UseToastOptions {
 }
 
 export type UseToastComponent = ToastProps | ReactElement;
+
+/**
+ * Add a component to the toast queue.
+ * You can find examples in useToast.stories.tsx
+ * @param component {UseToastComponent} The component to be displayed in the toast queue.
+ * You can use ToastProps to create Toast or put your own component.
+ * @param toastOption {UseToastOptions} Optional. The options of the toast.
+ * @param toastOption.targetEl The target element of the toast.
+ * Make sure that the target element has a "position: relative;" setting. default: null (means "document.body")
+ * @param toastOption.duration The duration of the toast (not including the animation time). default: 3500
+ * @param toastOption.position The position of the toast. default: "bottom"
+ * @param toastOption.manualClosePlan The manual close plan of the toast. default: "fullBody"
+ */
 export interface Toaster {
   (component: UseToastComponent, toastOption?: UseToastOptions): void;
 }
@@ -31,6 +44,8 @@ export interface UseToast {
   (): Toaster;
 }
 
+// useToast is a hook that returns a toast function that can be used to add a Toast to the ToastQueue (Context).
+// You can find examples of use in the useToast.stories.tsx file.
 export const useToast: UseToast = () => {
   const { addToast } = useToastQueueContext();
 
