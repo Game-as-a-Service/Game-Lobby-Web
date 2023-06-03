@@ -110,6 +110,8 @@ const meta: Meta<typeof DemoUseToast> = {
     ...toastStoryArgTypes,
     duration: {
       control: { type: "number" },
+      description:
+        "In milliseconds. If value is negative, NaN, greater than 600000 (10 minutes) will be considered as non-automatic closing",
       defaultValue: DEFAULT_TOAST_DURATION,
     },
     position: {
@@ -122,11 +124,14 @@ const meta: Meta<typeof DemoUseToast> = {
         "bottom-left",
         "bottom-right",
       ],
+      description: "render position",
       defaultValue: DEFAULT_TOAST_POSITION,
     },
     manualClosePlan: {
       control: { type: "select" },
       options: ["fullBody", "closeButton", "none"],
+      description:
+        "How to close the toast manually. If 'none' and duration is set to non-automatic closing will force to be default to 'fullBody'",
       defaultValue: DEFAULT_TOAST_MANUAL_CLOSE_PLAN,
     },
   },
