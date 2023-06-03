@@ -2,7 +2,7 @@ import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { NextPageWithProps } from "@/pages/_app";
-import useUser from "@/shared/hooks/useUser";
+import useUser from "@/hooks/useUser";
 
 const Token: NextPageWithProps = () => {
   const {

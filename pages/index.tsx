@@ -1,10 +1,10 @@
 import { GetStaticProps } from "next";
 import { useState } from "react";
 
-import Button from "@/shared/components/Button";
-import UserInfoModal from "@/core/lobby/components/UserInfoModal";
-import usePagination from "@/shared/hooks/usePagination";
-import useRequest from "@/shared/hooks/useRequest";
+import Button from "@/components/shared/Button";
+import UserInfoModal from "@/components/lobby/UserInfoModal";
+import usePagination from "@/hooks/usePagination";
+import useRequest from "@/hooks/useRequest";
 import { getRooms } from "@/requests/rooms";
 
 export default function Home() {
