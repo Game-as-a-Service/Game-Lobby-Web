@@ -32,7 +32,8 @@ export type UseToastComponent = ToastProps | ReactElement;
  * @param toastOption {UseToastOptions} Optional. The options of the toast.
  * @param toastOption.targetEl The target element of the toast.
  * Make sure that the target element has a "position: relative;" setting. default: null (means "document.body")
- * @param toastOption.duration The duration of the toast (not including the animation time). default: 3500
+ * @param toastOption.duration The duration of the toast (not including the animation time).
+ * negative, NaN, and greater than 10 minutes will be considered as non-automatic closing. default: 3500
  * @param toastOption.position The position of the toast. default: "bottom"
  * @param toastOption.manualClosePlan The manual close plan of the toast. default: "fullBody"
  */

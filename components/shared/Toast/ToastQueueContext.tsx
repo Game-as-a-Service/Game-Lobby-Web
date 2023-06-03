@@ -58,6 +58,9 @@ export const TOAST_QUEUE_STATE = {
 export type ToastQueueState =
   typeof TOAST_QUEUE_STATE[keyof typeof TOAST_QUEUE_STATE];
 
+const isToastNotAutoClosed = (duration: number) =>
+  duration < 0 || isNaN(duration) || duration > 600000;
+
 export type ToastQueueValue = {
   id: string;
   value: UseToastComponent;
@@ -140,7 +143,7 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
     });
   }, []);
 
-  //
+  // toasts should be rendered
   const mappedToasts = useMemo(() => {
     const allToasts: ReactElement[] = [];
     toastQueueMap.forEach((queue) => {
@@ -150,9 +153,15 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
           // If the value is a ReactElement, it is a custom toast component.
           const component = "key" in value ? value : <Toast {...value} />;
           const targetEl: HTMLElement = options?.targetEl ?? document.body;
+          const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
           const position = options?.position ?? DEFAULT_TOAST_POSITION;
-          const manualClosePlan =
-            options?.manualClosePlan ?? DEFAULT_TOAST_MANUAL_CLOSE_PLAN;
+          // prevent permanent toast
+          const manualClosePlan = options?.manualClosePlan
+            ? isToastNotAutoClosed(duration) &&
+              options.manualClosePlan === "none"
+              ? DEFAULT_TOAST_MANUAL_CLOSE_PLAN
+              : options.manualClosePlan
+            : DEFAULT_TOAST_MANUAL_CLOSE_PLAN;
 
           const removeToastHandler = removeToast.bind(null, id);
 
@@ -173,6 +182,7 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
                   targetEl === document.body ? "fixed" : "absolute",
                   INITIAL_TOAST_POSITION[position],
                   { "cursor-pointer": manualClosePlan === "fullBody" },
+                  { "hover:opacity-90": manualClosePlan === "fullBody" },
                   {
                     "opacity-0": !state || state === TOAST_QUEUE_STATE.exiting,
                   }
@@ -231,6 +241,9 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
             break;
           case TOAST_QUEUE_STATE.entered:
             const duration = options?.duration ?? DEFAULT_TOAST_DURATION;
+            // if duration is negative, NaN, or greater than 10 minutes, the toast will not be removed automatically.
+            if (isToastNotAutoClosed(duration)) return;
+
             timeout = setTimeout(
               () => changeToastState(id, TOAST_QUEUE_STATE.exiting),
               duration
