@@ -1,10 +1,9 @@
-import profileImg from "@/public/images/profile.jpg";
 import { GameType } from "@/requests/games";
 const mock_gameList: GameType[] = [
   {
     id: "123456",
     displayName: "狼人殺",
-    imageUrl: `/`,
+    imageUrl: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 10,
     category: "心機",
@@ -12,14 +11,14 @@ const mock_gameList: GameType[] = [
   {
     id: "133456",
     displayName: "璀璨寶石",
-    imageUrl: `/`,
+    imageUrl: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 2,
     maxPlayers: 4,
   },
   {
     id: "133416",
     displayName: "富饒之城",
-    imageUrl: `/`,
+    imageUrl: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 8,
   },
@@ -27,14 +26,14 @@ const mock_gameList: GameType[] = [
   {
     id: "139456",
     displayName: "幕後交易",
-    imageUrl: `/`,
+    imageUrl: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 6,
   },
   {
     id: "184456",
     displayName: "農家樂",
-    imageUrl: `/`,
+    imageUrl: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 1,
     maxPlayers: 5,
     category: "策略",

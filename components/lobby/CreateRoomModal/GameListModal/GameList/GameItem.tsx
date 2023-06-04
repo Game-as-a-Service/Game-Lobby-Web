@@ -1,7 +1,6 @@
 import Avatar from "@/components/shared/Avatar";
 import styles from "../gameListModal.module.css";
 import { GameType } from "@/requests/games";
-
 interface GameItemProp {
   game: GameType;
   checked: boolean;

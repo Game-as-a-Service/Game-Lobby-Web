@@ -1,9 +1,9 @@
-import { Room, RoomInfo } from "@/requests/rooms";
+import { Room, RoomType, RoomInfo } from "@/requests/rooms";
 
-const mock_genRoom = (id: string): Room => {
+const mock_genRoom = (id: string, status: RoomType): Room => {
   return {
     id,
-    name: `Mock Room - [${id}]`,
+    name: `[${id}] - ${status} room`,
     game: {
       id: "mock game id",
       name: "好玩的遊戲",
@@ -20,10 +20,10 @@ const mock_genRoom = (id: string): Room => {
   };
 };
 
-export const mock_rooms = () => {
+export const mock_rooms = (status: RoomType) => {
   return new Array(100)
     .fill(undefined)
-    .map((item, index) => mock_genRoom(index.toString()));
+    .map((item, index) => mock_genRoom(index.toString(), status));
 };
 
 export const mock_createRoomResponse: Room = {

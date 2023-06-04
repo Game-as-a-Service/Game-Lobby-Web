@@ -1,14 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { mock_rooms, mock_createRoomResponse } from "@/mocks/room";
-import type { Rooms, Room } from "@/requests/rooms";
+import { Rooms, RoomType, Room } from "@/requests/rooms";
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Rooms | Room>
 ) {
   if (req.method === "GET") {
-    const { page: reqPage = 1, perPage = 10 } = req.query;
-    const rooms = mock_rooms();
+    const { page: reqPage = 1, perPage = 10, status } = req.query;
+    const roomType = (status as RoomType) || RoomType.WAITING;
+    const rooms = mock_rooms(roomType);
 
     const pageOpt = {
       page: Number(reqPage),

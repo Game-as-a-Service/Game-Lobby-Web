@@ -63,7 +63,12 @@ export default function CreateRoomModal() {
     const game = gameList.find((game) => game.id === gameId);
     if (game) {
       setCurrentGame(game);
-      setRoomForm((prev) => ({ ...prev, gameId: game.id }));
+      setRoomForm((prev) => ({
+        ...prev,
+        gameId: game.id,
+        minPlayers: game.minPlayers,
+        maxPlayers: game.maxPlayers,
+      }));
     }
 
     setShowGameListModal(false);
