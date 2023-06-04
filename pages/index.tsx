@@ -1,44 +1,15 @@
 import { GetStaticProps } from "next";
 import { useState } from "react";
-
 import Button from "@/components/shared/Button";
-import UserInfoModal from "@/components/lobby/UserInfoModal";
-import usePagination from "@/hooks/usePagination";
-import useRequest from "@/hooks/useRequest";
-import { getRooms } from "@/requests/rooms";
+import Link from "next/link";
 
 export default function Home() {
-  const { fetch } = useRequest();
-
-  const [showUserInfoModal, setShowUserInfoModal] = useState(true);
-
-  const { nextPage, backPage, setPerPage, data } = usePagination({
-    source: (page: number, perPage: number) =>
-      fetch(getRooms({ page, perPage })),
-    defaultPerPage: 10,
-  });
-
-  const nextPerPage = () => {
-    setPerPage(10);
-  };
-
-  const backPerPage = () => {
-    setPerPage(-10);
-  };
-
   return (
     <>
       <h1>遊戲大廳！</h1>
-
-      {data &&
-        data.length &&
-        data.map((item) => <p key={item.id}>{JSON.stringify(item)}</p>)}
-
-      <Button onClick={backPage}>上一頁</Button>
-      <Button onClick={nextPage}>下一頁</Button>
-      <Button onClick={nextPerPage}>我要+10筆</Button>
-      <Button onClick={backPerPage}>我要-10筆</Button>
-      {showUserInfoModal && <UserInfoModal isOpen={showUserInfoModal} />}
+      <Button component={Link} href="/rooms">
+        查看房間列表
+      </Button>
     </>
   );
 }
