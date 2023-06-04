@@ -34,9 +34,15 @@ export type Rooms = {
   page: PageMeta;
 };
 
+export enum RoomType {
+  WAITING = "WAITING",
+  PLAYING = "PLAYING",
+}
+
 export const getRooms = (data: {
   page?: number;
   perPage?: number;
+  status: RoomType;
 }): IRequestWrapper<Rooms> => {
   return requestWrapper({
     url: "/api/internal/rooms",
