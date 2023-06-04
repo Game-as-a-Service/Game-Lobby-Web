@@ -6,17 +6,14 @@ const { context } = require("@actions/github");
 
 const knipScanResultPath = path.join(process.cwd(), "knipScanResult.txt");
 
-const HOST_NAME = "https://github.com";
 const octokit = new Octokit({
   auth: process.env.GIT_TOKEN,
-  baseUrl: `${HOST_NAME}/api/v3`,
+  baseUrl: "https://api.github.com",
 });
 
 const REPO_FULL_NAME = context.payload.repository.full_name;
 const PR_NUMBER = context.payload.pull_request.number;
-console.log("process.env.GIT_TOKEN ", process.env.GIT_TOKEN);
-console.log("REPO_FULL_NAME ", REPO_FULL_NAME);
-console.log("PR_NUMBER ", PR_NUMBER);
+
 const categories = [
   "Unused files",
   "Unused dependencies",
