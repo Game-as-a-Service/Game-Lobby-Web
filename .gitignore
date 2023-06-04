@@ -9,6 +9,7 @@
 /coverage
 *.mp4
 /cypress/videos
+/storybook-static
 
 # next.js
 /.next/
