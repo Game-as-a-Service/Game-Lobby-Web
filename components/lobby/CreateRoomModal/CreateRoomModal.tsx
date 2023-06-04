@@ -5,6 +5,7 @@ import {
   FormEvent,
   ChangeEvent,
   KeyboardEvent,
+  useRef,
 } from "react";
 import Button from "@/components/shared/Button";
 import GameListModal from "./GameListModal";
@@ -21,6 +22,9 @@ export default function CreateRoomModal() {
   const [showThisModal, setshowThisModal] = useState(false);
   const [showGameListModal, setShowGameListModal] = useState(false);
   const [gameList, setGameList] = useState<GameType[]>([]);
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [passwords, setPasswords] = useState(["", "", "", ""]);
+  const passwordRefs = useRef<(HTMLInputElement | null)[]>([]);
   const { fetch } = useRequest();
   const { push } = useRouter();
   const {
@@ -31,12 +35,8 @@ export default function CreateRoomModal() {
     updateMaxplayers,
     updatePassword,
   } = useContext(CreateRoomContext);
-  const [isPublic, setIsPublic] = useState<boolean>(true);
-  const [passwords, setPasswords] = useState(["", "", "", ""]);
-
   const checkIsPasswordDone = () => passwords.every((digit) => digit !== "");
-
-  const isNumeric = (value: string) => /[0-9]/.test(value);
+  const isNumeric = (value: string) => !/[\D]/.test(value);
 
   // get game list
   useEffect(() => {
@@ -50,6 +50,7 @@ export default function CreateRoomModal() {
   function handleChangeGame(gameId: string) {
     const game = gameList.find((game) => game.id === gameId);
     game && updateGame(game);
+    setShowGameListModal(false);
   }
 
   function handleChangeRoomName(value: string) {
@@ -76,9 +77,11 @@ export default function CreateRoomModal() {
 
   function handlePasswordChange(value: string, index: number) {
     if (!isNumeric(value) && value !== "") return;
+    if (value.length > 1) return;
     const nextPasswords = [...passwords];
     nextPasswords[index] = value;
     setPasswords(nextPasswords);
+    passwordRefs.current[index + 1]?.focus();
     checkIsPasswordDone() && updatePassword(Number(nextPasswords.join("")));
   }
 
@@ -261,6 +264,9 @@ export default function CreateRoomModal() {
                       {passwords.map((password, index) => (
                         <div key={index}>
                           <Input
+                            inputRef={(element) =>
+                              (passwordRefs.current[index] = element)
+                            }
                             id={`input-password-${index}`}
                             type="text"
                             maxLength={1}
