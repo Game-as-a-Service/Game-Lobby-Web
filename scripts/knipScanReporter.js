@@ -14,7 +14,9 @@ const octokit = new Octokit({
 
 const REPO_FULL_NAME = context.payload.repository.full_name;
 const PR_NUMBER = context.payload.pull_request.number;
-
+console.log("process.env.GIT_TOKEN ", process.env.GIT_TOKEN);
+console.log("REPO_FULL_NAME ", REPO_FULL_NAME);
+console.log("PR_NUMBER ", PR_NUMBER);
 const categories = [
   "Unused files",
   "Unused dependencies",
