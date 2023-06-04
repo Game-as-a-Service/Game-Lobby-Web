@@ -5151,10 +5151,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-cypress@^12.12.0:
-  version "12.13.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.13.0.tgz#725b6617ea19e41e5c59cc509fc3e08097142b01"
-  integrity sha512-QJlSmdPk+53Zhy69woJMySZQJoWfEWun3X5OOenGsXjRPVfByVTHorxNehbzhZrEzH9RDUDqVcck0ahtlS+N/Q==
+cypress@12.12.0:
+  version "12.12.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-12.12.0.tgz#0da622a34c970d8699ca6562d8e905ed7ce33c77"
+  integrity sha512-UU5wFQ7SMVCR/hyKok/KmzG6fpZgBHHfrXcHzDmPHWrT+UUetxFzQgt7cxCszlwfozckzwkd22dxMwl/vNkWRw==
   dependencies:
     "@cypress/request" "^2.88.10"
     "@cypress/xvfb" "^1.2.4"
@@ -9325,7 +9325,7 @@ postcss-modules-extract-imports@^3.0.0:
   resolved "https://registry.yarnpkg.com/postcss-modules-extract-imports/-/postcss-modules-extract-imports-3.0.0.tgz#cda1f047c0ae80c97dbe28c3e76a43b88025741d"
   integrity sha512-bdHleFnP3kZ4NYDhuGlVK+CMrQ/pqUm8bx/oGL93K6gVwiclvX5x0n76fYMKuIGKzlABOy13zsvqjb0f92TEXw==
 
-postcss-modules-local-by-default@^4.0.3:
+postcss-modules-local-by-default@^4.0.1:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/postcss-modules-local-by-default/-/postcss-modules-local-by-default-4.0.3.tgz#b08eb4f083050708998ba2c6061b50c2870ca524"
   integrity sha512-2/u2zraspoACtrbFRnTijMiQtb4GW4BvatjaG/bCjYQo8kLTdevCUlwuBHx2sCnSyrI3x3qj4ZK1j5LQBgzmwA==
