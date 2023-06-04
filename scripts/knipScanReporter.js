@@ -6,7 +6,7 @@ const { context } = require("@actions/github");
 
 const knipScanResultPath = path.join(process.cwd(), "knipScanResult.txt");
 
-const HOST_NAME = "https://github.com/";
+const HOST_NAME = "https://github.com";
 const octokit = new Octokit({
   auth: process.env.GIT_TOKEN,
   baseUrl: `${HOST_NAME}/api/v3`,
