@@ -2,7 +2,6 @@ import { FC, ReactNode, useState } from "react";
 import { UserInfo } from "@/requests/users";
 import AuthContext from "@/contexts/AuthContext";
 
-
 type Props = {
   children: ReactNode;
 };
