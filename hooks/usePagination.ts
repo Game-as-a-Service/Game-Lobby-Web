@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { PageData } from "@/requests/rooms";
 
 const DEFAULT_PAGE = 1;

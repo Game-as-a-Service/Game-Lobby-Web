@@ -62,7 +62,7 @@ const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
         </div>
       </div>
       {/* 檢查是否上鎖 */}
-      {room.isLock && (
+      {room.isLocked && (
         <div className={cn("absolute z-3 -left-[10px] -top-[10px]")}>
           {LockIcon()}
         </div>

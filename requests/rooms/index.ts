@@ -1,4 +1,12 @@
-import { IRequestWrapper, requestWrapper } from "../request";
+import { IRequestWrapper, requestWrapper } from "@/requests/request";
+
+export type CreateRoomDataType = {
+  name: string;
+  gameId: string;
+  password: number | null | "";
+  minPlayers: number;
+  maxPlayers: number;
+};
 
 export type Room = {
   id: string;
@@ -12,10 +20,10 @@ export type Room = {
     id: string;
     nickname: string;
   };
+  isLocked: boolean;
+  currentPlayers: number;
   minPlayers: number;
   maxPlayers: number;
-  isLock: boolean;
-  currentPlayers: number;
 };
 
 export type PageMeta = {
@@ -34,6 +42,42 @@ export type Rooms = {
   page: PageMeta;
 };
 
+export namespace RoomInfo {
+  export type Game = {
+    id: string;
+    name: string;
+  };
+
+  export type User = {
+    id: string;
+    nickname: string;
+    isReady: boolean;
+  };
+
+  export type Room = {
+    id: string;
+    name: string;
+    status: "WATTING" | "PLAYING";
+    game: Game;
+    host: User;
+    isLocked: boolean;
+    players: User[];
+    currentPlayers: number;
+    minPlayers: number;
+    maxPlayers: number;
+  };
+}
+
+export const createRoomEndpoint = (
+  data: CreateRoomDataType
+): IRequestWrapper<Room> => {
+  return requestWrapper({
+    url: "/api/internal/rooms",
+    method: "POST",
+    data,
+  });
+};
+
 export enum RoomType {
   WAITING = "WAITING",
   PLAYING = "PLAYING",
@@ -48,5 +92,14 @@ export const getRooms = (data: {
     url: "/api/internal/rooms",
     method: "GET",
     params: data,
+  });
+};
+
+export const getRoomInfoEndpoint = (
+  roomId: string
+): IRequestWrapper<RoomInfo.Room> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}`,
+    method: "GET",
   });
 };
