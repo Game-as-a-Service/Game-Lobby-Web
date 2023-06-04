@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Button from "@/components/shared/Button";
 import UserCard, { UserCardProps } from "@/components/rooms/UserCard/UserCard";
 import useRequest from "@/hooks/useRequest";
-import useRoom from "@/hooks/context/useRoom";
+import useRoom from "@/hooks/useRoom";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
 import type { RoomInfo } from "@/requests/rooms";
 

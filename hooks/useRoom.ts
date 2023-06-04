@@ -1,7 +1,72 @@
-import { PropsWithChildren, useReducer, useCallback } from "react";
-import RoomContext, { initRoomInfo } from "@//contexts/RoomContext";
-import { REDUCER_ACTION_TYPE, ReducerAction } from "./type";
+import { useReducer, useCallback } from "react";
 import { RoomInfo } from "@/requests/rooms";
+
+const initRoomInfo: RoomInfo.Room = {
+  id: "",
+  name: "string",
+  status: "WATTING",
+  game: { id: "", name: "" },
+  host: { id: "", nickname: "", isReady: false },
+  isLocked: false,
+  players: [{ id: "", nickname: "", isReady: false }],
+  currentPlayers: 0,
+  minPlayers: 0,
+  maxPlayers: 0,
+};
+
+const enum REDUCER_ACTION_TYPE {
+  INITIALIZE_ROOM,
+  ADD_PLAYER,
+  REMOVE_PLAYER,
+  UPDATE_HOST,
+  UPDATE_ROOM_STATUS,
+  TOGGLE_USER_READY_STATUS,
+  CLEAN_UP_ROOM,
+}
+
+type InitializeRoomAction = {
+  type: REDUCER_ACTION_TYPE.INITIALIZE_ROOM;
+  payload: RoomInfo.Room;
+};
+
+type AddPlayerAction = {
+  type: REDUCER_ACTION_TYPE.ADD_PLAYER;
+  payload: Omit<RoomInfo.User, "isReady">;
+};
+
+type RemovePlayerAction = {
+  type: REDUCER_ACTION_TYPE.REMOVE_PLAYER;
+  payload: Pick<RoomInfo.User, "id">;
+};
+
+type UpdateHostAction = {
+  type: REDUCER_ACTION_TYPE.UPDATE_HOST;
+  payload: Pick<RoomInfo.User, "id">;
+};
+
+type UpdateRoomStatus = {
+  type: REDUCER_ACTION_TYPE.UPDATE_ROOM_STATUS;
+  payload: Pick<RoomInfo.Room, "status">;
+};
+
+type UpdateUserReadyStatus = {
+  type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS;
+  payload: Pick<RoomInfo.User, "id">;
+};
+
+type CleanUpRoomAction = {
+  type: REDUCER_ACTION_TYPE.CLEAN_UP_ROOM;
+};
+
+type ReducerAction =
+  | InitializeRoomAction
+  | AddPlayerAction
+  | RemovePlayerAction
+  | UpdateHostAction
+  | UpdateRoomStatus
+  | UpdateUserReadyStatus
+  | CleanUpRoomAction;
+
 const useRoomReducer = (
   state: RoomInfo.Room,
   action: ReducerAction
@@ -74,8 +139,8 @@ const useRoomReducer = (
   }
 };
 
-function useRoomCore(initState: RoomInfo.Room) {
-  const [roomInfo, dispatch] = useReducer(useRoomReducer, initState);
+export default function useRoom() {
+  const [roomInfo, dispatch] = useReducer(useRoomReducer, initRoomInfo);
 
   const initializeRoom = useCallback((roomInfo: RoomInfo.Room) => {
     dispatch({ type: REDUCER_ACTION_TYPE.INITIALIZE_ROOM, payload: roomInfo });
@@ -128,16 +193,3 @@ function useRoomCore(initState: RoomInfo.Room) {
     cleanUpRoom,
   };
 }
-
-export type UseRoomContextType = ReturnType<typeof useRoomCore>;
-
-const RoomContextProvider = ({ children }: PropsWithChildren) => {
-  const RoomContextValue = useRoomCore(initRoomInfo);
-  return (
-    <RoomContext.Provider value={RoomContextValue}>
-      {children}
-    </RoomContext.Provider>
-  );
-};
-
-export default RoomContextProvider;

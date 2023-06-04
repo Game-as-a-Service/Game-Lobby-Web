@@ -1,42 +1,54 @@
 import {
   useState,
   useEffect,
-  useContext,
   FormEvent,
   ChangeEvent,
   KeyboardEvent,
   useRef,
 } from "react";
 import Button from "@/components/shared/Button";
-import GameListModal from "./GameListModal";
 import Modalow from "@/components/shared/Modalow";
-import { createRoomEndpoint } from "@/requests/rooms";
-import { getAllGamesEndpoint, GameType } from "@/requests/games";
+import GameListModal from "./GameListModal";
+import Input from "@/components/shared/Input";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/router";
-import CreateRoomContext from "@/contexts/CreateRoomContext";
+import { createRoomEndpoint } from "@/requests/rooms";
+import { getAllGamesEndpoint, GameType } from "@/requests/games";
 import styles from "./createRoomModall.module.css";
-import Input from "@/components/shared/Input";
+
+export type CreateRoomFormType = {
+  name: string;
+  gameId: string;
+  password: null | number | "";
+  minPlayers: number;
+  maxPlayers: number;
+};
+
+const initialRoomFormState = {
+  name: "",
+  gameId: "",
+  password: null,
+  minPlayers: 0,
+  maxPlayers: 0,
+};
 
 export default function CreateRoomModal() {
   const [showThisModal, setshowThisModal] = useState(false);
   const [showGameListModal, setShowGameListModal] = useState(false);
   const [gameList, setGameList] = useState<GameType[]>([]);
+  const [roomForm, setRoomForm] =
+    useState<CreateRoomFormType>(initialRoomFormState);
+  const [currentGame, setCurrentGame] = useState<GameType | undefined>(
+    undefined
+  );
   const [isPublic, setIsPublic] = useState<boolean>(true);
-  const [passwords, setPasswords] = useState(["", "", "", ""]);
+  const [passwordValues, setPasswordValues] = useState(["", "", "", ""]);
   const passwordRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const checkIsPasswordDone = () =>
+    passwordValues.every((digit) => digit !== "");
+  const isNumeric = (value: string) => !/[\D]/.test(value);
   const { fetch } = useRequest();
   const { push } = useRouter();
-  const {
-    currentGame,
-    roomForm,
-    updateGame,
-    updateRoomName,
-    updateMaxplayers,
-    updatePassword,
-  } = useContext(CreateRoomContext);
-  const checkIsPasswordDone = () => passwords.every((digit) => digit !== "");
-  const isNumeric = (value: string) => !/[\D]/.test(value);
 
   // get game list
   useEffect(() => {
@@ -49,23 +61,30 @@ export default function CreateRoomModal() {
 
   function handleChangeGame(gameId: string) {
     const game = gameList.find((game) => game.id === gameId);
-    game && updateGame(game);
+    if (game) {
+      setCurrentGame(game);
+      setRoomForm((prev) => ({ ...prev, gameId: game.id }));
+    }
+
     setShowGameListModal(false);
   }
 
   function handleChangeRoomName(value: string) {
-    updateRoomName(value);
+    setRoomForm((prev) => ({ ...prev, name: value }));
   }
 
   function handleChangeMaxplayers(event: ChangeEvent<HTMLInputElement>) {
-    updateMaxplayers(Number(event.target.value));
+    setRoomForm((prev) => ({
+      ...prev,
+      maxPlayers: Number(event.target.value),
+    }));
   }
 
   function handleChangeIsPublic(event: ChangeEvent<HTMLInputElement>) {
     const isPublic = event.target.value === "public";
     if (isPublic) {
-      setPasswords(["", "", "", ""]);
-      updatePassword(null);
+      setPasswordValues(["", "", "", ""]);
+      setRoomForm((prev) => ({ ...prev, password: null }));
     }
     setIsPublic(isPublic);
   }
@@ -78,11 +97,16 @@ export default function CreateRoomModal() {
   function handlePasswordChange(value: string, index: number) {
     if (!isNumeric(value) && value !== "") return;
     if (value.length > 1) return;
-    const nextPasswords = [...passwords];
+    const nextPasswords = [...passwordValues];
     nextPasswords[index] = value;
-    setPasswords(nextPasswords);
+    setPasswordValues(nextPasswords);
     passwordRefs.current[index + 1]?.focus();
-    checkIsPasswordDone() && updatePassword(Number(nextPasswords.join("")));
+    if (checkIsPasswordDone()) {
+      setRoomForm((prev) => ({
+        ...prev,
+        password: Number(nextPasswords.join("")),
+      }));
+    }
   }
 
   async function handleCreateRoom(event: FormEvent) {
@@ -131,6 +155,7 @@ export default function CreateRoomModal() {
             </div>
             <div className="flex items-center relative">
               <Input
+                inputClassName="cursor-pointer"
                 label="請選擇遊戲"
                 value={currentGame?.displayName}
                 required
@@ -261,7 +286,7 @@ export default function CreateRoomModal() {
                       className="flex gap-[5px] mt-[7px]"
                       onClick={() => setIsPublic(false)}
                     >
-                      {passwords.map((password, index) => (
+                      {passwordValues.map((password, index) => (
                         <div key={index}>
                           <Input
                             inputRef={(element) =>

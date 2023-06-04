@@ -10,8 +10,6 @@ import AppLayout from "@/containers/layout/AppLayout";
 import ModalManager from "@/components/shared/Modal/ModalManager";
 import AuthProvider from "@/containers/provider/AuthProvider";
 import Startup from "@/containers/util/Startup";
-import RoomContextProvider from "@/containers/provider/RoomProvider";
-import CreateRoomContextProvider from "@/containers/provider/CreateRoomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -34,11 +32,7 @@ export default function App({ Component, pageProps }: AppWithProps) {
       <AxiosProvider>
         <AuthProvider>
           <Startup isAnonymous={isAnonymous}>
-            <RoomContextProvider>
-              <CreateRoomContextProvider>
-                {getLayout(<Component {...pageProps} />)}
-              </CreateRoomContextProvider>
-            </RoomContextProvider>
+            {getLayout(<Component {...pageProps} />)}
           </Startup>
         </AuthProvider>
       </AxiosProvider>
