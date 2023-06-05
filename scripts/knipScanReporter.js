@@ -13,6 +13,7 @@ const octokit = new Octokit({
 
 const REPO_FULL_NAME = context.payload.repository.full_name;
 const PR_NUMBER = context.payload.pull_request.number;
+const COMMIT_SHA = context.payload.after;
 
 const categories = [
   "Unused files",
@@ -67,14 +68,22 @@ const createTable = (section, lines) => {
   table += `|${"-".repeat(section.length + 2)}|\n`;
 
   for (const line of lines) {
-    table += `| ${line} |\n`;
+    const words = line.split(" ");
+
+    if (words.length > 1) {
+      const boldText = `**${words[0]}**`;
+      const remainingText = words.slice(1).join(" ");
+      table += `| ${boldText} ${remainingText} |\n`;
+    } else {
+      table += `| ${line} |\n`;
+    }
   }
 
   return table;
 };
 
 const addOrUpdateComment = (resultSections) => {
-  let commentBody = `✅ **Knip Scan Result** \n\n`;
+  let commentBody = `✅ **Knip Scan Result** for https://github.com/${REPO_FULL_NAME}/pull/${PR_NUMBER}/commits/${COMMIT_SHA} \n\n`;
 
   for (const [section, lines] of Object.entries(resultSections)) {
     commentBody += `<details>\n<summary>${section}</summary>\n\n`;
