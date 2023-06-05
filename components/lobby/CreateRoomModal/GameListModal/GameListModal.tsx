@@ -1,5 +1,4 @@
 import GameList from "./GameList";
-import styles from "./gameListModal.module.css";
 import { GameType } from "@/requests/games";
 interface GamePickModalProps {
   gameList: GameType[];
@@ -38,7 +37,7 @@ export default function GameListModal({
           />
         </svg>
       </button>
-      <div className={`overflow-y-scroll h-full ${styles.scrollbar} pr-4`}>
+      <div className={`scrollbar overflow-y-scroll h-full pr-4`}>
         <GameList
           gameList={gameList}
           onGameChange={onGameChange}
