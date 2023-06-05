@@ -67,7 +67,17 @@ const addOrUpdateComment = (resultSections) => {
 
   for (const [section, lines] of Object.entries(resultSections)) {
     commentBody += `<details>\n<summary>${section}</summary>\n\n`;
-    commentBody += lines.join("\n") + "\n</details>\n\n";
+
+    /* generate table */
+    const splitLines = lines.map((line) => line.replace(/,/g, "").split(" "));
+    commentBody +=
+      "| " + new Array(splitLines[0].length).fill("---").join(" | ") + " |\n"; // Table header
+
+    for (let row of splitLines) {
+      commentBody += "| " + row.join(" | ") + " |\n";
+    }
+
+    commentBody += "</details>\n\n";
   }
 
   octokit
