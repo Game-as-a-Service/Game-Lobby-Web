@@ -70,11 +70,14 @@ const addOrUpdateComment = (resultSections) => {
 
     /* generate table */
     const splitLines = lines.map((line) => line.replace(/,/g, "").split(" "));
+    const columnCount = splitLines[0].length;
+
+    /* table header */
     commentBody +=
-      "| " + new Array(splitLines[0].length).fill("---").join(" | ") + " |\n"; // Table header
+      "| " + new Array(columnCount).fill("---").join(" | ") + " |\n";
 
     for (let row of splitLines) {
-      commentBody += "| " + row.join(" | ") + " |\n";
+      commentBody += "| " + row.join(" | ") + " |\n"; // Table row
     }
 
     commentBody += "</details>\n\n";
