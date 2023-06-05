@@ -119,5 +119,5 @@ jobs:
         env: 
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
-          yarn run knip > knipScanResult.txt
+          yarn run knip > knipScanResult.txt 2>&1
           node ./scripts/knipScanReporter.js
