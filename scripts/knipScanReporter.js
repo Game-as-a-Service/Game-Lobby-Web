@@ -62,24 +62,24 @@ rl.on("close", () => {
   addOrUpdateComment(resultSections);
 });
 
+const createTable = (section, lines) => {
+  let table = `| ${section} |\n`;
+  table += `|${"-".repeat(section.length + 2)}|\n`;
+
+  for (const line of lines) {
+    table += `| ${line} |\n`;
+  }
+
+  return table;
+};
+
 const addOrUpdateComment = (resultSections) => {
-  let commentBody = `✅**Knip Scan Result** \n\n`;
+  let commentBody = `✅ **Knip Scan Result** \n\n`;
 
   for (const [section, lines] of Object.entries(resultSections)) {
-    // Table header
-    let tableHeader = section.split(/\s+/);
     commentBody += `<details>\n<summary>${section}</summary>\n\n`;
-    commentBody += "| " + tableHeader.join(" | ") + " |\n";
-    commentBody +=
-      "| " + new Array(tableHeader.length).fill("---").join(" | ") + " |\n";
-
-    // Table rows
-    for (const line of lines) {
-      const columns = line.split(/\s+/);
-      commentBody += "| " + columns.join(" | ") + " |\n";
-    }
-
-    commentBody += "</details>\n\n";
+    commentBody += createTable(section, lines);
+    commentBody += `</details>\n\n`;
   }
 
   octokit
