@@ -9,7 +9,7 @@ interface GameItemProp {
 
 function GameItem({ game, onChange, checked }: GameItemProp) {
   return (
-    <li className="">
+    <li>
       <input
         type="radio"
         className={`hidden ${styles.gamePickRadio}`}

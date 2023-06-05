@@ -1,9 +1,9 @@
 import { IRequestWrapper, requestWrapper } from "@/requests/request";
 
-export type CreateRoomDataType = {
+export type CreateRoomFormType = {
   name: string;
   gameId: string;
-  password: number | null | "";
+  password: null | string;
   minPlayers: number;
   maxPlayers: number;
 };
@@ -69,7 +69,7 @@ export namespace RoomInfo {
 }
 
 export const createRoomEndpoint = (
-  data: CreateRoomDataType
+  data: CreateRoomFormType
 ): IRequestWrapper<Room> => {
   return requestWrapper({
     url: "/api/internal/rooms",

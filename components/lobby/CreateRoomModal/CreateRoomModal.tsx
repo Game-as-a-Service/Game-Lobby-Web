@@ -12,17 +12,10 @@ import GameListModal from "./GameListModal";
 import Input from "@/components/shared/Input";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/router";
-import { createRoomEndpoint } from "@/requests/rooms";
+import { createRoomEndpoint, CreateRoomFormType } from "@/requests/rooms";
 import { getAllGamesEndpoint, GameType } from "@/requests/games";
 import styles from "./createRoomModall.module.css";
-
-export type CreateRoomFormType = {
-  name: string;
-  gameId: string;
-  password: null | number | "";
-  minPlayers: number;
-  maxPlayers: number;
-};
+import { cn } from "@/lib/utils";
 
 const initialRoomFormState = {
   name: "",
@@ -44,8 +37,6 @@ export default function CreateRoomModal() {
   const [isPublic, setIsPublic] = useState<boolean>(true);
   const [passwordValues, setPasswordValues] = useState(["", "", "", ""]);
   const passwordRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const checkIsPasswordDone = () =>
-    passwordValues.every((digit) => digit !== "");
   const isNumeric = (value: string) => !/[\D]/.test(value);
   const { fetch } = useRequest();
   const { push } = useRouter();
@@ -90,13 +81,65 @@ export default function CreateRoomModal() {
     if (isPublic) {
       setPasswordValues(["", "", "", ""]);
       setRoomForm((prev) => ({ ...prev, password: null }));
+    } else {
+      passwordRefs.current[0]?.focus();
     }
     setIsPublic(isPublic);
   }
 
   function handlePasswordKeyUp(e: KeyboardEvent, index: number) {
-    if (!isNumeric(e.key)) return;
-    handlePasswordChange(e.key, index);
+    const previousIndex = index - 1;
+    const nextIndex = index + 1;
+    const currentPassword = passwordValues[index];
+    /**
+     * 返回鍵的處理
+     * 1. 有值，則清空該格，不focus到前一格
+     * 2. 沒有值，則focus到前一格，並清空該格
+     */
+    if (e.key === "Backspace") {
+      if (currentPassword === "") {
+        passwordRefs.current[previousIndex]?.focus();
+        handlePasswordChange("", previousIndex);
+      } else {
+        handlePasswordChange("", index);
+      }
+    }
+    /**
+     * 方向鍵的處理
+     * 1. 左方向鍵：如果不是第一格，則focus到前一格
+     * 2. 右方向鍵：如果不是最後一格，則focus到後一格
+     */
+    if (e.key === "ArrowLeft") {
+      if (index === 0) return;
+      passwordRefs.current[previousIndex]?.focus();
+    }
+    if (e.key === "ArrowRight") {
+      if (index === 3) return;
+      passwordRefs.current[nextIndex]?.focus();
+    }
+    /**
+     * Delete鍵的處理
+     * 1. 有值，則清空該格。
+     * 2. 沒有值，將下一格的值清空，並將後面的值往前移一格。
+     */
+    if (e.key === "Delete") {
+      if (currentPassword === "") {
+        handlePasswordChange("", nextIndex);
+        const nextPasswords = [...passwordValues];
+        for (let i = index; i < nextPasswords.length - 1; i++) {
+          nextPasswords[i] = nextPasswords[i + 1];
+        }
+        nextPasswords[index] = "";
+        nextPasswords[nextPasswords.length - 1] = "";
+        setPasswordValues(nextPasswords);
+      } else {
+        handlePasswordChange("", index);
+      }
+    }
+    if (isNumeric(e.key)) {
+      handlePasswordChange(e.key, index);
+      passwordRefs.current[nextIndex]?.focus();
+    }
   }
 
   function handlePasswordChange(value: string, index: number) {
@@ -105,23 +148,34 @@ export default function CreateRoomModal() {
     const nextPasswords = [...passwordValues];
     nextPasswords[index] = value;
     setPasswordValues(nextPasswords);
-    passwordRefs.current[index + 1]?.focus();
-    if (checkIsPasswordDone()) {
-      setRoomForm((prev) => ({
-        ...prev,
-        password: Number(nextPasswords.join("")),
-      }));
-    }
+    setRoomForm((prev) => ({
+      ...prev,
+      password: nextPasswords.join(""),
+    }));
   }
 
   async function handleCreateRoom(event: FormEvent) {
     event.preventDefault();
     // valid
     if (!roomForm.gameId) return;
-    if (!isPublic && !checkIsPasswordDone()) return;
+    if (!isPublic && roomForm.password?.length !== 4) return;
     // send request
     const result = await fetch(createRoomEndpoint(roomForm));
     push(`/rooms/${result.id}`);
+  }
+
+  /**
+   * 1. 如果是從公開房間切過來私人房間，則 focus 到第一格
+   * 2. 如果是在私人房間再次點擊，則 focus 到有值的那格的後一格
+   */
+  function handlePasswordInputClick() {
+    if (isPublic) {
+      passwordRefs.current[0]?.focus();
+    } else {
+      const index = passwordValues.findIndex((value) => value === "");
+      const focusIndex = index === -1 ? passwordValues.length - 1 : index;
+      passwordRefs.current[focusIndex]?.focus();
+    }
   }
 
   function handleCloseModal() {
@@ -148,29 +202,37 @@ export default function CreateRoomModal() {
         ) : (
           <form className="flex flex-col gap-[24px] py-10 px-[55px] lg:h-[500px] mx-auto">
             <div className="flex">
-              <Input
-                label="請輸入房間名稱"
-                onChange={handleChangeRoomName}
-                value={roomForm.name}
-                name="name"
-                id="name"
-                required
-                className="w-full"
-              />
+              <div className="w-full">
+                <Input
+                  label="請輸入房間名稱"
+                  onChange={handleChangeRoomName}
+                  value={roomForm.name}
+                  name="name"
+                  id="name"
+                  required
+                  className="w-full"
+                  //  errorMessage={"請選擇遊戲"}
+                  //  errorClassName="flex justify-end" // 若需要實作 error message，需加入行高防止抖動。
+                />
+              </div>
             </div>
             <div className="flex items-center relative">
-              <Input
-                inputClassName="cursor-pointer"
-                label="請選擇遊戲"
-                value={currentGame?.displayName}
-                required
-                readOnly
-                className="w-full"
-                onClick={() => setShowGameListModal(true)}
-              />
+              <div className="w-full">
+                <Input
+                  inputClassName="cursor-pointer"
+                  label="請選擇遊戲"
+                  value={currentGame?.displayName}
+                  required
+                  readOnly
+                  onClick={() => setShowGameListModal(true)}
+                  error={roomForm.gameId === ""}
+                  // errorMessage={"請選擇遊戲"}
+                  // errorClassName="flex justify-end"  // 若需要實作 error message，需加入行高防止抖動。
+                />
+              </div>
               <button
                 type="button"
-                className="w-[28.11px] h-[28.11px] ml-[9px] absolute right-[-8px] translate-x-[100%] "
+                className="w-[28.11px] h-[28.11px] ml-[9px] absolute top-0 right-[-8px] translate-x-[100%] "
                 onClick={() => setShowGameListModal(true)}
               >
                 <svg
@@ -282,6 +344,7 @@ export default function CreateRoomModal() {
                   <label
                     htmlFor="radio-isPublic-private"
                     className="block label__container w-[200px] h-[133px] rounded-[10px] border border-[#1E1F22] pt-[14px] px-6 text-center text-base cursor-pointer"
+                    onClick={handlePasswordInputClick}
                   >
                     私人房間
                     <div className="text-sm mt-[14px] flex flex-col">
@@ -304,9 +367,7 @@ export default function CreateRoomModal() {
                             value={password}
                             maxLengthClassName="hidden"
                             onKeyUp={(e) => handlePasswordKeyUp(e, index)}
-                            onChange={(value) =>
-                              handlePasswordChange(value, index)
-                            }
+                            onClick={(event) => event.stopPropagation()}
                           />
                         </div>
                       ))}
