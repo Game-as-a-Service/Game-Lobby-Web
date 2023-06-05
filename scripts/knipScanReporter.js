@@ -70,14 +70,22 @@ const addOrUpdateComment = (resultSections) => {
 
     /* generate table */
     const splitLines = lines.map((line) => line.replace(/,/g, "").split(" "));
-    const columnCount = splitLines[0].length;
+
+    const columnCount = Math.max(...splitLines.map((line) => line.length)); // Get max column count
 
     /* table header */
     commentBody +=
       "| " + new Array(columnCount).fill("---").join(" | ") + " |\n";
 
     for (let row of splitLines) {
-      commentBody += "| " + row.join(" | ") + " |\n"; // Table row
+      /*
+        Table row
+        If row has fewer columns than header, add empty columns at the end
+      */
+      commentBody +=
+        "| " +
+        row.concat(new Array(columnCount - row.length).fill(" ")).join(" | ") +
+        " |\n";
     }
 
     commentBody += "</details>\n\n";
