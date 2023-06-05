@@ -7,7 +7,7 @@ import useAuth from "./context/useAuth";
 
 const useRequest = () => {
   const { axios } = useAxios();
-  const { token } = useAuth();
+  const { token, setToken: setTokenCtx } = useAuth();
 
   const fetch = useMemo(
     () =>
@@ -19,7 +19,12 @@ const useRequest = () => {
         }
         return requestWrapper
           .executor(axios, additionalToRequest)
-          .then((res) => res.data);
+          .then((res) => res.data)
+          .catch((err) => {
+            // the same handling like useUser.logout()
+            setTokenCtx(null);
+            throw err;
+          });
       },
     [axios, token]
   );
