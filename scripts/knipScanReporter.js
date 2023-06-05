@@ -29,6 +29,7 @@ const categories = [
   "Unused exported enum members",
   "Unused exported class members",
   "Duplicate exports",
+  "Configuration issues",
 ];
 
 const commentRegex = new RegExp(/Knip Scan Result+/gm);
