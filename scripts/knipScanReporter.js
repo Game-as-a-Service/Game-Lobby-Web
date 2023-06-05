@@ -63,29 +63,20 @@ rl.on("close", () => {
 });
 
 const addOrUpdateComment = (resultSections) => {
-  let commentBody = `Knip Scan Result \n\n`;
+  let commentBody = `✅**Knip Scan Result** \n\n`;
 
   for (const [section, lines] of Object.entries(resultSections)) {
+    // Table header
+    let tableHeader = section.split(/\s+/);
     commentBody += `<details>\n<summary>${section}</summary>\n\n`;
-
-    /* generate table */
-    const splitLines = lines.map((line) => line.replace(/,/g, "").split(" "));
-
-    const columnCount = Math.max(...splitLines.map((line) => line.length)); // Get max column count
-
-    /* table header */
+    commentBody += "| " + tableHeader.join(" | ") + " |\n";
     commentBody +=
-      "| " + new Array(columnCount).fill("---").join(" | ") + " |\n";
+      "| " + new Array(tableHeader.length).fill("---").join(" | ") + " |\n";
 
-    for (let row of splitLines) {
-      /*
-        Table row
-        If row has fewer columns than header, add empty columns at the end
-      */
-      commentBody +=
-        "| " +
-        row.concat(new Array(columnCount - row.length).fill(" ")).join(" | ") +
-        " |\n";
+    // Table rows
+    for (const line of lines) {
+      const columns = line.split(/\s+/);
+      commentBody += "| " + columns.join(" | ") + " |\n";
     }
 
     commentBody += "</details>\n\n";
