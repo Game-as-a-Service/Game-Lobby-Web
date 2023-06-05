@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface IRequestWrapper<T> {
   executor: (
@@ -8,7 +8,7 @@ export interface IRequestWrapper<T> {
     additionalToRequest?: AxiosRequestConfig
   ) => Promise<AxiosResponse<T>>;
   url: string;
-  method: string;
+  method: HttpMethod;
   additional?: {
     isPublic?: boolean;
   };
