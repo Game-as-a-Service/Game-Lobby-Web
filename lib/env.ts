@@ -4,9 +4,9 @@ enum Env {
 }
 
 interface IEnv {
-  env: Env
-  internalEndpoint: string
-  isMock: boolean
+  env: Env;
+  internalEndpoint: string;
+  isMock: boolean;
 }
 
 export const getEnv = (): IEnv => {
@@ -14,5 +14,5 @@ export const getEnv = (): IEnv => {
     env: (process.env.NODE_ENV as Env) || Env.DEV,
     internalEndpoint: process.env.INTERNAL_ENDPOINT || "",
     isMock: process.env.MOCK === "true",
-  }
-}
+  };
+};

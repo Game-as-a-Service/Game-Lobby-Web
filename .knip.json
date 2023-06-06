@@ -1,0 +1,84 @@
+{
+  "paths": {
+    "@/*": ["./*"]
+  },
+  "rules": {
+    "files": "warn",
+    "unlisted": "off"
+  },
+  "ignoreDependencies": ["@next/bundle-analyzer", "jest-environment-jsdom"],
+  "next": {
+    "entry": [
+      "next.config.{js,ts}",
+      "pages/**/*.{js,jsx,ts,tsx}",
+      "src/pages/**/*.{js,jsx,ts,tsx}"
+    ]
+  },
+  "cypress": {
+    "entry": [
+      "cypress.config.{js,ts,mjs,cjs}",
+      "cypress/support/e2e.{js,jsx,ts,tsx}",
+      "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+      "cypress/plugins/index.js"
+    ]
+  },
+  "eslint": {
+    "config": [
+      ".eslintrc",
+      ".eslintrc.{js,json,cjs}",
+      ".eslintrc.{yml,yaml}",
+      "package.json"
+    ],
+    "entry": ["eslint.config.js"]
+  },
+  "github-actions": {
+    "config": [".github/workflows/*.yml", ".github/**/action.{yml,yaml}"]
+  },
+  "husky": {
+    "config": [
+      ".husky/commit-msg",
+      ".husky/pre-{applypatch,commit,merge-commit,push,rebase,receive}",
+      ".husky/post-{checkout,commit,merge,rewrite}"
+    ]
+  },
+  "jest": {
+    "entry": "jest.setup.js",
+    "config": ["jest.config.{js,ts,mjs,cjs,json}", "package.json"]
+  },
+  "lint-staged": {
+    "config": [
+      ".lintstagedrc",
+      ".lintstagedrc.json",
+      ".lintstagedrc.{yml,yaml}",
+      ".lintstagedrc.{js,mjs,cjs}",
+      "lint-staged.config.{js,mjs,cjs}",
+      "package.json"
+    ]
+  },
+  "postcss": {
+    "config": ["postcss.config.js", "postcss.config.json", "package.json"]
+  },
+  "prettier": {
+    "config": [
+      ".prettierrc",
+      ".prettierrc.{json,js,cjs,yml,yaml}",
+      "prettier.config.{js,cjs}",
+      "package.json"
+    ]
+  },
+  "storybook": {
+    "config": [".storybook/{main,manager}.{js,ts}"],
+    "entry": [
+      ".storybook/preview.{js,jsx,ts,tsx}",
+      "**/*.stories.{js,jsx,ts,tsx}"
+    ],
+    "project": [".storybook/**/*.{js,jsx,ts,tsx}"]
+  },
+  "tailwind": {
+    "config": ["tailwind.config.{js,cjs,mjs,ts}"]
+  },
+  "typescript": {
+    "entry": "next-env.d.ts",
+    "config": ["tsconfig.json"]
+  }
+}

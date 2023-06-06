@@ -5,11 +5,11 @@ import { ReactElement, ReactNode } from "react";
 import "@/styles/reset.css";
 import "@/styles/global.css";
 
-import AxiosProvider from "@/shared/containers/provider/AxiosProvider";
-import AppLayout from "@/shared/containers/layout/AppLayout";
-import ModalManager from "@/shared/components/Modal/ModalManager";
-import AuthProvider from "@/shared/containers/provider/AuthProvider";
-import Startup from "@/shared/containers/util/Startup";
+import AxiosProvider from "@/containers/provider/AxiosProvider";
+import AppLayout from "@/containers/layout/AppLayout";
+import ModalManager from "@/components/shared/Modal/ModalManager";
+import AuthProvider from "@/containers/provider/AuthProvider";
+import Startup from "@/containers/util/Startup";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

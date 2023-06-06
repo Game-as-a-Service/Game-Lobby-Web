@@ -1,9 +1,9 @@
-import { Room } from "@/requests/rooms";
+import { Room, RoomType, RoomInfo } from "@/requests/rooms";
 
-const mock_genRoom = (id: string): Room => {
+const mock_genRoom = (id: string, status: RoomType): Room => {
   return {
     id,
-    name: `Mock Room - [${id}]`,
+    name: `[${id}] - ${status} room`,
     game: {
       id: "mock game id",
       name: "好玩的遊戲",
@@ -15,13 +15,44 @@ const mock_genRoom = (id: string): Room => {
     },
     minPlayers: 1,
     maxPlayers: 7,
-    isLock: false,
+    isLocked: false,
     currentPlayers: 1,
   };
 };
 
-export const mock_rooms = () => {
+export const mock_rooms = (status: RoomType) => {
   return new Array(100)
     .fill(undefined)
-    .map((item, index) => mock_genRoom(index.toString()));
+    .map((item, index) => mock_genRoom(index.toString(), status));
+};
+
+export const mock_createRoomResponse: Room = {
+  id: "3345678",
+  name: "銀河路跑2v2",
+  game: {
+    id: "456",
+    name: "銀河路跑",
+    imgUrl: "/undefined",
+  },
+  host: {
+    id: "abc",
+    nickname: "房間建造者",
+  },
+  isLocked: false,
+  currentPlayers: 1,
+  minPlayers: 2,
+  maxPlayers: 7,
+};
+
+export const mock_roomInfo: RoomInfo.Room = {
+  id: "3345678",
+  name: "銀河路跑2v2",
+  status: "WATTING",
+  game: { id: "456", name: "銀河路跑" },
+  host: { id: "abc", nickname: "房間創建者", isReady: false },
+  isLocked: false,
+  players: [{ id: "abc", nickname: "房間創建者", isReady: false }],
+  currentPlayers: 1,
+  minPlayers: 2,
+  maxPlayers: 7,
 };

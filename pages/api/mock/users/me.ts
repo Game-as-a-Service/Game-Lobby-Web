@@ -7,7 +7,10 @@ export const config = {
   },
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "GET") {
     return res.json(mock_currentUser);
   } else if (req.method === "POST") {
@@ -19,13 +22,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       nickname,
     });
   } else if (req.method === "PUT") {
-    const { nickname } = req.body;
-    if (nickname === "error")
+    const { nickname, email } = req.body;
+    if (nickname === "error" || email === "test@error")
       return res.status(500).json({ message: "Mock Server Error" });
-    return res.json({
-      ...req.body,
-      nickname,
-    });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    return res.json({ ...req.body });
   } else {
     throw new Error("Invalid method!");
   }

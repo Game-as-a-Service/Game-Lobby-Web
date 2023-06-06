@@ -9,6 +9,7 @@
 /coverage
 *.mp4
 /cypress/videos
+/storybook-static
 
 # next.js
 /.next/
@@ -39,3 +40,6 @@ package-lock.json
 
 # env
 .env
+
+# knip scan report
+knipScanResult.txt
