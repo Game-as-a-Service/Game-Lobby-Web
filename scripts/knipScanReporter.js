@@ -13,7 +13,7 @@ const octokit = new Octokit({
 
 const REPO_FULL_NAME = context.payload.repository.full_name;
 const PR_NUMBER = context.payload.pull_request.number;
-const COMMIT_SHA = context.payload.head.sha;
+const COMMIT_SHA = context.payload.pull_request.head.sha;
 
 const categories = [
   "Unused files",
