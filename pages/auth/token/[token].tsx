@@ -22,5 +22,6 @@ const Token: NextPageWithProps = () => {
 };
 
 Token.getLayout = (page: ReactElement) => page;
+Token.Anonymous = true;
 
 export default Token;
