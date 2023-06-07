@@ -71,7 +71,7 @@ export default function Tabs(props: TabsProps) {
   const tabsWrapperClass = cn("flex flex-col", tabsClass);
 
   const tabBarClass = cn(
-    "flex bg-[#292A2D]",
+    "flex bg-dark29",
     isLageSize ? "gap-[40px]" : "gap-[14px] px-3",
     customTabBarClass
   );

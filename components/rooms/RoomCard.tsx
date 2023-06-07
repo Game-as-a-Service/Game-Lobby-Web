@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Room } from "@/requests/rooms";
-import Image from "next/image";
 import Lock from "../../public/images/padlock.svg";
+import Cover from "../shared/Cover";
 
 type RoomsCardProps = {
   key: string;
@@ -12,7 +12,6 @@ type RoomsCardProps = {
   onClick: (id: string) => void;
 };
 const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
-  const [loaded, setLoaded] = useState(false);
   const LockIcon = () => <Lock className="w-5 h-5" />;
 
   const roomCardClass = cn(
@@ -28,28 +27,17 @@ const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
 
   return (
     <div className={roomCardClass} onClick={() => onClick(room.id)}>
-      <div
-        className={cn(
-          "game__cover",
-          "relative w-[34px] h-[34px] overflow-hidden rounded-[10px] bg-[#666]"
-        )}
-      >
-        <Image
-          className={cn("w-full object-cover object-center", {
-            invisible: !loaded,
-          })}
-          fill={true}
-          sizes="100vw"
-          src="http://localhost:3030/images/game-avatar.jpg"
-          onLoadingComplete={() => setLoaded(true)}
-          alt={room.game.name}
-          loading="lazy"
-        />
-      </div>
+      <Cover
+        className="w-[34px] h-[34px] rounded-[10px]"
+        fill
+        sizes="100vw"
+        src="/images/game-avatar.jpg"
+        alt={room.game.name}
+      />
       <div className={cn("grid gap-[7px]")}>
         <h3 className={cn("text-white truncate")}>{room.name}</h3>
         <div className={cn("text-white")}>
-          <span className={cn("text-blue")}>{room.maxPlayers}</span>
+          <span className={cn("text-blue)")}>{room.maxPlayers}</span>
           人房，
           {lackTotalPlayers > 0 ? (
             <>

@@ -26,7 +26,7 @@ export const RoomsListTitle = ({
 export const RoomsListWrapper = ({ className, children }: RoomsListProps) => {
   const listClass = cn(
     "rooms__list__wrapper",
-    "grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-2.5 my-5",
+    "grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-2.5 my-5",
     className
   );
 

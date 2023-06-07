@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* The height will effect the children's height  */
+#__next {
+  height: 100%;
+}
