@@ -14,7 +14,7 @@ const octokit = new Octokit({
 const REPO_FULL_NAME = context.payload.repository.full_name;
 const PR_NUMBER = context.payload.pull_request.number;
 const COMMIT_SHA = context.payload.after;
-
+console.log("context.payload ", context.payload);
 const categories = [
   "Unused files",
   "Unused dependencies",
