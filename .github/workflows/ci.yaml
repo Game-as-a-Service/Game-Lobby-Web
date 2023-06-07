@@ -24,11 +24,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -52,10 +48,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -79,10 +72,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -106,10 +96,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
