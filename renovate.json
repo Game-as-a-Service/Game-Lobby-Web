@@ -4,7 +4,13 @@
   "commitMessagePrefix": "[RENOVATE-BOT] ",
   "rangeStrategy": "pin",
   "enabledManagers": ["npm"],
-  "reviewers": [],
+  "reviewers": [
+    "kylemocode",
+    "Parkerhiphop",
+    "JohnsonMao",
+    "bxbdev",
+    "HongLinLiao"
+  ],
   "timezone": "Asia/Taipei",
   "prConcurrentLimit": 3,
   "packageRules": [
