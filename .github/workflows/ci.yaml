@@ -36,12 +36,12 @@ jobs:
       - name: Bundle Watch
         shell: bash
         env: 
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-          REPO_OWNER: Game-as-a-Service
-          REPO_NAME: Game-Lobby-Web
-          CURRENT_BRANCH: ${{ github.head_ref }}
-          BASE_BRANCH: ${{ github.base_ref }}
-          COMMIT_SHA: ${{ github.sha }}
+          CI_REPO_OWNER: Game-as-a-Service
+          CI_REPO_NAME: Game-Lobby-Web
+          CI_BRANCH: ${{ github.head_ref }}
+          CI_BRANCH_BASE: ${{ github.base_ref }}
+          CI_COMMIT_SHA: ${{ github.sha }}
+          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: yarn run bundlewatch
   
   test:
