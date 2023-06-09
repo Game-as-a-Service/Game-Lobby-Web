@@ -10,7 +10,7 @@ const checkList = [
     path: "./.next/static/chunks/pages/_app*.js",
     maxSize: "180KB",
   },
-  // other pagesxw
+  // other pages
   {
     path: "./.next/static/chunks/pages/**/!(_app)*.js",
     maxSize: "50KB",
