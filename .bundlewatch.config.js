@@ -42,6 +42,12 @@ const bundleWatchConfig = {
   files: checkList,
   ci: {
     trackBranches: ["main"],
+    githubAccessToken: process.env.GIT_TOKEN,
+    repoOwner: process.env.REPO_OWNER,
+    repoName: process.env.REPO_NAME,
+    repoCurrentBranch: process.env.CURRENT_BRANCH,
+    repoBranchBase: process.env.BASE_BRANCH || "main",
+    commitSha: process.env.COMMIT_SHA,
   },
 };
 
