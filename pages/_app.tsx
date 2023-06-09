@@ -33,9 +33,9 @@ export default function App({ Component, pageProps }: AppWithProps) {
 
   const getHistory = (children: ReactElement) => {
     return isProduction ? (
-      <ApiHistoryProvider>{children}</ApiHistoryProvider>
-    ) : (
       children
+    ) : (
+      <ApiHistoryProvider>{children}</ApiHistoryProvider>
     );
   };
 
