@@ -9,6 +9,10 @@ on:
 env:
   APPLICATION_FOLDER: ~/game-lobby/frontend
 
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
 jobs:
   build_and_deploy:
     name: Build and Test and Deploy to AWS EC2
@@ -17,6 +21,22 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          # the ARN (Amazon Resource Name) of the IAM role that should be assumed.
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          # sets the session name used when assuming the role.
+          role-session-name: github-runner-build-and-deploy
+          aws-region: us-east-1
+
+      - name: Login to AWS ECR
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+            # an argument to the amazon-ecr-login action indicating that the ECR registry you are logging into is public.
+            registry-type: public
+
       - name: Git checkout
         uses: actions/checkout@v3
 
@@ -27,8 +47,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -37,36 +56,28 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Build
-        run: yarn build
+      - name: Docker Build
+        run: |
+          docker build \
+          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:latest \
+          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:${{ github.sha }} \
+          -f ./docker/Dockerfile.production \
+          .    
 
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.4
+      - name: Push Docker Image to ECR
+        run: docker push ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }} --all-tags
+
+      # Restart systemd service
+      - name: Run Application
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ vars.EC2_HOST }}
           username: ${{ vars.EC2_USERNAME }}
           port: ${{ vars.EC2_PORT }}
           key: ${{ secrets.EC2_KEY }}
-          source: '.next,public,package.json,yarn.lock'
-          target: ${{ env.APPLICATION_FOLDER }}
-
-      - name: Install dependencies
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.EC2_HOST }}
-          username: ${{ vars.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
           script: |
-            cd ${{ env.APPLICATION_FOLDER }}
-            yarn install --production --frozen-lockfile
+            uname -a
+            whoami
+            pwd
+            sudo systemctl restart game-lobby
 
-      - name: Start the app on EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.EC2_HOST }}
-          username: ${{ vars.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd ${{ env.APPLICATION_FOLDER }}
-            fuser -k 3000/tcp
-            nohup yarn start > output.log 2>&1 &
