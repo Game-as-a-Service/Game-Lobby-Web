@@ -40,6 +40,9 @@ files.forEach((file) => {
 
 const bundleWatchConfig = {
   files: checkList,
+  ci: {
+    trackBranches: ["main"],
+  },
 };
 
 module.exports = bundleWatchConfig;
