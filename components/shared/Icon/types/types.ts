@@ -3,6 +3,10 @@ export interface IconVariants {
   definition: {
     svg?: {
       viewBox?: string;
+      width?: string | number;
+      height?: string | number;
+      fill?: string;
+      xmlns?: string;
     };
     path?: {
       d?: string;
@@ -10,7 +14,9 @@ export interface IconVariants {
       fillRule?: "nonzero" | "evenodd" | "inherit";
       stroke?: string;
       strokeWidth?: string | number;
+      strokeLinejoin?: "inherit" | "round" | "miter" | "bevel" | undefined;
+      strokeLinecap?: "inherit" | "round" | "butt" | "square" | undefined;
       transform?: string;
-    };
+    }[];
   };
 }
