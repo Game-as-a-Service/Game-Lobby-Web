@@ -13,6 +13,7 @@ import Startup from "@/containers/util/Startup";
 import ApiHistoryProvider from "@/containers/provider/ApiHistoryProvider";
 import ApiHistoryList from "@/components/util/api-history/ApiHistoryList";
 import { Env, getEnv } from "@/lib/env";
+import { ToastQueueProvider } from "@/components/shared/Toast";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -40,17 +41,19 @@ export default function App({ Component, pageProps }: AppWithProps) {
   };
 
   return (
-    <ModalManager.Provider>
-      <AxiosProvider>
-        <AuthProvider>
-          {getHistory(
-            <Startup isAnonymous={isAnonymous}>
-              {getLayout(<Component {...pageProps} />)}
-              {!isProduction && <ApiHistoryList />}
-            </Startup>
-          )}
-        </AuthProvider>
-      </AxiosProvider>
-    </ModalManager.Provider>
+    <ToastQueueProvider>
+      <ModalManager.Provider>
+        <AxiosProvider>
+          <AuthProvider>
+            {getHistory(
+              <Startup isAnonymous={isAnonymous}>
+                {getLayout(<Component {...pageProps} />)}
+                {!isProduction && <ApiHistoryList />}
+              </Startup>
+            )}
+          </AuthProvider>
+        </AxiosProvider>
+      </ModalManager.Provider>
+    </ToastQueueProvider>
   );
 }
