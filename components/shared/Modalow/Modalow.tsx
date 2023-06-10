@@ -5,7 +5,7 @@ import React, {
   forwardRef,
 } from "react";
 import { cn } from "@/lib/utils";
-import Portal from "./Portal";
+import Portal from "../Portal/Portal";
 import styles from "./modal.module.css";
 import Header from "./Header";
 import Footer from "./Footer";
