@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
 import Cover from "@/components/shared/Cover";
@@ -6,11 +7,11 @@ import IconProfile from "@/public/images/icon_profile.svg";
 import IconMessage from "@/public/images/icon_message.svg";
 import IconHelp from "@/public/images/icon_help.svg";
 import IconRemind from "@/public/images/icon_remind.svg";
+import UserInfoModal from "../lobby/UserInfoModal";
 import SearchBar from "./SearchBar";
 import Button from "./Button";
-import { cn } from "@/lib/utils";
 import Badge from "./Badge";
-import UiContext from "@/contexts/UiContext";
+import Chat from "./Chat";
 
 enum HeaderActions {
   HELP = "HELP",
@@ -20,19 +21,18 @@ enum HeaderActions {
 }
 
 export default function Header() {
-  const [value, setValue] = useState("");
   const { currentUser } = useAuth();
   const { logout } = useUser();
-  const {
-    toggleChat,
-    setOpenProfile,
-    setOpenHelp,
-    setOpenRemind,
-    openChat,
-    openHelp,
-    openProfile,
-    openRemind,
-  } = useContext(UiContext);
+
+  const [openProfile, setOpenProfile] = useState(false);
+  const [openHelp, setOpenHelp] = useState(false);
+  const [openChat, setOpenChat] = useState(false);
+  const [openRemind, setOpenRemind] = useState(false);
+  const [value, setValue] = useState("");
+
+  const toggleChat = () => {
+    setOpenChat((status) => !status);
+  };
 
   const buttons = [
     {
@@ -104,6 +104,13 @@ export default function Header() {
         ))}
         {currentUser && <Button onClick={logout}>登出</Button>}
       </div>
+      {openProfile && (
+        <UserInfoModal
+          isOpen={openProfile}
+          onClose={() => setOpenProfile(false)}
+        />
+      )}
+      {openChat && <Chat />}
     </header>
   );
 }
