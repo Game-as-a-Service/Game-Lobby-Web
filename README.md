@@ -2,6 +2,10 @@
 
 The frontend of the Game as a Service lobby.
 
+## Env
+- Node 版本需求：">=16.17.0 <17 || >=18.6.0
+- 可使用 `nvm version` 確認版本，並使用 `nvm install vXX.X.X` 安裝版本，再以 `nvm use vXX.X.X` 改變版號
+
 ## Commands
 
 ```bash
