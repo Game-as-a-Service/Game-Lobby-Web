@@ -24,11 +24,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -36,6 +32,17 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Bundle Watch
+        shell: bash
+        env: 
+          CI_REPO_OWNER: Game-as-a-Service
+          CI_REPO_NAME: Game-Lobby-Web
+          CI_BRANCH: ${{ github.head_ref }}
+          CI_BRANCH_BASE: ${{ github.base_ref }}
+          CI_COMMIT_SHA: ${{ github.sha }}
+          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: yarn run bundlewatch
   
   test:
     runs-on: ubuntu-latest
@@ -52,10 +59,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -79,10 +83,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -106,10 +107,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress
-            ${{ github.workspace }}/.next/cache
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
-          restore-keys: |
-            deps-node-modules-${{ hashFiles('**/yarn.lock') }}-
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'

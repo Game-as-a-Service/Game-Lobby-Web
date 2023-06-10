@@ -35,8 +35,8 @@ export const mock_createRoomResponse: Room = {
     imgUrl: "/undefined",
   },
   host: {
-    id: "abc",
-    nickname: "房間建造者",
+    id: "mock-currentUser-uid",
+    nickname: "mock currentUser",
   },
   isLocked: false,
   currentPlayers: 1,
@@ -49,9 +49,19 @@ export const mock_roomInfo: RoomInfo.Room = {
   name: "銀河路跑2v2",
   status: "WATTING",
   game: { id: "456", name: "銀河路跑" },
-  host: { id: "abc", nickname: "房間創建者", isReady: false },
+  host: {
+    id: "mock-currentUser-uid",
+    nickname: "mock currentUser",
+    isReady: false,
+  },
   isLocked: false,
-  players: [{ id: "abc", nickname: "房間創建者", isReady: false }],
+  players: [
+    {
+      id: "mock-currentUser-uid",
+      nickname: "mock currentUser",
+      isReady: false,
+    },
+  ],
   currentPlayers: 1,
   minPlayers: 2,
   maxPlayers: 7,

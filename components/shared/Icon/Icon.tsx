@@ -28,7 +28,9 @@ export default function Icon(props: IconProps) {
       {...rest}
     >
       <svg {...definition.svg} focusable={false}>
-        <path {...definition.path} />
+        {definition.path?.map((path, index) => (
+          <path key={index} {...path} />
+        ))}
       </svg>
     </i>
   );
