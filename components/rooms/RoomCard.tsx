@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Room } from "@/requests/rooms";
 import Lock from "../../public/images/padlock.svg";
