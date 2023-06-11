@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PageData } from "@/requests/rooms";
+import axios, { AxiosError } from "axios";
 
 const DEFAULT_PAGE = 1;
 
@@ -11,12 +12,25 @@ const usePagination = <T>(option: {
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [perPage, setPerPage] = useState(option.defaultPerPage || 10);
   const [total, setTotal] = useState<number | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
+    setLoading(true);
     async function query() {
-      const res = await option.source(page, perPage);
-      setTotal(res.page.total);
-      setData(res.data);
+      try {
+        const res = await option.source(page, perPage);
+        setTotal(res.page.total);
+        setData(res.data);
+        setLoading(false);
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response) {
+          setErrorMessage(err.message);
+          setLoading(false);
+          setIsError(true);
+        }
+      }
     }
 
     query();
@@ -48,6 +62,9 @@ const usePagination = <T>(option: {
     nextPage,
     perPage,
     setPerPage: setPerPageAndResetPage,
+    loading,
+    isError,
+    errorMessage,
   };
 };
 

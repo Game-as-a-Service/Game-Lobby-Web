@@ -12,6 +12,7 @@ export interface CoverProps {
   height?: number;
   /** If `fill` is `true`, the image will fill the viewport. According to next-image, `fill` is using `absolute` to position the image.  */
   fill?: boolean;
+  sizes?: string;
 }
 
 const Cover: React.FC<CoverProps> = ({

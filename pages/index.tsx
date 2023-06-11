@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-      <h1>遊戲大廳！</h1>
+      <h1 className="text-white">遊戲大廳！</h1>
       <CreateRoomModal />
       <Button component={Link} href="/rooms">
         查看房間列表
