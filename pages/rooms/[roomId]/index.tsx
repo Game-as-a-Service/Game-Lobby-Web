@@ -7,16 +7,17 @@ import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";
 import useAuth from "@/hooks/context/useAuth";
 import { getRoomInfoEndpoint } from "@/requests/rooms";
+import RoomChatroom from "@/components/rooms/RoomChatroom";
 
 export default function Room() {
   const {
     roomInfo,
     initializeRoom,
-    addPlayer,
-    removePlayer,
-    updateHost,
-    updateRoomStatus,
-    toggleUserReadyStatus,
+    // addPlayer,
+    // removePlayer,
+    // updateHost,
+    // updateRoomStatus,
+    // toggleUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
   const { currentUser } = useAuth();
@@ -42,7 +43,7 @@ export default function Room() {
         <RoomUserCardList roomInfo={roomInfo} currentUserId={currentUser?.id} />
         <div className="flex items-center">
           <div className="grow min-w-[643px] border self-stretch text-center text-white">
-            聊天室區塊
+            <RoomChatroom roomId={roomId} />
           </div>
           <RoomButtonGroup
             onClickClose={() => push("/")}
