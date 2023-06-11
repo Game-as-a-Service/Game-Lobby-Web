@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: yarn build
 
-       - name: Archive production artifacts
+      - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
           name: build-artifacts
@@ -140,10 +140,10 @@ jobs:
           name: build-artifacts
 
       - name: run lighthouse-ci
+        env:
+            LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN}}
+            NEXT_PUBLIC_MOCK: true
         run: |
           npm install -g @lhci/cli@0.3.x
           lhci autorun || echo "LHCI failed!"
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{secrets.LHCI_GITHUB_APP_TOKEN}}
-          NEXT_PUBLIC_MOCK: true
 
