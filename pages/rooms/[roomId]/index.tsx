@@ -37,21 +37,17 @@ export default function Room() {
   }, [fetch, initializeRoom, cleanUpRoom, roomId]);
 
   return (
-    <section className="bg-[#212123] px-[10px] py-4">
+    <section className="px-[18px] py-4 max-w-[1172px] ">
       <RoomBreadcrumb roomInfo={roomInfo} />
-      <div className="pt-4 flex flex-col gap-[36px] max-w-[1172px] ">
-        <RoomUserCardList roomInfo={roomInfo} currentUserId={currentUser?.id} />
-        <div className="flex items-center">
-          <div className="grow min-w-[643px] border self-stretch text-center text-white">
-            <RoomChatroom roomId={roomId} />
-          </div>
-          <RoomButtonGroup
-            onClickClose={() => push("/")}
-            onClickLeave={() => push("/")}
-            onToggleReady={() => {}}
-            onClickStart={() => {}}
-          />
-        </div>
+      <RoomUserCardList roomInfo={roomInfo} currentUserId={currentUser?.id} />
+      <div className="flex items-center">
+        <RoomChatroom roomId={roomId} />
+        <RoomButtonGroup
+          onClickClose={() => push("/")}
+          onClickLeave={() => push("/")}
+          onToggleReady={() => {}}
+          onClickStart={() => {}}
+        />
       </div>
     </section>
   );
