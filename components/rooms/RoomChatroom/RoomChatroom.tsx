@@ -65,19 +65,19 @@ function RoomChatroom({ roomId }: RoomChatroom) {
     setInputValue("");
   }
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col grow">
       <div
-        className="scrollbar grow bg-[#1E1F22] border border-[#2D2D2E] rounded-t-[10px] py-[9px] px-3 overflow-y-auto h-[137px] snap-end"
+        className="scrollbar border border-gray2d rounded-t-[10px] py-[9px] px-3 overflow-y-auto h-[137px] snap-end"
         ref={scrollbarRef}
       >
         {messageList.map((msg, index) => (
           <ChatMessage {...msg} key={msg.timestamp + index} />
         ))}
       </div>
-      <div className="bg-[#2D2D2E] py-[5px] px-[7px] flex">
+      <div className="py-[5px] px-[7px] flex">
         <textarea
           role="textarea"
-          className="w-full bg-[#1E1F22] resize-none focus:outline-none text-sm px-[13px] py-[9px] h-[38px] scrollbar"
+          className="w-full bg-dark1E resize-none focus:outline-none text-sm px-[13px] py-[9px] h-[38px] scrollbar text-white"
           value={inputValue}
           onChange={handleTextChange}
           onKeyDown={handleInputKeyDown}

@@ -36,7 +36,7 @@ function RoomUserCardList({ roomInfo, currentUserId }: RoomUserCardListProps) {
     return [...userCards, ...emptyCards];
   }
   return (
-    <div className="grid grid-cols-5 gap-x-5 gap-y-[60px]">
+    <div className="pt-4 grid grid-cols-5 gap-x-5 gap-y-[60px]">
       {renderUserCards(roomInfo.players)}
     </div>
   );
