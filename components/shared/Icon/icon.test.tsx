@@ -8,32 +8,24 @@ describe("Icon", () => {
   it("render Icon with correct definition", () => {
     const { container } = render(<Icon icon={ArrowRightIcon} />);
 
-    const svg = container.querySelector("i");
+    const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
   });
+
   it("Icon has correct className", () => {
     const className = "test class";
     const { container } = render(
-      <Icon icon={ArrowRightIcon} className={className}></Icon>
+      <Icon icon={ArrowRightIcon} className={className} />
     );
 
-    const svg = container.querySelector("i");
+    const svg = container.querySelector("svg");
     expect(svg).toHaveClass(className);
   });
-  it("Icon has correct style", () => {
-    const style = { color: "red" };
-    const { container } = render(
-      <Icon icon={ArrowRightIcon} style={style}></Icon>
-    );
 
-    const svg = container.querySelector("i");
-    expect(svg).toHaveStyle(style);
-  });
-  it("Icon has correct name", () => {
-    const iconName = ArrowRightIcon.name;
-    const { container } = render(<Icon icon={ArrowRightIcon}></Icon>);
+  it("Icon has spin animation", () => {
+    const { container } = render(<Icon icon={ArrowRightIcon} spin />);
 
-    const svg = container.querySelector("i");
-    expect(svg?.getAttribute("data-icon-name")).toBe(iconName);
+    const svg = container.querySelector("svg");
+    expect(svg).toHaveClass("animate-spin");
   });
 });
