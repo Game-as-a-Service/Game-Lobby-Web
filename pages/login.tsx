@@ -4,11 +4,6 @@ import { useRouter } from "next/router";
 import Button from "@/components/shared/Button";
 import Cover from "@/components/shared/Cover";
 import Icon from "@/components/shared/Icon";
-import { discord } from "@/components/shared/Icon/group/discord";
-import { github } from "@/components/shared/Icon/group/github";
-import { google } from "@/components/shared/Icon/group/google";
-import { linkedin } from "@/components/shared/Icon/group/linkedin";
-import { logo } from "@/components/shared/Icon/group/logo";
 
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
@@ -16,6 +11,7 @@ import { getEnv } from "@/lib/env";
 import { LoginType } from "@/requests/auth";
 
 import { NextPageWithProps } from "./_app";
+import { IconName } from "@/components/shared/Icon/icons";
 
 const Login: NextPageWithProps = () => {
   const { getLoginEndpoint } = useUser();
@@ -44,17 +40,17 @@ const Login: NextPageWithProps = () => {
     }
   };
 
-  const buttons = [
-    { text: "Google 登入", type: LoginType.GOOGLE, icon: google },
-    { text: "GitHub 登入", type: LoginType.GITHUB, icon: github },
-    { text: "LinkedIn 登入", type: LoginType.LINKEDIN, icon: linkedin },
-    { text: "Discord 登入", type: LoginType.DISCORD, icon: discord },
+  const buttons: { text: string; type: LoginType; icon: IconName }[] = [
+    { text: "Google 登入", type: LoginType.GOOGLE, icon: "google" },
+    { text: "GitHub 登入", type: LoginType.GITHUB, icon: "github" },
+    { text: "LinkedIn 登入", type: LoginType.LINKEDIN, icon: "linkedin" },
+    { text: "Discord 登入", type: LoginType.DISCORD, icon: "discord" },
   ];
 
   return checkAuth ? (
     <div className="lg:w-1/2 w-full flex flex-col items-center">
       <h1 className="relative flex gap-10 items-center text-[40px] font-normal text-white z-10">
-        <Icon icon={logo} />
+        <Icon name="logo" />
         遊戲線上揪
       </h1>
 
@@ -67,7 +63,10 @@ const Login: NextPageWithProps = () => {
             className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue hover:text-white"
             onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
             prefix={
-              <Icon icon={icon} className="fill-blue group-hover:fill-white" />
+              <Icon
+                name={icon}
+                className="w-6 fill-blue group-hover:fill-white"
+              />
             }
           >
             {text}
