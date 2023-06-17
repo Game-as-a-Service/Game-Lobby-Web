@@ -6,7 +6,7 @@ const ApiHistoryList = () => {
   const { history, clear, isHidden, setIsHidden } = useApiHistory();
 
   return (
-    <div className="fixed z-10 w-32 top-0 right-0 rounded border border-zinc-400">
+    <div className="fixed z-10 w-32 top-20 right-0 text-white bg-[rgba(0,0,0,0.2)] rounded border border-zinc-400">
       {!isHidden ? (
         history.map((props: ApiHistory) => (
           <ApiHistoryItem key={props.id} {...props} />

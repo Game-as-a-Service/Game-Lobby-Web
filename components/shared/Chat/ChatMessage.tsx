@@ -30,7 +30,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       <div className="text-sm">
         <h3
           className={cn("text-blue58", {
-            "text-green": isMe,
+            "text-green23": isMe,
           })}
         >
           {nickname}

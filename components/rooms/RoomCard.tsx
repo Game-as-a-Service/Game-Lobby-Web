@@ -36,12 +36,12 @@ const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
       <div className={cn("grid gap-[7px]")}>
         <h3 className={cn("text-white truncate")}>{room.name}</h3>
         <div className={cn("text-white")}>
-          <span className={cn("text-blue)")}>{room.maxPlayers}</span>
+          <span className={cn("text-blue2f)")}>{room.maxPlayers}</span>
           人房，
           {lackTotalPlayers > 0 ? (
             <>
               還缺
-              <span className={cn("text-blue")}>{lackTotalPlayers}</span>人
+              <span className={cn("text-blue2f")}>{lackTotalPlayers}</span>人
             </>
           ) : (
             <>人數已滿</>

@@ -70,7 +70,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex flex-row items-center justify-between p-[10px_15px]">
+    <header className="flex flex-row items-center justify-between p-[10px_15px] bg-dark1E">
       <div className="flex items-center gap-3">
         <Cover
           src="/images/logo.svg"
