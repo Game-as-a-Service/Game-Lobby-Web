@@ -1,7 +1,6 @@
 import { MouseEventHandler } from "react";
 import { cn } from "@/lib/utils";
-import PrevArrow from '@/public/images/arrow-prev.svg'
-import NextArrow from '@/public/images/arrow-next.svg'
+import Icon from "@/components/shared/Icon";
 
 export type CarouselArrowButtonType = "prev" | "next";
 
@@ -17,7 +16,7 @@ export default function CarouselArrowButton({
   onClick,
 }: CarouselArrowButtonProps) {
   const baseClass = `
-    w-[24px] h-full z-10 bg-[#292A2D] rounded-[10px]
+    w-[24px] h-full z-10 bg-[#292A2D] rounded-[8px]
     flex justify-center items-center text-white font-bold 
   `;
 
@@ -34,10 +33,9 @@ export default function CarouselArrowButton({
   );
 
   const arrowIcon = {
-    prev:<PrevArrow />,
-    next: <NextArrow />
+    prev: <Icon name="arrowPrev" />,
+    next: <Icon name="arrowNext" />,
   };
-
 
   return (
     <button
@@ -46,7 +44,7 @@ export default function CarouselArrowButton({
       disabled={isDisabled}
       onClick={onClick}
     >
-     {arrowIcon[type]}
+      {arrowIcon[type]}
     </button>
   );
 }

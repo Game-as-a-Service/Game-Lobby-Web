@@ -1,3 +1,5 @@
+import arrowPrev from "./svgs/arrow-prev.svg";
+import arrowNext from "./svgs/arrow-next.svg";
 import check from "./svgs/check.svg";
 import discord from "./svgs/discord.svg";
 import error from "./svgs/error.svg";
@@ -17,6 +19,8 @@ import rooms from "./svgs/rooms.svg";
 import target from "./svgs/target.svg";
 
 const icons = {
+  arrowPrev,
+  arrowNext,
   check,
   discord,
   error,
