@@ -68,6 +68,10 @@ export namespace RoomInfo {
   };
 }
 
+export type RoomEntry = {
+  message: string;
+};
+
 export const createRoomEndpoint = (
   data: CreateRoomFormType
 ): IRequestWrapper<Room> => {
@@ -101,5 +105,16 @@ export const getRoomInfoEndpoint = (
   return requestWrapper({
     url: `/api/internal/rooms/${roomId}`,
     method: "GET",
+  });
+};
+
+export const postRoomEntry = (
+  roomId: string,
+  password: null | string
+): IRequestWrapper<RoomEntry> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players`,
+    method: "POST",
+    data: { password },
   });
 };
