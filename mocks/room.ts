@@ -15,7 +15,7 @@ const mock_genRoom = (id: string, status: RoomType): Room => {
     },
     minPlayers: 1,
     maxPlayers: 7,
-    isLocked: false,
+    isLocked: true,
     currentPlayers: 1,
   };
 };
