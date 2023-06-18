@@ -56,16 +56,17 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Docker Build
-        run: |
-          docker build \
-          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:latest \
-          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:${{ github.sha }} \
-          -f ./docker/Dockerfile.production \
-          .    
-
-      - name: Push Docker Image to ECR
-        run: docker push ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }} --all-tags
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/Dockerfile.production
+          push: true
+          tags: |
+            ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:latest
+            ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha
 
       # Restart systemd service
       - name: Run Application
