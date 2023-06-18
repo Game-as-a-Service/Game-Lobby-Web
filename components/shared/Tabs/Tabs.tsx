@@ -1,22 +1,22 @@
 import { useState, Key, ReactNode } from "react";
 import Tab from "./Tab";
 import { cn } from "@/lib/utils";
-export interface TabItemType {
-  key: Key;
+export interface TabItemType<T extends Key = string> {
+  key: T;
   label?: string;
 }
 
 export type TabSizeType = "default" | "large";
 
-export interface TabsProps {
+export interface TabsProps<T extends Key = string> {
   /**
    * The array of tabItem to render tabBar
    */
-  tabs: TabItemType[];
+  tabs: TabItemType<T>[];
   /**
    * Initial active tab's key
    */
-  defaultActiveKey?: Key;
+  defaultActiveKey?: T;
   /**
    * The className of tabs that wraps tabBar and tabPane
    */
@@ -44,14 +44,14 @@ export interface TabsProps {
   /**
    * Function that recieved activeTabItem and render content of tabPane
    */
-  renderTabPaneContent?: (tabItem: TabItemType) => ReactNode;
+  renderTabPaneContent?: (tabItem: TabItemType<T>) => ReactNode;
   /**
    * Callback executed when tab is clicked
    */
-  onChange?: (tabKey: Key) => void;
+  onChange?: (tabKey: T) => void;
 }
 
-export default function Tabs(props: TabsProps) {
+export default function Tabs<T extends Key = string>(props: TabsProps<T>) {
   const {
     tabs,
     defaultActiveKey,
@@ -78,7 +78,7 @@ export default function Tabs(props: TabsProps) {
 
   const tabClass = cn(isLageSize ? "px-3" : "px-0", customTabClass);
 
-  function handleChangeActiveTab(nextTabkey: Key) {
+  function handleChangeActiveTab(nextTabkey: T) {
     if (nextTabkey === activeKey) return;
     setActiveKey(nextTabkey);
     onChange && onChange(nextTabkey);
