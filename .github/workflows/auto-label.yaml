@@ -1,42 +1,49 @@
-name: Label PRs based on title
-
+name: PR Auto Labeler
 on:
   pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
+    types: [opened, edited, synchronize]
+  issue_comment:
+    types: [created, deleted]
 
 jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-      - name: Label PRs
+      - name: Label PR based on title and comments
         uses: actions/github-script@v5
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const { owner, repo, number } = context.issue;
-            const { title } = context.payload.pull_request;
-            const titleLower = title.toLowerCase();
+            const { pull_request: pr, issue, repository: { owner: { login: owner }, name: repo } } = context.payload;
+            const issue_number = issue ? issue.number : pr.number;
+            const title = pr ? pr.title : issue.title;
 
-            // Define mapping between keywords and labels
-            const keywordToLabel = {
-              "feat": "feature",
-              "[wip]": "don't merge",
-              "refactor": "refactor",
-              "fix": "bug",
-              "[renovate-bot]": "dependency upgrade",
-            };
+            const labelRules = [
+              { keyword: 'feat', label: 'feature' },
+              { keyword: '[WIP]', label: "don't merge" },
+              { keyword: 'refactor', label: 'refactor' },
+              { keyword: 'fix', label: 'bug' },
+              { keyword: '[RENOVATE-BOT]', label: 'dependency upgrade' },
+            ];
 
-            // Iterate over the mapping and add labels accordingly
-            for (const [keyword, label] of Object.entries(keywordToLabel)) {
-              if (titleLower.includes(keyword)) {
-                await github.rest.issues.addLabels({
-                  owner,
-                  repo,
-                  issue_number: number,
-                  labels: [label]
-                }).catch(() => {});
+            const labelsToAdd = labelRules.filter(rule => title.includes(rule.keyword)).map(rule => rule.label);
+
+            // If the PR title no longer contains "[WIP]", remove "don't merge" label
+            if (!title.includes('[WIP]')) {
+              const currentLabels = (await github.rest.issues.listLabelsOnIssue({ owner, repo, issue_number })).data.map(label => label.name);
+              if (currentLabels.includes("don't merge")) {
+                await github.rest.issues.removeLabel({ owner, repo, issue_number, name: "don't merge" });
               }
+            }
+
+            await github.rest.issues.addLabels({ owner, repo, issue_number, labels: labelsToAdd });
+
+            // Check comments and add/remove "reviewing" label accordingly
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const currentLabels = (await github.rest.issues.listLabelsOnIssue({ owner, repo, issue_number })).data.map(label => label.name);
+            
+            if (comments.data.length >= 2 && !currentLabels.includes('reviewing')) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['reviewing'] });
+            } else if (comments.data.length < 2 && currentLabels.includes('reviewing')) {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'reviewing' });
             }
