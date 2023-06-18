@@ -1,0 +1,42 @@
+name: Label PRs based on title
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PRs
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { title } = context.payload.pull_request;
+            const titleLower = title.toLowerCase();
+
+            // Define mapping between keywords and labels
+            const keywordToLabel = {
+              "feat": "feature",
+              "[wip]": "don't merge",
+              "refactor": "refactor",
+              "fix": "bug",
+              "[renovate-bot]": "dependency upgrade",
+            };
+
+            // Iterate over the mapping and add labels accordingly
+            for (const [keyword, label] of Object.entries(keywordToLabel)) {
+              if (titleLower.includes(keyword)) {
+                await github.rest.issues.addLabels({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  labels: [label]
+                }).catch(() => {});
+              }
+            }
