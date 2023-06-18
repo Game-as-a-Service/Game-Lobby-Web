@@ -1,10 +1,10 @@
-import { Key } from "react";
 import { cn } from "@/lib/utils";
-export interface TabProps {
+import { Key } from "react";
+export interface TabProps<T extends Key = string> {
   /**
    * The key of tab
    */
-  tabKey: Key;
+  tabKey: T;
   /**
    * The label of tab
    */
@@ -21,10 +21,10 @@ export interface TabProps {
   /**
    * Callback executed when tab is clicked
    */
-  onTabClick?: (tabKey: Key) => void;
+  onTabClick?: (tabKey: T) => void;
 }
 
-export default function Tab(props: TabProps) {
+export default function Tab<T extends Key = string>(props: TabProps<T>) {
   const { tabKey, label, className, active, onTabClick } = props;
 
   const tabBaseClass = ` w-fit py-3 text-center text-base text-white relative  after:content-'' after:w-full after:h-[4px] after:block after:absolute after:bottom-0 after:left-0  after:transition-colors hover:after:bg-[#2F88FF]`;

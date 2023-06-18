@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Tabs, { TabsProps } from ".";
+import Tabs, { TabsProps, TabItemType } from ".";
 
 const meta: Meta<typeof Tabs> = {
   title: "Navigation/Tabs",
@@ -8,7 +8,7 @@ const meta: Meta<typeof Tabs> = {
 };
 
 export default meta;
-type Story = StoryObj<TabsProps>;
+type Story = StoryObj<TabsProps<number>>;
 
 export const Playground: Story = {
   args: {
