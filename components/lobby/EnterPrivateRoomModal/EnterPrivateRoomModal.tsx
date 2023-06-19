@@ -51,7 +51,7 @@ export default function EnterPrivateRoomModal({
 
   return (
     <Modalow hasTitle={false} isOpen={!!roomId} onClose={onClose} size="small">
-      <div className="p-3 m-[26px] border-2 border-blue rounded-[10px] flex justify-center text-center">
+      <div className="p-3 m-[26px] border-2 border-blue2f rounded-[10px] flex justify-center text-center">
         <PasswordField
           title={"私人房間"}
           subTitle={"請輸入此房間密碼"}

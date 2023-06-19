@@ -1,20 +1,46 @@
 import { useMemo } from "react";
-import { AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 
 import { IRequestWrapper } from "@/requests/request";
 import useAxios from "./context/useAxios";
 import useAuth from "./context/useAuth";
 import useApiHistory from "./context/useApiHistory";
 import { Status } from "@/contexts/ApiHistoryContext";
+import {
+  useToast,
+  UseToastComponent,
+  UseToastOptions,
+} from "@/components/shared/Toast";
+import { getEnv, Env } from "@/lib/env";
+
+interface FetchOptions {
+  toast?: {
+    show?: boolean;
+    component?: UseToastComponent;
+    options?: UseToastOptions;
+  };
+}
 
 const useRequest = () => {
   const { axios } = useAxios();
   const { token, setToken: setTokenCtx } = useAuth();
   const { addHistory, updateHistory } = useApiHistory();
+  const toast = useToast();
+  const isProduction = getEnv().env !== Env.PROD ? false : true;
 
   const fetch = useMemo(
     () =>
-      <T>(requestWrapper: IRequestWrapper<T>) => {
+      <T>(
+        requestWrapper: IRequestWrapper<T>,
+        options: FetchOptions = {
+          toast: {
+            show: true,
+            options: {
+              position: "bottom-left",
+            },
+          },
+        }
+      ) => {
         const additionalToRequest: AxiosRequestConfig = {};
 
         if (!requestWrapper.additional?.isPublic) {
@@ -34,24 +60,53 @@ const useRequest = () => {
         return requestWrapper
           .executor(axios, additionalToRequest)
           .then((res) => {
-            updateHistory({
-              ...history,
-              status: Status.RESOLVED,
-              statusCode: res.status,
-              response: res.data,
-              time: new Date().getTime() - startTime,
-            });
+            if (!isProduction) {
+              updateHistory({
+                ...history,
+                status: Status.RESOLVED,
+                statusCode: res.status,
+                response: res.data,
+                time: new Date().getTime() - startTime,
+              });
+            }
+
+            if (options.toast?.show) {
+              toast(
+                options?.toast?.component || {
+                  state: "success",
+                  children: "success!",
+                },
+                options?.toast?.options
+              );
+            }
             return res.data;
           })
-          .catch((err) => {
-            updateHistory({
-              ...history,
-              status: Status.REJECTED,
-              time: new Date().getTime() - startTime,
-              error: err,
-            });
-            // the same handling like useUser.logout()
-            setTokenCtx(null);
+          .catch((err: AxiosError) => {
+            if (err?.response?.status === 401) {
+              // the same handling like useUser.logout()
+              setTokenCtx(null);
+            }
+            throw err;
+          })
+          .catch((err: Error) => {
+            if (!isProduction) {
+              updateHistory({
+                ...history,
+                status: Status.REJECTED,
+                time: new Date().getTime() - startTime,
+                error: err,
+              });
+            }
+
+            if (options.toast?.show) {
+              toast(
+                options?.toast?.component || {
+                  state: "error",
+                  children: "error!",
+                },
+                options?.toast?.options
+              );
+            }
             throw err;
           });
       },
