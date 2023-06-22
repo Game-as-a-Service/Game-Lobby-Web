@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #1e1f22;
+}
+
 /* The height will effect the children's height  */
 #__next {
   height: 100%;

@@ -34,5 +34,9 @@ export const RoomsListWrapper = ({ className, children }: RoomsListProps) => {
 };
 
 export const RoomsList = ({ className, children }: RoomsListProps) => {
-  return <div className={cn("rooms__list", className)}>{children}</div>;
+  return (
+    <div className={cn("rooms__list flex flex-col h-full", className)}>
+      {children}
+    </div>
+  );
 };
