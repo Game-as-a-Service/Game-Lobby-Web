@@ -4,12 +4,11 @@ import CreateRoomModal from "@/components/lobby/CreateRoomModal";
 import Link from "next/link";
 
 import Carousel, { mockCarouselItems } from "@/components/shared/Carousel";
+import GamesListView from "@/components/lobby/games/GamesListView";
 
 export default function Home() {
   return (
-    <>
-      <h1 className="text-white">遊戲大廳！</h1>
-      <div className="px-[18px] mt-[12px] mb-[22px]" style={{width: 'calc(100vw - 71px)'}}>
+    <div className="grid">
       <Carousel
         itemWidth={332}
         itemHeight={158}
@@ -17,12 +16,13 @@ export default function Home() {
         itemsToSlide={2}
         autoplay
       />
+      <GamesListView />
+      <div>
+        <Button component={Link} href="/rooms">
+          查看房間列表
+        </Button>
       </div>
-      <CreateRoomModal />
-      <Button component={Link} href="/rooms">
-        查看房間列表
-      </Button>
-    </>
+    </div>
   );
 }
 
