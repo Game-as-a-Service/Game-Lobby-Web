@@ -1,3 +1,5 @@
+import arrowPrev from "./svgs/arrow-prev.svg";
+import arrowNext from "./svgs/arrow-next.svg";
 import check from "./svgs/check.svg";
 import discord from "./svgs/discord.svg";
 import error from "./svgs/error.svg";
@@ -15,8 +17,10 @@ import profile from "./svgs/profile.svg";
 import remind from "./svgs/remind.svg";
 import rooms from "./svgs/rooms.svg";
 import target from "./svgs/target.svg";
-
+import kickUser from "./svgs/kick_user.svg";
 const icons = {
+  arrowPrev,
+  arrowNext,
   check,
   discord,
   error,
@@ -34,6 +38,7 @@ const icons = {
   remind,
   rooms,
   target,
+  kickUser,
 };
 
 export type IconName = keyof typeof icons;

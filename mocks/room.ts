@@ -61,6 +61,11 @@ export const mock_roomInfo: RoomInfo.Room = {
       nickname: "mock currentUser",
       isReady: false,
     },
+    {
+      id: "mock-currentUser-uid1",
+      nickname: "mock currentUser1",
+      isReady: false,
+    },
   ],
   currentPlayers: 1,
   minPlayers: 2,
