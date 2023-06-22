@@ -139,7 +139,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
             {userInfo && (
               <>
                 <div className="flex items-start h-12">
-                  <div className="w-[100px] border-l-2 border-blue pl-2">
+                  <div className="w-[100px] border-l-2 border-blue2f pl-2">
                     暱稱
                   </div>
                   {editMode ? (
@@ -148,7 +148,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                         className={cn("flex flex-col")}
                         inputClassName={cn(
                           "rounded-[10px] w-full border border-dark29",
-                          "focus:border-blue transition-[border-color] duration-300 ease-in-out"
+                          "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"
                         )}
                         errorClassName={cn("w-full flex justify-end")}
                         value={userInfo.nickname}
@@ -164,7 +164,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                   )}
                 </div>
                 <div className="flex items-start h-12">
-                  <div className="w-[100px] border-l-2 border-blue pl-2">
+                  <div className="w-[100px] border-l-2 border-blue2f pl-2">
                     電子郵件
                   </div>
                   {editMode ? (
@@ -173,7 +173,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                         className={cn("flex flex-col")}
                         inputClassName={cn(
                           "rounded-[10px] w-full  border border-dark29",
-                          "focus:border-blue transition-[border-color] duration-300 ease-in-out"
+                          "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"
                         )}
                         errorClassName={cn("flex justify-end")}
                         value={userInfo.email}

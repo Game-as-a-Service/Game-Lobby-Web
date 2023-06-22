@@ -74,7 +74,7 @@ function RoomChatroom({ roomId }: RoomChatroom) {
           <ChatMessage {...msg} key={msg.timestamp + index} />
         ))}
       </div>
-      <div className="py-[5px] px-[7px] flex">
+      <div className="py-[5px] px-[7px] flex bg-dark29">
         <textarea
           role="textarea"
           className="w-full bg-dark1E resize-none focus:outline-none text-sm px-[13px] py-[9px] h-[38px] scrollbar text-white"

@@ -15,7 +15,7 @@ const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
 
   const roomCardClass = cn(
     "room__card",
-    "relative cursor-pointer hover:border-blue transition-all duration-300",
+    "relative cursor-pointer hover:border-blue2f transition-all duration-300",
     "grid grid-cols-[34px_1fr] gap-[12px] rounded-[10px] border-2 border-dark1E py-[11px] pl-[11px] pr-[20px] bg-dark1E",
     {
       "border-blue": active,
