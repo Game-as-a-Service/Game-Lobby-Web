@@ -26,8 +26,10 @@ type AppWithProps = AppProps & {
 };
 
 export default function App({ Component, pageProps }: AppWithProps) {
-  const isAnonymous = Component.Anonymous || false;
-  const isProduction = getEnv().env !== Env.PROD ? false : true;
+  const { env } = getEnv();
+  const isAnonymous =
+    Component.Anonymous || !!process.env.NEXT_PUBLIC_CI_MODE || false;
+  const isProduction = env !== Env.PROD ? false : true;
 
   const getLayout =
     Component.getLayout ??
