@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function keys<T extends object, K = keyof T>(object: T) {
   return Object.keys(object) as K[];
 }
+
+/** @param time - 等待毫秒數 */
+export const wait = (time: number) =>
+  new Promise((res) => setTimeout(res, time));

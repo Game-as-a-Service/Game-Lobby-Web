@@ -1,21 +1,16 @@
-import { cn } from "@/lib/utils";
+import { FC, useState } from "react";
 import { Room, RoomType, getRooms } from "@/requests/rooms";
 import useRequest from "@/hooks/useRequest";
 import usePagination from "@/hooks/usePagination";
 import Button from "@/components/shared/Button";
-import {
-  RoomsList,
-  RoomsListTitle,
-  RoomsListWrapper,
-} from "@/components/rooms/RoomsList";
+import { RoomsList, RoomsListWrapper } from "@/components/rooms/RoomsList";
 import RoomCard from "@/components/rooms/RoomCard";
-import { FC, useEffect, useState } from "react";
+import EnterPrivateRoomModal from "@/components/lobby/EnterPrivateRoomModal";
 
 type Props = {
   status: RoomType;
 };
 const RoomsListView: FC<Props> = ({ status }) => {
-  const [roomStatus, setRoomStatus] = useState<RoomType>(status);
   const { fetch } = useRequest();
   const {
     nextPage,
@@ -27,11 +22,14 @@ const RoomsListView: FC<Props> = ({ status }) => {
     errorMessage,
   } = usePagination({
     source: (page: number, perPage: number) =>
-      fetch(getRooms({ page, perPage, status: roomStatus })),
+      fetch(getRooms({ page, perPage, status })),
     defaultPerPage: 20,
   });
-  const [selectedRoomId, setSelectedRoomId] = useState<Room["id"]>("");
-  const onSelectedRoomId = (id: string) => setSelectedRoomId(id);
+  const [selectedRoom, setSelectedRoom] = useState<Room | undefined>();
+  const onSelectedRoom = (id: string) => {
+    const targetRoom = data.find((room) => room.id === id);
+    setSelectedRoom(targetRoom);
+  };
 
   const nextPerPage = () => {
     setPerPage(10);
@@ -40,10 +38,6 @@ const RoomsListView: FC<Props> = ({ status }) => {
   const backPerPage = () => {
     setPerPage(-10);
   };
-
-  useEffect(() => {
-    setRoomStatus(status);
-  }, [status]);
 
   const Pagination = () => {
     return (
@@ -66,23 +60,29 @@ const RoomsListView: FC<Props> = ({ status }) => {
     );
 
   return (
-    <RoomsList>
-      {/* <RoomsListTitle>
-        {status === "WAITING" ? "正在等待玩家配對" : "遊戲已開始"}
-      </RoomsListTitle> */}
-      <RoomsListWrapper>
-        {data.length > 0 &&
-          data.map((room) => (
-            <RoomCard
-              key={room.id}
-              room={room}
-              active={room.id === selectedRoomId}
-              onClick={onSelectedRoomId}
-            />
-          ))}
-      </RoomsListWrapper>
-      <Pagination />
-    </RoomsList>
+    <>
+      <RoomsList>
+        <RoomsListWrapper>
+          {data.length > 0 &&
+            data.map((room) => (
+              <RoomCard
+                key={room.id}
+                room={room}
+                active={room.id === selectedRoom?.id}
+                onClick={onSelectedRoom}
+              />
+            ))}
+        </RoomsListWrapper>
+        <Pagination />
+      </RoomsList>
+
+      {selectedRoom && selectedRoom.isLocked && (
+        <EnterPrivateRoomModal
+          roomId={selectedRoom.id}
+          onClose={() => setSelectedRoom(undefined)}
+        />
+      )}
+    </>
   );
 };
 

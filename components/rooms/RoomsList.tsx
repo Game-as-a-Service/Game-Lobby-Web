@@ -16,7 +16,7 @@ export const RoomsListTitle = ({
 }: RoomsListTitleProps) => {
   const titleClass = cn(
     "rooms__list__title",
-    "font-black text-white border-l-4 border-blue pl-2",
+    "font-black text-white border-l-4 border-blue2f pl-2",
     className
   );
 

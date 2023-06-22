@@ -13,6 +13,7 @@ type PasswordFieldProps = {
   title: string;
   subTitle: string;
   passwordValues: string[];
+  disabled?: boolean;
   setPasswordValues: Dispatch<SetStateAction<string[]>>;
 };
 
@@ -21,6 +22,7 @@ const PasswordField: FC<PasswordFieldProps> = ({
   title,
   subTitle,
   passwordValues,
+  disabled,
   setPasswordValues,
 }) => {
   const passwordRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -105,6 +107,7 @@ const PasswordField: FC<PasswordFieldProps> = ({
               maxLengthClassName="hidden"
               onKeyUp={(e) => handlePasswordKeyUp(e, index)}
               onClick={(event) => event.stopPropagation()} // 防止冒泡到父層的onClick
+              disabled={disabled}
               data-testid={`input-password-${index}`}
             />
           </div>

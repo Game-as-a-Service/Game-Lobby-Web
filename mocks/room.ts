@@ -15,7 +15,7 @@ const mock_genRoom = (id: string, status: RoomType): Room => {
     },
     minPlayers: 1,
     maxPlayers: 7,
-    isLocked: false,
+    isLocked: true,
     currentPlayers: 1,
   };
 };
@@ -59,6 +59,11 @@ export const mock_roomInfo: RoomInfo.Room = {
     {
       id: "mock-currentUser-uid",
       nickname: "mock currentUser",
+      isReady: false,
+    },
+    {
+      id: "mock-currentUser-uid1",
+      nickname: "mock currentUser1",
       isReady: false,
     },
   ],

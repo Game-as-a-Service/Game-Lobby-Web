@@ -21,7 +21,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <nav className="flex flex-col justify-start bg-dark29 rounded-[10px] w-[71px] gap-5">
+    <nav className="flex flex-col shrink-0 justify-start bg-dark29 rounded-[10px] w-[71px] gap-5">
       {buttons.map((ButtonProps) => (
         <Button
           key={ButtonProps.type}

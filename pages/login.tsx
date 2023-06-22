@@ -30,7 +30,6 @@ const Login: NextPageWithProps = () => {
 
   const onLoginClick = async (e: SyntheticEvent, type: LoginType) => {
     if (isMock) {
-      alert(123);
       e.preventDefault();
       e.stopPropagation();
 
@@ -60,12 +59,12 @@ const Login: NextPageWithProps = () => {
             key={type}
             component="a"
             href={`${internalEndpoint}/login?type=${type}`}
-            className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue hover:text-white"
+            className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
             onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
             prefix={
               <Icon
                 name={icon}
-                className="w-6 fill-blue group-hover:fill-white"
+                className="w-6 fill-blue2f group-hover:fill-white"
               />
             }
           >

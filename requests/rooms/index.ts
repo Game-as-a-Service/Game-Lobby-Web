@@ -68,6 +68,10 @@ export namespace RoomInfo {
   };
 }
 
+export type RoomEntry = {
+  message: string;
+};
+
 export const createRoomEndpoint = (
   data: CreateRoomFormType
 ): IRequestWrapper<Room> => {
@@ -101,5 +105,36 @@ export const getRoomInfoEndpoint = (
   return requestWrapper({
     url: `/api/internal/rooms/${roomId}`,
     method: "GET",
+  });
+};
+
+export const postRoomEntry = (
+  roomId: string,
+  password: null | string
+): IRequestWrapper<RoomEntry> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players`,
+    method: "POST",
+    data: { password },
+  });
+};
+
+export const kickUser = ({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}): IRequestWrapper<null> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players/${userId}`,
+    method: "DELETE",
+  });
+};
+
+export const closeRoom = (roomId: string): IRequestWrapper<null> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}`,
+    method: "DELETE",
   });
 };

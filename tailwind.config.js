@@ -3,10 +3,10 @@ const colors = {
   dark1E: "#1e1f22",
   dark21: "#212123",
   gray2d: "#2D2D2E",
-  blue: "#2f88ff",
+  blue2f: "#2f88ff",
   blue58: "#5865f2",
   darkRed: "#CC2431",
-  green: "#23A55A",
+  green23: "#23A55A",
 };
 
 module.exports = {
