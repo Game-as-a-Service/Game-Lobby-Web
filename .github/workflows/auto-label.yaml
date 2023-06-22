@@ -1,0 +1,38 @@
+name: PR Auto Labeler
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR based on title and comments
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { pull_request: pr, repository: { owner: { login: owner }, name: repo } } = context.payload;
+            const title = pr.title;
+            const issue_number = pr.number;
+
+            // Define keyword-to-label mapping
+            const labelRules = [
+              { keyword: 'feat', label: 'feature' },
+              { keyword: '[WIP]', label: "don't merge" },
+              { keyword: 'refactor', label: 'refactor' },
+              { keyword: 'fix', label: 'bug' },
+              { keyword: '[RENOVATE-BOT]', label: 'dependency upgrade' },
+            ];
+
+            // Collect all labels that should be added according to the title
+            const labelsToAdd = labelRules.filter(rule => title.includes(rule.keyword)).map(rule => rule.label);
+
+            // Remove "don't merge" label if the PR title no longer contains "[WIP]"
+            const currentLabels = (await github.rest.issues.listLabelsOnIssue({ owner, repo, issue_number })).data.map(label => label.name);
+            if (!title.includes('[WIP]') && currentLabels.includes("don't merge")) {
+                await github.rest.issues.removeLabel({ owner, repo, issue_number, name: "don't merge" });
+            }
+
+            // Add labels to the PR
+            await github.rest.issues.addLabels({ owner, repo, issue_number, labels: labelsToAdd });

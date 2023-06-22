@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Room, RoomType, getRooms } from "@/requests/rooms";
 import useRequest from "@/hooks/useRequest";
 import usePagination from "@/hooks/usePagination";
@@ -11,7 +11,6 @@ type Props = {
   status: RoomType;
 };
 const RoomsListView: FC<Props> = ({ status }) => {
-  const [roomStatus, setRoomStatus] = useState<RoomType>(status);
   const { fetch } = useRequest();
   const {
     nextPage,
@@ -23,7 +22,7 @@ const RoomsListView: FC<Props> = ({ status }) => {
     errorMessage,
   } = usePagination({
     source: (page: number, perPage: number) =>
-      fetch(getRooms({ page, perPage, status: roomStatus })),
+      fetch(getRooms({ page, perPage, status })),
     defaultPerPage: 20,
   });
   const [selectedRoom, setSelectedRoom] = useState<Room | undefined>();
@@ -39,10 +38,6 @@ const RoomsListView: FC<Props> = ({ status }) => {
   const backPerPage = () => {
     setPerPage(-10);
   };
-
-  useEffect(() => {
-    setRoomStatus(status);
-  }, [status]);
 
   const Pagination = () => {
     return (
