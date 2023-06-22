@@ -6,18 +6,28 @@ const SEAT_AMOUNT = 10;
 export type RoomUserCardListProps = {
   roomInfo: RoomInfo.Room;
   currentUserId: string | undefined;
+  onKickUser?: (User: Omit<RoomInfo.User, "isReady">) => void;
 };
 
-function RoomUserCardList({ roomInfo, currentUserId }: RoomUserCardListProps) {
+function RoomUserCardList({
+  roomInfo,
+  currentUserId,
+  onKickUser,
+}: RoomUserCardListProps) {
   function renderUserCards(users: RoomInfo.User[]) {
     const userCount = users.length;
 
+    const haveRightToKick = (userId: string) =>
+      currentUserId === roomInfo.host.id && currentUserId !== userId;
+
     const userCards = users.map((user) => {
       const props: UserCardProps = {
-        nickName: user.nickname,
+        id: user.id,
+        nickname: user.nickname,
         isReady: user.isReady,
-        isSelf: user.id === (currentUserId || ""),
+        isSelf: user.id === currentUserId,
         isHost: user.id === roomInfo.host.id,
+        onKickUser: haveRightToKick(user.id) ? onKickUser : undefined,
       };
       return <UserCard key={user.id} {...props} />;
     });
