@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - refactor/docker-size-improvement-through-output-sourcing
   workflow_dispatch:
 
 env:
