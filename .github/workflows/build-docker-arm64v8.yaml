@@ -1,0 +1,70 @@
+name: Build and Deploy to AWS
+
+on:
+  push:
+    branches:
+      - feature/docker-arm64v8
+  workflow_dispatch:
+
+env:
+  APPLICATION_FOLDER: ~/game-lobby/frontend
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  build_and_deploy:
+    name: Build and Test and Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 10
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          # the ARN (Amazon Resource Name) of the IAM role that should be assumed.
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          # sets the session name used when assuming the role.
+          role-session-name: github-runner-build-and-deploy
+          aws-region: us-east-1
+
+      - name: Login to AWS ECR
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+            # an argument to the amazon-ecr-login action indicating that the ECR registry you are logging into is public.
+            registry-type: public
+
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress
+          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Test
+        run: yarn test
+
+      - name: Docker Build
+        run: |
+          docker build \
+          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:latest-arm64v8 \
+          -t ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }}:${{ github.sha }} \
+          -f ./docker/Dockerfile.production.arm64v8 \
+          .    
+
+      - name: Push Docker Image to ECR
+        run: docker push ${{ vars.AWS_ECR_URI }}/${{ vars.AWS_ECR_REPOSITORY_NAME }} --all-tags
+
+
