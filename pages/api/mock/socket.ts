@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { WebSocket, WebSocketServer } from "ws";
-import { Socket_DispatchActionType } from "@/hooks/useChatroom";
+import { Socket_DispatchActionType } from "@/containers/provider/ChatroomProvider";
 
 import { MessageType } from "@/components/rooms/RoomChatroom";
 
