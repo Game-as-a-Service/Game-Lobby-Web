@@ -138,3 +138,10 @@ export const closeRoom = (roomId: string): IRequestWrapper<null> => {
     method: "DELETE",
   });
 };
+
+export const leaveRoom = (roomId: string): IRequestWrapper<null> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players/me`,
+    method: "DELETE",
+  });
+};
