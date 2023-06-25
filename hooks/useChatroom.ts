@@ -1,15 +1,7 @@
-import ChatroomContext from "@/contexts/ChatroomContext";
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { MessageType } from "@/components/rooms/RoomChatroom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useAuth from "@/hooks/context/useAuth";
-
-export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
+import { MessageType } from "@/components/rooms/RoomChatroom";
+import { Env, getEnv } from "@/lib/env";
 
 export enum SOCKET_EVENT {
   CONNECTION_OPEN = "CONNECTION_OPEN",
@@ -30,7 +22,7 @@ export type Socket_DispatchActionType = {
   payload: Record<string, any>;
 };
 
-function useChatroomCore() {
+function useChatroom() {
   const { currentUser } = useAuth();
   const webSocket = useRef<WebSocket | null>(null);
   const [lastMessage, setLastMessage] = useState<MessageType | undefined>(
@@ -44,12 +36,17 @@ function useChatroomCore() {
    * @param {any} action.payload - The payload of the socket event.
    */
   function dispatchSocketEvent(action: Socket_DispatchActionType): void {
-    webSocket.current?.send(JSON.stringify(action));
+    // ChatGPT said to webSocket.current could be null when the page rendered and caused the error
+    if (webSocket.current && webSocket.current.readyState === WebSocket.OPEN) {
+      webSocket.current.send(JSON.stringify(action));
+    }
   }
 
   // TODO delete the next useEffect: this is only for mock socket server
   useEffect(() => {
-    fetch("/api/internal/socket");
+    if (getEnv().env === Env.DEV) {
+      fetch("/api/internal/socket");
+    }
   }, []);
 
   useEffect(() => {
@@ -65,7 +62,7 @@ function useChatroomCore() {
 
     const ws = webSocket.current;
 
-    // trigger when connected, notify server to regist user
+    // trigger when connected, notify server to register user
     ws.onopen = () => {
       setReadyState(1);
       dispatchSocketEvent({
@@ -82,7 +79,7 @@ function useChatroomCore() {
       }
     };
 
-    // trigger when server shotdown
+    // trigger when server shutdown
     ws.onclose = () => {
       setReadyState(2);
       setLastMessage({
@@ -167,13 +164,4 @@ function useChatroomCore() {
   };
 }
 
-export default function ChatroomContextProvider({
-  children,
-}: PropsWithChildren) {
-  const contextValue = useChatroomCore();
-  return (
-    <ChatroomContext.Provider value={contextValue}>
-      {children}
-    </ChatroomContext.Provider>
-  );
-}
+export default useChatroom;

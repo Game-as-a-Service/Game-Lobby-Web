@@ -9,6 +9,7 @@ if (process.env.ANALYZE === "true") {
 }
 
 const nextConfig = {
+  output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },

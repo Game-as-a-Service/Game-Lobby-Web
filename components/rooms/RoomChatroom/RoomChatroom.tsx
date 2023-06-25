@@ -2,7 +2,7 @@ import { useState, ChangeEvent, KeyboardEvent, useRef, useEffect } from "react";
 import Button from "@/components/shared/Button";
 import ChatMessage from "./ChatMessage";
 import { MessageType } from ".";
-import useChatroom from "@/hooks/context/useChatroom";
+import useChatroom from "@/hooks/useChatroom";
 
 export type RoomChatroom = {
   roomId: string;

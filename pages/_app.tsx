@@ -14,7 +14,6 @@ import ApiHistoryProvider from "@/containers/provider/ApiHistoryProvider";
 import ApiHistoryList from "@/components/util/api-history/ApiHistoryList";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
-import ChatroomContextProvider from "@/containers/provider/ChatroomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -26,8 +25,10 @@ type AppWithProps = AppProps & {
 };
 
 export default function App({ Component, pageProps }: AppWithProps) {
-  const isAnonymous = Component.Anonymous || false;
-  const isProduction = getEnv().env !== Env.PROD ? false : true;
+  const { env } = getEnv();
+  const isAnonymous =
+    Component.Anonymous || !!process.env.NEXT_PUBLIC_CI_MODE || false;
+  const isProduction = env !== Env.PROD ? false : true;
 
   const getLayout =
     Component.getLayout ??
@@ -46,14 +47,12 @@ export default function App({ Component, pageProps }: AppWithProps) {
       <ModalManager.Provider>
         <AxiosProvider>
           <AuthProvider>
-            <ChatroomContextProvider>
             {getHistory(
               <Startup isAnonymous={isAnonymous}>
                 {getLayout(<Component {...pageProps} />)}
                 {!isProduction && <ApiHistoryList />}
               </Startup>
             )}
-            </ChatroomContextProvider>
           </AuthProvider>
         </AxiosProvider>
       </ModalManager.Provider>
