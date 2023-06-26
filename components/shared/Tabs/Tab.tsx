@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Key } from "react";
-export interface TabProps<T extends Key = string> {
+interface TabProps<T extends Key = string> {
   /**
    * The key of tab
    */

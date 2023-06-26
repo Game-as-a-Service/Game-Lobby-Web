@@ -11,7 +11,7 @@ import useAuth from "@/hooks/context/useAuth";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
-export enum SOCKET_EVENT {
+enum SOCKET_EVENT {
   CONNECTION_OPEN = "CONNECTION_OPEN",
   CONNECTION_CLOSE = "CONNECTION_CLOSE",
   CHATROOM_JOIN = "CHATROOM_JOIN",
@@ -19,7 +19,7 @@ export enum SOCKET_EVENT {
   CHAT_MESSAGE = "CHAT_MESSAGE",
 }
 
-export enum WS_ReadyState {
+enum WS_ReadyState {
   CONNECTING = 0,
   OPEN,
   CLOSED,

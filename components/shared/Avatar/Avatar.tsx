@@ -5,11 +5,11 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-export type AvatarType = "link" | "button" | "image";
+type AvatarType = "link" | "button" | "image";
 
-export type AvatarSizeType = "default" | "small" | "large";
+type AvatarSizeType = "default" | "small" | "large";
 
-export type AvatarShape = "circle" | "square";
+type AvatarShape = "circle" | "square";
 
 // Currently, the design only supports the default size,
 // we retain the small and large size in advance for future use.
@@ -19,7 +19,7 @@ const AVATAR_SIZES: Record<AvatarSizeType, number> = {
   large: 40,
 };
 
-export interface BaseAvatarProps {
+interface BaseAvatarProps {
   /** If true, an online badge will be displayed. */
   isOnline?: boolean;
   /** The address of avatar image. If the src is invalid or empty, the avatar fallback will be displayed instead. */
@@ -32,30 +32,27 @@ export interface BaseAvatarProps {
   shape?: AvatarShape;
 }
 
-export interface AvatarLinkProps extends BaseAvatarProps {
+interface AvatarLinkProps extends BaseAvatarProps {
   type: "link";
   /** The href attribute limited to the "link" avatar */
   href: string;
   onClick?: never;
 }
 
-export interface AvatarButtonProps extends BaseAvatarProps {
+interface AvatarButtonProps extends BaseAvatarProps {
   type: "button";
   href?: never;
   /** The onclick handler limited to the "button" avatar */
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface AvatarImageProps extends BaseAvatarProps {
+interface AvatarImageProps extends BaseAvatarProps {
   type: "image";
   href?: never;
   onClick?: never;
 }
 
-export type AvatarProps =
-  | AvatarLinkProps
-  | AvatarButtonProps
-  | AvatarImageProps;
+type AvatarProps = AvatarLinkProps | AvatarButtonProps | AvatarImageProps;
 
 // #TODO
 // Configure image hostname in `next.config.js`

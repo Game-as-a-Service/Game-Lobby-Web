@@ -6,7 +6,7 @@ export enum TagColor {
   RED = "red",
 }
 
-export interface TagProps extends React.ComponentPropsWithoutRef<"span"> {
+interface TagProps extends React.ComponentPropsWithoutRef<"span"> {
   /**
    * The color of Tag, defined in TagColor
    */

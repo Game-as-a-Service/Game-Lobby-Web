@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import cookie from "js-cookie";
 
-export enum CookieKey {
+enum CookieKey {
   TOKEN = "_token",
 }
 

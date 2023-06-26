@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
-import Input, { ChangeHandler } from "./Input";
+import Input, { ChangeHandler } from ".";
 
 describe("Input", () => {
   it("should renders input component with correct value", async () => {

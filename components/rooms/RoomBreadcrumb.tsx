@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { RoomInfo } from "@/requests/rooms";
 
-export type RoomBreadcrumbType = {
+type RoomBreadcrumbType = {
   roomInfo: RoomInfo.Room;
 };
 

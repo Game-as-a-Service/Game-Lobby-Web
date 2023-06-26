@@ -5,24 +5,6 @@ type RoomsListProps = {
   children: React.ReactNode;
 };
 
-type RoomsListTitleProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-export const RoomsListTitle = ({
-  children,
-  className,
-}: RoomsListTitleProps) => {
-  const titleClass = cn(
-    "rooms__list__title",
-    "font-black text-white border-l-4 border-blue2f pl-2",
-    className
-  );
-
-  return <h2 className={titleClass}>{children}</h2>;
-};
-
 export const RoomsListWrapper = ({ className, children }: RoomsListProps) => {
   const listClass = cn(
     "rooms__list__wrapper",

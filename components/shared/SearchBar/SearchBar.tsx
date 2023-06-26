@@ -5,12 +5,9 @@ import { cn } from "@/lib/utils";
 import Button from "../Button";
 import Input, { ChangeHandler } from "../Input";
 
-export type SubmitHandler = (
-  value: string,
-  event: FormEvent<HTMLFormElement>
-) => void;
+type SubmitHandler = (value: string, event: FormEvent<HTMLFormElement>) => void;
 
-export interface SearchBarProps {
+interface SearchBarProps {
   /** The current value of the input */
   value: string;
 
@@ -111,5 +108,3 @@ export const SearchBar = ({
     </form>
   );
 };
-
-export default SearchBar;

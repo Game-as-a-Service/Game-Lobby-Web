@@ -3,7 +3,7 @@ import UserCard, { UserCardProps } from "./UserCard/UserCard";
 
 const SEAT_AMOUNT = 10;
 
-export type RoomUserCardListProps = {
+type RoomUserCardListProps = {
   roomInfo: RoomInfo.Room;
   currentUserId: string | undefined;
   onKickUser?: (User: Omit<RoomInfo.User, "isReady">) => void;

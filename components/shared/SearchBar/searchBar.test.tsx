@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import type { ChangeHandler } from "../Input";
-import SearchBar from "./SearchBar";
+import SearchBar from ".";
 
 describe("SearchBar", () => {
   it("should renders input component with correct value", async () => {

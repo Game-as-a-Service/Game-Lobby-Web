@@ -15,7 +15,7 @@ export type ChangeHandler = (
   event: ChangeEvent<HTMLInputElement>
 ) => void;
 
-export interface InputProps
+interface InputProps
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
     "maxLength" | "prefix" | "className" | "onChange"
@@ -193,5 +193,3 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
 };
 
 export const Input = forwardRef(InteralInput);
-
-export default Input;

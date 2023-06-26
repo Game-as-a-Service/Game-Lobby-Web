@@ -8,7 +8,6 @@ import "@/scripts/whyDidYouRender";
 
 import AxiosProvider from "@/containers/provider/AxiosProvider";
 import AppLayout from "@/containers/layout/AppLayout";
-import ModalManager from "@/components/shared/Modal/ModalManager";
 import AuthProvider from "@/containers/provider/AuthProvider";
 import Startup from "@/containers/util/Startup";
 import ApiHistoryProvider from "@/containers/provider/ApiHistoryProvider";
@@ -46,20 +45,18 @@ export default function App({ Component, pageProps }: AppWithProps) {
 
   return (
     <ToastQueueProvider>
-      <ModalManager.Provider>
-        <AxiosProvider>
-          <AuthProvider>
-            <ChatroomContextProvider>
+      <AxiosProvider>
+        <AuthProvider>
+          <ChatroomContextProvider>
             {getHistory(
               <Startup isAnonymous={isAnonymous}>
                 {getLayout(<Component {...pageProps} />)}
                 {!isProduction && <ApiHistoryList />}
               </Startup>
             )}
-            </ChatroomContextProvider>
-          </AuthProvider>
-        </AxiosProvider>
-      </ModalManager.Provider>
+          </ChatroomContextProvider>
+        </AuthProvider>
+      </AxiosProvider>
     </ToastQueueProvider>
   );
 }

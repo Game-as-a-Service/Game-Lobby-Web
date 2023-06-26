@@ -1,7 +1,7 @@
 import { ReactNode, ForwardRefRenderFunction, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface FooterProps {
+interface FooterProps {
   footer?: ReactNode;
 }
 
@@ -31,5 +31,5 @@ const InternalFooter: ForwardRefRenderFunction<HTMLDivElement, FooterProps> = (
   );
 };
 
-export const Footer = forwardRef<HTMLDivElement, FooterProps>(InternalFooter);
+const Footer = forwardRef<HTMLDivElement, FooterProps>(InternalFooter);
 export default Footer;

@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { cn } from "@/lib/utils";
 import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
-import Modal from "@/components/shared/Modalow/Modalow";
+import Modalow from "@/components/shared/Modalow";
 import useRequest from "@/hooks/useRequest";
 import useUser from "@/hooks/useUser";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
@@ -95,7 +95,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Modal
+      <Modalow
         hasTitle={false}
         isOpen={isOpenModal}
         onClose={handleClose}
@@ -173,7 +173,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
             )}
           </div>
         </div>
-      </Modal>
+      </Modalow>
     </>
   );
 };
