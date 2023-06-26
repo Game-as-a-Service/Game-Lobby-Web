@@ -56,7 +56,7 @@ export const TOAST_QUEUE_STATE = {
 } as const;
 
 export type ToastQueueState =
-  typeof TOAST_QUEUE_STATE[keyof typeof TOAST_QUEUE_STATE];
+  (typeof TOAST_QUEUE_STATE)[keyof typeof TOAST_QUEUE_STATE];
 
 const isToastNotAutoClosed = (duration: number) =>
   duration < 0 || isNaN(duration) || duration > 600000;
@@ -73,33 +73,31 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   children,
 }) => {
   const [toastQueueMap, setToastQueueMap] = useState<ToastQueueMap>(new Map());
-  const [toastTimeoutMap, setToastTimeoutMap] = useState<
-    Map<string, NodeJS.Timeout>
-  >(new Map());
-  const cleanRef = useRef(() =>
-    toastTimeoutMap.forEach((timeout) => clearTimeout(timeout))
-  );
+  const toastTimeoutMap = useRef(new Map<string, NodeJS.Timeout>());
 
   const addToast = useCallback<Toaster>(
     (component: UseToastComponent, toastOption?: UseToastOptions) => {
       // If the toastOption is not set, the toast will be displayed in the body element.
       // find the toast queue of the target element. If it does not exist, create a new one.
       const targetEl = toastOption?.targetEl ?? null;
-      const targetQueue = toastQueueMap.get(targetEl) ?? [];
-      const targetQueueSize = targetQueue.length;
 
-      // If the queue is full, ignore the request.
-      if (targetQueueSize > MAX_TOAST_QUEUE_SIZE) return;
+      setToastQueueMap((prevToastQueueMap) => {
+        const targetQueue = prevToastQueueMap.get(targetEl) ?? [];
+        const targetQueueSize = targetQueue.length;
 
-      // add an uuid and enqueue the toast.
-      const id = window.crypto.randomUUID();
-      const newQueue: ToastQueueMapValue = [
-        { id, value: component, options: toastOption },
-        ...targetQueue,
-      ];
-      setToastQueueMap(new Map(toastQueueMap.set(targetEl, newQueue)));
+        // If the queue is full, ignore the request.
+        if (targetQueueSize > MAX_TOAST_QUEUE_SIZE) return prevToastQueueMap;
+
+        // add an uuid and enqueue the toast.
+        const id = window.crypto.randomUUID();
+        const newQueue: ToastQueueMapValue = [
+          { id, value: component, options: toastOption },
+          ...targetQueue,
+        ];
+        return new Map(prevToastQueueMap.set(targetEl, newQueue));
+      });
     },
-    [toastQueueMap]
+    []
   );
 
   const removeToast = useCallback(
@@ -113,14 +111,10 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
         return newMap;
       });
       // clear timeout
-      const timeout = toastTimeoutMap.get(id);
+      const timeout = toastTimeoutMap.current.get(id);
       if (timeout) {
         clearTimeout(timeout);
-        setToastTimeoutMap((prev) => {
-          const newMap = new Map(prev);
-          newMap.delete(id);
-          return newMap;
-        });
+        toastTimeoutMap.current.delete(id);
       }
     },
     [toastTimeoutMap]
@@ -135,12 +129,13 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
       });
       return newMap;
     });
-    // cleat timeout
-    setToastTimeoutMap((prev) => {
-      const newMap = new Map(prev);
-      newMap.delete(id);
-      return newMap;
-    });
+
+    // clear timeout
+    const timeout = toastTimeoutMap.current.get(id);
+    if (timeout) {
+      clearTimeout(timeout);
+      toastTimeoutMap.current.delete(id);
+    }
   }, []);
 
   // toasts should be rendered
@@ -223,7 +218,7 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
       // only set timeout for the last MAX_TOAST_MOUNT_SIZE toasts
       queue.slice(-MAX_TOAST_MOUNT_SIZE).forEach(({ id, state, options }) => {
         // ignore if the toast timeout is already set.
-        if (toastTimeoutMap.has(id)) return;
+        if (toastTimeoutMap.current.has(id)) return;
 
         let timeout: NodeJS.Timeout;
 
@@ -253,14 +248,21 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
             timeout = setTimeout(() => removeToast(id), 150);
         }
 
-        setToastTimeoutMap((prev) => new Map(prev.set(id, timeout)));
+        toastTimeoutMap.current.set(id, timeout);
       });
     });
-  }, [changeToastState, removeToast, toastQueueMap, toastTimeoutMap]);
+  }, [changeToastState, removeToast, toastQueueMap]);
 
   // remove all timeout when unmount
   useEffect(() => {
-    return cleanRef.current;
+    const currentTimeoutMap = toastTimeoutMap.current;
+
+    return () => {
+      currentTimeoutMap.forEach((timeout) => {
+        clearTimeout(timeout);
+      });
+      currentTimeoutMap.clear();
+    };
   }, []);
 
   return (
