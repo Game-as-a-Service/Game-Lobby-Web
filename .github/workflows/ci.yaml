@@ -15,29 +15,9 @@ env:
   NEXT_PUBLIC_CI_MODE: true
 
 jobs:
-  init:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Git checkout
-        uses: actions/checkout@v3
-
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-            ~/.cache/Cypress
-          key: deps-node-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile
-
   build:
+    name: Build
     runs-on: ubuntu-latest
-    needs: init
 
     steps:
       - name: Git checkout
@@ -78,7 +58,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    needs: init
+    needs: build
 
     steps:
       - name: Git checkout
@@ -100,7 +80,7 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Smoke & Acceptance tests
+      - name: Storybook Smoke & Acceptance tests
         run: |
           yarn build-storybook --quiet
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
@@ -109,7 +89,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
-    needs: init
+    needs: build
 
     steps:
       - name: Git checkout
@@ -133,7 +113,7 @@ jobs:
   
   knip-scan:
     runs-on: ubuntu-latest
-    needs: init
+    needs: build
 
     steps:
       - name: Git checkout
