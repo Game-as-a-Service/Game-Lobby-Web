@@ -35,7 +35,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
-  build:
+  build-and-lhci:
     runs-on: ubuntu-latest
     needs: init
 
