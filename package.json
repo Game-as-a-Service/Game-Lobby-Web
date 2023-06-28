@@ -41,6 +41,7 @@
     "@actions/github": "5.1.1",
     "@next/bundle-analyzer": "13.4.7",
     "@octokit/core": "4.2.4",
+    "@playwright/test": "^1.35.1",
     "@storybook/addon-essentials": "7.0.23",
     "@storybook/addon-interactions": "7.0.23",
     "@storybook/addon-links": "7.0.23",
