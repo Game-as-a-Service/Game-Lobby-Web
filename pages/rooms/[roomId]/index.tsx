@@ -13,6 +13,7 @@ import {
   kickUser,
   closeRoom,
   RoomInfo,
+  leaveRoom,
 } from "@/requests/rooms";
 
 export default function Room() {
@@ -29,7 +30,7 @@ export default function Room() {
   const { currentUser } = useAuth();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
-  const { query, push } = useRouter();
+  const { query, push, replace } = useRouter();
   const roomId = query.roomId as string;
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function Room() {
     const handleCloseRoom = async () => {
       try {
         await fetch(closeRoom(roomId));
-        push("/");
+        replace("/rooms");
       } catch (err) {
         // TODO handle error
       }
@@ -93,6 +94,27 @@ export default function Room() {
   //   removePlayer(userId);
   // }
 
+  // the user leave room
+  const handleLeave = () => {
+    const leave = async () => {
+      try {
+        await fetch(leaveRoom(roomId));
+        replace("/rooms");
+      } catch (err) {
+        // TODO handle error
+      }
+    };
+
+    firePopup({
+      title:
+        roomInfo.host.id === currentUser?.id
+          ? `當您離開房間後，房主的位子將會自動移交給其他成員，若房間內沒有成員則會自動關閉房間，是否確定要離開房間？`
+          : `是否確定要離開房間？`,
+      showCancelButton: true,
+      onConfirm: leave,
+    });
+  };
+
   return (
     <section className="px-[18px] py-4 max-w-[1172px] ">
       <RoomBreadcrumb roomInfo={roomInfo} />
@@ -106,7 +128,7 @@ export default function Room() {
         <RoomButtonGroup
           onToggleReady={() => {}}
           onClickClose={handleClickClose}
-          onClickLeave={() => push("/")}
+          onClickLeave={handleLeave}
           onClickStart={() => {}}
           isHost={roomInfo.host.id === currentUser?.id}
         />
