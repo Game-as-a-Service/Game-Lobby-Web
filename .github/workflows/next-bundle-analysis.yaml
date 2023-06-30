@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true 
         with:
           branch: ${{ github.event.pull_request.base.ref }}
-          path: .next/analyze/base
+          path: .next/analyze/base/bundle
           name: build-bundle-artifacts
           workflow_conclusion: completed
 
