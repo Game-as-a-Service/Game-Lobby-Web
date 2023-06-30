@@ -60,6 +60,7 @@ jobs:
           branch: ${{ github.event.pull_request.base.ref }}
           path: .next/analyze/base
           name: build-bundle-artifacts
+          workflow_conclusion: completed
 
       # And here's the second place - this runs after we have both the current and
       # base branch bundle stats, and will compare them to determine what changed.
