@@ -57,7 +57,6 @@ jobs:
         if: success() && github.event.number
         continue-on-error: true 
         with:
-          workflow: next-bundle-analysis.yaml
           branch: ${{ github.event.pull_request.base.ref }}
           path: .next/analyze/base
           name: build-bundle-artifacts
