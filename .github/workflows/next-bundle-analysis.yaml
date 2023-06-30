@@ -50,7 +50,7 @@ jobs:
       - name: Upload bundle
         uses: actions/upload-artifact@v3
         with:
-          name: PR-${{ github.event.pull_request.number }}-build-artifacts
+          name: build-bundle-artifacts
           path: .next/analyze/__bundle_analysis.json
 
       - name: Download base branch bundle stats
@@ -61,6 +61,7 @@ jobs:
           workflow: next-bundle-analysis.yaml
           branch: ${{ github.event.pull_request.base.ref }}
           path: .next/analyze/base
+          name: build-bundle-artifacts
 
       # And here's the second place - this runs after we have both the current and
       # base branch bundle stats, and will compare them to determine what changed.
