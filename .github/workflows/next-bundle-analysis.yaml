@@ -9,10 +9,6 @@ on:
       - main
   workflow_dispatch:
 
-# defaults:
-#   run:
-#     working-directory: ./
-
 jobs:
   analyze:
     env:
@@ -20,11 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # - name: Set up node
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: "18.x"
 
       - name: Cache dependencies
         id: cache
@@ -59,12 +50,13 @@ jobs:
       - name: Upload bundle
         uses: actions/upload-artifact@v3
         with:
-          name: bundle
+          name: PR-${{ github.event.pull_request.number }}-build-artifacts
           path: .next/analyze/__bundle_analysis.json
 
       - name: Download base branch bundle stats
         uses: dawidd6/action-download-artifact@v2
         if: success() && github.event.number
+        continue-on-error: true 
         with:
           workflow: next-bundle-analysis.yaml
           branch: ${{ github.event.pull_request.base.ref }}
