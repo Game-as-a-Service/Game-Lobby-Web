@@ -1,7 +1,6 @@
 import Modalow, { ModalProps } from "@/components/shared/Modalow";
 import Button from "@/components/shared/Button";
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useCallback, useMemo } from "react";
 interface PopupConfig extends Pick<ModalProps, "isOpen"> {
   title?: string;
   showCancelButton?: boolean;
@@ -30,10 +29,12 @@ const initPopupConfig: PopupConfig = {
 export default function usePopup() {
   const [popupConfig, setPopupConfig] = useState<PopupConfig>(initPopupConfig);
 
-  const resetPopup = () =>
-    setPopupConfig((prev) => ({ ...prev, ...initPopupConfig }));
+  const resetPopup = useCallback(
+    () => setPopupConfig((prev) => ({ ...prev, ...initPopupConfig })),
+    []
+  );
 
-  async function handleConfirm() {
+  const handleConfirm = useCallback(async () => {
     if (popupConfig.onConfirm) {
       const isOpen = await popupConfig.onConfirm();
       if (!isOpen) {
@@ -42,12 +43,12 @@ export default function usePopup() {
     } else {
       resetPopup();
     }
-  }
+  }, [popupConfig, resetPopup]);
 
-  async function handleClose() {
+  const handleClose = useCallback(async () => {
     popupConfig.onCancel && (await popupConfig.onCancel());
     resetPopup();
-  }
+  }, [popupConfig, resetPopup]);
 
   function firePopup({
     title,
@@ -64,29 +65,31 @@ export default function usePopup() {
     });
   }
 
-  const popupFooter = (
-    <div className="flex gap-4">
-      {popupConfig.showCancelButton && (
-        <Button onClick={handleClose}>取消</Button>
-      )}
-      <Button onClick={handleConfirm}>確定</Button>
-    </div>
-  );
-
-  const Popup = () => (
-    <Modalow
-      hasTitle={false}
-      isOpen={popupConfig.isOpen}
-      onClose={handleClose}
-      footer={popupFooter}
-      maskClosable={false}
-    >
-      <p className="text-center text-lg pt-3">{popupConfig.title}</p>
-    </Modalow>
-  );
+  const Popup = useMemo(() => {
+    function PopupComponent() {
+      return (
+        <Modalow
+          hasTitle={false}
+          isOpen={popupConfig.isOpen}
+          onClose={handleClose}
+          maskClosable={false}
+        >
+          <p className="text-center text-lg pt-3">{popupConfig.title}</p>
+          <div className="flex px-8 py-3 justify-center w-full gap-2 flex-nowrap">
+            {popupConfig.showCancelButton && (
+              <Button onClick={handleClose}>取消</Button>
+            )}
+            <Button onClick={handleConfirm}>確定</Button>
+          </div>
+        </Modalow>
+      );
+    }
+    return PopupComponent;
+  }, [popupConfig, handleClose, handleConfirm]);
 
   useEffect(() => {
     return resetPopup();
-  }, []);
+  }, [resetPopup]);
+
   return { Popup, firePopup };
 }
