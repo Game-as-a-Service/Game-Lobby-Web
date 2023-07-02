@@ -8,13 +8,13 @@ import Modal from "@/components/shared/Modalow/Modalow";
 import useRequest from "@/hooks/useRequest";
 import useUser from "@/hooks/useUser";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
+import { useToast } from "../shared/Toast";
 
 type UserInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-// TODO: Update Style when design is ready
 const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
   const [isOpenModal, setIsOpenModal] = useState(isOpen);
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
   const [errorMsg, setErrorMsg] = useState({ nickname: "", email: "" });
   const { fetch } = useRequest();
   const { getCurrentUser } = useUser();
+  const toast = useToast();
 
   const hasError = errorMsg.nickname !== "" || errorMsg.email !== "";
 
@@ -37,19 +38,28 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
     setUserInfo(originalUserInfo); // Restore the original user info
   };
   const handleSubmit = async () => {
-    if (hasError) return; // TODO: Show error notification
-    if (!userInfo) return; // TODO: Show error notification
+    if (hasError) return;
+    if (!userInfo) return;
     try {
       setLoading(true);
-      const response = await fetch(putUserinfoEndpoint(userInfo));
+      await fetch(putUserinfoEndpoint(userInfo), { toast: { show: false } });
       setOriginalUserInfo(userInfo); // Update the original user info
       handleClose();
-      // TODO: Success Notification
     } catch (error) {
       if (error instanceof AxiosError) {
-        alert(`Show on Toast: ${error.response?.data.message}`);
+        toast(
+          { state: "error", children: error.response?.data.message },
+          {
+            position: "bottom-left",
+          }
+        );
       } else {
-        alert(`Show on Toast: ${error}`);
+        toast(
+          { state: "error", children: `無法預期的錯誤： ${error}` },
+          {
+            position: "bottom-left",
+          }
+        );
       }
     } finally {
       setLoading(false);
@@ -102,6 +112,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
         hasTitle={false}
         isOpen={isOpenModal}
         onClose={handleClose}
+        maskClosable={!loading}
         size="xLarge"
       >
         <div className="flex flex-col">
@@ -121,6 +132,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                   <Button
                     className="flex justify-center rounded-sm"
                     onClick={handleCancelEdit}
+                    disabled={loading}
                   >
                     取消
                   </Button>
@@ -130,7 +142,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                   className="flex justify-center rounded-sm"
                   onClick={() => setEditMode((prev) => !prev)}
                 >
-                  {editMode ? "取消" : "編輯"}
+                  編輯
                 </Button>
               )}
             </div>
@@ -146,6 +158,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                     <div className="w-full">
                       <Input
                         className={cn("flex flex-col")}
+                        disabled={loading}
                         inputClassName={cn(
                           "rounded-[10px] w-full border border-dark29",
                           "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"
@@ -171,6 +184,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                     <div className="w-full">
                       <Input
                         className={cn("flex flex-col")}
+                        disabled={loading}
                         inputClassName={cn(
                           "rounded-[10px] w-full  border border-dark29",
                           "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"

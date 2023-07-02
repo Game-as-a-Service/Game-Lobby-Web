@@ -15,7 +15,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <div id="side-chat" />
       </body>
     </Html>
   );
