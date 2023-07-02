@@ -4,6 +4,7 @@ import { ReactElement, ReactNode } from "react";
 
 import "@/styles/reset.css";
 import "@/styles/global.css";
+import "@/scripts/whyDidYouRender";
 
 import AxiosProvider from "@/containers/provider/AxiosProvider";
 import AppLayout from "@/containers/layout/AppLayout";
