@@ -14,13 +14,15 @@ function RoomButtonGroup(props: RoomButtonGroupProps) {
   return (
     <div className="flex items-center">
       <div className="flex flex-col gap-[18px] font-normal text-sm leading-[22px] ml-[40px] mr-[52px]">
-        <Button
-          variant="primary"
-          className="rounded-[21px] w-[165px] h-10 flex justify-center"
-          onClick={onToggleReady}
-        >
-          準備
-        </Button>
+        {isHost || (
+          <Button
+            variant="primary"
+            className="rounded-[21px] w-[165px] h-10 flex justify-center"
+            onClick={onToggleReady}
+          >
+            準備
+          </Button>
+        )}
         <Button
           variant="dark"
           className="rounded-[21px] w-[165px] h-10 flex justify-center"
