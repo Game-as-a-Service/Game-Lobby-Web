@@ -24,15 +24,10 @@ function GameItem({ game, onChange, checked }: GameItemProp) {
         className="flex gap-3 w-[197px] p-[11px] rounded-[10px] border border-solid border-[#1E1F22] cursor-pointer hover:border-[#2F88FF] transition"
       >
         <div className="w-[34px] h-[34px] rounded-[10px] items-center">
-          <Avatar
-            src={game.imageUrl}
-            type="image"
-            isOnline={false}
-            size="default"
-          />
+          <Avatar src={game.img} type="image" isOnline={false} size="default" />
         </div>
         <span className="text text-sm text-white leading-[34px]">
-          {game.displayName}
+          {game.name}
         </span>
       </label>
     </li>
