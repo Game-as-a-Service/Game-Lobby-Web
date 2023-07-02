@@ -11,7 +11,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
 import Toast from "@/components/shared/Toast/index";
 import {
   Toaster,
@@ -20,6 +19,7 @@ import {
 } from "@/components/shared/Toast/useToast";
 import clsx from "clsx";
 import { Button } from "@/components/shared/Button";
+import Portal from "@/components/shared/Portal";
 
 export interface CtxToastQueueValue {
   addToast: Toaster;
@@ -136,9 +136,8 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
               i * 11
             }px))`,
           };
-
           allToasts.push(
-            createPortal(
+            <Portal key={id} rootId={targetEl.id}>
               <div
                 className={clsx(
                   `flex justify-center z-[1400] transition-all duration-500`,
@@ -166,10 +165,8 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
                     </Button>
                   ) : null}
                 </div>
-              </div>,
-              targetEl,
-              id
-            )
+              </div>
+            </Portal>
           );
         });
     });
