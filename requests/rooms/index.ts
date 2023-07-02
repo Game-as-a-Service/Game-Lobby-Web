@@ -143,5 +143,22 @@ export const leaveRoom = (roomId: string): IRequestWrapper<null> => {
   return requestWrapper({
     url: `/api/internal/rooms/${roomId}/players/me`,
     method: "DELETE",
+  })
+};
+export const playerReady = (
+  roomId: string
+): IRequestWrapper<{ message: string }> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players/me:ready`,
+    method: "POST",
+  });
+};
+
+export const playerCancelReady = (
+  roomId: string
+): IRequestWrapper<{ message: string }> => {
+  return requestWrapper({
+    url: `/api/internal/rooms/${roomId}/players/me:cancel`,
+    method: "POST",
   });
 };

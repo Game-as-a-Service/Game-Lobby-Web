@@ -14,6 +14,8 @@ import {
   closeRoom,
   RoomInfo,
   leaveRoom,
+  playerReady,
+  playerCancelReady,
 } from "@/requests/rooms";
 
 export default function Room() {
@@ -24,7 +26,7 @@ export default function Room() {
     // removePlayer,
     // updateHost,
     // updateRoomStatus,
-    // toggleUserReadyStatus,
+    toggleUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
 
@@ -33,6 +35,9 @@ export default function Room() {
   const { fetch } = useRequest();
   const { query, push, replace } = useRouter();
   const roomId = query.roomId as string;
+  const player = roomInfo.players.find(
+    (player) => player.id === currentUser?.id
+  );
 
   useEffect(() => {
     async function getRoomInfo() {
@@ -116,6 +121,19 @@ export default function Room() {
     });
   };
 
+  const handleToggleReady = async () => {
+    try {
+      const { message } = player?.isReady
+        ? await fetch(playerCancelReady(roomId))
+        : await fetch(playerReady(roomId));
+      if (message === "Success" && currentUser?.id) {
+        toggleUserReadyStatus(currentUser.id);
+      }
+    } catch (err) {
+      // TODO handle error
+    }
+  };
+
   return (
     <section className="px-[18px] py-4 max-w-[1172px] ">
       <RoomBreadcrumb roomInfo={roomInfo} />
@@ -127,11 +145,12 @@ export default function Room() {
       <div className="flex items-center">
         <RoomChatroom roomId={roomId} />
         <RoomButtonGroup
-          onToggleReady={() => {}}
+          onToggleReady={handleToggleReady}
           onClickClose={handleClickClose}
           onClickLeave={handleLeave}
           onClickStart={() => {}}
           isHost={roomInfo.host.id === currentUser?.id}
+          isReady={player?.isReady || false}
         />
       </div>
       <Popup />
