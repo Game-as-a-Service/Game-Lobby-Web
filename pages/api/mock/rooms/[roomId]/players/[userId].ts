@@ -4,8 +4,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "DELETE") {
     const userId = req.query.userId;
     const roomId = req.query.roomId;
+    // 關閉房間
     if (roomId && userId && userId !== "me") {
-      return res.end();
+      return res.status(204).json({});
+    }
+
+    // 離開房間
+    if (roomId && userId && userId === "me") {
+      return res.status(204).json({});
     }
   }
 
