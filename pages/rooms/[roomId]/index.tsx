@@ -29,7 +29,6 @@ export default function Room() {
     toggleUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
-
   const { currentUser } = useAuth();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
