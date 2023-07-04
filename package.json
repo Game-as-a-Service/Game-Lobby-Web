@@ -86,7 +86,7 @@
     }
   },
   "resolutions": {
-    "@babel/core": "7.22.5",
+    "@babel/core": "7.22.6",
     "@types/react": "18.2.13"
   }
 }
