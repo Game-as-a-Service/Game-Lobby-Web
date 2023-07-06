@@ -57,12 +57,12 @@ export default function Room() {
       try {
         await fetch(kickUser({ roomId, userId: user.id }));
       } catch (err) {
-        // TODO handle error
+        firePopup({ title: `error!` });
       }
     };
 
     firePopup({
-      title: `確定要將 ${user.nickname} 踢除房間？`,
+      title: `確定要將 ${user.nickname} 踢出房間？`,
       showCancelButton: true,
       onConfirm: handleKickUser,
     });
@@ -75,7 +75,7 @@ export default function Room() {
         await fetch(closeRoom(roomId));
         replace("/rooms");
       } catch (err) {
-        // TODO handle error
+        firePopup({ title: "error!" });
       }
     };
 
@@ -86,19 +86,6 @@ export default function Room() {
     });
   }
 
-  // // SocketEvent: on user self be kicked
-  // function onUserSelfKicked() {
-  //   firePopup({
-  //     title: `你已被踢出房間`,
-  //     onConfirm: () => push("/"),
-  //   });
-  // }
-
-  // // SocketEvent: on someone leave or be kicked
-  // function onUserLeave(userId: string) {
-  //   removePlayer(userId);
-  // }
-
   // the user leave room
   const handleLeave = () => {
     const leave = async () => {
@@ -106,7 +93,7 @@ export default function Room() {
         await fetch(leaveRoom(roomId));
         replace("/rooms");
       } catch (err) {
-        // TODO handle error
+        firePopup({ title: "error!" });
       }
     };
 
@@ -129,9 +116,22 @@ export default function Room() {
         toggleUserReadyStatus(currentUser.id);
       }
     } catch (err) {
-      // TODO handle error
+      firePopup({ title: `error!` });
     }
   };
+
+  // // SocketEvent: on user self be kicked
+  // function onUserSelfKicked() {
+  //   firePopup({
+  //     title: `你已被踢出房間`,
+  //     onConfirm: () => push("/"),
+  //   });
+  // }
+
+  // // SocketEvent: on someone leave or be kicked
+  // function onUserLeave(userId: string) {
+  //   removePlayer(userId);
+  // }
 
   return (
     <section className="px-[18px] py-4 max-w-[1172px] ">
