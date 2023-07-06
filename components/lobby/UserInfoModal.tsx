@@ -21,12 +21,12 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
   const [editMode, setEditMode] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const [originalUserInfo, setOriginalUserInfo] = useState<UserInfo>(); // 取消編輯時可以回復原先資料
-  const [errorMsg, setErrorMsg] = useState({ nickname: "", email: "" });
+  const [errorMsg, setErrorMsg] = useState({ nickname: "" });
   const { fetch } = useRequest();
   const { getCurrentUser } = useUser();
   const toast = useToast();
 
-  const hasError = errorMsg.nickname !== "" || errorMsg.email !== "";
+  const hasError = errorMsg.nickname !== "";
 
   const handleClose = () => {
     setIsOpenModal((prev) => !prev);
@@ -34,7 +34,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
   };
   const handleCancelEdit = () => {
     setEditMode(false);
-    setErrorMsg({ nickname: "", email: "" }); // Reset error message
+    setErrorMsg({ nickname: "" }); // Reset error message
     setUserInfo(originalUserInfo); // Restore the original user info
   };
   const handleSubmit = async () => {
@@ -82,19 +82,6 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
       return;
     } else {
       setErrorMsg((prep) => ({ ...prep, nickname: "" }));
-    }
-  };
-
-  const handleEmailChange = (value: string) => {
-    if (!userInfo) return;
-    setUserInfo((prev) => ({ ...prev!, email: value }));
-    const regex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/; // Regex pattern for email
-    if (value.length === 0) {
-      setErrorMsg((prep) => ({ ...prep, email: "Email 欄位不可空白" }));
-    } else if (!regex.test(value)) {
-      setErrorMsg((prep) => ({ ...prep, email: "Email 格式錯誤" }));
-    } else {
-      setErrorMsg((prep) => ({ ...prep, email: "" }));
     }
   };
 
@@ -180,25 +167,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                   <div className="w-[100px] border-l-2 border-blue2f pl-2">
                     電子郵件
                   </div>
-                  {editMode ? (
-                    <div className="w-full">
-                      <Input
-                        className={cn("flex flex-col")}
-                        disabled={loading}
-                        inputClassName={cn(
-                          "rounded-[10px] w-full  border border-dark29",
-                          "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"
-                        )}
-                        errorClassName={cn("flex justify-end")}
-                        value={userInfo.email}
-                        onChange={handleEmailChange}
-                        error={hasError}
-                        errorMessage={errorMsg.email}
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-full px-3 py-0.5">{userInfo.email}</div>
-                  )}
+                  <div className="w-full px-3 py-0.5">{userInfo.email}</div>
                 </div>
               </>
             )}

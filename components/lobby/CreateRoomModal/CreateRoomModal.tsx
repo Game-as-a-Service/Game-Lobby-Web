@@ -134,7 +134,7 @@ export default function CreateRoomModal() {
                 <Input
                   inputClassName="cursor-pointer"
                   label="請選擇遊戲"
-                  value={currentGame?.displayName}
+                  value={currentGame?.name}
                   required
                   readOnly
                   onClick={() => setShowGameListModal(true)}
