@@ -14,7 +14,6 @@ export interface PortalProps {
 
 const Portal: FC<PortalProps> = ({ children, rootId = "portal-root" }) => {
   const [targetRoot, setTargetRoot] = useState<HTMLElement | null>(null);
-
   useEffect(() => {
     const existingRoot = document.getElementById(rootId);
     let root: HTMLElement;

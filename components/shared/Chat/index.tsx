@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-
+import { useState } from "react";
 import Tabs from "../Tabs";
 import Button from "../Button";
 import ChatMessage from "./ChatMessage";
 import ChatContent from "./ChatContent";
+import Portal from "@/components/shared/Portal";
 
 enum TabsProps {
   PUBLIC = "PUBLIC",
@@ -38,19 +37,9 @@ const Chat = () => {
   const [selectedTab, setSelectedTab] = useState<string>(TabsProps.PUBLIC);
   const [message, setMessage] = useState<string>();
 
-  const ref = useRef<Element | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    ref.current = document.querySelector<HTMLElement>("#side-chat");
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !ref.current) return <></>;
-
   return (
     <>
-      {createPortal(
+      <Portal rootId="side-chat">
         <div className="chat__container fixed right-0 top-[60px] flex flex-col flex-grow max-w-[262px] max-h-[calc(100vh-60px)] bg-dark29 rounded-[10px] overflow-hidden">
           <Tabs
             tabsClass="tabs__wrap"
@@ -97,9 +86,8 @@ const Chat = () => {
               發送
             </Button>
           </div>
-        </div>,
-        ref.current
-      )}
+        </div>{" "}
+      </Portal>
     </>
   );
 };

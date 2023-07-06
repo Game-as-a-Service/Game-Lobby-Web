@@ -3,6 +3,7 @@ import { wait } from "@/lib/utils";
 import { mock_rooms } from "@/mocks/room";
 import { RoomType } from "@/requests/rooms";
 
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
