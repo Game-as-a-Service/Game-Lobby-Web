@@ -1,29 +1,34 @@
 import { Room, RoomType, RoomInfo } from "@/requests/rooms";
 
-const mock_genRoom = (id: string, status: RoomType): Room => {
-  return {
-    id,
-    name: `[${id}] - ${status} room`,
-    game: {
-      id: "mock game id",
-      name: "好玩的遊戲",
-      imgUrl: "http://localhost:3030/images/game-avatar.jpg",
-    },
-    host: {
-      id: "mock user id",
-      nickname: "mock user name",
-    },
-    minPlayers: 1,
-    maxPlayers: 7,
-    isLocked: true,
-    currentPlayers: 1,
-  };
+const mock_genRoom = (id: string, status: RoomType): Room => ({
+  id,
+  name: `[${id}] - ${status} room`,
+  game: {
+    id: "mock game id",
+    name: "好玩的遊戲",
+    imgUrl: "http://localhost:3030/images/game-avatar.jpg",
+  },
+  host: {
+    id: "mock user id",
+    nickname: "mock user name",
+  },
+  minPlayers: 1,
+  maxPlayers: 8,
+  isLocked: Number(id) % 2 === 1,
+  currentPlayers: Number(id) % 3 ? 8 : 3,
+});
+
+const mock_genRooms = {
+  [RoomType.PLAYING]: new Array(100)
+    .fill(undefined)
+    .map((_, index) => mock_genRoom(index.toString(), RoomType.PLAYING)),
+  [RoomType.WAITING]: new Array(100)
+    .fill(undefined)
+    .map((_, index) => mock_genRoom(index.toString(), RoomType.WAITING)),
 };
 
 export const mock_rooms = (status: RoomType) => {
-  return new Array(100)
-    .fill(undefined)
-    .map((item, index) => mock_genRoom(index.toString(), status));
+  return mock_genRooms[status];
 };
 
 export const mock_createRoomResponse: Room = {
@@ -62,9 +67,14 @@ export const mock_roomInfo: RoomInfo.Room = {
       isReady: false,
     },
     {
-      id: "mock-currentUser-uid1",
-      nickname: "mock currentUser1",
+      id: "mock-currentUser-uid-b",
+      nickname: "mock user B",
       isReady: false,
+    },
+    {
+      id: "mock-currentUser-uid-c",
+      nickname: "mock user C",
+      isReady: true,
     },
   ],
   currentPlayers: 1,

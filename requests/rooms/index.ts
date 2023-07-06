@@ -69,7 +69,15 @@ export namespace RoomInfo {
 }
 
 export type RoomEntry = {
-  message: string;
+  message:
+    | "success"
+    | "wrong password"
+    | "room is full"
+    | "you can only join 1 room";
+};
+
+export type RoomEntryError = {
+  message: Exclude<RoomEntry["message"], "success">;
 };
 
 export const createRoomEndpoint = (

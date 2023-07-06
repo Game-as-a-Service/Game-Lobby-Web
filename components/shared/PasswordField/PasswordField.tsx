@@ -1,11 +1,4 @@
-import {
-  useRef,
-  FC,
-  Dispatch,
-  SetStateAction,
-  KeyboardEvent,
-  useEffect,
-} from "react";
+import { useRef, FC, KeyboardEvent, useEffect } from "react";
 import Input from "@/components/shared/Input";
 
 type PasswordFieldProps = {
@@ -14,7 +7,7 @@ type PasswordFieldProps = {
   subTitle: string;
   passwordValues: string[];
   disabled?: boolean;
-  setPasswordValues: Dispatch<SetStateAction<string[]>>;
+  setPasswordValues: (values: string[]) => void;
 };
 
 const PasswordField: FC<PasswordFieldProps> = ({
