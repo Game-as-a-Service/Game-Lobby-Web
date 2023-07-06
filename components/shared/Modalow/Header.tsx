@@ -2,7 +2,7 @@ import React, { ForwardRefRenderFunction } from "react";
 import { cn } from "@/lib/utils";
 import { CloseIcon } from "./Icon";
 
-export interface HeaderProps {
+interface HeaderProps {
   title: string;
   hasTitle?: boolean;
   hideCloseIcon?: boolean;
@@ -48,7 +48,5 @@ const InternalHeader: ForwardRefRenderFunction<HTMLDivElement, HeaderProps> = (
   );
 };
 
-export const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
-  InternalHeader
-);
+const Header = React.forwardRef<HTMLDivElement, HeaderProps>(InternalHeader);
 export default Header;

@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 
-export type RoomButtonGroupProps = {
+type RoomButtonGroupProps = {
   isHost: boolean;
   isReady: boolean;
   onToggleReady: () => void;

@@ -1,4 +1,4 @@
-import Modalow from "./Modalow";
+import { Modalow } from "./Modalow";
 
 export * from "./Modalow";
 

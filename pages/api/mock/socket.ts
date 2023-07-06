@@ -144,6 +144,10 @@ export default function handler(
             }
             break;
           }
+
+          case "CONNECTION_CLOSE": {
+            break;
+          }
           default:
             throw new Error(`未預期的 type: ${messageType}`);
         }

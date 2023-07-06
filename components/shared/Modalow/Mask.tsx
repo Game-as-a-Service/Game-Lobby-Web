@@ -2,7 +2,7 @@ import React, { ForwardRefRenderFunction } from "react";
 import { cn } from "@/lib/utils";
 import styles from "./modal.module.css";
 
-export interface MaskProps {
+interface MaskProps {
   isOpen: boolean;
   hasMask?: boolean;
   maskClosable?: boolean;
@@ -39,5 +39,5 @@ const InternalMask: ForwardRefRenderFunction<HTMLDivElement, MaskProps> = (
   );
 };
 
-export const Mask = React.forwardRef<HTMLDivElement, MaskProps>(InternalMask);
+const Mask = React.forwardRef<HTMLDivElement, MaskProps>(InternalMask);
 export default Mask;

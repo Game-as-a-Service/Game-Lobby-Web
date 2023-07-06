@@ -12,7 +12,7 @@ import Footer from "./Footer";
 import Mask from "./Mask";
 import Body from "./Body";
 
-export enum ModalSizeVariant {
+enum ModalSizeVariant {
   small = "small",
   medium = "medium",
   large = "large",
@@ -125,4 +125,3 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
 };
 
 export const Modalow = forwardRef<HTMLDivElement, ModalProps>(InternalModal);
-export default Modalow;

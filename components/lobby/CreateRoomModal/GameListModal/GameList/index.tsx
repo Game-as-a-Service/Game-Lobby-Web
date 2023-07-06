@@ -2,13 +2,13 @@ import CategoryTitle from "./CategoryTitle";
 import PickGameItem from "./GameItem";
 import { GameType } from "@/requests/games";
 
-export interface GameListProp {
+interface GameListProp {
   activeGameId: string;
   gameList: GameType[];
   onGameChange: (gameId: string) => void;
 }
 
-export type GroupedGamesType = {
+type GroupedGamesType = {
   [category: string]: GameType[];
 };
 

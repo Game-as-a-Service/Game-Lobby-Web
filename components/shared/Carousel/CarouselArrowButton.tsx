@@ -4,7 +4,7 @@ import Icon from "@/components/shared/Icon";
 
 export type CarouselArrowButtonType = "prev" | "next";
 
-export interface CarouselArrowButtonProps {
+interface CarouselArrowButtonProps {
   type: CarouselArrowButtonType;
   isDisabled?: boolean;
   onClick: MouseEventHandler<HTMLButtonElement>;

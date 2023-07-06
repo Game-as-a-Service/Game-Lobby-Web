@@ -2,7 +2,7 @@ import { useEffect, FC, useState, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 /* Props for the Portal component.*/
-export interface PortalProps {
+interface PortalProps {
   /** The children to be rendered inside the Portal. */
   children: ReactNode;
   /**

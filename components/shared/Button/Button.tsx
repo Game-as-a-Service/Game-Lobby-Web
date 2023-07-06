@@ -26,7 +26,7 @@ export enum ButtonVariant {
   DARK = "dark",
 }
 
-export interface BaseButtonProps<C extends ElementType = "button"> {
+interface BaseButtonProps<C extends ElementType = "button"> {
   /** Button root node component @default button */
   component?: C | "button";
 
@@ -64,7 +64,7 @@ export interface BaseButtonProps<C extends ElementType = "button"> {
   onClick?: (event: SyntheticEvent) => void;
 }
 
-export type ButtonProps<C extends ElementType = "button"> = BaseButtonProps<C> &
+type ButtonProps<C extends ElementType = "button"> = BaseButtonProps<C> &
   Omit<ComponentProps<C>, keyof BaseButtonProps<C>>;
 
 const InteralButton = <C extends ElementType = "button">(
@@ -148,5 +148,3 @@ const LoadingIcon = () => (
 );
 
 export const Button = forwardRef(InteralButton);
-
-export default Button;

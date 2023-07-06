@@ -4,11 +4,11 @@ import ChatMessage from "./ChatMessage";
 import { MessageType } from ".";
 import useChatroom from "@/hooks/context/useChatroom";
 
-export type RoomChatroom = {
+type RoomChatroom = {
   roomId: string;
 };
 
-function RoomChatroom({ roomId }: RoomChatroom) {
+export default function RoomChatroom({ roomId }: RoomChatroom) {
   const {
     lastMessage,
     sendChatMessage,
@@ -94,5 +94,3 @@ function RoomChatroom({ roomId }: RoomChatroom) {
     </div>
   );
 }
-
-export default RoomChatroom;

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-export enum BadgeSizeVariant {
+enum BadgeSizeVariant {
   small = "small",
   medium = "medium",
   large = "large",
@@ -9,7 +9,7 @@ export enum BadgeSizeVariant {
   extraLarge = "extraLarge",
 }
 
-export enum BadgePositionVariant {
+enum BadgePositionVariant {
   "top-left" = "top-left",
   "top-right" = "top-right",
   "bottom-left" = "bottom-left",
@@ -23,7 +23,7 @@ export const positionVariants: Record<BadgePositionVariant, string> = {
   "bottom-right": "bottom-0 right-0 translate-x-1/2 translate-y-1/2",
 };
 
-export const textSizeVariants: Record<BadgeSizeVariant, string> = {
+const textSizeVariants: Record<BadgeSizeVariant, string> = {
   small: "text-xs",
   medium: "text-sm",
   large: "text-base",
@@ -31,7 +31,7 @@ export const textSizeVariants: Record<BadgeSizeVariant, string> = {
   extraLarge: "text-xl",
 };
 
-export const dotSizeVariants: Record<BadgeSizeVariant, string> = {
+const dotSizeVariants: Record<BadgeSizeVariant, string> = {
   small: "w-1 h-1",
   medium: "w-2 h-2",
   large: "w-3 h-3",
@@ -39,7 +39,7 @@ export const dotSizeVariants: Record<BadgeSizeVariant, string> = {
   extraLarge: "w-5 h-5",
 };
 
-export interface BadgeProps {
+interface BadgeProps {
   /** The number or content displayed on the badge. It can be a React element, such as an icon, or a string or number. Default value is 0. */
   count?: React.ReactNode;
   /** The size of badge. It can be "xSmall", "small", "medium", "large", or "xlarge". Default is "medium". */
@@ -123,4 +123,3 @@ const InternalBadge: React.ForwardRefRenderFunction<
 export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   InternalBadge
 );
-export default Badge;

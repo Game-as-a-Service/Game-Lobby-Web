@@ -10,10 +10,10 @@ export interface UserCardProps {
   isHost: boolean;
   onKickUser?: (User: Omit<RoomInfo.User, "isReady">) => void;
 }
-export interface WatingUserCardProp {
+interface WatingUserCardProp {
   isWating: boolean;
 }
-export interface DisabledUserCardProp {
+interface DisabledUserCardProp {
   disabled: boolean;
 }
 function UserCard(props: WatingUserCardProp): ReactElement;

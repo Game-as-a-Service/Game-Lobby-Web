@@ -17,58 +17,44 @@ import {
   UseToastComponent,
   UseToastOptions,
 } from "@/components/shared/Toast/useToast";
+import {
+  MAX_TOAST_MOUNT_SIZE,
+  MAX_TOAST_QUEUE_SIZE,
+  DEFAULT_TOAST_DURATION,
+  DEFAULT_TOAST_POSITION,
+  DEFAULT_TOAST_MANUAL_CLOSE_PLAN,
+  INITIAL_TOAST_POSITION,
+  TOAST_QUEUE_STATE,
+} from "./constants";
 import clsx from "clsx";
-import { Button } from "@/components/shared/Button";
+import Button from "@/components/shared/Button";
 import Portal from "@/components/shared/Portal";
 
-export interface CtxToastQueueValue {
+interface CtxToastQueueValue {
   addToast: Toaster;
 }
 
-export const ToastQueueContext = createContext<CtxToastQueueValue>({} as any);
+const ToastQueueContext = createContext<CtxToastQueueValue>({} as any);
 export const useToastQueueContext = () => useContext(ToastQueueContext);
 
-export const MAX_TOAST_QUEUE_SIZE = 100;
-export const MAX_TOAST_MOUNT_SIZE = 6;
-export const DEFAULT_TOAST_DURATION = 3500;
-export const DEFAULT_TOAST_POSITION = "bottom";
-export const DEFAULT_TOAST_MANUAL_CLOSE_PLAN = "fullBody";
-export const INITIAL_TOAST_POSITION: Record<
-  Required<UseToastOptions>["position"],
-  string
-> = {
-  top: "top-[11px] left-1/2",
-  "top-left": "top-[11px] left-[11px]",
-  "top-right": "top-[11px] right-[11px]",
-  bottom: "bottom-[11px] left-1/2",
-  "bottom-left": "bottom-[11px] left-[11px]",
-  "bottom-right": "bottom-[11px] right-[11px]",
-};
-
-export interface CtxToastQueueProviderProps {
+interface CtxToastQueueProviderProps {
   children?: ReactNode;
 }
 
-export const TOAST_QUEUE_STATE = {
-  entering: "entering",
-  entered: "entered",
-  exiting: "exiting",
-} as const;
-
-export type ToastQueueState =
+type ToastQueueState =
   (typeof TOAST_QUEUE_STATE)[keyof typeof TOAST_QUEUE_STATE];
 
 const isToastNotAutoClosed = (duration: number) =>
   duration < 0 || isNaN(duration) || duration > 600000;
 
-export type ToastQueueValue = {
+type ToastQueueValue = {
   id: string;
   value: UseToastComponent;
   state?: ToastQueueState;
   options?: UseToastOptions;
 };
-export type ToastQueueMapValue = ToastQueueValue[];
-export type ToastQueueMap = Map<null | HTMLElement, ToastQueueMapValue>;
+type ToastQueueMapValue = ToastQueueValue[];
+type ToastQueueMap = Map<null | HTMLElement, ToastQueueMapValue>;
 export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
   children,
 }) => {

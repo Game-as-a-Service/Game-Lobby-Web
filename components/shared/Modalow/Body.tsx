@@ -1,7 +1,7 @@
 import { ReactNode, ForwardRefRenderFunction, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface BodyProps {
+interface BodyProps {
   children: ReactNode;
 }
 const InternalBody: ForwardRefRenderFunction<HTMLDivElement, BodyProps> = (
@@ -22,5 +22,5 @@ const InternalBody: ForwardRefRenderFunction<HTMLDivElement, BodyProps> = (
   );
 };
 
-export const Body = forwardRef<HTMLDivElement, BodyProps>(InternalBody);
+const Body = forwardRef<HTMLDivElement, BodyProps>(InternalBody);
 export default Body;

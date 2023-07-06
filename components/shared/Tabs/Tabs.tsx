@@ -6,7 +6,7 @@ export interface TabItemType<T extends Key = string> {
   label?: string;
 }
 
-export type TabSizeType = "default" | "large";
+type TabSizeType = "default" | "large";
 
 export interface TabsProps<T extends Key = string> {
   /**

@@ -18,7 +18,7 @@ export type CarouselItem = {
   link: string;
 };
 
-export interface CarouselProps {
+interface CarouselProps {
   /** The width of each carousel item (px) */
   itemWidth: number;
   /** The height of the carousel item (px) */

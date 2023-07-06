@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { IconVariants } from "./types/types";
 import icons, { IconName } from "./icons";
 
-export type IconProps = {
+type IconProps = {
   className?: ClassValue;
 
   /** If `true`, spin animation */

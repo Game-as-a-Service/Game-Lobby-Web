@@ -36,10 +36,10 @@ const TOAST_LENGTH_CLS = {
   lg: "w-[450px]",
 } as const;
 
-export type ToastPropState = keyof typeof TOAST_STATE_CLS;
-export type ToastPropSize = keyof typeof TOAST_SIZE_CLS;
-export type ToastPropRounded = keyof typeof TOAST_ROUNDED_CLS;
-export type ToastPropLength = keyof typeof TOAST_LENGTH_CLS;
+type ToastPropState = keyof typeof TOAST_STATE_CLS;
+type ToastPropSize = keyof typeof TOAST_SIZE_CLS;
+type ToastPropRounded = keyof typeof TOAST_ROUNDED_CLS;
+type ToastPropLength = keyof typeof TOAST_LENGTH_CLS;
 
 export interface ToastProps extends HTMLAttributes<HTMLDivElement> {
   state?: ToastPropState;

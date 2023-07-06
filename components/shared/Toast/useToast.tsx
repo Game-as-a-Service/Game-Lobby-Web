@@ -41,7 +41,7 @@ export interface Toaster {
   (component: UseToastComponent, toastOption?: UseToastOptions): void;
 }
 
-export interface UseToast {
+interface UseToast {
   (): Toaster;
 }
 

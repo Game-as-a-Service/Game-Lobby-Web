@@ -25,13 +25,3 @@ export const putUserinfoEndpoint = (
     data,
   });
 };
-
-export const createNicknameEndpoint = (
-  data: UserInfo
-): IRequestWrapper<UserInfo> => {
-  return requestWrapper({
-    url: currentUserEndpoint,
-    method: "POST",
-    data,
-  });
-};

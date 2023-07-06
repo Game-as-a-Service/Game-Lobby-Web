@@ -26,7 +26,7 @@ export type Room = {
   maxPlayers: number;
 };
 
-export type PageMeta = {
+type PageMeta = {
   page: number;
   perPage: number;
   total: number;
@@ -43,7 +43,7 @@ export type Rooms = {
 };
 
 export namespace RoomInfo {
-  export type Game = {
+  type Game = {
     id: string;
     name: string;
   };
@@ -68,7 +68,7 @@ export namespace RoomInfo {
   };
 }
 
-export type RoomEntry = {
+type RoomEntry = {
   message:
     | "success"
     | "wrong password"

@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  DEFAULT_TOAST_DURATION,
-  DEFAULT_TOAST_MANUAL_CLOSE_PLAN,
-  DEFAULT_TOAST_POSITION,
   Toaster,
   useToast,
   UseToastComponent,
   UseToastOptions,
 } from "@/components/shared/Toast/index";
+import {
+  DEFAULT_TOAST_DURATION,
+  DEFAULT_TOAST_MANUAL_CLOSE_PLAN,
+  DEFAULT_TOAST_POSITION,
+} from "./constants";
 import Toast from "@/components/shared/Toast/index";
 import type { ToastProps } from "@/components/shared/Toast/index";
 import { ToastQueueProvider } from "@/components/shared/Toast/index";
