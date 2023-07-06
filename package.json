@@ -72,7 +72,7 @@
     "knip": "2.14.1",
     "lint-staged": "13.2.2",
     "postcss": "8.4.24",
-    "prettier": "2.8.8",
+    "prettier": "3.0.0",
     "shell-quote": "1.8.1",
     "storybook": "7.0.23",
     "tailwindcss": "3.3.2",
