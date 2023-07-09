@@ -95,6 +95,10 @@ export default function CreateRoomModal() {
     setshowThisModal(false);
   }
 
+  function getPasswordSelected(bool: boolean) {
+    setIsPublic(!bool);
+  }
+
   return (
     <>
       <Button onClick={() => setshowThisModal(true)}>開創房間</Button>
@@ -235,6 +239,7 @@ export default function CreateRoomModal() {
                       subTitle={"請輸入此房間密碼"}
                       passwordValues={passwordValues}
                       setPasswordValues={setPasswordValues}
+                      getPasswordSelected={getPasswordSelected}
                     />
                   </label>
                 </div>
