@@ -1,43 +1,51 @@
-import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import Button from "./Button";
 import HomeIcon from "./Icon/group/home";
 import NewsIcon from "./Icon/group/news";
 import RoomsIcon from "./Icon/group/rooms";
+
 import { cn } from "@/lib/utils";
 
-enum SidebarActive {
-  NEWS = "news",
-  HOME = "home",
-  ROOMS = "rooms",
+enum SidebarRoutes {
+  HOME = "/",
+  ROOMS = "/rooms",
+  NEWS = "/news",
 }
 
 export default function Sidebar() {
-  const [selected, setSelected] = useState(SidebarActive.NEWS);
+  const router = useRouter();
+  const { pathname } = router;
 
   const buttons = [
-    { text: "公告", Icon: NewsIcon, type: SidebarActive.NEWS },
-    { text: "遊戲大廳", Icon: HomeIcon, type: SidebarActive.HOME },
-    { text: "遊戲房間", Icon: RoomsIcon, type: SidebarActive.ROOMS },
+    { text: "公告", Icon: NewsIcon, route: SidebarRoutes.NEWS },
+    { text: "遊戲大廳", Icon: HomeIcon, route: SidebarRoutes.HOME },
+    { text: "遊戲房間", Icon: RoomsIcon, route: SidebarRoutes.ROOMS },
   ];
 
   return (
     <nav className="flex flex-col shrink-0 justify-start bg-dark29 rounded-[10px] w-[71px] gap-5">
       {buttons.map((ButtonProps) => (
-        <Button
-          key={ButtonProps.type}
-          className={cn(
-            "bg-transparent px-0 justify-center opacity-[0.3] hover:shadow-none hover:opacity-100",
-            {
-              "opacity-1": selected === ButtonProps.type,
-            }
-          )}
-          onClick={() => setSelected(ButtonProps.type)}
+        <Link
+          href={ButtonProps.route}
+          key={ButtonProps.text}
+          className="block flex justify-center items-center"
         >
-          <div className="w-full flex flex-col items-center gap-1">
-            <ButtonProps.Icon active={selected === ButtonProps.type} />
-            <span className={cn("text-xs")}>{ButtonProps.text}</span>
-          </div>
-        </Button>
+          <Button
+            className={cn(
+              "bg-transparent px-0 justify-center opacity-[0.3] hover:shadow-none hover:opacity-100",
+              {
+                "opacity-1": pathname === ButtonProps.route,
+              }
+            )}
+          >
+            <div className="w-full flex flex-col items-center gap-1">
+              <ButtonProps.Icon active={pathname === ButtonProps.route} />
+              <span className={cn("text-xs")}>{ButtonProps.text}</span>
+            </div>
+          </Button>
+        </Link>
       ))}
     </nav>
   );
