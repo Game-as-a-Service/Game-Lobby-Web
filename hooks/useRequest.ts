@@ -4,8 +4,8 @@ import { AxiosError, AxiosRequestConfig } from "axios";
 import { IRequestWrapper } from "@/requests/request";
 import useAxios from "./context/useAxios";
 import useAuth from "./context/useAuth";
-import useApiHistory from "./context/useApiHistory";
-import { Status } from "@/contexts/ApiHistoryContext";
+import useHistory from "./context/useHistory";
+import { Status } from "@/contexts/HistoryContext";
 import {
   useToast,
   UseToastComponent,
@@ -24,7 +24,7 @@ interface FetchOptions {
 const useRequest = () => {
   const { axios } = useAxios();
   const { token, setToken: setTokenCtx } = useAuth();
-  const { addHistory, updateHistory } = useApiHistory();
+  const { addApiHistory, updateApiHistory } = useHistory();
   const toast = useToast();
   const isProduction = getEnv().env !== Env.PROD ? false : true;
 
@@ -55,13 +55,13 @@ const useRequest = () => {
           status: Status.PENDING,
           time: 0,
         };
-        addHistory(history);
+        addApiHistory(history);
 
         return requestWrapper
           .executor(axios, additionalToRequest)
           .then((res) => {
             if (!isProduction) {
-              updateHistory({
+              updateApiHistory({
                 ...history,
                 status: Status.RESOLVED,
                 statusCode: res.status,
@@ -90,7 +90,7 @@ const useRequest = () => {
           })
           .catch((err: Error) => {
             if (!isProduction) {
-              updateHistory({
+              updateApiHistory({
                 ...history,
                 status: Status.REJECTED,
                 time: new Date().getTime() - startTime,

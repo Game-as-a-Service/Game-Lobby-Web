@@ -33,11 +33,11 @@ export interface WebSocketHistory<T = unknown> {
   message: T;
 }
 
-interface IApiHistoryContext<T = unknown> {
-  history: ApiHistory[];
-  addHistory: (data: ApiHistory) => void;
-  removeHistory: (id: string) => void;
-  updateHistory: (data: ApiHistory) => void;
+interface IHistoryContext<T = unknown> {
+  apiHistory: ApiHistory[];
+  addApiHistory: (data: ApiHistory) => void;
+  removeApiHistory: (id: string) => void;
+  updateApiHistory: (data: ApiHistory) => void;
   wsHistory: WebSocketHistory[];
   addWsHistory: (data: Omit<WebSocketHistory, "id">) => void;
   clearAllHistory: () => void;
@@ -45,11 +45,11 @@ interface IApiHistoryContext<T = unknown> {
   setIsHidden: (isHidden: boolean) => void;
 }
 
-const ApiHistoryContext = createContext<IApiHistoryContext>({
-  history: [],
-  addHistory: () => {},
-  removeHistory: () => {},
-  updateHistory: () => {},
+const HistoryContext = createContext<IHistoryContext>({
+  apiHistory: [],
+  addApiHistory: () => {},
+  removeApiHistory: () => {},
+  updateApiHistory: () => {},
   wsHistory: [],
   addWsHistory: () => {},
   clearAllHistory: () => {},
@@ -57,4 +57,4 @@ const ApiHistoryContext = createContext<IApiHistoryContext>({
   setIsHidden: () => {},
 });
 
-export default ApiHistoryContext;
+export default HistoryContext;

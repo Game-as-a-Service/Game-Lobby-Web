@@ -1,4 +1,4 @@
-import { ApiHistory, Status } from "@/contexts/ApiHistoryContext";
+import { ApiHistory, Status } from "@/contexts/HistoryContext";
 import Check from "public/images/check.svg";
 import Error from "public/images/error.svg";
 import Pending from "public/images/pending.svg";

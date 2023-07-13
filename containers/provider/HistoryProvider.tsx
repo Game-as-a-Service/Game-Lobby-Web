@@ -1,34 +1,34 @@
-import ApiHistoryContext, {
+import HistoryContext, {
   ApiHistory,
   WebSocketHistory,
-} from "@/contexts/ApiHistoryContext";
+} from "@/contexts/HistoryContext";
 import { FC, ReactNode, useState, useCallback } from "react";
 
 type Props = {
   children: ReactNode;
 };
 
-const ApiHistoryProvider: FC<Props> = ({ children }) => {
-  const [history, setHistory] = useState<ApiHistory[]>([]);
+const HistoryProvider: FC<Props> = ({ children }) => {
+  const [apiHistory, setApiHistory] = useState<ApiHistory[]>([]);
   const [wsHistory, setWsHistory] = useState<WebSocketHistory[]>([]);
   const [isHidden, setIsHidden] = useState<boolean>(false);
 
-  const addHistory = useCallback((data: ApiHistory) => {
-    setHistory((prev) => [...prev, data]);
+  const addApiHistory = useCallback((data: ApiHistory) => {
+    setApiHistory((prev) => [...prev, data]);
   }, []);
 
-  const removeHistory = useCallback((id: string) => {
-    setHistory((prev) => prev.filter((item) => item.id !== id));
+  const removeApiHistory = useCallback((id: string) => {
+    setApiHistory((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
-  const updateHistory = useCallback((data: ApiHistory) => {
-    setHistory((prev) =>
+  const updateApiHistory = useCallback((data: ApiHistory) => {
+    setApiHistory((prev) =>
       prev.map((item) => (item.id === data.id ? data : item))
     );
   }, []);
 
   const clearAllHistory = useCallback(() => {
-    setHistory([]);
+    setApiHistory([]);
     setWsHistory([]);
   }, []);
 
@@ -37,12 +37,12 @@ const ApiHistoryProvider: FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <ApiHistoryContext.Provider
+    <HistoryContext.Provider
       value={{
-        history,
-        addHistory,
-        removeHistory,
-        updateHistory,
+        apiHistory,
+        addApiHistory,
+        removeApiHistory,
+        updateApiHistory,
         wsHistory,
         addWsHistory,
         clearAllHistory,
@@ -51,8 +51,8 @@ const ApiHistoryProvider: FC<Props> = ({ children }) => {
       }}
     >
       {children}
-    </ApiHistoryContext.Provider>
+    </HistoryContext.Provider>
   );
 };
 
-export default ApiHistoryProvider;
+export default HistoryProvider;

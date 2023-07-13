@@ -1,13 +1,13 @@
-import { ApiHistory, WebSocketHistory } from "@/contexts/ApiHistoryContext";
+import { ApiHistory, WebSocketHistory } from "@/contexts/HistoryContext";
 import ApiHistoryItem from "./ApiHistoryItem";
 import WsHistoryItem from "./WsHistoryItem";
-import useApiHistory from "@/hooks/context/useApiHistory";
+import useHistory from "@/hooks/context/useHistory";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const ApiHistoryList = () => {
-  const { history, wsHistory, clearAllHistory, isHidden, setIsHidden } =
-    useApiHistory();
+const HistoryList = () => {
+  const { apiHistory, wsHistory, clearAllHistory, isHidden, setIsHidden } =
+    useHistory();
   const [historyType, setHistoryType] = useState<"API" | "WebSocket">("API");
 
   function handleChangeHistoryType() {
@@ -38,7 +38,7 @@ const ApiHistoryList = () => {
         </div>
       </div>
       <div className={cn([(isHidden || historyType !== "API") && "hidden"])}>
-        {history.map((props: ApiHistory) => (
+        {apiHistory.map((props: ApiHistory) => (
           <ApiHistoryItem key={props.id} {...props} />
         ))}
       </div>
@@ -53,4 +53,4 @@ const ApiHistoryList = () => {
   );
 };
 
-export default ApiHistoryList;
+export default HistoryList;

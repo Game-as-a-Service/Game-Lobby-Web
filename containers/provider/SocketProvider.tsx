@@ -5,8 +5,8 @@ import SocketContext, {
   SOCKET_URL,
 } from "@/contexts/SocketContext";
 import useAuth from "@/hooks/context/useAuth";
-import { WebSocketHistoryType } from "@/contexts/ApiHistoryContext";
-import useApiHistory from "@/hooks/context/useApiHistory";
+import useHistory from "@/hooks/context/useHistory";
+import { WebSocketHistoryType } from "@/contexts/HistoryContext";
 import { Env, getEnv } from "@/lib/env";
 
 type Props = {
@@ -16,7 +16,7 @@ const { internalEndpoint, env } = getEnv();
 
 export const SocketProvider: FC<Props> = ({ children }) => {
   const [socket, setSocket] = useState<null | Socket>(null);
-  const { addWsHistory } = useApiHistory();
+  const { addWsHistory } = useHistory();
   const { currentUser } = useAuth();
 
   const connect = useCallback(() => {

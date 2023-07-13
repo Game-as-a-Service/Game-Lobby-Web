@@ -11,8 +11,8 @@ import AxiosProvider from "@/containers/provider/AxiosProvider";
 import AppLayout from "@/containers/layout/AppLayout";
 import AuthProvider from "@/containers/provider/AuthProvider";
 import Startup from "@/containers/util/Startup";
-import ApiHistoryProvider from "@/containers/provider/ApiHistoryProvider";
-import ApiHistoryList from "@/components/util/api-history/ApiHistoryList";
+import HistoryProvider from "@/containers/provider/HistoryProvider";
+import HistoryList from "@/components/util/history/HistoryList";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
 import { SocketProvider } from "@/containers/provider/SocketProvider";
@@ -41,7 +41,7 @@ function App({ Component, pageProps }: AppWithProps) {
     return isProduction ? (
       children
     ) : (
-      <ApiHistoryProvider>{children}</ApiHistoryProvider>
+      <HistoryProvider>{children}</HistoryProvider>
     );
   };
 
@@ -54,7 +54,7 @@ function App({ Component, pageProps }: AppWithProps) {
               <ChatroomContextProvider>
                 <Startup isAnonymous={isAnonymous}>
                   {getLayout(<Component {...pageProps} />)}
-                  {!isProduction && <ApiHistoryList />}
+                  {!isProduction && <HistoryList />}
                 </Startup>
               </ChatroomContextProvider>
             </SocketProvider>
