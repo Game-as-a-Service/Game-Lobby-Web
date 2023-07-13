@@ -23,14 +23,7 @@ function useChatroomCore() {
   useEffect(() => {
     if (!currentUser) return;
 
-    // const user = {
-    //   id: currentUser.id,
-    //   nickname: currentUser.nickname,
-    // };
-
     socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
-      // eslint-disable-next-line no-console
-      console.log("Message received in chatroom context", data);
       setLastMessage(data);
     });
 
@@ -53,8 +46,9 @@ function useChatroomCore() {
         timestamp: new Date().toISOString(),
         ...message,
       };
-
-      socket?.emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
+      if (socket) {
+        socket?.emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
+      }
     },
     [currentUser, socket]
   );
@@ -62,13 +56,16 @@ function useChatroomCore() {
   const joinChatroom = useCallback(
     (chatroomId: string) => {
       if (!currentUser) return;
-      socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, {
-        user: {
-          id: currentUser.id,
-          nickname: currentUser.nickname,
-        },
-        chatroomId,
-      });
+      if (socket) {
+        const payload = {
+          user: {
+            id: currentUser.id,
+            nickname: currentUser.nickname,
+          },
+          chatroomId,
+        };
+        socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, payload);
+      }
     },
     [currentUser, socket]
   );
@@ -76,13 +73,16 @@ function useChatroomCore() {
   const leaveChatroom = useCallback(
     (chatroomId: string) => {
       if (!currentUser) return;
-      socket?.emit(SOCKET_EVENT.CHATROOM_LEAVE, {
-        user: {
-          id: currentUser.id,
-          nickname: currentUser.nickname,
-        },
-        chatroomId,
-      });
+      if (socket) {
+        const payload = {
+          user: {
+            id: currentUser.id,
+            nickname: currentUser.nickname,
+          },
+          chatroomId,
+        };
+        socket?.emit(SOCKET_EVENT.CHATROOM_LEAVE, payload);
+      }
     },
     [currentUser, socket]
   );

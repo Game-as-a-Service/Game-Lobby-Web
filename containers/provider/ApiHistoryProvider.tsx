@@ -1,5 +1,8 @@
-import ApiHistoryContext, { ApiHistory } from "@/contexts/ApiHistoryContext";
-import { FC, ReactNode, useState } from "react";
+import ApiHistoryContext, {
+  ApiHistory,
+  WebSocketHistory,
+} from "@/contexts/ApiHistoryContext";
+import { FC, ReactNode, useState, useCallback } from "react";
 
 type Props = {
   children: ReactNode;
@@ -7,25 +10,31 @@ type Props = {
 
 const ApiHistoryProvider: FC<Props> = ({ children }) => {
   const [history, setHistory] = useState<ApiHistory[]>([]);
+  const [wsHistory, setWsHistory] = useState<WebSocketHistory[]>([]);
   const [isHidden, setIsHidden] = useState<boolean>(false);
 
-  const addHistory = (data: ApiHistory) => {
+  const addHistory = useCallback((data: ApiHistory) => {
     setHistory((prev) => [...prev, data]);
-  };
+  }, []);
 
-  const removeHistory = (id: string) => {
+  const removeHistory = useCallback((id: string) => {
     setHistory((prev) => prev.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const updateHistory = (data: ApiHistory) => {
+  const updateHistory = useCallback((data: ApiHistory) => {
     setHistory((prev) =>
       prev.map((item) => (item.id === data.id ? data : item))
     );
-  };
+  }, []);
 
-  const clear = () => {
+  const clearAllHistory = useCallback(() => {
     setHistory([]);
-  };
+    setWsHistory([]);
+  }, []);
+
+  const addWsHistory = useCallback((data: Omit<WebSocketHistory, "id">) => {
+    setWsHistory((prev) => [...prev, { id: crypto.randomUUID(), ...data }]);
+  }, []);
 
   return (
     <ApiHistoryContext.Provider
@@ -34,7 +43,9 @@ const ApiHistoryProvider: FC<Props> = ({ children }) => {
         addHistory,
         removeHistory,
         updateHistory,
-        clear,
+        wsHistory,
+        addWsHistory,
+        clearAllHistory,
         isHidden,
         setIsHidden,
       }}

@@ -53,6 +53,7 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
         // avoid memory leak
         if (!isEmitting) {
           sendOnlineUsers = setInterval(
+            // eslint-disable-next-line no-console
             () => console.log("Online users: ", onlineUsers),
             5000
           );

@@ -1,5 +1,6 @@
 import { HttpMethod } from "@/requests/request";
 import { createContext } from "react";
+import { SOCKET_EVENT } from "@/contexts/SocketContext";
 
 export enum Status {
   RESOLVED = "RESOLVED",
@@ -19,12 +20,27 @@ export interface ApiHistory<T = unknown> {
   error?: Error;
 }
 
+export enum WebSocketHistoryType {
+  SEND = "Send",
+  RECEIVE = "Receive",
+  CONNECTION = "Connection",
+}
+
+export interface WebSocketHistory<T = unknown> {
+  id: string;
+  type: WebSocketHistoryType;
+  event: keyof typeof SOCKET_EVENT;
+  message: T;
+}
+
 interface IApiHistoryContext<T = unknown> {
   history: ApiHistory[];
   addHistory: (data: ApiHistory) => void;
   removeHistory: (id: string) => void;
   updateHistory: (data: ApiHistory) => void;
-  clear: () => void;
+  wsHistory: WebSocketHistory[];
+  addWsHistory: (data: Omit<WebSocketHistory, "id">) => void;
+  clearAllHistory: () => void;
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
 }
@@ -34,7 +50,9 @@ const ApiHistoryContext = createContext<IApiHistoryContext>({
   addHistory: () => {},
   removeHistory: () => {},
   updateHistory: () => {},
-  clear: () => {},
+  wsHistory: [],
+  addWsHistory: () => {},
+  clearAllHistory: () => {},
   isHidden: false,
   setIsHidden: () => {},
 });
