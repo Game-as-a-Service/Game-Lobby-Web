@@ -57,19 +57,19 @@ export const mock_roomInfo: RoomInfo.Room = {
   host: {
     id: "mock-currentUser-uid",
     nickname: "mock currentUser",
-    isReady: false,
+    isReady: true,
   },
   isLocked: false,
   players: [
     {
       id: "mock-currentUser-uid",
       nickname: "mock currentUser",
-      isReady: false,
+      isReady: true,
     },
     {
       id: "mock-currentUser-uid-b",
       nickname: "mock user B",
-      isReady: false,
+      isReady: true,
     },
     {
       id: "mock-currentUser-uid-c",

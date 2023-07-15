@@ -16,6 +16,7 @@ import {
   leaveRoom,
   playerReady,
   playerCancelReady,
+  startGame,
 } from "@/requests/rooms";
 
 export default function Room() {
@@ -25,7 +26,7 @@ export default function Room() {
     // addPlayer,
     // removePlayer,
     // updateHost,
-    // updateRoomStatus,
+    updateRoomStatus,
     toggleUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
@@ -120,6 +121,27 @@ export default function Room() {
     }
   };
 
+  const handleStart = async () => {
+    try {
+      // Check all players are ready
+      const allReady = roomInfo.players.every((player) => player.isReady);
+      if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
+
+      // update room status
+      updateRoomStatus("PLAYING");
+
+      // get the url for starting game
+      const { gameUrl } = await fetch(startGame(roomId));
+
+      // TODO: iframe the url and start game
+      firePopup({
+        title: `所有玩家已準備完畢，並已開始遊戲! 遊戲網址為：${gameUrl}`,
+      });
+    } catch (err) {
+      firePopup({ title: `error!` });
+    }
+  };
+
   // // SocketEvent: on user self be kicked
   // function onUserSelfKicked() {
   //   firePopup({
@@ -147,7 +169,7 @@ export default function Room() {
           onToggleReady={handleToggleReady}
           onClickClose={handleClickClose}
           onClickLeave={handleLeave}
-          onClickStart={() => {}}
+          onClickStart={handleStart}
           isHost={roomInfo.host.id === currentUser?.id}
           isReady={player?.isReady || false}
         />
