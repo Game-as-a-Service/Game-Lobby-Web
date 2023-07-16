@@ -6,7 +6,6 @@ const defaultValue: ChatroomContextType = {
   sendChatMessage: () => {},
   joinChatroom: () => {},
   leaveChatroom: () => {},
-  readyState: 0,
 };
 
 const ChatroomContext = createContext<ChatroomContextType>(defaultValue);

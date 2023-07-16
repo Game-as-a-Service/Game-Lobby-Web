@@ -8,49 +8,23 @@ import {
 } from "react";
 import { MessageType } from "@/components/rooms/RoomChatroom";
 import useAuth from "@/hooks/context/useAuth";
+import { SOCKET_EVENT, useSocketCore } from "./SocketProvider";
+import { set } from "cypress/types/lodash";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
-enum SOCKET_EVENT {
-  CONNECTION_OPEN = "CONNECTION_OPEN",
-  CONNECTION_CLOSE = "CONNECTION_CLOSE",
-  CHATROOM_JOIN = "CHATROOM_JOIN",
-  CHATROOM_LEAVE = "CHATROOM_LEAVE",
-  CHAT_MESSAGE = "CHAT_MESSAGE",
-}
-
-enum WS_ReadyState {
-  CONNECTING = 0,
-  OPEN,
-  CLOSED,
-}
-
-export type Socket_DispatchActionType = {
-  type: keyof typeof SOCKET_EVENT;
-  payload: Record<string, any>;
-};
-
 function useChatroomCore() {
+  const { socket, emit } = useSocketCore();
   const { currentUser } = useAuth();
-  const webSocket = useRef<WebSocket | null>(null);
   const [lastMessage, setLastMessage] = useState<MessageType | undefined>(
     undefined
   );
-  const [readyState, setReadyState] = useState<WS_ReadyState>(0);
 
   /**
    * Dispatches a socket event to the server.
    * @param {string} action.type - The type of the socket event.
    * @param {any} action.payload - The payload of the socket event.
    */
-  function dispatchSocketEvent(action: Socket_DispatchActionType): void {
-    webSocket.current?.send(JSON.stringify(action));
-  }
-
-  // TODO delete the next useEffect: this is only for mock socket server
-  useEffect(() => {
-    fetch("/api/internal/socket");
-  }, []);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -60,48 +34,16 @@ function useChatroomCore() {
       nickname: currentUser.nickname,
     };
 
-    // TODO switch to correct url
-    webSocket.current = new WebSocket("ws://localhost:3000");
+    socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, { user });
 
-    const ws = webSocket.current;
+    socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
+      setLastMessage(data);
+    });
 
-    // trigger when connected, notify server to regist user
-    ws.onopen = () => {
-      setReadyState(1);
-      dispatchSocketEvent({
-        type: SOCKET_EVENT.CONNECTION_OPEN,
-        payload: { user },
-      });
-    };
-
-    // trigger when received any message
-    ws.onmessage = (event: MessageEvent) => {
-      const data = JSON.parse(event.data) as any;
-      if (data?.type === SOCKET_EVENT.CHAT_MESSAGE) {
-        setLastMessage(data.payload);
-      }
-    };
-
-    // trigger when server shotdown
-    ws.onclose = () => {
-      setReadyState(2);
-      setLastMessage({
-        from: "SYSTEM",
-        content: "聊天室伺服器已關閉",
-        timestamp: new Date().toISOString(),
-        to: "ALL",
-      });
-    };
-
-    // clean up: notify the server to handle user disconnected
     return () => {
-      dispatchSocketEvent({
-        type: SOCKET_EVENT.CONNECTION_CLOSE,
-        payload: user,
-      });
-      ws.close();
+      socket?.off(SOCKET_EVENT.CHAT_MESSAGE);
     };
-  }, [currentUser]);
+  }, [currentUser, socket, emit]);
 
   /**
    * Sends a chat message to the server.
@@ -110,7 +52,7 @@ function useChatroomCore() {
    */
   const sendChatMessage = useCallback(
     (message: Pick<MessageType, "content" | "to">) => {
-      if (!currentUser || !webSocket.current) return;
+      if (!socket || !emit || !currentUser) return;
 
       const payload: MessageType = {
         from: "USER",
@@ -119,43 +61,37 @@ function useChatroomCore() {
         ...message,
       };
 
-      dispatchSocketEvent({ type: SOCKET_EVENT.CHAT_MESSAGE, payload });
+      emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
     },
-    [currentUser]
+    [currentUser, emit, socket]
   );
 
   const joinChatroom = useCallback(
     (chatroomId: string) => {
-      if (!currentUser) return;
-      dispatchSocketEvent({
-        type: SOCKET_EVENT.CHATROOM_JOIN,
-        payload: {
-          user: {
-            id: currentUser.id,
-            nickname: currentUser.nickname,
-          },
-          chatroomId,
+      if (!socket || !emit || !currentUser) return;
+      emit(SOCKET_EVENT.CHATROOM_JOIN, {
+        user: {
+          id: currentUser.id,
+          nickname: currentUser.nickname,
         },
+        chatroomId,
       });
     },
-    [currentUser]
+    [currentUser, emit, socket]
   );
 
   const leaveChatroom = useCallback(
     (chatroomId: string) => {
-      if (!currentUser) return;
-      dispatchSocketEvent({
-        type: SOCKET_EVENT.CHATROOM_LEAVE,
-        payload: {
-          user: {
-            id: currentUser.id,
-            nickname: currentUser.nickname,
-          },
-          chatroomId,
+      if (!socket || !emit || !currentUser) return;
+      emit(SOCKET_EVENT.CHATROOM_LEAVE, {
+        user: {
+          id: currentUser.id,
+          nickname: currentUser.nickname,
         },
+        chatroomId,
       });
     },
-    [currentUser]
+    [currentUser, emit, socket]
   );
 
   return {
@@ -163,7 +99,6 @@ function useChatroomCore() {
     sendChatMessage,
     joinChatroom,
     leaveChatroom,
-    readyState,
   };
 }
 
