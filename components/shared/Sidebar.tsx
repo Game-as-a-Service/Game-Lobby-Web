@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 import Button from "./Button";
 import HomeIcon from "./Icon/group/home";
-import NewsIcon from "./Icon/group/news";
 import RoomsIcon from "./Icon/group/rooms";
 
 import { cn } from "@/lib/utils";
@@ -11,7 +10,6 @@ import { cn } from "@/lib/utils";
 enum SidebarRoutes {
   HOME = "/",
   ROOMS = "/rooms",
-  NEWS = "/news",
 }
 
 export default function Sidebar() {
@@ -19,7 +17,6 @@ export default function Sidebar() {
   const { pathname } = router;
 
   const buttons = [
-    { text: "公告", Icon: NewsIcon, route: SidebarRoutes.NEWS },
     { text: "遊戲大廳", Icon: HomeIcon, route: SidebarRoutes.HOME },
     { text: "遊戲房間", Icon: RoomsIcon, route: SidebarRoutes.ROOMS },
   ];
