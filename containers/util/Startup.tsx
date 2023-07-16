@@ -12,7 +12,7 @@ type Props = {
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
   const { token, setToken, setCurrentUser, currentUser } = useAuth();
   const {
-    authentication,
+    // authentication,
     getTokenInCookie,
     updateTokenInCookie,
     getCurrentUser,

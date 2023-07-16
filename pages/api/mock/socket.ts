@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { WebSocket, WebSocketServer } from "ws";
-import { Socket_DispatchActionType } from "@/containers/provider/ChatroomProvider";
-
 import { MessageType } from "@/components/rooms/RoomChatroom";
+import { SOCKET_EVENT } from "@/contexts/SocketContext";
 
 type NextApiResponseServer = NextApiResponse & {
   socket: {
@@ -15,6 +14,11 @@ type NextApiResponseServer = NextApiResponse & {
 type User = NonNullable<MessageType["user"]>;
 
 type ConnectionType = Record<string, { user: User; ws: WebSocket }[]>;
+
+type Socket_DispatchActionType = {
+  type: keyof typeof SOCKET_EVENT;
+  payload: Record<string, any>;
+};
 
 type Response = Socket_DispatchActionType & { payload: MessageType };
 
@@ -37,28 +41,28 @@ export default function handler(
         const messageType = jsonData.type as Socket_DispatchActionType["type"];
 
         switch (messageType) {
-          case "CONNECTION_OPEN": {
-            // register the user to LOBBY chatroom
-            const user: User = jsonData.payload.user;
-            connections.LOBBY.push({ user, ws });
+          // case "CONNECTION_OPEN": {
+          //   // register the user to LOBBY chatroom
+          //   const user: User = jsonData.payload.user;
+          //   connections.LOBBY.push({ user, ws });
 
-            // produce response
-            const response: Response = {
-              type: "CHAT_MESSAGE",
-              payload: {
-                from: "SYSTEM",
-                content: `聊天室伺服器連線成功，加入大廳聊天室`,
-                timestamp: new Date().toISOString(),
-                to: "LOBBY",
-              },
-            };
+          //   // produce response
+          //   const response: Response = {
+          //     type: "CHAT_MESSAGE",
+          //     payload: {
+          //       from: "SYSTEM",
+          //       content: `聊天室伺服器連線成功，加入大廳聊天室`,
+          //       timestamp: new Date().toISOString(),
+          //       to: "LOBBY",
+          //     },
+          //   };
 
-            // broadcast the message to LOBBY chatroom
-            connections.LOBBY.forEach((connection) => {
-              connection.ws.send(JSON.stringify(response));
-            });
-            break;
-          }
+          //   // broadcast the message to LOBBY chatroom
+          //   connections.LOBBY.forEach((connection) => {
+          //     connection.ws.send(JSON.stringify(response));
+          //   });
+          //   break;
+          // }
           case "CHAT_MESSAGE": {
             // produce response
             const {
@@ -145,9 +149,9 @@ export default function handler(
             break;
           }
 
-          case "CONNECTION_CLOSE": {
-            break;
-          }
+          // case "CONNECTION_CLOSE": {
+          //   break;
+          // }
           default:
             throw new Error(`未預期的 type: ${messageType}`);
         }
