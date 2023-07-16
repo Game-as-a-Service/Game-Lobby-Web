@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { WebSocket, WebSocketServer } from "ws";
-import { Socket_DispatchActionType } from "@/containers/provider/ChatroomProvider";
-
 import { MessageType } from "@/components/rooms/RoomChatroom";
+import { SOCKET_EVENT } from "../../../containers/provider/SocketProvider";
 
 type NextApiResponseServer = NextApiResponse & {
   socket: {
@@ -15,6 +14,11 @@ type NextApiResponseServer = NextApiResponse & {
 type User = NonNullable<MessageType["user"]>;
 
 type ConnectionType = Record<string, { user: User; ws: WebSocket }[]>;
+
+type Socket_DispatchActionType = {
+  type: keyof typeof SOCKET_EVENT;
+  payload: Record<string, any>;
+};
 
 type Response = Socket_DispatchActionType & { payload: MessageType };
 
