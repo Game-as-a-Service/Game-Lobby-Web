@@ -43,7 +43,7 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
             path: SOCKET_URL,
             addTrailingSlash: false,
           }
-        : {}
+        : { path: SOCKET_URL, addTrailingSlash: false }
     );
 
     socket
