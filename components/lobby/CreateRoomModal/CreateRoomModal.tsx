@@ -95,8 +95,8 @@ export default function CreateRoomModal() {
     setshowThisModal(false);
   }
 
-  function getPasswordSelected(bool: boolean) {
-    setIsPublic(!bool);
+  function getPasswordSelected(e: React.MouseEvent<HTMLElement>) {
+    setIsPublic(false);
   }
 
   return (
@@ -239,7 +239,7 @@ export default function CreateRoomModal() {
                       subTitle={"請輸入此房間密碼"}
                       passwordValues={passwordValues}
                       setPasswordValues={setPasswordValues}
-                      getPasswordSelected={getPasswordSelected}
+                      onInputClick={getPasswordSelected}
                     />
                   </label>
                 </div>
