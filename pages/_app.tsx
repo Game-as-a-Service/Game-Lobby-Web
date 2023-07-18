@@ -46,9 +46,9 @@ export default function App({ Component, pageProps }: AppWithProps) {
 
   return (
     <ToastQueueProvider>
-      <SocketProvider>
-        <AxiosProvider>
-          <AuthProvider>
+      <AxiosProvider>
+        <AuthProvider>
+          <SocketProvider>
             <ChatroomContextProvider>
               {getHistory(
                 <Startup isAnonymous={isAnonymous}>
@@ -57,9 +57,9 @@ export default function App({ Component, pageProps }: AppWithProps) {
                 </Startup>
               )}
             </ChatroomContextProvider>
-          </AuthProvider>
-        </AxiosProvider>
-      </SocketProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </AxiosProvider>
     </ToastQueueProvider>
   );
 }
