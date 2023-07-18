@@ -11,6 +11,7 @@ import {
   SOCKET_MESSAGE_URL,
   SOCKET_URL,
 } from "../../contexts/SocketContext";
+import { Env, getEnv } from "../../lib/env";
 
 export enum SOCKET_EVENT {
   CONNECTION_OPEN = "CONNECTION_OPEN",
@@ -35,15 +36,17 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   const [socket, setSocket] = useState<null | Socket>(null);
   // const socket = useRef<null | Socket>(null);
 
+  const { internalEndpoint, env } = getEnv();
+
   useEffect(() => {
     const socket = io(
-      process.env.NEXT_PUBLIC_INTERNAL_ENDPOINT || "",
-      process.env.NODE_ENV === "development"
+      internalEndpoint || "",
+      env === Env.DEV
         ? {
             path: SOCKET_URL,
             addTrailingSlash: false,
           }
-        : { path: SOCKET_URL, addTrailingSlash: false }
+        : {}
     );
 
     socket
@@ -63,25 +66,39 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const emit = async (event: string, data: any) => {
-    if (process.env.NODE_ENV === "development") {
-      try {
-        const response = await fetch(SOCKET_MESSAGE_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        console.log("emit", event, "\nresponse:", response);
-      } catch (error) {
-        if (error instanceof Error) console.error(error?.message);
-      }
-    } else {
-      socket?.emit(event, data, (response: any) => {
-        console.log("emit", event, response.status);
+    try {
+      const response = await fetch(SOCKET_MESSAGE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
+
+      console.log("emit", event, "\nresponse:", response);
+    } catch (error) {
+      if (error instanceof Error) console.error(error?.message);
     }
+
+    // if (env === Env.DEV) {
+    //   try {
+    //     const response = await fetch(SOCKET_MESSAGE_URL, {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(data),
+    //     });
+
+    //     console.log("emit", event, "\nresponse:", response);
+    //   } catch (error) {
+    //     if (error instanceof Error) console.error(error?.message);
+    //   }
+    // } else {
+    //   socket?.emit(event, data, (response: any) => {
+    //     console.log("emit", event, response.status);
+    //   });
+    // }
   };
 
   const disconnect = () => {
