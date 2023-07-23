@@ -28,10 +28,13 @@
     "axios": "1.4.0",
     "clsx": "1.2.1",
     "http-proxy-middleware": "2.0.6",
+    "i18next": "^23.2.11",
     "js-cookie": "3.0.5",
     "next": "13.4.8",
+    "next-i18next": "^14.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-i18next": "^13.0.2",
     "sharp": "0.32.1",
     "tailwind-merge": "1.13.2"
   },

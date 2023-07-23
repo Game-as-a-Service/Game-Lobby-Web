@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
+import { appWithTranslation } from "next-i18next";
 
 import "@/styles/reset.css";
 import "@/styles/global.css";
@@ -25,7 +26,7 @@ type AppWithProps = AppProps & {
   Component: NextPageWithProps;
 };
 
-export default function App({ Component, pageProps }: AppWithProps) {
+function App({ Component, pageProps }: AppWithProps) {
   const { env } = getEnv();
   const isAnonymous =
     Component.Anonymous || !!process.env.NEXT_PUBLIC_CI_MODE || false;
@@ -60,3 +61,5 @@ export default function App({ Component, pageProps }: AppWithProps) {
     </ToastQueueProvider>
   );
 }
+
+export default appWithTranslation(App);

@@ -1,6 +1,7 @@
 import { ClipboardEvent, FC, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
+import { useTranslation } from "next-i18next";
 
 import {
   Room,
@@ -24,6 +25,7 @@ type Props = {
 const INIT_PASSWORD = ["", "", "", ""];
 
 const RoomsListView: FC<Props> = ({ status }) => {
+  const { t } = useTranslation("rooms");
   const { fetch } = useRequest();
   const { nextPage, backPage, data, loading, isError, errorMessage } =
     usePagination({
@@ -41,7 +43,7 @@ const RoomsListView: FC<Props> = ({ status }) => {
     const targetRoom = data.find((room) => room.id === id);
 
     if (targetRoom?.currentPlayers === targetRoom?.maxPlayers) {
-      firePopup({ title: "房間人數已滿" });
+      firePopup({ title: t("room_is_full") });
       return;
     }
 
@@ -77,19 +79,9 @@ const RoomsListView: FC<Props> = ({ status }) => {
           router.push(`/rooms/${_roomId}`);
         })
         .catch((err: AxiosError<RoomEntryError>) => {
-          switch (err.response?.data.message) {
-            case "room is full":
-              firePopup({ title: "房間人數已滿!" });
-              break;
-            case "wrong password":
-              firePopup({ title: "房間密碼錯誤!" });
-              break;
-            case "you can only join 1 room":
-              firePopup({ title: "一人只能進入一間房!" });
-              break;
-            default:
-              firePopup({ title: "error!" });
-          }
+          const msg = err.response?.data.message.replaceAll(" ", "_");
+          if (!msg) return firePopup({ title: "error!" });
+          firePopup({ title: t(msg) });
         })
         .finally(() => {
           // setSelectedRoom(undefined);
