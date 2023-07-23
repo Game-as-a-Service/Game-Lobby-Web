@@ -7,21 +7,15 @@ import React, {
   useCallback,
 } from "react";
 import { io, Socket } from "socket.io-client";
-import {
-  SocketContext,
-  SOCKET_MESSAGE_URL,
-  SOCKET_URL,
-} from "../../contexts/SocketContext";
+import { SocketContext, SOCKET_URL } from "../../contexts/SocketContext";
 import { Env, getEnv } from "../../lib/env";
 
 export enum SOCKET_EVENT {
   CONNECT = "connect",
-  CONNECTION_OPEN = "CONNECTION_OPEN",
-  CONNECTION_CLOSE = "CONNECTION_CLOSE",
+  DISCONNECT = "disconnect",
   CHATROOM_JOIN = "CHATROOM_JOIN",
   CHATROOM_LEAVE = "CHATROOM_LEAVE",
   CHAT_MESSAGE = "CHAT_MESSAGE",
-  DISCONNECT = "disconnect",
 }
 
 enum SOCKET_STATUS {
@@ -60,9 +54,6 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
       .on(SOCKET_EVENT.DISCONNECT, () => {
         console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.id);
         setSocketStatus(SOCKET_STATUS.CLOSED);
-      })
-      .on(SOCKET_EVENT.CONNECTION_CLOSE, () => {
-        setSocketStatus(SOCKET_STATUS.CLOSED);
       });
 
     setSocket(socket);
@@ -74,11 +65,14 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
 
   const emit = useCallback(
     async (event: string, data: any) => {
-      console.log("emit called", event, data);
+      if (!socket) {
+        console.log("socket is null");
+        return;
+      }
 
       try {
-        socket?.emit(event, data, (response: any) => {
-          console.log("emit by emit", event, response.status);
+        socket.emit(event, data, (response: any) => {
+          console.log("response after emitting", event, response);
         });
       } catch (error) {
         console.error(error);

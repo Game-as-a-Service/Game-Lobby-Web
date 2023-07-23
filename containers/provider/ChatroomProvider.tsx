@@ -9,12 +9,11 @@ import {
 import { MessageType } from "@/components/rooms/RoomChatroom";
 import useAuth from "@/hooks/context/useAuth";
 import { SOCKET_EVENT, useSocketCore } from "./SocketProvider";
-import { set } from "cypress/types/lodash";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
 function useChatroomCore() {
-  const { socket, emit } = useSocketCore();
+  const { socket } = useSocketCore();
   const { currentUser } = useAuth();
   const [lastMessage, setLastMessage] = useState<MessageType | undefined>(
     undefined
@@ -27,17 +26,12 @@ function useChatroomCore() {
    */
 
   useEffect(() => {
-    console.log("chatroom context", currentUser);
     if (!currentUser) return;
 
     const user = {
       id: currentUser.id,
       nickname: currentUser.nickname,
     };
-
-    console.log("chatroom context user", user);
-
-    socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, { user });
 
     socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
       console.log("Message received in chatroom context", data);
@@ -47,7 +41,7 @@ function useChatroomCore() {
     return () => {
       socket?.off(SOCKET_EVENT.CHAT_MESSAGE);
     };
-  }, [currentUser, socket, emit]);
+  }, [currentUser, socket]);
 
   /**
    * Sends a chat message to the server.
@@ -56,8 +50,7 @@ function useChatroomCore() {
    */
   const sendChatMessage = useCallback(
     (message: Pick<MessageType, "content" | "to">) => {
-      if (!socket || !emit || !currentUser) return;
-
+      if (!currentUser) return;
       const payload: MessageType = {
         from: "USER",
         user: { id: currentUser.id, nickname: currentUser.nickname },
@@ -65,15 +58,15 @@ function useChatroomCore() {
         ...message,
       };
 
-      emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
+      socket?.emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
     },
-    [currentUser, emit, socket]
+    [currentUser, socket]
   );
 
   const joinChatroom = useCallback(
     (chatroomId: string) => {
-      if (!socket || !emit || !currentUser) return;
-      emit(SOCKET_EVENT.CHATROOM_JOIN, {
+      if (!currentUser) return;
+      socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, {
         user: {
           id: currentUser.id,
           nickname: currentUser.nickname,
@@ -81,13 +74,13 @@ function useChatroomCore() {
         chatroomId,
       });
     },
-    [currentUser, emit, socket]
+    [currentUser, socket]
   );
 
   const leaveChatroom = useCallback(
     (chatroomId: string) => {
-      if (!socket || !emit || !currentUser) return;
-      emit(SOCKET_EVENT.CHATROOM_LEAVE, {
+      if (!currentUser) return;
+      socket?.emit(SOCKET_EVENT.CHATROOM_LEAVE, {
         user: {
           id: currentUser.id,
           nickname: currentUser.nickname,
@@ -95,7 +88,7 @@ function useChatroomCore() {
         chatroomId,
       });
     },
-    [currentUser, emit, socket]
+    [currentUser, socket]
   );
 
   return {
