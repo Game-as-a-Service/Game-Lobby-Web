@@ -30,13 +30,12 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   const [socketStatus, setSocketStatus] = useState<SOCKET_STATUS>(
     SOCKET_STATUS.CONNECTING
   );
-  const [socket, setSocket] = useState<null | Socket>(null);
-  // const socket = useRef<null | Socket>(null);
+  const socket = useRef<null | Socket>(null);
 
   const { internalEndpoint, env } = getEnv();
 
   useEffect(() => {
-    const socket = io(
+    socket.current = io(
       internalEndpoint || "",
       env === Env.DEV
         ? {
@@ -46,20 +45,18 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
         : {}
     );
 
-    socket
+    socket.current
       .on(SOCKET_EVENT.CONNECT, () => {
-        console.log("SOCKET CONNECTED IN CLIENT! ", socket.id);
+        console.log("SOCKET CONNECTED IN CLIENT! ", socket.current?.id);
         setSocketStatus(SOCKET_STATUS.OPEN);
       })
       .on(SOCKET_EVENT.DISCONNECT, () => {
-        console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.id);
+        console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.current?.id);
         setSocketStatus(SOCKET_STATUS.CLOSED);
       });
 
-    setSocket(socket);
-
     return () => {
-      socket.disconnect();
+      socket.current?.disconnect();
     };
   }, []);
 
@@ -71,7 +68,7 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
       }
 
       try {
-        socket.emit(event, data, (response: any) => {
+        socket.current?.emit(event, data, (response: any) => {
           console.log("response after emitting", event, response);
         });
       } catch (error) {
@@ -82,14 +79,16 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   );
 
   const disconnect = useCallback(() => {
-    if (socket) {
-      socket.disconnect();
-      setSocket(null);
+    if (socket.current) {
+      socket.current?.disconnect();
+      socket.current = null;
     }
   }, [socket]);
 
   return (
-    <SocketContext.Provider value={{ socketStatus, socket, emit, disconnect }}>
+    <SocketContext.Provider
+      value={{ socketStatus, socket: socket.current, emit, disconnect }}
+    >
       {children}
     </SocketContext.Provider>
   );
