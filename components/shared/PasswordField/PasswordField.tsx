@@ -8,6 +8,7 @@ type PasswordFieldProps = {
   passwordValues: string[];
   disabled?: boolean;
   setPasswordValues: (values: string[]) => void;
+  onInputClick?: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
 const PasswordField: FC<PasswordFieldProps> = ({
@@ -17,6 +18,7 @@ const PasswordField: FC<PasswordFieldProps> = ({
   passwordValues,
   disabled,
   setPasswordValues,
+  onInputClick,
 }) => {
   const passwordRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -99,7 +101,10 @@ const PasswordField: FC<PasswordFieldProps> = ({
               value={password}
               maxLengthClassName="hidden"
               onKeyUp={(e) => handlePasswordKeyUp(e, index)}
-              onClick={(event) => event.stopPropagation()} // 防止冒泡到父層的onClick
+              onClick={(event) => {
+                event.stopPropagation(); // 防止冒泡到父層的onClick
+                onInputClick && onInputClick(event);
+              }}
               disabled={disabled}
               data-testid={`input-password-${index}`}
             />

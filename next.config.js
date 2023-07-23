@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const { i18n } = require("./next-i18next.config.js");
 
 let withBundleAnalyzer = (config) => config;
 
@@ -9,6 +10,7 @@ if (process.env.ANALYZE === "true") {
 }
 
 const nextConfig = {
+  i18n,
   output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
