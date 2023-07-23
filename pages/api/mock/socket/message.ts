@@ -13,8 +13,10 @@ export type NextApiResponseServerIO = NextApiResponse & {
 };
 
 const message = (req: NextApiRequest, res: NextApiResponseServerIO) => {
+  const message: MessageType = req.body;
+
   if (req.method === "POST") {
-    const message: MessageType = req.body;
+    // const message: MessageType = req.body;
 
     if (
       !message.from ||

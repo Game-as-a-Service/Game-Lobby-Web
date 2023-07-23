@@ -27,8 +27,22 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       path: SOCKET_URL,
       addTrailingSlash: false,
     });
-    io.on(SOCKET_EVENT.CONNECTION_OPEN, () => {
-      console.log("SOCKET CONNECTED!");
+
+    io.on(SOCKET_EVENT.CONNECT, (socket) => {
+      console.log("SOCKET CONNECTED IN SERVER! ", socket.id);
+
+      socket.on(SOCKET_EVENT.CHAT_MESSAGE, (message) => {
+        console.log("Message received in server: ", message);
+        io.emit(SOCKET_EVENT.CHAT_MESSAGE, message);
+      });
+    });
+
+    // io.on(SOCKET_EVENT.CHAT_MESSAGE, (message) => {
+    //   console.log("SOCKET CHAT_MESSAGE!", message);
+    // });
+
+    io.on(SOCKET_EVENT.DISCONNECT, () => {
+      console.log("SOCKET DISCONNECTED!");
     });
 
     res.socket.server.io = io;

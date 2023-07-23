@@ -4,6 +4,7 @@ import React, {
   useEffect,
   PropsWithChildren,
   useRef,
+  useCallback,
 } from "react";
 import { io, Socket } from "socket.io-client";
 import {
@@ -14,11 +15,13 @@ import {
 import { Env, getEnv } from "../../lib/env";
 
 export enum SOCKET_EVENT {
+  CONNECT = "connect",
   CONNECTION_OPEN = "CONNECTION_OPEN",
   CONNECTION_CLOSE = "CONNECTION_CLOSE",
   CHATROOM_JOIN = "CHATROOM_JOIN",
   CHATROOM_LEAVE = "CHATROOM_LEAVE",
   CHAT_MESSAGE = "CHAT_MESSAGE",
+  DISCONNECT = "disconnect",
 }
 
 enum SOCKET_STATUS {
@@ -50,9 +53,13 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
     );
 
     socket
-      .on(SOCKET_EVENT.CONNECTION_OPEN, () => {
-        console.log("SOCKET CONNECTED!", socket.id);
+      .on(SOCKET_EVENT.CONNECT, () => {
+        console.log("SOCKET CONNECTED IN CLIENT! ", socket.id);
         setSocketStatus(SOCKET_STATUS.OPEN);
+      })
+      .on(SOCKET_EVENT.DISCONNECT, () => {
+        console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.id);
+        setSocketStatus(SOCKET_STATUS.CLOSED);
       })
       .on(SOCKET_EVENT.CONNECTION_CLOSE, () => {
         setSocketStatus(SOCKET_STATUS.CLOSED);
@@ -65,48 +72,27 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
-  const emit = async (event: string, data: any) => {
-    try {
-      const response = await fetch(SOCKET_MESSAGE_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+  const emit = useCallback(
+    async (event: string, data: any) => {
+      console.log("emit called", event, data);
 
-      console.log("emit", event, "\nresponse:", response);
-    } catch (error) {
-      if (error instanceof Error) console.error(error?.message);
-    }
+      try {
+        socket?.emit(event, data, (response: any) => {
+          console.log("emit by emit", event, response.status);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [socket]
+  );
 
-    // if (env === Env.DEV) {
-    //   try {
-    //     const response = await fetch(SOCKET_MESSAGE_URL, {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(data),
-    //     });
-
-    //     console.log("emit", event, "\nresponse:", response);
-    //   } catch (error) {
-    //     if (error instanceof Error) console.error(error?.message);
-    //   }
-    // } else {
-    //   socket?.emit(event, data, (response: any) => {
-    //     console.log("emit", event, response.status);
-    //   });
-    // }
-  };
-
-  const disconnect = () => {
+  const disconnect = useCallback(() => {
     if (socket) {
       socket.disconnect();
       setSocket(null);
     }
-  };
+  }, [socket]);
 
   return (
     <SocketContext.Provider value={{ socketStatus, socket, emit, disconnect }}>

@@ -27,6 +27,7 @@ function useChatroomCore() {
    */
 
   useEffect(() => {
+    console.log("chatroom context", currentUser);
     if (!currentUser) return;
 
     const user = {
@@ -34,9 +35,12 @@ function useChatroomCore() {
       nickname: currentUser.nickname,
     };
 
+    console.log("chatroom context user", user);
+
     socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, { user });
 
     socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
+      console.log("Message received in chatroom context", data);
       setLastMessage(data);
     });
 
