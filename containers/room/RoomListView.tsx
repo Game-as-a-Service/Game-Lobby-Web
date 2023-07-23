@@ -25,19 +25,12 @@ const INIT_PASSWORD = ["", "", "", ""];
 
 const RoomsListView: FC<Props> = ({ status }) => {
   const { fetch } = useRequest();
-  const {
-    nextPage,
-    backPage,
-    setPerPage,
-    data,
-    loading,
-    isError,
-    errorMessage,
-  } = usePagination({
-    source: (page: number, perPage: number) =>
-      fetch(getRooms({ page, perPage, status })),
-    defaultPerPage: 20,
-  });
+  const { nextPage, backPage, data, loading, isError, errorMessage } =
+    usePagination({
+      source: (page: number, perPage: number) =>
+        fetch(getRooms({ page, perPage, status })),
+      defaultPerPage: 20,
+    });
   const [selectedRoom, setSelectedRoom] = useState<Room | undefined>();
   const [passwordValues, setPasswordValues] = useState(INIT_PASSWORD);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,14 +46,6 @@ const RoomsListView: FC<Props> = ({ status }) => {
     }
 
     setSelectedRoom(targetRoom);
-  };
-
-  const nextPerPage = () => {
-    setPerPage(10);
-  };
-
-  const backPerPage = () => {
-    setPerPage(-10);
   };
 
   const handleClose = () => {
@@ -124,8 +109,6 @@ const RoomsListView: FC<Props> = ({ status }) => {
       <div className="flex justify-center items-center gap-2">
         <Button onClick={backPage}>上一頁</Button>
         <Button onClick={nextPage}>下一頁</Button>
-        <Button onClick={nextPerPage}>我要+10筆</Button>
-        <Button onClick={backPerPage}>我要-10筆</Button>
       </div>
     );
   };
