@@ -7,21 +7,15 @@ import React, {
   useCallback,
 } from "react";
 import { io, Socket } from "socket.io-client";
-import {
-  SocketContext,
-  SOCKET_MESSAGE_URL,
-  SOCKET_URL,
-} from "../../contexts/SocketContext";
+import { SocketContext, SOCKET_URL } from "../../contexts/SocketContext";
 import { Env, getEnv } from "../../lib/env";
 
 export enum SOCKET_EVENT {
   CONNECT = "connect",
-  CONNECTION_OPEN = "CONNECTION_OPEN",
-  CONNECTION_CLOSE = "CONNECTION_CLOSE",
+  DISCONNECT = "disconnect",
   CHATROOM_JOIN = "CHATROOM_JOIN",
   CHATROOM_LEAVE = "CHATROOM_LEAVE",
   CHAT_MESSAGE = "CHAT_MESSAGE",
-  DISCONNECT = "disconnect",
 }
 
 enum SOCKET_STATUS {
@@ -36,13 +30,12 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   const [socketStatus, setSocketStatus] = useState<SOCKET_STATUS>(
     SOCKET_STATUS.CONNECTING
   );
-  const [socket, setSocket] = useState<null | Socket>(null);
-  // const socket = useRef<null | Socket>(null);
+  const socket = useRef<null | Socket>(null);
 
   const { internalEndpoint, env } = getEnv();
 
   useEffect(() => {
-    const socket = io(
+    socket.current = io(
       internalEndpoint || "",
       env === Env.DEV
         ? {
@@ -52,33 +45,31 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
         : {}
     );
 
-    socket
+    socket.current
       .on(SOCKET_EVENT.CONNECT, () => {
-        console.log("SOCKET CONNECTED IN CLIENT! ", socket.id);
+        console.log("SOCKET CONNECTED IN CLIENT! ", socket.current?.id);
         setSocketStatus(SOCKET_STATUS.OPEN);
       })
       .on(SOCKET_EVENT.DISCONNECT, () => {
-        console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.id);
-        setSocketStatus(SOCKET_STATUS.CLOSED);
-      })
-      .on(SOCKET_EVENT.CONNECTION_CLOSE, () => {
+        console.log("SOCKET DISCONNECTED IN CLIENT! ", socket.current?.id);
         setSocketStatus(SOCKET_STATUS.CLOSED);
       });
 
-    setSocket(socket);
-
     return () => {
-      socket.disconnect();
+      socket.current?.disconnect();
     };
   }, []);
 
   const emit = useCallback(
     async (event: string, data: any) => {
-      console.log("emit called", event, data);
+      if (!socket) {
+        console.log("socket is null");
+        return;
+      }
 
       try {
-        socket?.emit(event, data, (response: any) => {
-          console.log("emit by emit", event, response.status);
+        socket.current?.emit(event, data, (response: any) => {
+          console.log("response after emitting", event, response);
         });
       } catch (error) {
         console.error(error);
@@ -88,14 +79,16 @@ export const SocketProvider = ({ children }: PropsWithChildren) => {
   );
 
   const disconnect = useCallback(() => {
-    if (socket) {
-      socket.disconnect();
-      setSocket(null);
+    if (socket.current) {
+      socket.current?.disconnect();
+      socket.current = null;
     }
   }, [socket]);
 
   return (
-    <SocketContext.Provider value={{ socketStatus, socket, emit, disconnect }}>
+    <SocketContext.Provider
+      value={{ socketStatus, socket: socket.current, emit, disconnect }}
+    >
       {children}
     </SocketContext.Provider>
   );

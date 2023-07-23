@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Server as NetServer, Socket } from "net";
 import { Server as SocketIOServer, Server as ServerIO } from "socket.io";
 import { Server as HttpServer } from "http";
-import { SOCKET_URL } from "../../../../contexts/SocketContext";
-import { SOCKET_EVENT } from "../../../../containers/provider/SocketProvider";
+import { SOCKET_URL } from "../../../contexts/SocketContext";
+import { SOCKET_EVENT } from "../../../containers/provider/SocketProvider";
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: Socket & {

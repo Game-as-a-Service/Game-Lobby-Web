@@ -10,5 +10,4 @@ type StoreContextType = {
 
 export const SocketContext = createContext<Partial<StoreContextType>>({});
 
-export const SOCKET_MESSAGE_URL = "/api/internal/socket/message";
-export const SOCKET_URL = "/api/internal/socket/socketio";
+export const SOCKET_URL = "/api/internal/socketio";
