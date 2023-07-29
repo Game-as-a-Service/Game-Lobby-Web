@@ -85,16 +85,17 @@ const RoomsListView: FC<Props> = ({ status }) => {
         })
         .finally(() => {
           // setSelectedRoom(undefined);
-          setIsLoading(false);
           setPasswordValues(INIT_PASSWORD);
         });
+
+      setIsLoading(false);
     }
 
     if (!selectedRoom || isLoading) return;
     if (!selectedRoom.isLocked || passwordValues.every((char) => char !== "")) {
       fetchRoomEntry(selectedRoom.id);
     }
-  }, [selectedRoom, passwordValues, isLoading, router, fetch]);
+  }, [isLoading, selectedRoom, passwordValues, router, fetch]);
 
   const Pagination = () => {
     return (

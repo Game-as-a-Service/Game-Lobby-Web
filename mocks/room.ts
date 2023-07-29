@@ -55,7 +55,7 @@ export const mock_roomInfo: RoomInfo.Room = {
   status: "WATTING",
   game: { id: "456", name: "銀河路跑" },
   host: {
-    id: "mock-currentUser-uid",
+    id: "mock-currentUser-uid-c",
     nickname: "mock currentUser",
     isReady: false,
   },

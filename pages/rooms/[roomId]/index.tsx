@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
@@ -8,6 +8,7 @@ import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";
 import useAuth from "@/hooks/context/useAuth";
 import usePopup from "@/hooks/usePopup";
+import { useSocket } from "@/containers/provider/SocketProvider";
 import {
   getRoomInfoEndpoint,
   kickUser,
@@ -22,10 +23,10 @@ export default function Room() {
   const {
     roomInfo,
     initializeRoom,
-    // addPlayer,
-    // removePlayer,
+    addPlayer,
+    removePlayer,
     // updateHost,
-    // updateRoomStatus,
+    updateRoomStatus,
     toggleUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
@@ -37,19 +38,62 @@ export default function Room() {
   const player = roomInfo.players.find(
     (player) => player.id === currentUser?.id
   );
+  const socket = useSocket();
+  const [user, setUser] = useState<RoomInfo.User>({
+    id: "",
+    nickname: "",
+    isReady: false,
+  });
+  const [users, setUsers] = useState<RoomInfo.User[]>([]);
+
+  const getRoomInfo = useCallback(async () => {
+    const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
+    initializeRoom(roomInfo);
+  }, [fetch, roomId, initializeRoom]);
 
   useEffect(() => {
-    async function getRoomInfo() {
-      const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
-      initializeRoom(roomInfo);
-    }
-
     getRoomInfo();
 
     return () => {
       cleanUpRoom();
     };
-  }, [fetch, initializeRoom, cleanUpRoom, roomId]);
+  }, [cleanUpRoom]);
+
+  useEffect(() => {
+    const userId = socket.id;
+    const userInfo: RoomInfo.User = {
+      id: userId,
+      nickname: "玩家_" + userId.slice(0, 4),
+      isReady: false,
+    };
+    setUser(userInfo);
+    // console.log(roomInfo);
+
+    socket.emit("join_room", { roomId, user: userInfo });
+
+    socket.on("USER_JOINED", (user) => {
+      addPlayer(user);
+    });
+
+    socket.on("USER_READY", (user) => {
+      // console.log("玩家已經準備好了: ", user);
+      toggleUserReadyStatus(user);
+    });
+
+    socket.on("USER_LEFT", (userId) => {
+      // console.log("玩家已離開");
+      removePlayer(userId);
+    });
+
+    return () => {
+      socket.off("disconnect");
+    };
+  }, []);
+
+  useEffect(() => {
+    // console.log("current: ", user);
+    // console.log("Players: ", users);
+  }, [user, users]);
 
   // Event: kick user
   async function handleClickKick(user: Omit<RoomInfo.User, "isReady">) {
@@ -112,9 +156,6 @@ export default function Room() {
       const { message } = player?.isReady
         ? await fetch(playerCancelReady(roomId))
         : await fetch(playerReady(roomId));
-      if (message === "Success" && currentUser?.id) {
-        toggleUserReadyStatus(currentUser.id);
-      }
     } catch (err) {
       firePopup({ title: `error!` });
     }
@@ -138,6 +179,7 @@ export default function Room() {
       <RoomBreadcrumb roomInfo={roomInfo} />
       <RoomUserCardList
         roomInfo={roomInfo}
+        // currentUserId={user?.id}
         currentUserId={currentUser?.id}
         onKickUser={handleClickKick}
       />

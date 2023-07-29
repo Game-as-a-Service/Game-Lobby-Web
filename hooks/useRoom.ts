@@ -51,7 +51,7 @@ type UpdateRoomStatus = {
 
 type UpdateUserReadyStatus = {
   type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS;
-  payload: Pick<RoomInfo.User, "id">;
+  payload: Pick<RoomInfo.User, "id" | "isReady">;
 };
 
 type CleanUpRoomAction = {
@@ -119,7 +119,7 @@ const useRoomReducer = (
       if (userIndex === -1)
         throw new Error("Recived invalid user id when toggling ready status.");
 
-      nextPlayers[userIndex].isReady = !nextPlayers[userIndex].isReady;
+      nextPlayers[userIndex].isReady = payload.isReady;
       return {
         ...state,
         players: nextPlayers,
@@ -171,12 +171,15 @@ export default function useRoom() {
     });
   }, []);
 
-  const toggleUserReadyStatus = useCallback((userId: RoomInfo.User["id"]) => {
-    dispatch({
-      type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS,
-      payload: { id: userId },
-    });
-  }, []);
+  const toggleUserReadyStatus = useCallback(
+    (payload: Omit<RoomInfo.User, "nickname">) => {
+      dispatch({
+        type: REDUCER_ACTION_TYPE.TOGGLE_USER_READY_STATUS,
+        payload,
+      });
+    },
+    []
+  );
 
   const cleanUpRoom = useCallback(() => {
     dispatch({ type: REDUCER_ACTION_TYPE.CLEAN_UP_ROOM });
