@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="wrap__ flex flex-col w-full h-full">
+    <div className="__wrap flex flex-col w-full h-full">
       <Header />
-      <div className="container__ flex flex-grow gap-5">
+      <div className="__container flex flex-grow">
         <Sidebar />
-        <main className="flex-grow w-full h-full">{children}</main>
+        <main className="__main flex-grow px-8 w-full h-full">{children}</main>
       </div>
       <Footer />
     </div>

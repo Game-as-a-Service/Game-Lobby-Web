@@ -20,8 +20,14 @@ const initialRoomFormState = {
   maxPlayers: 0,
 };
 
-export default function CreateRoomModal() {
-  const [showThisModal, setshowThisModal] = useState(false);
+export default function CreateRoomModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: (open: boolean) => void;
+}) {
+  const [showThisModal, setshowThisModal] = useState(open);
   const [showGameListModal, setShowGameListModal] = useState(false);
   const [gameList, setGameList] = useState<GameType[]>([]);
   const [roomForm, setRoomForm] =
@@ -93,6 +99,7 @@ export default function CreateRoomModal() {
   function handleCloseModal() {
     setShowGameListModal(false);
     setshowThisModal(false);
+    onClose(false);
   }
 
   function getPasswordSelected(e: React.MouseEvent<HTMLElement>) {
@@ -101,7 +108,6 @@ export default function CreateRoomModal() {
 
   return (
     <>
-      <Button onClick={() => setshowThisModal(true)}>開創房間</Button>
       <Modalow
         title="create-room"
         hasTitle={false}

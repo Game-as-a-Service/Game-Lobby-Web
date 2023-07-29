@@ -18,6 +18,7 @@ import remind from "./svgs/remind.svg";
 import rooms from "./svgs/rooms.svg";
 import target from "./svgs/target.svg";
 import kickUser from "./svgs/kick_user.svg";
+import star from "./svgs/star.svg";
 const icons = {
   arrowPrev,
   arrowNext,
@@ -39,6 +40,7 @@ const icons = {
   rooms,
   target,
   kickUser,
+  star,
 };
 
 export type IconName = keyof typeof icons;

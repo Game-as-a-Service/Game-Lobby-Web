@@ -32,7 +32,7 @@ const Cover: React.FC<CoverProps> = ({
       relative: fill,
       "w-full": !fill,
     },
-    "overflow-hidden bg-gray-500 cover",
+    "overflow-hidden bg-gray-500",
     className
   );
 
