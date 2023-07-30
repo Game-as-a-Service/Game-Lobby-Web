@@ -24,10 +24,13 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
     async function fetch() {
       const jwt = getTokenInCookie();
       if (jwt) {
-        const res = await authentication(jwt);
-        if (res.token) {
-          setToken(res.token);
-        }
+        setToken(jwt);
+        // The `authentication` is needed when the token is expired
+        // TODO: Put it back after clarify the refresh workflow
+        // const res = await authentication(jwt);
+        // if (res.token) {
+        //   setToken(res.token);
+        // }
       } else {
         setToken(null);
       }
