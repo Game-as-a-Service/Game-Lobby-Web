@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { WebSocket, WebSocketServer } from "ws";
 import { MessageType } from "@/components/rooms/RoomChatroom";
-import { SOCKET_EVENT } from "../../../containers/provider/SocketProvider";
+import { SOCKET_EVENT } from "@/contexts/SocketContext";
 
 type NextApiResponseServer = NextApiResponse & {
   socket: {
