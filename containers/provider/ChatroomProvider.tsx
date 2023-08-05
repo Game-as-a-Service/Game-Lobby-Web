@@ -1,9 +1,14 @@
 import ChatroomContext from "@/contexts/ChatroomContext";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { MessageType } from "@/components/rooms/RoomChatroom";
 import useAuth from "@/hooks/context/useAuth";
-import useSocketCore from "@/hooks/context/useSocketCore";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT, useSocketCore } from "./SocketProvider";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
@@ -23,13 +28,12 @@ function useChatroomCore() {
   useEffect(() => {
     if (!currentUser) return;
 
-    // const user = {
-    //   id: currentUser.id,
-    //   nickname: currentUser.nickname,
-    // };
+    const user = {
+      id: currentUser.id,
+      nickname: currentUser.nickname,
+    };
 
     socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
-      // eslint-disable-next-line no-console
       console.log("Message received in chatroom context", data);
       setLastMessage(data);
     });
