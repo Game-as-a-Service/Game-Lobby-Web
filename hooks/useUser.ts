@@ -8,6 +8,7 @@ import { getCurrentUser as getCurrentUserReq } from "@/requests/users/index";
 import useRequest from "./useRequest";
 import useAuth from "./context/useAuth";
 import useCookie from "./useCookie";
+import { useCallback } from "react";
 
 const useUser = () => {
   const { fetch } = useRequest();
@@ -26,13 +27,16 @@ const useUser = () => {
     return await fetch(authenticationReq(token));
   };
 
-  const login = (token: string) => {
-    setTokenCtx(token);
-  };
+  const login = useCallback(
+    (token: string) => {
+      setTokenCtx(token);
+    },
+    [setTokenCtx]
+  );
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setTokenCtx(null);
-  };
+  }, [setTokenCtx]);
 
   const getTokenInCookie = () => {
     return tokenOperator.get();

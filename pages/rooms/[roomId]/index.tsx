@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { GetStaticProps, GetStaticPaths } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import RoomBreadcrumb from "@/components/rooms/RoomBreadcrumb";
@@ -178,3 +180,18 @@ export default function Room() {
     </section>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "zh-TW", [""])),
+    },
+  };
+};

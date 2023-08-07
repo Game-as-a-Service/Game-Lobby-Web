@@ -85,8 +85,8 @@ const RoomsListView: FC<Props> = ({ status }) => {
         })
         .finally(() => {
           // setSelectedRoom(undefined);
-          setIsLoading(false);
           setPasswordValues(INIT_PASSWORD);
+          isLoading && setIsLoading(false);
         });
     }
 
@@ -94,7 +94,7 @@ const RoomsListView: FC<Props> = ({ status }) => {
     if (!selectedRoom.isLocked || passwordValues.every((char) => char !== "")) {
       fetchRoomEntry(selectedRoom.id);
     }
-  }, [selectedRoom, passwordValues, isLoading, router, fetch]);
+  }, [selectedRoom, passwordValues, isLoading, router, fetch, firePopup, t]);
 
   const Pagination = () => {
     return (

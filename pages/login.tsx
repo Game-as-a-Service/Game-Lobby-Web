@@ -1,5 +1,7 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Button from "@/components/shared/Button";
 import Cover from "@/components/shared/Cover";
@@ -26,7 +28,7 @@ const Login: NextPageWithProps = () => {
     } else {
       setCheckAuth(true);
     }
-  }, [token]);
+  }, [token, push]);
 
   const onLoginClick = async (e: SyntheticEvent, type: LoginType) => {
     if (isMock) {
@@ -35,7 +37,7 @@ const Login: NextPageWithProps = () => {
 
       const endpoint = await getLoginEndpoint(type);
       // mock: redirect to /auth/token
-      window.location.href = endpoint.url;
+      push(endpoint.url);
     }
   };
 
@@ -95,3 +97,11 @@ Login.getLayout = (page) => (
 );
 
 export default Login;
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "zh-TW", [""])),
+    },
+  };
+};
