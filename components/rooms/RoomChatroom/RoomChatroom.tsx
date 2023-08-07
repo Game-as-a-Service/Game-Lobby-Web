@@ -3,6 +3,7 @@ import Button from "@/components/shared/Button";
 import ChatMessage from "./ChatMessage";
 import { MessageType } from ".";
 import useChatroom from "@/hooks/context/useChatroom";
+import useSocketCore from "@/hooks/context/useSocketCore";
 
 type RoomChatroom = {
   roomId: string;
@@ -14,8 +15,9 @@ export default function RoomChatroom({ roomId }: RoomChatroom) {
     sendChatMessage,
     joinChatroom,
     leaveChatroom,
-    readyState,
+    // readyState,
   } = useChatroom();
+  const { socket } = useSocketCore();
   const scrollbarRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const [messageList, setMessageList] = useState<MessageType[]>([]);
@@ -23,11 +25,10 @@ export default function RoomChatroom({ roomId }: RoomChatroom) {
   // join chatroom by roomId
   useEffect(() => {
     if (!roomId) return;
-    if (readyState < 1) return;
+    if (!socket || !socket.connected) return;
     joinChatroom(roomId);
-
     return () => leaveChatroom(roomId);
-  }, [joinChatroom, leaveChatroom, roomId, readyState]);
+  }, [joinChatroom, leaveChatroom, roomId, socket]);
 
   // update message list while received new message from websocket
   useEffect(() => {
