@@ -1,5 +1,7 @@
 import { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
+import { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { NextPageWithProps } from "../_app";
 import useUser from "@/hooks/useUser";
@@ -27,3 +29,11 @@ Login.getLayout = (page: ReactElement) => page;
 Login.Anonymous = true;
 
 export default Login;
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "zh-TW", [""])),
+    },
+  };
+};

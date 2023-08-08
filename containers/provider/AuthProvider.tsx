@@ -14,7 +14,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     <AuthContext.Provider
       value={{
         token,
-        setToken: (token: string | undefined | null) => setToken(token),
+        setToken,
         currentUser,
         setCurrentUser: (currentUser: UserInfo | null) =>
           setCurrentUser(currentUser),
