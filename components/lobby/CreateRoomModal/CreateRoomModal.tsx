@@ -15,13 +15,12 @@ import { target } from "@/components/shared/Icon/group/target";
 const initialRoomFormState = {
   name: "",
   gameId: "",
-  password: null,
   minPlayers: 0,
   maxPlayers: 0,
 };
 
 export default function CreateRoomModal() {
-  const [showThisModal, setshowThisModal] = useState(false);
+  const [showThisModal, setShowThisModal] = useState(false);
   const [showGameListModal, setShowGameListModal] = useState(false);
   const [gameList, setGameList] = useState<GameType[]>([]);
   const [roomForm, setRoomForm] =
@@ -35,11 +34,12 @@ export default function CreateRoomModal() {
   const { push } = useRouter();
 
   useEffect(() => {
+    if (isPublic) return;
     setRoomForm((prev) => ({
       ...prev,
       password: passwordValues.join(""),
     }));
-  }, [passwordValues]);
+  }, [passwordValues, isPublic]);
 
   // get game list
   useEffect(() => {
@@ -92,7 +92,7 @@ export default function CreateRoomModal() {
 
   function handleCloseModal() {
     setShowGameListModal(false);
-    setshowThisModal(false);
+    setShowThisModal(false);
   }
 
   function getPasswordSelected(e: React.MouseEvent<HTMLElement>) {
@@ -101,7 +101,7 @@ export default function CreateRoomModal() {
 
   return (
     <>
-      <Button onClick={() => setshowThisModal(true)}>開創房間</Button>
+      <Button onClick={() => setShowThisModal(true)}>開創房間</Button>
       <Modalow
         title="create-room"
         hasTitle={false}

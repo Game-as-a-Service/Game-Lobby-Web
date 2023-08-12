@@ -43,3 +43,4 @@ package-lock.json
 
 # knip scan report
 knipScanResult.txt
+*.yarn
