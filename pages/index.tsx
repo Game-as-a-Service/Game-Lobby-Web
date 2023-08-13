@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
 import Carousel, { mockCarouselItems } from "@/components/shared/Carousel";
+import FastJoinButton from "@/components/lobby/FastJoinButton";
 
 export default function Home() {
   const { t } = useTranslation("rooms");
@@ -28,6 +29,7 @@ export default function Home() {
       <Button component={Link} href="/rooms">
         {t("rooms_list")}
       </Button>
+      <FastJoinButton />
     </>
   );
 }

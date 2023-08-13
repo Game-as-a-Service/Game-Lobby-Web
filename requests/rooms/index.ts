@@ -179,3 +179,13 @@ export const startGame = (
     method: "POST",
   });
 };
+
+export const fastJoinGameEndpoint = (
+  gameId: string
+): IRequestWrapper<{ roomId: string }> => {
+  return requestWrapper({
+    url: `/api/internal/rooms:fastJoin`,
+    method: "POST",
+    data: { gameId },
+  });
+};
