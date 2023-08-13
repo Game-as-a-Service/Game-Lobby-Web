@@ -23,7 +23,7 @@ export const SocketProvider: FC<Props> = ({ children }) => {
     if (socket?.connected) return;
 
     const config =
-      env === Env.DEV
+      env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
         ? {
             path: SOCKET_URL,
             addTrailingSlash: false,
