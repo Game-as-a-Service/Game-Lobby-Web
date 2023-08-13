@@ -15,7 +15,6 @@ import { target } from "@/components/shared/Icon/group/target";
 const initialRoomFormState = {
   name: "",
   gameId: "",
-  password: null,
   minPlayers: 0,
   maxPlayers: 0,
 };
@@ -33,13 +32,13 @@ export default function CreateRoomModal() {
   const [passwordValues, setPasswordValues] = useState(["", "", "", ""]);
   const { fetch } = useRequest();
   const { push } = useRouter();
-
   useEffect(() => {
+    if (isPublic) return;
     setRoomForm((prev) => ({
       ...prev,
       password: passwordValues.join(""),
     }));
-  }, [passwordValues]);
+  }, [passwordValues, isPublic]);
 
   // get game list
   useEffect(() => {

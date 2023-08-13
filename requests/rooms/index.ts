@@ -3,7 +3,7 @@ import { IRequestWrapper, requestWrapper } from "@/requests/request";
 export type CreateRoomFormType = {
   name: string;
   gameId: string;
-  password: null | string;
+  password?: string;
   minPlayers: number;
   maxPlayers: number;
 };
