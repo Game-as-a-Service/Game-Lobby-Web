@@ -1,4 +1,4 @@
-import { ApiHistory, Status } from "@/contexts/ApiHistoryContext";
+import { ApiHistory, Status } from "@/contexts/HistoryContext";
 import Check from "public/images/check.svg";
 import Error from "public/images/error.svg";
 import Pending from "public/images/pending.svg";
@@ -24,7 +24,7 @@ const ApiHistoryItem = (props: ApiHistory) => {
     <div
       key={props.id}
       className={`flex justify-between items-center gap-4 px-2 py-1 border-b border-zinc-400 ${color} cursor-pointer`}
-      onClick={() => alert(JSON.stringify(props))}
+      onClick={() => alert(JSON.stringify(props, null, 2))}
     >
       <Icon className="w-4 h-4" />
       <div>{props.time + "ms"}</div>
