@@ -22,7 +22,7 @@ const usePagination = <T>(option: {
       try {
         const res = await option.source(page, perPage);
         setTotal(res.page.total);
-        setData(res.data);
+        setData(res.rooms);
         setLoading(false);
       } catch (err) {
         if (axios.isAxiosError(err) && err.response) {

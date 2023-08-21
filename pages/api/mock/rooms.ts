@@ -22,7 +22,7 @@ export default function handler(
       Number(reqPage) * Number(perPage)
     );
 
-    return res.json({ data, page: pageOpt });
+    return res.json({ rooms: data, page: pageOpt });
   } else if (req.method === "POST") {
     return res.json(mock_createRoomResponse);
   }

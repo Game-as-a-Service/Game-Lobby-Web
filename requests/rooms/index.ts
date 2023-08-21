@@ -33,12 +33,12 @@ type PageMeta = {
 };
 
 export type PageData<T> = {
-  data: T[];
+  rooms: T[];
   page: PageMeta;
 };
 
 export type Rooms = {
-  data: Room[];
+  rooms: Room[];
   page: PageMeta;
 };
 
