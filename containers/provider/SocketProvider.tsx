@@ -1,40 +1,30 @@
-import React, { useState, useEffect, FC, useCallback } from "react";
-import { io, Socket } from "socket.io-client";
-import SocketContext, {
-  SOCKET_EVENT,
-  SOCKET_URL,
-} from "@/contexts/SocketContext";
+import React, { useEffect, FC, useCallback } from "react";
+import SocketContext, { socket, SOCKET_EVENT } from "@/contexts/SocketContext";
 import useAuth from "@/hooks/context/useAuth";
 import useHistory from "@/hooks/context/useHistory";
 import { WebSocketHistoryType } from "@/contexts/HistoryContext";
-import { Env, getEnv } from "@/lib/env";
 
 type Props = {
   children: React.ReactNode;
 };
-const { internalEndpoint, env } = getEnv();
 
 export const SocketProvider: FC<Props> = ({ children }) => {
-  const [socket, setSocket] = useState<null | Socket>(null);
   const { addWsHistory } = useHistory();
   const { currentUser } = useAuth();
 
   const connect = useCallback(() => {
     if (socket?.connected) return;
+    socket.connect();
+  }, []);
 
-    const config =
-      env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
-        ? {
-            path: SOCKET_URL,
-            addTrailingSlash: false,
-          }
-        : {};
+  const disconnect = useCallback(() => {
+    if (!socket?.connected) return;
+    socket.disconnect();
+  }, []);
 
-    const newSocket = io(internalEndpoint, config);
-
-    newSocket
+  useEffect(() => {
+    socket
       .on(SOCKET_EVENT.CONNECT, () => {
-        setSocket(newSocket);
         addWsHistory({
           type: WebSocketHistoryType.CONNECTION,
           event: "CONNECT",
@@ -61,19 +51,25 @@ export const SocketProvider: FC<Props> = ({ children }) => {
           event: "DISCONNECT",
           message: "",
         });
-        setSocket(null);
       });
-  }, [socket, addWsHistory]);
 
-  const disconnect = useCallback(() => {
-    if (!socket?.connected) return;
-    socket.disconnect();
-  }, [socket]);
+    return () => {
+      socket
+        .off(SOCKET_EVENT.CONNECT)
+        .offAny()
+        .offAnyOutgoing()
+        .off(SOCKET_EVENT.DISCONNECT);
+    };
+  }, [addWsHistory]);
 
   useEffect(() => {
     if (!currentUser) return;
+    window.addEventListener("beforeunload", disconnect);
     connect();
-    return () => disconnect();
+    return () => {
+      window.removeEventListener("beforeunload", disconnect);
+      disconnect();
+    };
   }, [connect, disconnect, currentUser]);
 
   return (
