@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PageData } from "@/requests/rooms";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE = 0;
 
 const usePagination = <T>(option: {
   source: (page: number, perPage: number) => Promise<PageData<T>>;
