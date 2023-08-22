@@ -1,11 +1,33 @@
+import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
-import { Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 
 type StoreContextType = {
-  socket: null | Socket;
+  socket: Socket;
 };
 
+const { internalEndpoint, env } = getEnv();
+
 export const SOCKET_URL = "/api/internal/socketio";
+
+const config =
+  env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
+    ? {
+        path: SOCKET_URL,
+        addTrailingSlash: false,
+        autoConnect: false,
+        reconnection: true,
+        reconnectionDelay: 10000,
+        reconnectionDelayMax: 10000,
+        reconnectionAttempts: Infinity,
+      }
+    : {
+        autoConnect: false,
+        reconnection: true,
+        reconnectionDelay: 10000,
+        reconnectionDelayMax: 10000,
+        reconnectionAttempts: Infinity,
+      };
 
 export enum SOCKET_EVENT {
   CONNECT = "connect",
@@ -23,8 +45,8 @@ export enum SOCKET_EVENT {
   ROOM_CLOSED = "ROOM_CLOSED",
 }
 
-const SocketContext = createContext<StoreContextType>({
-  socket: null,
-});
+export const socket = io(internalEndpoint, config);
+
+const SocketContext = createContext<StoreContextType>({ socket });
 
 export default SocketContext;

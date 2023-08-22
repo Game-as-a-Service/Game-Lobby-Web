@@ -10,13 +10,8 @@ type RoomChatroom = {
 };
 
 export default function RoomChatroom({ roomId }: RoomChatroom) {
-  const {
-    lastMessage,
-    sendChatMessage,
-    joinChatroom,
-    leaveChatroom,
-    // readyState,
-  } = useChatroom();
+  const { lastMessage, sendChatMessage, joinChatroom, leaveChatroom } =
+    useChatroom();
   const { socket } = useSocketCore();
   const scrollbarRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState<string>("");

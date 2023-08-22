@@ -125,6 +125,8 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
         io.emit(SOCKET_EVENT.CHAT_MESSAGE, message);
       });
       socket.on(SOCKET_EVENT.DISCONNECT, () => {
+        // eslint-disable-next-line no-console
+        console.log("SOCKET DISCONNECTED FROM SERVER! ", socket.id);
         onlineUsers.delete(socket.id);
         if (isEmitting && onlineUsers.size === 0) {
           clearInterval(sendOnlineUsers);
