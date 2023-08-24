@@ -88,7 +88,7 @@
     }
   },
   "resolutions": {
-    "@babel/core": "7.22.9",
+    "@babel/core": "7.22.11",
     "@types/react": "18.2.13",
     "jackspeak": "2.1.1"
   }
