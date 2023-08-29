@@ -105,7 +105,7 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
             break;
           case SOCKET_EVENT.GAME_STARTED:
             socket.emit(SOCKET_EVENT.GAME_STARTED, {
-              gameUrl: "http://localhost:3030",
+              gameUrl: "https://example.com/game",
               roomId: message.to,
             });
             break;
