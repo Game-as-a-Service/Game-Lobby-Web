@@ -52,10 +52,10 @@ function App({ Component, pageProps }: AppWithProps) {
           {getHistory(
             <SocketProvider>
               <ChatroomContextProvider>
-                <Startup isAnonymous={isAnonymous}>
-                  {getLayout(<Component {...pageProps} />)}
-                  {!isProduction && <HistoryList />}
-                </Startup>
+                {/* <Startup isAnonymous={isAnonymous}> */}
+                {getLayout(<Component {...pageProps} />)}
+                {!isProduction && <HistoryList />}
+                {/* </Startup> */}
               </ChatroomContextProvider>
             </SocketProvider>
           )}
