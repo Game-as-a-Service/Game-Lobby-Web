@@ -11,12 +11,12 @@ type TabsProps = {
 }[];
 
 const Rooms = () => {
-  const { t } = useTranslation("rooms");
+  const { t, ready } = useTranslation("rooms");
 
   const tabs: TabsProps = [
     {
       key: RoomType.WAITING,
-      label: t("rooms_waiting"),
+      label: ready ? t("rooms_waiting") : "",
     },
     {
       key: RoomType.PLAYING,

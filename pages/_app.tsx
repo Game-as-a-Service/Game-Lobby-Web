@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import { appWithTranslation } from "next-i18next";
-
+import nextI18nConfig from "../next-i18next.config";
 import "@/styles/reset.css";
 import "@/styles/global.css";
 import "@/scripts/whyDidYouRender";
@@ -65,4 +65,4 @@ function App({ Component, pageProps }: AppWithProps) {
   );
 }
 
-export default appWithTranslation(App);
+export default appWithTranslation(App, nextI18nConfig);
