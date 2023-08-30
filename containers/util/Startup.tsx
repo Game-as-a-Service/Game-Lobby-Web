@@ -57,7 +57,7 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
 
   useEffect(() => {
     if (token === null && !isAnonymous) {
-      push("/login");
+      // push("/login");
     } else if (token && currentUser) {
       setPageDone(true);
     } else if (isAnonymous) {
