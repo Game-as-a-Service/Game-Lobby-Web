@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           # the ARN (Amazon Resource Name) of the IAM role that should be assumed.
           role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
