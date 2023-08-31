@@ -8,10 +8,7 @@ const env = getEnv();
 const proxyMiddleware = createProxyMiddleware({
   target: env.internalEndpoint,
   changeOrigin: true,
-  pathRewrite: (path, req) => {
-    if (!env.isMock) return path.replace(/^\/api\/internal/, "");
-    return path.replace(/:/g, "/").replace(/^\/api\/internal/, "/api/mock");
-  },
+  pathRewrite: { "^/api/internal": env.isMock ? "/api/mock" : "" },
 }) as any;
 
 export const config = {
