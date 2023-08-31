@@ -78,7 +78,7 @@ jobs:
 
       # Restart systemd service
       - name: Run Application
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ vars.EC2_HOST }}
           username: ${{ vars.EC2_USERNAME }}
