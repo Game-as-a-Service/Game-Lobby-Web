@@ -18,8 +18,8 @@ export default function handler(
     };
 
     const data = rooms.slice(
-      (Number(reqPage) - 1) * Number(perPage),
-      Number(reqPage) * Number(perPage)
+      Number(reqPage) * Number(perPage),
+      Number(reqPage) + 1 * Number(perPage)
     );
 
     return res.json({ rooms: data, page: pageOpt });

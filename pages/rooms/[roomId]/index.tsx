@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -6,6 +6,7 @@ import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import RoomBreadcrumb from "@/components/rooms/RoomBreadcrumb";
 import RoomChatroom from "@/components/rooms/RoomChatroom";
+import GameWindow from "@/components/rooms/GameWindow";
 import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";
 import useAuth from "@/hooks/context/useAuth";
@@ -37,10 +38,11 @@ export default function Room() {
     cleanUpRoom,
   } = useRoom();
   const { socket } = useSocketCore();
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
   const { query, replace } = useRouter();
+  const [gameUrl, setGameUrl] = useState("");
   const roomId = query.roomId as string;
   const player = roomInfo.players.find(
     (player) => player.id === currentUser?.id
@@ -90,14 +92,12 @@ export default function Room() {
 
     socket.on(SOCKET_EVENT.GAME_STARTED, ({ gameUrl }: { gameUrl: string }) => {
       updateRoomStatus("PLAYING");
-      // TODO: iframe the url and start game
-      firePopup({
-        title: `開始遊戲! 遊戲網址為：${gameUrl}`,
-      });
+      setGameUrl(`${gameUrl}?token=${token}`);
     });
 
     socket.on(SOCKET_EVENT.GAME_ENDED, () => {
       updateRoomStatus("WAITING");
+      setGameUrl("");
       firePopup({
         title: `遊戲已結束!`,
       });
@@ -110,6 +110,7 @@ export default function Room() {
       });
     });
   }, [
+    token,
     socket,
     currentUser?.id,
     addPlayer,
@@ -219,6 +220,7 @@ export default function Room() {
           isReady={player?.isReady || false}
         />
       </div>
+      {gameUrl && <GameWindow gameUrl={gameUrl} />}
       <Popup />
     </section>
   );
