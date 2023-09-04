@@ -11,7 +11,7 @@ function ChatMessage(props: MessageType): JSX.Element {
   const textColorClass =
     props.from === "SYSTEM" ? TEXT_COLORS_CLASS.SYSTEM : TEXT_COLORS_CLASS.USER;
 
-  const senderText = props.from === "USER" ? props.user?.nickname + ": " : "";
+  const senderText = props.from === "SYSTEM" ? "" : props.from.nickname + ": ";
 
   return (
     <div className={cn("text-sm text-left", textColorClass)}>
