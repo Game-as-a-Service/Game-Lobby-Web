@@ -35,15 +35,13 @@ function useChatroomCore() {
   /**
    * Sends a chat message to the server.
    * @param {string} message.content - The content of the message.
-   * @param {string} message.to - The target roomId of the message.
+   * @param {string} message.target - The target chatroomId of the message.
    */
   const sendChatMessage = useCallback(
-    (message: Pick<MessageType, "content" | "to">) => {
+    (message: Pick<MessageType, "content" | "target">) => {
       if (!currentUser) return;
-      const payload: MessageType = {
-        from: "USER",
-        user: { id: currentUser.id, nickname: currentUser.nickname },
-        timestamp: new Date().toISOString(),
+      const payload: Omit<MessageType, "timestamp"> = {
+        from: { id: currentUser.id, nickname: currentUser.nickname },
         ...message,
       };
       if (socket) {

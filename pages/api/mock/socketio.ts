@@ -122,7 +122,10 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
           default:
             break;
         }
-        io.emit(SOCKET_EVENT.CHAT_MESSAGE, message);
+        io.emit(SOCKET_EVENT.CHAT_MESSAGE, {
+          ...message,
+          timestamp: new Date().toISOString(),
+        });
       });
       socket.on(SOCKET_EVENT.DISCONNECT, () => {
         // eslint-disable-next-line no-console

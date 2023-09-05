@@ -3,19 +3,18 @@ import { render, screen } from "@testing-library/react";
 import ChatMessage, { ChatMessageProps } from "./ChatMessage";
 import { TEXT_COLORS_CLASS } from "./ChatMessage";
 
-const TEST_USER_MESSAGE_PROPS: ChatMessageProps = {
-  from: "USER",
+const TEST_USER_MESSAGE_PROPS = {
+  from: { id: "test_user", nickname: "test_nickname" },
   content: "test textContent",
-  user: { id: "a", nickname: "testName" },
   timestamp: new Date().toISOString(),
-  to: "LOBBY",
+  target: "LOBBY",
 };
 
 const TEST_SYSTEM_MESSAGE_PROPS: ChatMessageProps = {
   from: "SYSTEM",
   content: "test textContent",
   timestamp: new Date().toISOString(),
-  to: "ALL",
+  target: "LOBBY",
 };
 
 describe("ChatMessage", () => {
@@ -48,7 +47,7 @@ describe("ChatMessage", () => {
     );
 
     expect(baseElement.textContent).toMatch(
-      TEST_USER_MESSAGE_PROPS.user!.nickname
+      TEST_USER_MESSAGE_PROPS.from.nickname
     );
   });
 });

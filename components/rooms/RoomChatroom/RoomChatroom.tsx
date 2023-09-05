@@ -28,7 +28,7 @@ export default function RoomChatroom({ roomId }: RoomChatroom) {
   // update message list while received new message from websocket
   useEffect(() => {
     if (!lastMessage || !roomId) return;
-    if (lastMessage.to === roomId || lastMessage.to === "ALL") {
+    if (lastMessage.target === `ROOM_${roomId}`) {
       setMessageList((prev) => [...prev, lastMessage]);
     }
   }, [lastMessage, roomId]);
@@ -53,9 +53,9 @@ export default function RoomChatroom({ roomId }: RoomChatroom) {
 
   function handleSubmitText() {
     if (!inputValue) return;
-    const data: Pick<MessageType, "content" | "to"> = {
+    const data: Pick<MessageType, "content" | "target"> = {
       content: inputValue,
-      to: roomId,
+      target: `ROOM_${roomId}`,
     };
     sendChatMessage(data);
     setInputValue("");
