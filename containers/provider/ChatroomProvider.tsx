@@ -52,7 +52,7 @@ function useChatroomCore() {
   );
 
   const joinChatroom = useCallback(
-    (chatroomId: string) => {
+    (roomId: string) => {
       if (!currentUser) return;
       if (socket) {
         const payload = {
@@ -60,16 +60,16 @@ function useChatroomCore() {
             id: currentUser.id,
             nickname: currentUser.nickname,
           },
-          chatroomId,
+          target: `ROOM_${roomId}`,
         };
-        socket?.emit(SOCKET_EVENT.CHATROOM_JOIN, payload);
+        socket?.emit(SOCKET_EVENT.JOIN_ROOM, payload);
       }
     },
     [currentUser, socket]
   );
 
   const leaveChatroom = useCallback(
-    (chatroomId: string) => {
+    (roomId: string) => {
       if (!currentUser) return;
       if (socket) {
         const payload = {
@@ -77,9 +77,9 @@ function useChatroomCore() {
             id: currentUser.id,
             nickname: currentUser.nickname,
           },
-          chatroomId,
+          target: `ROOM_${roomId}`,
         };
-        socket?.emit(SOCKET_EVENT.CHATROOM_LEAVE, payload);
+        socket?.emit(SOCKET_EVENT.LEAVE_ROOM, payload);
       }
     },
     [currentUser, socket]

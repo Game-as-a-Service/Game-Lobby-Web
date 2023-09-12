@@ -23,7 +23,7 @@ export default function RoomChatroom({ roomId }: RoomChatroom) {
     if (!socket || !socket.connected) return;
     joinChatroom(roomId);
     return () => leaveChatroom(roomId);
-  }, [joinChatroom, leaveChatroom, roomId, socket]);
+  }, [joinChatroom, leaveChatroom, roomId, socket, socket.connected]);
 
   // update message list while received new message from websocket
   useEffect(() => {
