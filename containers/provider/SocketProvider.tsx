@@ -1,8 +1,12 @@
-import React, { useEffect, FC, useCallback } from "react";
-import SocketContext, { socket, SOCKET_EVENT } from "@/contexts/SocketContext";
+import React, { useEffect, FC, useState } from "react";
+import SocketContext, {
+  SOCKET_EVENT,
+  createSocket,
+} from "@/contexts/SocketContext";
 import useAuth from "@/hooks/context/useAuth";
 import useHistory from "@/hooks/context/useHistory";
 import { WebSocketHistoryType } from "@/contexts/HistoryContext";
+import { Socket } from "socket.io-client";
 
 type Props = {
   children: React.ReactNode;
@@ -10,21 +14,16 @@ type Props = {
 
 export const SocketProvider: FC<Props> = ({ children }) => {
   const { addWsHistory } = useHistory();
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const connect = useCallback(() => {
-    if (socket?.connected) return;
-    socket.connect();
-  }, []);
-
-  const disconnect = useCallback(() => {
-    if (!socket?.connected) return;
-    socket.disconnect();
-  }, []);
+  useEffect(() => {
+    setSocket(createSocket(token));
+  }, [token]);
 
   useEffect(() => {
     socket
-      .on(SOCKET_EVENT.CONNECT, () => {
+      ?.on(SOCKET_EVENT.CONNECT, () => {
         addWsHistory({
           type: WebSocketHistoryType.CONNECTION,
           event: "CONNECT",
@@ -55,14 +54,24 @@ export const SocketProvider: FC<Props> = ({ children }) => {
 
     return () => {
       socket
-        .off(SOCKET_EVENT.CONNECT)
+        ?.off(SOCKET_EVENT.CONNECT)
         .offAny()
         .offAnyOutgoing()
         .off(SOCKET_EVENT.DISCONNECT);
     };
-  }, [addWsHistory]);
+  }, [socket, addWsHistory]);
 
   useEffect(() => {
+    const connect = () => {
+      if (socket?.connected) return;
+      socket?.connect();
+    };
+
+    const disconnect = () => {
+      if (!socket?.connected) return;
+      socket.disconnect();
+    };
+
     if (!currentUser) return;
     window.addEventListener("beforeunload", disconnect);
     connect();
@@ -70,7 +79,7 @@ export const SocketProvider: FC<Props> = ({ children }) => {
       window.removeEventListener("beforeunload", disconnect);
       disconnect();
     };
-  }, [connect, disconnect, currentUser]);
+  }, [socket, currentUser]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
