@@ -32,6 +32,11 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       addTrailingSlash: false,
     });
 
+    io.use((socket, next) => {
+      const token = socket.handshake.auth.token;
+      next();
+    });
+
     io.on(SOCKET_EVENT.CONNECT, (socket) => {
       // eslint-disable-next-line no-console
       console.log("SOCKET CONNECTED IN SERVER! ", socket.id);
