@@ -34,7 +34,11 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
 
     io.use((socket, next) => {
       const token = socket.handshake.auth.token;
-      next();
+      if (token == undefined) {
+        next(new Error("not authorized"));
+      } else {
+        next();
+      }
     });
 
     io.on(SOCKET_EVENT.CONNECT, (socket) => {
