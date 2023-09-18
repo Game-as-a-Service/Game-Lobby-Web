@@ -22,6 +22,17 @@ const onlineUsers = new Map<string, string>();
 let isEmitting = false;
 let sendOnlineUsers: NodeJS.Timeout;
 
+function registeringMiddleware(io: ServerIO) {
+  io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token == undefined) {
+      next(new Error("not authorized"));
+    } else {
+      next();
+    }
+  });
+}
+
 const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
   if (!res.socket.server.io) {
     // eslint-disable-next-line no-console
@@ -31,6 +42,8 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
       path: SOCKET_URL,
       addTrailingSlash: false,
     });
+
+    registeringMiddleware(io);
 
     io.on(SOCKET_EVENT.CONNECT, (socket) => {
       // eslint-disable-next-line no-console
