@@ -111,6 +111,7 @@ export default function Avatar({
         height={avatarSize}
         className={avatarClassName}
         onError={handleImageError}
+        unoptimized
       />
     );
 
