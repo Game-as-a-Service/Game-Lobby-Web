@@ -75,7 +75,7 @@
     "jest-environment-jsdom": "29.5.0",
     "knip": "2.14.1",
     "lint-staged": "14.0.1",
-    "postcss": "8.4.24",
+    "postcss": "8.4.31",
     "prettier": "3.0.0",
     "shell-quote": "1.8.1",
     "storybook": "7.2.3",
