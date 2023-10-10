@@ -23,6 +23,7 @@ jobs:
               { keyword: 'refactor', label: 'refactor' },
               { keyword: 'fix', label: 'bug' },
               { keyword: '[RENOVATE-BOT]', label: 'dependency upgrade' },
+              { keyword: '[DEPENDA-BOT]', label: 'dependency alerts' },
             ];
 
             // Collect all labels that should be added according to the title
