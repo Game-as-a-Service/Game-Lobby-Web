@@ -32,7 +32,7 @@ jobs:
 
       - name: Login to AWS ECR
         id: login-ecr-public
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
         with:
             # an argument to the amazon-ecr-login action indicating that the ECR registry you are logging into is public.
             registry-type: public
