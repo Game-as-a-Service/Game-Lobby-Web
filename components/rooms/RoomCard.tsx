@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Room } from "@/requests/rooms";
-import Lock from "../../public/images/padlock.svg";
-import Cover from "../shared/Cover";
+import Icon from "@/components/shared/Icon";
+import Cover from "@/components/shared/Cover";
 
 type RoomsCardProps = {
   key: string;
@@ -11,7 +11,7 @@ type RoomsCardProps = {
   onClick: (id: string) => void;
 };
 const RoomCard = ({ room, active, onClick }: RoomsCardProps) => {
-  const LockIcon = () => <Lock className="w-5 h-5" />;
+  const LockIcon = () => <Icon name="padlock" className="w-5 h-5" />;
 
   const roomCardClass = cn(
     "room__card",

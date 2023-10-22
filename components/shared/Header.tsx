@@ -2,11 +2,11 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
-import Cover from "@/components/shared/Cover";
-import IconProfile from "@/public/images/icon_profile.svg";
 import UserInfoModal from "../lobby/UserInfoModal";
 import Button from "./Button";
 import Badge from "./Badge";
+import Icon from "./Icon";
+import type { IconName } from "./Icon/icons";
 
 enum HeaderActions {
   HELP = "HELP",
@@ -22,7 +22,7 @@ export default function Header() {
 
   const buttons = [
     {
-      Icon: IconProfile,
+      Icon: "player" as IconName,
       type: HeaderActions.PROFILE,
       click: () => {
         setOpenProfile(true);
@@ -34,11 +34,7 @@ export default function Header() {
   return (
     <header className="flex flex-row items-center justify-between p-[10px_15px] bg-dark1E">
       <div className="flex items-center gap-3">
-        <Cover
-          src="/images/logo.svg"
-          alt="Water ball logo"
-          className="w-[39px] h-[39px] bg-transparent"
-        />
+        <Icon name="logo" className="bg-transparent" />
       </div>
       <div className="header___actions flex gap-6">
         {buttons.map((ButtonProps) => (
@@ -56,8 +52,11 @@ export default function Header() {
               className="relative bg-transparent hover:shadow-none p-0"
               onClick={ButtonProps.click}
             >
-              <ButtonProps.Icon
-                className={cn({ "fill-blue": ButtonProps.active })}
+              <Icon
+                name={ButtonProps.Icon}
+                className={cn("[&_*]:stroke-white", {
+                  "fill-blue": ButtonProps.active,
+                })}
               />
             </Button>
           </Badge>

@@ -51,7 +51,7 @@ const Login: NextPageWithProps = () => {
   return checkAuth ? (
     <div className="lg:w-1/2 w-full flex flex-col items-center">
       <h1 className="relative flex gap-10 items-center text-[40px] font-normal text-white z-10">
-        <Icon name="logo" />
+        <Icon name="logo" className="w-20 h-20" />
         遊戲線上揪
       </h1>
 

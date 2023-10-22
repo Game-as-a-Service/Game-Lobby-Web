@@ -1,16 +1,15 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
+import { useRouter } from "next/router";
+import useRequest from "@/hooks/useRequest";
+import { createRoomEndpoint, CreateRoomFormType } from "@/requests/rooms";
+import { getAllGamesEndpoint, GameType } from "@/requests/games";
 import Button from "@/components/shared/Button";
 import Modalow from "@/components/shared/Modalow";
 import GameListModal from "./GameListModal";
 import Input from "@/components/shared/Input";
-import useRequest from "@/hooks/useRequest";
-import { useRouter } from "next/router";
-import { createRoomEndpoint, CreateRoomFormType } from "@/requests/rooms";
-import { getAllGamesEndpoint, GameType } from "@/requests/games";
-import styles from "./createRoomModall.module.css";
 import PasswordField from "@/components/shared/PasswordField";
 import Icon from "@/components/shared/Icon";
-import { target } from "@/components/shared/Icon/group/target";
+import styles from "./createRoomModall.module.css";
 
 const initialRoomFormState = {
   name: "",
@@ -132,7 +131,7 @@ export default function CreateRoomModal() {
                 />
               </div>
             </div>
-            <div className="flex items-center relative">
+            <div className="flex items-center relative ">
               <div className="w-full">
                 <Input
                   inputClassName="cursor-pointer"
@@ -148,12 +147,12 @@ export default function CreateRoomModal() {
               </div>
               <button
                 type="button"
-                className="w-[28.11px] h-[28.11px] ml-[9px] absolute top-0 right-[-8px] translate-x-[100%] "
+                className="ml-[9px] absolute top-1/2 right-[-8px] translate-x-[100%] translate-y-[-50%]"
                 onClick={() => setShowGameListModal(true)}
               >
                 <Icon
-                  className="stroke-[2.8116] stroke-[#1E1F22] hover:stroke-[#2F88FF]"
-                  icon={target}
+                  className="[&_*]:hover:stroke-[#2F88FF]"
+                  name="gamepadSimple"
                 />
               </button>
             </div>
