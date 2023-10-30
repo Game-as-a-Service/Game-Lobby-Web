@@ -1,23 +1,11 @@
 import type { ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
-import { IconVariants } from "./types/types";
 import icons, { IconName } from "./icons";
 
 type IconProps = {
+  name: IconName;
   className?: ClassValue;
-
-  /** If `true`, spin animation */
-  spin?: boolean;
-} & (
-  | {
-      icon: IconVariants;
-      name?: never;
-    }
-  | {
-      icon?: never;
-      name: IconName;
-    }
-);
+};
 
 /**
  * 新增 Svg 可以將檔案放至 `@/components/shared/Icon/icons/svgs` 裡，
@@ -25,29 +13,17 @@ type IconProps = {
  * 並放入 **icons** 這個物件，即可使用
  */
 const Icon = (props: IconProps) => {
-  const { className, icon, name, spin = false } = props;
-  const definition = icon?.definition;
-  const transformClassName = cn(className, { "animate-spin": spin });
+  const { className, name, ...rest } = props;
+  const transformClassName = cn(className);
   const SvgIcon = name && icons[name];
 
   return (
-    <>
-      {SvgIcon && (
-        <SvgIcon focusable={false} className={transformClassName} aria-hidden />
-      )}
-      {definition && (
-        <svg
-          {...definition.svg}
-          focusable={false}
-          className={transformClassName}
-          aria-hidden
-        >
-          {definition.path?.map((path, index) => (
-            <path key={index} {...path} />
-          ))}
-        </svg>
-      )}
-    </>
+    <SvgIcon
+      focusable={false}
+      className={transformClassName}
+      aria-hidden
+      {...rest}
+    />
   );
 };
 

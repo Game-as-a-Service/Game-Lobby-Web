@@ -20,6 +20,8 @@ export default function CarouselArrowButton({
     flex justify-center items-center text-white font-bold 
   `;
 
+  const svgClass = "[&_*]:stroke-white";
+
   const prevClass = "absolute left-0 top-0";
 
   const nextClass = "absolute right-0 top-0";
@@ -33,8 +35,8 @@ export default function CarouselArrowButton({
   );
 
   const arrowIcon = {
-    prev: <Icon name="arrowPrev" />,
-    next: <Icon name="arrowNext" />,
+    prev: <Icon name="navArrowLeft" className={svgClass} />,
+    next: <Icon name="navArrowRight" className={svgClass} />,
   };
 
   return (

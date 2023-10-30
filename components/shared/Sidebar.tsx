@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 
 import Button from "./Button";
-import HomeIcon from "./Icon/group/home";
-import RoomsIcon from "./Icon/group/rooms";
-
-import { cn } from "@/lib/utils";
+import Icon from "@/components/shared/Icon";
+import type { IconName } from "./Icon/icons";
 
 enum SidebarRoutes {
   HOME = "/",
@@ -16,9 +15,13 @@ export default function Sidebar() {
   const router = useRouter();
   const { pathname } = router;
 
-  const buttons = [
-    { text: "遊戲大廳", Icon: HomeIcon, route: SidebarRoutes.HOME },
-    { text: "遊戲房間", Icon: RoomsIcon, route: SidebarRoutes.ROOMS },
+  const buttons: {
+    text: string;
+    iconName: IconName;
+    route: SidebarRoutes;
+  }[] = [
+    { text: "遊戲大廳", iconName: "home", route: SidebarRoutes.HOME },
+    { text: "遊戲房間", iconName: "arcade", route: SidebarRoutes.ROOMS },
   ];
 
   return (
@@ -27,7 +30,7 @@ export default function Sidebar() {
         <Link
           href={ButtonProps.route}
           key={ButtonProps.text}
-          className="block flex justify-center items-center"
+          className="flex justify-center items-center"
         >
           <Button
             className={cn(
@@ -38,7 +41,12 @@ export default function Sidebar() {
             )}
           >
             <div className="w-full flex flex-col items-center gap-1">
-              <ButtonProps.Icon active={pathname === ButtonProps.route} />
+              <Icon
+                name={ButtonProps.iconName}
+                className={{
+                  "[&_*]:stroke-[#2F88FF]": pathname === ButtonProps.route,
+                }}
+              />
               <span className={cn("text-xs")}>{ButtonProps.text}</span>
             </div>
           </Button>

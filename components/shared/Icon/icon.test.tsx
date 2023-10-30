@@ -2,11 +2,14 @@ import React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Icon from "./index";
-import { ArrowRightIcon } from "./group/arrow-right";
+import type { IconName } from "./icons";
+
+jest.mock("path/to/image.svg", () => "svg");
 
 describe("Icon", () => {
-  it("render Icon with correct definition", () => {
-    const { container } = render(<Icon icon={ArrowRightIcon} />);
+  const TEST_ICON_NAME: IconName = "arcade";
+  it("render Icon with correct name", () => {
+    const { container } = render(<Icon name={TEST_ICON_NAME} />);
 
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
@@ -15,17 +18,10 @@ describe("Icon", () => {
   it("Icon has correct className", () => {
     const className = "test class";
     const { container } = render(
-      <Icon icon={ArrowRightIcon} className={className} />
+      <Icon name={TEST_ICON_NAME} className={className} />
     );
 
     const svg = container.querySelector("svg");
     expect(svg).toHaveClass(className);
-  });
-
-  it("Icon has spin animation", () => {
-    const { container } = render(<Icon icon={ArrowRightIcon} spin />);
-
-    const svg = container.querySelector("svg");
-    expect(svg).toHaveClass("animate-spin");
   });
 });

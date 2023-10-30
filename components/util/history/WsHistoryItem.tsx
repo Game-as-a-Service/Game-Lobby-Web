@@ -19,20 +19,29 @@ const WsHistoryItem = (props: WebSocketHistory) => {
   const arrowIcon = {
     [WebSocketHistoryType.SEND]: (
       <Icon
-        name="arrowUp"
-        className={cn("w-6 h-6 absolute left-0 z-1", color)}
+        name="sendDiagonal"
+        className={cn(
+          "w-6 h-6 absolute left-0 z-1 [&_path]:stroke-orange-500",
+          color
+        )}
       />
     ),
     [WebSocketHistoryType.RECEIVE]: (
       <Icon
-        name="arrowDown"
-        className={cn("w-6 h-6 absolute left-0 z-1", color)}
+        name="edit"
+        className={cn(
+          "w-6 h-6 absolute left-0 z-1 [&_path]:stroke-green-500",
+          color
+        )}
       />
     ),
     [WebSocketHistoryType.CONNECTION]: (
       <Icon
-        name="thunder"
-        className={cn("w-6 h-6 absolute left-0 z-1", color)}
+        name="globe"
+        className={cn(
+          "w-6 h-6 absolute left-0 z-1 [&_path]:stroke-yellow-500",
+          color
+        )}
       />
     ),
   };
