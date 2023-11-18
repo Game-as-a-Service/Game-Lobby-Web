@@ -32,6 +32,7 @@ export const Playground: Story = {
 };
 
 Playground.args = {
+  userId: "我",
   friendList: mockFriendList,
   lobbyMessages: mockLobbyMessages,
   roomMessages: mockRoomMessages,

@@ -3,14 +3,17 @@ import { cn } from "@/lib/utils";
 import Icon from "../../Icon";
 import type { MessageType } from "./ChatMessages";
 
-export type ChatInputProps = {
+type ChatInputProps = {
+  userId: string;
   disabled: boolean;
   onSubmit: (message: MessageType) => void;
 };
 
-export default function ChatInput({ disabled, onSubmit }: ChatInputProps) {
-  // TODO: userInfo hook
-  const { userId } = { userId: "我" };
+export default function ChatInput({
+  userId,
+  disabled,
+  onSubmit,
+}: Readonly<ChatInputProps>) {
   const [value, setValue] = useState("");
 
   const sendMessage: FormEventHandler<HTMLFormElement> = (event) => {

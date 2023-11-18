@@ -9,12 +9,14 @@ export type MessageType = {
 };
 
 type ChatMessageProps = {
+  userId: string;
   messages: MessageType[];
 };
 
-export default function ChatMessages({ messages }: ChatMessageProps) {
-  // TODO: userInfo hook
-  const { userId } = { userId: "我" };
+export default function ChatMessages({
+  userId,
+  messages,
+}: Readonly<ChatMessageProps>) {
   const messagesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function ChatMessages({ messages }: ChatMessageProps) {
 
             return (
               <div
-                key={index}
+                key={from + content}
                 className={cn(
                   "flex items-end mb-6 last-of-type:mb-0",
                   isSameUser && "mb-2",

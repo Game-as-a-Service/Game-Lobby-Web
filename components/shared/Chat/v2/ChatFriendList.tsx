@@ -8,6 +8,7 @@ export type FriendType = {
 };
 
 type ChatFriendListProps = {
+  userId: string;
   friendList: FriendType[];
   onToggle: (target: FriendType["target"]) => void;
 };
@@ -18,12 +19,11 @@ export const getTargetUser = (target: FriendType["target"], userId: string) => {
 };
 
 export default function ChatFriendList({
+  userId,
   friendList,
   onToggle,
-}: ChatFriendListProps) {
-  // TODO: userInfo hook
-  const { userId } = { userId: "我" };
-  const handleClick = (target: FriendType["target"]) => () => onToggle(target);
+}: Readonly<ChatFriendListProps>) {
+  const goTo = (target: FriendType["target"]) => () => onToggle(target);
 
   return (
     <div className="min-h-full max-h-[calc(var(--chat-height)-120px)]">
@@ -37,7 +37,9 @@ export default function ChatFriendList({
               <div
                 key={target}
                 className="relative flex items-center gap-4 text-primary-100 p-2 pr-8 fz-14 border-b border-gradient-purple cursor-pointer"
-                onClick={handleClick(target)}
+                tabIndex={0}
+                onClick={goTo(target)}
+                onKeyDown={goTo(target)}
               >
                 <Avatar type="image" size="small" src="" />
                 <div>
