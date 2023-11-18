@@ -8,19 +8,19 @@ import { createMockFriendMessages } from "./__mocks__/mock";
 import Icon from "../../Icon";
 
 export type ChatProps = {
+  userId: string;
   lobbyMessages: MessageType[];
   friendList: FriendType[];
   roomMessages: MessageType[];
 };
 
 export default function Chat({
+  userId,
   lobbyMessages,
   friendList,
   roomMessages,
-}: ChatProps) {
-  // TODO: userInfo hook
-  const { userId } = { userId: "我" };
-  const [messages, setMessage] = useState(lobbyMessages);
+}: Readonly<ChatProps>) {
+  const [messages, setMessages] = useState(lobbyMessages);
   const [target, setTarget] = useState<[ChatTab["id"], string | null]>([
     "lobby",
     null,
@@ -42,18 +42,18 @@ export default function Chat({
     }[activeTab];
 
     if (mockMessages) {
-      setMessage(mockMessages);
+      setMessages(mockMessages);
       return;
     }
 
     const friend = friendList.find((item) => item.target === friendRoom);
 
     if (!friend) {
-      setMessage([]);
+      setMessages([]);
       return;
     }
 
-    setMessage(createMockFriendMessages(friend));
+    setMessages(createMockFriendMessages(friend));
   }, [activeTab, friendRoom, friendList, roomMessages, lobbyMessages]);
 
   const handleToggleTab = (id: ChatTab["id"]) => setTarget([id, null]);
@@ -63,7 +63,7 @@ export default function Chat({
 
   const handleSubmit = (message: MessageType) => {
     if (activeTab === "friend" && !friendRoom) return;
-    setMessage((pre) => [...pre, message]);
+    setMessages((pre) => [...pre, message]);
   };
 
   return (
@@ -80,6 +80,7 @@ export default function Chat({
         <div className="relative h-[calc(var(--chat-height)-120px)] bg-primary-50/4">
           {isFriendList ? (
             <ChatFriendList
+              userId={userId}
               friendList={friendList}
               onToggle={handleToggleTarget}
             />
@@ -99,11 +100,15 @@ export default function Chat({
                   {getTargetUser(friendRoom, userId)}
                 </div>
               )}
-              <ChatMessages messages={messages} />
+              <ChatMessages userId={userId} messages={messages} />
             </>
           )}
         </div>
-        <ChatInput onSubmit={handleSubmit} disabled={isFriendList} />
+        <ChatInput
+          userId={userId}
+          onSubmit={handleSubmit}
+          disabled={isFriendList}
+        />
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export default function ChatHeader({
   tabs,
   activeTab,
   onToggle,
-}: ChatHeaderProps) {
+}: Readonly<ChatHeaderProps>) {
   const toggleTab = (id: ChatTab["id"]) => () => onToggle(id);
 
   return (
@@ -33,7 +33,7 @@ export default function ChatHeader({
             onClick={toggleTab(id)}
           >
             {notifications && (
-              <span className="absolute right-0 -top-2 fz-12 w-4 h-4 rounded-full bg-secondary-500 text-basic-white">
+              <span className="absolute right-0 -top-2 fz-12 w-4 h-4 leading-4 rounded-full bg-secondary-500 text-basic-white">
                 {notifications}
               </span>
             )}
