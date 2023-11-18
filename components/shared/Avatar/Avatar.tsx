@@ -69,7 +69,7 @@ export default function Avatar({
 
   const avatarSizeVariants = {
     default: `w-[34px] h-[34px]`,
-    small: `w-[28px] h-[28px]`,
+    small: `w-[24px] h-[24px]`,
     large: `w-[40px] h-[40px]`,
   };
 
