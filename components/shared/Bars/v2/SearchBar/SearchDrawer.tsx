@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
-import NavItem from "@/components/shared/Bars/SearchBar/NavItem";
+import NavItem from "@/components/shared/Bars/v2/SearchBar/NavItem";
 import Icon from "@/components/shared/Icon";
 
 type Props = {
