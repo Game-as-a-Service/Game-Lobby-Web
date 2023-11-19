@@ -14,7 +14,7 @@ type IconProps = {
  */
 const Icon = (props: IconProps) => {
   const { className, name, ...rest } = props;
-  const transformClassName = cn(className);
+  const transformClassName = cn("stroke-primary-100", className);
   const SvgIcon = name && icons[name];
 
   return (

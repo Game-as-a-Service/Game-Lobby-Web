@@ -4,7 +4,7 @@
 <path d="M0 0H24V24H0V0Z" fill="white"/>
 </mask>
 <g mask="url(#mask0_15_3976)">
-<path d="M22.152 3.553L11.178 21.004L9.508 12.408L2 7.898L22.152 3.553ZM22.152 3.553L9.456 12.444" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.152 3.553L11.178 21.004L9.508 12.408L2 7.898L22.152 3.553ZM22.152 3.553L9.456 12.444" stroke="inherit" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </g>
 <defs>

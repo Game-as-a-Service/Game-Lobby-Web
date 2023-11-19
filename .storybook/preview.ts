@@ -6,7 +6,12 @@ const preview: Preview = {
   parameters: {
     backgrounds: {
       default: "Dark",
-      values: [{ name: "Dark", value: "#1E1F22" }],
+      values: [
+        {
+          name: "Dark",
+          value: "linear-gradient(145.51deg, #06020B -7.4%, #2C1B47 154.79%)",
+        },
+      ],
     },
     actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
