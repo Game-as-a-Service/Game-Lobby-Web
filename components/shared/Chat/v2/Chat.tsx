@@ -72,7 +72,7 @@ export default function Chat({
       className="w-[308px] h-[var(--chat-height))] gradient-purple rounded-lg"
       style={{ "--chat-height": "calc(100vh - 10rem)" } as CSSProperties}
     >
-      <div className="h-full bg-basic-black border border-transparent bg-clip-padding rounded-lg overflow-hidden">
+      <div className="h-full body-bg border border-transparent bg-clip-padding rounded-lg overflow-hidden">
         <ChatHeader
           tabs={chatTabs}
           activeTab={activeTab}
