@@ -71,7 +71,7 @@ export default function ChatMessages({
                           isMe && "text-right mt-1"
                         )}
                       >
-                        {from}
+                        {isMe ? "我" : from}
                       </div>
                     </div>
                   </>

@@ -9,8 +9,12 @@ export const mockLobbyMessages: MessageType[] = [
     target: "lobby",
     content: "文字文字文字文字文字文字文字",
   },
-  { from: "我", target: "lobby", content: "文字文字文字文字" },
-  { from: "我", target: "lobby", content: "文字文字文字文字文字文字文字" },
+  { from: "玩家名字3", target: "lobby", content: "文字文字文字文字" },
+  {
+    from: "玩家名字3",
+    target: "lobby",
+    content: "文字文字文字文字文字文字文字",
+  },
   { from: "玩家名字1", target: "lobby", content: "文字" },
   {
     from: "玩家名字1",
@@ -31,23 +35,28 @@ export const mockRoomMessages: MessageType[] = [
 export const mockFriendList: FriendType[] = [
   {
     lastUser: "玩家A",
-    target: "玩家A___我",
+    target: "玩家A___玩家名字3",
     lastContent: "玩家A送出的最後一句話",
     isRead: false,
   },
   {
-    lastUser: "我",
-    target: "玩家B___我",
+    lastUser: "玩家名字3",
+    target: "玩家B___玩家名字3",
     lastContent: "你送出的最後一句話",
     isRead: true,
   },
   {
     lastUser: "玩家C",
-    target: "玩家C___我",
+    target: "玩家C___玩家名字3",
     lastContent: "玩家C送出的最後一句話",
     isRead: false,
   },
-  { lastUser: null, target: "玩家D___我", lastContent: null, isRead: true },
+  {
+    lastUser: null,
+    target: "玩家D___玩家名字3",
+    lastContent: null,
+    isRead: true,
+  },
 ];
 
 export const createMockFriendMessages = ({
