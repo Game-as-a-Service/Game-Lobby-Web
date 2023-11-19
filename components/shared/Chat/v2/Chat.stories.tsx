@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import Chat from "./Chat";
 import {
-  createMockFriendMessages,
   mockFriendList,
   mockLobbyMessages,
   mockRoomMessages,
