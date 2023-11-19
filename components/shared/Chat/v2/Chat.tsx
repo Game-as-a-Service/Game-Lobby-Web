@@ -53,6 +53,7 @@ export default function Chat({
       return;
     }
 
+    // Call friend chat room message API?
     setMessages(createMockFriendMessages(friend));
   }, [activeTab, friendRoom, friendList, roomMessages, lobbyMessages]);
 

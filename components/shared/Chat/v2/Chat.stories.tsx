@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 import Chat from "./Chat";
 import {
+  createMockFriendMessages,
   mockFriendList,
   mockLobbyMessages,
   mockRoomMessages,
@@ -32,7 +33,7 @@ export const Playground: Story = {
 };
 
 Playground.args = {
-  userId: "我",
+  userId: "玩家名字3",
   friendList: mockFriendList,
   lobbyMessages: mockLobbyMessages,
   roomMessages: mockRoomMessages,
