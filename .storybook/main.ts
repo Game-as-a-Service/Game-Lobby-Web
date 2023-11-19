@@ -17,13 +17,13 @@ const config: StorybookConfig = {
     const fileLoaderRules = config.module?.rules?.filter(
       (rule) =>
         rule !== "..." &&
-        rule.test &&
+        rule &&
         rule.test instanceof RegExp &&
         rule.test.test(".svg")
     );
 
     fileLoaderRules?.forEach((rule) => {
-      if (rule !== "...") rule.exclude = /\.svg$/;
+      if (rule && rule !== "...") rule.exclude = /\.svg$/;
     });
 
     config.module?.rules?.push({
