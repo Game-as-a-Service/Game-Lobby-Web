@@ -1,10 +1,12 @@
-import { PropsWithChildren } from "react";
 import Icon from "@/components/shared/Icon";
-import SearchDrawer from "./SearchDrawer";
 
-interface TagProps extends React.ComponentPropsWithoutRef<"div"> {}
+type Props = {
+  onClick: () => void;
+};
 
-const SearchBarDumb = ({}: PropsWithChildren<TagProps>) => {
+const SearchBarDumb = ({ onClick }: Readonly<Props>) => {
+  const clickButton = () => () => onClick();
+
   return (
     <div
       className={
@@ -15,6 +17,7 @@ const SearchBarDumb = ({}: PropsWithChildren<TagProps>) => {
         className={
           "flex flex-grow flex-shrink-0 flex-basis-0 items-center justify-center px-3 py-2.5 rounded-[100px] text-primary-300 hover:bg-white/8 active:bg-[#CEBFEF] active:bg-white/20"
         }
+        onClick={clickButton()}
       >
         類型
       </button>
