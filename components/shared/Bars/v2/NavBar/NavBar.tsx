@@ -21,13 +21,13 @@ const NavBar = ({}: PropsWithChildren<TagProps>) => {
       </div>
       <div id={"btn-group"} className={"flex"}>
         <div className={"w-12 h-12 p-3"}>
-          <Icon name="chat" className="w-6 h-6 [&_*]:stroke-gray-500" />
+          <Icon name="chat" className="w-6 h-6 stroke-gray-500" />
         </div>
         <div className={"w-12 h-12 p-3 ml-3"}>
-          <Icon name="notification" className="w-6 h-6 [&_*]:stroke-gray-500" />
+          <Icon name="notification" className="w-6 h-6 stroke-gray-500" />
         </div>
         <div className={"w-12 h-12 p-3 ml-3"}>
-          <Icon name="player" className="w-6 h-6 [&_*]:stroke-gray-500" />
+          <Icon name="player" className="w-6 h-6 stroke-gray-500" />
         </div>
       </div>
     </div>

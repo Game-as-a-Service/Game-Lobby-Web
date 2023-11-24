@@ -11,7 +11,7 @@ const SearchDrawer = ({ className }: PropsWithChildren<Props>) => {
   return (
     <div
       className={cn(
-        "w-[484px] h-[537px] pb-2 bg-zinc-950 bg-opacity-40 rounded-2xl shadow shadow-inner border border-slate-500 backdrop-blur-[104.20px] flex-col justify-start items-center inline-flex",
+        "w-[484px] h-[537px] pb-2 bg-zinc-950 bg-opacity-40 rounded-2xl shadow border border-slate-500 backdrop-blur-[104.20px] flex-col justify-start items-center inline-flex",
         className
       )}
     >
@@ -19,10 +19,7 @@ const SearchDrawer = ({ className }: PropsWithChildren<Props>) => {
         <div className="w-[220px] flex-col justify-start items-start inline-flex">
           <div className="self-stretch h-14 rounded-[100px] justify-start items-center gap-3 inline-flex">
             <div className="grow shrink basis-0 self-stretch px-6 py-4 justify-start items-center gap-3 flex">
-              <Icon
-                name="archery"
-                className="w-6 h-6 [&_*]:stroke-white"
-              ></Icon>
+              <Icon name="archery" className="w-6 h-6 stroke-white"></Icon>
               <div className="grow shrink basis-0 text-violet-200 text-sm font-medium font-['Noto Sans TC'] leading-[21px]">
                 動作
               </div>
@@ -37,10 +34,7 @@ const SearchDrawer = ({ className }: PropsWithChildren<Props>) => {
           </div>
           <div className="self-stretch h-14 rounded-[100px] justify-start items-center gap-3 inline-flex">
             <div className="grow shrink basis-0 self-stretch px-6 py-4 justify-start items-center gap-3 flex">
-              <Icon
-                name="explore"
-                className="w-6 h-6 [&_*]:stroke-white"
-              ></Icon>
+              <Icon name="explore" className="w-6 h-6 stroke-white"></Icon>
               <div className="grow shrink basis-0 text-violet-200 text-sm font-medium font-['Noto Sans TC'] leading-[21px]">
                 冒險
               </div>
@@ -55,7 +49,7 @@ const SearchDrawer = ({ className }: PropsWithChildren<Props>) => {
             <div className="grow shrink basis-0 self-stretch px-6 py-4 justify-start items-center gap-3 flex">
               <Icon
                 name="hotAirBalloon"
-                className="w-6 h-6 [&_*]:stroke-white"
+                className="w-6 h-6 stroke-white"
               ></Icon>
               <div className="grow shrink basis-0 text-violet-200 text-sm font-medium font-['Noto Sans TC'] leading-[21px]">
                 模擬
@@ -71,10 +65,7 @@ const SearchDrawer = ({ className }: PropsWithChildren<Props>) => {
           </div>
           <div className="self-stretch h-14 rounded-[100px] justify-start items-center gap-3 inline-flex">
             <div className="grow shrink basis-0 self-stretch px-6 py-4 justify-start items-center gap-3 flex">
-              <Icon
-                name="chessRook"
-                className="w-6 h-6 [&_*]:stroke-white"
-              ></Icon>
+              <Icon name="chessRook" className="w-6 h-6 stroke-white"></Icon>
               <div className="grow shrink basis-0 text-violet-200 text-sm font-medium font-['Noto Sans TC'] leading-[21px]">
                 策略
               </div>
