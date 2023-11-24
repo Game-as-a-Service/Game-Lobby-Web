@@ -12,10 +12,10 @@ const NavBar = ({}: PropsWithChildren<TagProps>) => {
     >
       <div id={"btn-group"} className={"flex flex-col"}>
         <div className={"w-12 h-12 p-3"}>
-          <Icon name="chat" className="w-6 h-6 [&_*]:stroke-gray-500" />
+          <Icon name="chat" className="w-6 h-6 stroke-gray-500" />
         </div>
         <div className={"w-12 h-12 p-3 mt-4"}>
-          <Icon name="notification" className="w-6 h-6 [&_*]:stroke-gray-500" />
+          <Icon name="notification" className="w-6 h-6 stroke-gray-500" />
         </div>
       </div>
     </div>

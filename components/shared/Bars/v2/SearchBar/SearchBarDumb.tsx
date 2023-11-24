@@ -8,12 +8,12 @@ const SearchBarDumb = ({}: PropsWithChildren<TagProps>) => {
   return (
     <div
       className={
-        "flex items-start justify-center w-[484px] p-1 pl-4 rounded-[40px] bg-white bg-opacity-[.08] backdrop-blur-[20px]"
+        "flex items-start justify-center w-[484px] p-1 pl-4 rounded-[40px] bg-white/8 backdrop-blur-[20px]"
       }
     >
       <button
         className={
-          "flex flex-grow flex-shrink-0 flex-basis-0 items-center justify-center px-3 py-2.5 rounded-[100px] text-primary-300 hover:bg-white hover:bg-opacity-[.08] active:bg-[#CEBFEF] active:bg-opacity-20"
+          "flex flex-grow flex-shrink-0 flex-basis-0 items-center justify-center px-3 py-2.5 rounded-[100px] text-primary-300 hover:bg-white/8 active:bg-[#CEBFEF] active:bg-white/20"
         }
       >
         類型
@@ -21,7 +21,7 @@ const SearchBarDumb = ({}: PropsWithChildren<TagProps>) => {
       <div
         id={"search-bar"}
         className={
-          "flex flex-grow flex-shrink-0 flex-basis-0 items-center h-11 pl-4 pr-1 ml-4 rounded-[28px] text-gray-500 bg-white bg-opacity-[.08] backdrop-blur-[60px]"
+          "flex flex-grow flex-shrink-0 flex-basis-0 items-center h-11 pl-4 pr-1 ml-4 rounded-[28px] text-gray-500 bg-white/8 backdrop-blur-[60px]"
         }
       >
         <input
