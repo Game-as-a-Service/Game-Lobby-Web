@@ -52,7 +52,7 @@ module.exports = {
           800: "#930069",
           900: "#710250",
         },
-        gray: {
+        grey: {
           50: "#F3F3F5",
           100: "#DDDCE2",
           200: "#C6C5CF",
@@ -91,12 +91,12 @@ module.exports = {
           [`.fz-${size}`]: {
             fontWeight: 400,
             fontSize: size,
-            lineHeight: 1.3,
+            lineHeight: 1.5,
           },
           [`.fz-${size}-b`]: {
             fontWeight: 500,
             fontSize: size,
-            lineHeight: 1.3,
+            lineHeight: 1.5,
           },
         });
       });
@@ -124,6 +124,24 @@ module.exports = {
         ".border-gradient-purple": {
           "border-image":
             "linear-gradient(132.59deg, #7C7BA4 19.04%, #362662 86.03%) 1",
+        },
+      });
+    }),
+    plugin(({ addComponents }) => {
+      /** custom scroll bar */
+      addComponents({
+        ".scrollbar": {
+          "&::-webkit-scrollbar": {
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            boxShadow: "inset 0 0 8px 8px #7C7BA4",
+            border: "solid 4px transparent",
+            borderRadius: "8px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            boxShadow: "inset 0 0 8px 8px #4C4B6E",
+          },
         },
       });
     }),
