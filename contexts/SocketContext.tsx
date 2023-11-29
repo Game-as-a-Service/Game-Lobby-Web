@@ -2,14 +2,15 @@ import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
 import { Socket, io } from "socket.io-client";
 
-const { internalEndpoint, env } = getEnv();
+const { internalEndpoint, internalSocketEndpoint, env } = getEnv();
 
 export const SOCKET_URL = "/api/internal/socketio";
 
 const config =
   env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
     ? {
-        path: SOCKET_URL,
+        path:
+          internalSocketEndpoint === internalEndpoint ? SOCKET_URL : undefined,
         addTrailingSlash: false,
         autoConnect: false,
         reconnection: true,
@@ -42,7 +43,7 @@ export enum SOCKET_EVENT {
 }
 
 export const createSocket = (token: string | null | undefined) => {
-  return io(internalEndpoint, { auth: { token }, ...config });
+  return io(internalSocketEndpoint, { auth: { token }, ...config });
 };
 
 type StoreContextType = {

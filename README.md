@@ -22,7 +22,7 @@ yarn test
 
 ## Unit Test
 yarn unit-test
-### Test singel files/folder
+### Test single files/folder
 yarn jest $PATH
 
 ## E2E Test
@@ -30,6 +30,26 @@ yarn e2e-test
 
 # Storybook
 yarn storybook
+```
+
+### Starting the Project
+
+如何在自己的本地跑前端專案，並連接 webSocket
+
+```yaml
+# 調整 .env.development file
+# 後端 RESTful API 的 url
+NEXT_PUBLIC_INTERNAL_ENDPOINT=
+# 後端 Socket 的 url
+NEXT_PUBLIC_INTERNAL_SOCKET_ENDPOINT=
+```
+
+```bash
+# 使用 yarn install dependencies
+# 如果出現 Error 可以改成使用 yarn install 下載
+yarn
+# 啟動專案
+yarn dev
 ```
 
 ## Git Cooperation
@@ -69,7 +89,7 @@ yarn storybook
 2. 未捕捉到的：開 PR 時綁 Github Projects
    > 這樣在 Github Projects 就能看到原本的 User Story 跟 Sprint 過程中多做的 bugs，如果這週沒辦法完成的就開 Issues 在下次開會時納入討論
 
-# Contributor
+## Contributor
 
 <a href="https://github.com/Game-as-a-Service/Game-Lobby/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Game-as-a-Service/Game-Lobby" />
