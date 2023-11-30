@@ -2,29 +2,26 @@ import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
 import { Socket, io } from "socket.io-client";
 
-const { internalEndpoint, internalSocketEndpoint, env } = getEnv();
+const { internalEndpoint, internalSocketEndpoint, env, isMock } = getEnv();
 
 export const SOCKET_URL = "/api/internal/socketio";
 
+const rootConfig = {
+  autoConnect: false,
+  reconnection: true,
+  reconnectionDelay: 10000,
+  reconnectionDelayMax: 10000,
+  reconnectionAttempts: Infinity,
+};
+
 const config =
-  env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
+  (env === Env.DEV && isMock) || process.env.NEXT_PUBLIC_CI_MODE
     ? {
-        path:
-          internalSocketEndpoint === internalEndpoint ? SOCKET_URL : undefined,
+        path: SOCKET_URL,
         addTrailingSlash: false,
-        autoConnect: false,
-        reconnection: true,
-        reconnectionDelay: 10000,
-        reconnectionDelayMax: 10000,
-        reconnectionAttempts: Infinity,
+        ...rootConfig,
       }
-    : {
-        autoConnect: false,
-        reconnection: true,
-        reconnectionDelay: 10000,
-        reconnectionDelayMax: 10000,
-        reconnectionAttempts: Infinity,
-      };
+    : rootConfig;
 
 export enum SOCKET_EVENT {
   CONNECT = "connect",

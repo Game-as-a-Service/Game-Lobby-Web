@@ -42,6 +42,8 @@ yarn storybook
 NEXT_PUBLIC_INTERNAL_ENDPOINT=
 # 後端 Socket 的 url
 NEXT_PUBLIC_INTERNAL_SOCKET_ENDPOINT=
+# 取消前端 Mock Data
+NEXT_PUBLIC_MOCK=false
 ```
 
 ```bash
