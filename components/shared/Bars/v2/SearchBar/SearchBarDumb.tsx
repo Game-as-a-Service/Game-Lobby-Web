@@ -1,11 +1,13 @@
 import Icon from "@/components/shared/Icon";
+import { useState } from "react";
 
 type Props = {
-  onClick: () => void;
+  onSearchText: (text: string) => void;
+  onDrawerClick: () => void;
 };
 
-const SearchBarDumb = ({ onClick }: Readonly<Props>) => {
-  const clickButton = () => () => onClick();
+const SearchBarDumb = ({ onSearchText, onDrawerClick }: Readonly<Props>) => {
+  const [searchText, setSearchText] = useState("");
 
   return (
     <div
@@ -17,7 +19,7 @@ const SearchBarDumb = ({ onClick }: Readonly<Props>) => {
         className={
           "flex flex-grow flex-shrink-0 flex-basis-0 items-center justify-center px-3 py-2.5 rounded-[100px] text-primary-300 hover:bg-white/8 active:bg-[#CEBFEF] active:bg-white/20"
         }
-        onClick={clickButton()}
+        onClick={() => onDrawerClick()}
       >
         類型
       </button>
@@ -31,10 +33,15 @@ const SearchBarDumb = ({ onClick }: Readonly<Props>) => {
           type={"text"}
           className={"w-[324px] bg-transparent"}
           placeholder={"在此輸入今天想玩的遊戲"}
+          value={searchText}
+          onChange={(event) => setSearchText(event.target.value)}
         />
-        <div className={"w-11 h-11 p-2.5 ml-1"}>
+        <button
+          className={"w-11 h-11 p-2.5 ml-1"}
+          onClick={() => onSearchText(searchText)}
+        >
           <Icon name="search" className="w-6 h-6 [&_*]:stroke-white" />
-        </div>
+        </button>
       </div>
     </div>
   );

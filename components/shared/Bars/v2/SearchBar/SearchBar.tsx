@@ -2,14 +2,13 @@ import React from "react";
 import SearchBarDumb from "./SearchBarDumb";
 import SearchDrawer from "./SearchDrawer";
 
-interface Props extends React.ComponentPropsWithoutRef<"div"> {}
+type Props = {
+  onSearchText: (text: string) => void;
+  onSearchType: (text: string) => void;
+};
 
-const SearchBar = ({}: Readonly<Props>) => {
+const SearchBar = ({ onSearchText, onSearchType }: Readonly<Props>) => {
   const [showDrawer, setShowDrawer] = React.useState(false);
-
-  const handleClick = () => {
-    setShowDrawer(!showDrawer);
-  };
 
   const category = {
     action: ["格鬥和武術", "第一人稱射擊", "第三人稱射擊", "街機和節奏"],
@@ -20,11 +19,15 @@ const SearchBar = ({}: Readonly<Props>) => {
 
   return (
     <div>
-      <SearchBarDumb onClick={handleClick}></SearchBarDumb>
+      <SearchBarDumb
+        onSearchText={onSearchText}
+        onDrawerClick={() => setShowDrawer(!showDrawer)}
+      ></SearchBarDumb>
       {showDrawer ? (
         <SearchDrawer
           category={category}
           className="absolute mt-6"
+          onSearchType={onSearchType}
         ></SearchDrawer>
       ) : null}
     </div>

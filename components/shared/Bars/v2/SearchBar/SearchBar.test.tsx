@@ -7,7 +7,21 @@ describe("SearchBar", () => {
   afterEach(cleanup);
 
   it("SearchBar", () => {
-    render(<SearchBar />);
-    expect(screen.getByText("遊戲微服務大平台")).toBeInTheDocument();
+    let flagText = false;
+    let flagType = false;
+    render(
+      <SearchBar
+        onSearchText={(text: string) => {
+          flagText = true;
+        }}
+        onSearchType={(text: string) => {
+          flagType = true;
+        }}
+      />
+    );
+    // TODO: texting Search Input then click Search Button
+    expect(flagText).toBeTruthy();
+    // TODO: Click drawer button then click any type button
+    expect(flagType).toBeTruthy();
   });
 });

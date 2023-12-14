@@ -10,9 +10,14 @@ type Props = {
     simulation: string[];
     strategy: string[];
   };
+  onSearchType: (text: string) => void;
 };
 
-const SearchDrawer = ({ className, category }: Readonly<Props>) => {
+const SearchDrawer = ({
+  className,
+  category,
+  onSearchType,
+}: Readonly<Props>) => {
   return (
     <div
       className={cn(
@@ -24,27 +29,51 @@ const SearchDrawer = ({ className, category }: Readonly<Props>) => {
         <div className="w-[220px] flex-col justify-start items-start inline-flex">
           <NavHeader svg="archery" text="動作"></NavHeader>
           {category.action.map((text, index) => {
-            return <NavItem key={index} text={text}></NavItem>;
+            return (
+              <NavItem
+                key={index}
+                text={text}
+                onSearchType={onSearchType}
+              ></NavItem>
+            );
           })}
           <div className="self-stretch h-px px-4 flex-col justify-center items-start flex">
             <div className="self-stretch h-[0px] border border-slate-500"></div>
           </div>
           <NavHeader svg="explore" text="冒險"></NavHeader>
           {category.adventure.map((text, index) => {
-            return <NavItem key={index} text={text}></NavItem>;
+            return (
+              <NavItem
+                key={index}
+                text={text}
+                onSearchType={onSearchType}
+              ></NavItem>
+            );
           })}
         </div>
         <div className="w-[220px] flex-col justify-start items-start inline-flex">
           <NavHeader svg="hotAirBalloon" text="模擬"></NavHeader>
           {category.simulation.map((text, index) => {
-            return <NavItem key={index} text={text}></NavItem>;
+            return (
+              <NavItem
+                key={index}
+                text={text}
+                onSearchType={onSearchType}
+              ></NavItem>
+            );
           })}
           <div className="self-stretch h-px px-4 flex-col justify-center items-start flex">
             <div className="self-stretch h-[0px] border border-slate-500"></div>
           </div>
           <NavHeader svg="chessRook" text="策略"></NavHeader>
           {category.strategy.map((text, index) => {
-            return <NavItem key={index} text={text}></NavItem>;
+            return (
+              <NavItem
+                key={index}
+                text={text}
+                onSearchType={onSearchType}
+              ></NavItem>
+            );
           })}
         </div>
       </div>
