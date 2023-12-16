@@ -23,8 +23,12 @@ const SearchBarDumb = ({ onSearchText, onDrawerClick }: Readonly<Props>) => {
       >
         類型
       </button>
-      <div
+      <form
         id={"search-bar"}
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSearchText(searchText);
+        }}
         className={
           "flex flex-grow flex-shrink-0 flex-basis-0 items-center h-11 pl-4 pr-1 ml-4 rounded-[28px] text-gray-500 bg-white/8 backdrop-blur-[60px]"
         }
@@ -36,13 +40,10 @@ const SearchBarDumb = ({ onSearchText, onDrawerClick }: Readonly<Props>) => {
           value={searchText}
           onChange={(event) => setSearchText(event.target.value)}
         />
-        <button
-          className={"w-11 h-11 p-2.5 ml-1"}
-          onClick={() => onSearchText(searchText)}
-        >
-          <Icon name="search" className="w-6 h-6 [&_*]:stroke-white" />
+        <button type="submit" className={"w-11 h-11 p-2.5 ml-1"}>
+          <Icon name="search" className="w-6 h-6 stroke-white" />
         </button>
-      </div>
+      </form>
     </div>
   );
 };
