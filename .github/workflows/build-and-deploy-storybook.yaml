@@ -1,11 +1,9 @@
 name: Build and Deploy Storybook to Github pages
 
 on:
-  pull_request:
-    branches: '**'
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
