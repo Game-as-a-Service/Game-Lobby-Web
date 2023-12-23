@@ -24,7 +24,7 @@ let sendOnlineUsers: NodeJS.Timeout;
 
 function registeringMiddleware(io: ServerIO) {
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
+    const token = socket.handshake.query.token;
     if (token == undefined) {
       next(new Error("not authorized"));
     } else {

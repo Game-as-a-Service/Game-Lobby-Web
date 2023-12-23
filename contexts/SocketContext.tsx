@@ -2,7 +2,7 @@ import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
 import { Socket, io } from "socket.io-client";
 
-const { internalEndpoint, internalSocketEndpoint, env, isMock } = getEnv();
+const { internalSocketEndpoint, env, isMock } = getEnv();
 
 export const SOCKET_URL = "/api/internal/socketio";
 
@@ -40,7 +40,7 @@ export enum SOCKET_EVENT {
 }
 
 export const createSocket = (token: string | null | undefined) => {
-  return io(internalSocketEndpoint, { auth: { token }, ...config });
+  return io(internalSocketEndpoint, { query: { token }, ...config });
 };
 
 type StoreContextType = {
