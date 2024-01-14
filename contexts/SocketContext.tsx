@@ -2,28 +2,26 @@ import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
 import { Socket, io } from "socket.io-client";
 
-const { internalEndpoint, env } = getEnv();
+const { internalSocketEndpoint, env, isMock } = getEnv();
 
 export const SOCKET_URL = "/api/internal/socketio";
 
+const rootConfig = {
+  autoConnect: false,
+  reconnection: true,
+  reconnectionDelay: 10000,
+  reconnectionDelayMax: 10000,
+  reconnectionAttempts: Infinity,
+};
+
 const config =
-  env === Env.DEV || process.env.NEXT_PUBLIC_CI_MODE
+  (env === Env.DEV && isMock) || process.env.NEXT_PUBLIC_CI_MODE
     ? {
         path: SOCKET_URL,
         addTrailingSlash: false,
-        autoConnect: false,
-        reconnection: true,
-        reconnectionDelay: 10000,
-        reconnectionDelayMax: 10000,
-        reconnectionAttempts: Infinity,
+        ...rootConfig,
       }
-    : {
-        autoConnect: false,
-        reconnection: true,
-        reconnectionDelay: 10000,
-        reconnectionDelayMax: 10000,
-        reconnectionAttempts: Infinity,
-      };
+    : rootConfig;
 
 export enum SOCKET_EVENT {
   CONNECT = "connect",
@@ -42,7 +40,7 @@ export enum SOCKET_EVENT {
 }
 
 export const createSocket = (token: string | null | undefined) => {
-  return io(internalEndpoint, { auth: { token }, ...config });
+  return io(internalSocketEndpoint, { query: { token }, ...config });
 };
 
 type StoreContextType = {
