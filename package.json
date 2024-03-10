@@ -30,7 +30,7 @@
     "http-proxy-middleware": "2.0.6",
     "i18next": "23.7.6",
     "js-cookie": "3.0.5",
-    "next": "13.4.8",
+    "next": "13.5.0",
     "next-i18next": "14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
