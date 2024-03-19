@@ -47,6 +47,7 @@ export default function Room() {
   const player = roomInfo.players.find(
     (player) => player.id === currentUser?.id
   );
+  const isHost = roomInfo.host.id === currentUser?.id;
 
   useEffect(() => {
     async function getRoomInfo() {
@@ -101,6 +102,7 @@ export default function Room() {
       firePopup({
         title: `遊戲已結束!`,
       });
+      fetch(getRoomInfoEndpoint(roomId)).then(initializeRoom);
     });
 
     socket.on(SOCKET_EVENT.ROOM_CLOSED, () => {
@@ -113,6 +115,7 @@ export default function Room() {
     token,
     socket,
     currentUser?.id,
+    roomId,
     addPlayer,
     removePlayer,
     updateUserReadyStatus,
@@ -120,6 +123,8 @@ export default function Room() {
     updateRoomStatus,
     replace,
     firePopup,
+    fetch,
+    initializeRoom,
   ]);
 
   // Event: kick user
@@ -169,10 +174,9 @@ export default function Room() {
     };
 
     firePopup({
-      title:
-        roomInfo.host.id === currentUser?.id
-          ? `當您離開房間後，房主的位子將會自動移交給其他成員，若房間內沒有成員則會自動關閉房間，是否確定要離開房間？`
-          : `是否確定要離開房間？`,
+      title: isHost
+        ? `當您離開房間後，房主的位子將會自動移交給其他成員，若房間內沒有成員則會自動關閉房間，是否確定要離開房間？`
+        : `是否確定要離開房間？`,
       showCancelButton: true,
       onConfirm: leave,
     });
@@ -216,8 +220,8 @@ export default function Room() {
           onClickClose={handleClickClose}
           onClickLeave={handleLeave}
           onClickStart={handleStart}
-          isHost={roomInfo.host.id === currentUser?.id}
-          isReady={player?.isReady || false}
+          isHost={isHost}
+          isReady={isHost || !!player?.isReady}
         />
       </div>
       {gameUrl && <GameWindow gameUrl={gameUrl} />}
