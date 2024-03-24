@@ -20,6 +20,7 @@ import bounceRight from "./svgs/bounce-right.svg";
 import brightCrown from "./svgs/bright-crown.svg";
 import brightStar from "./svgs/bright-star.svg";
 import cellar from "./svgs/cellar.svg";
+import chat from "./svgs/chat.svg";
 import chatLines from "./svgs/chat-lines.svg";
 import chessRook from "./svgs/chess-rook.svg";
 import collectbook from "./svgs/collectbook.svg";
@@ -43,6 +44,7 @@ import lens from "./svgs/lens.svg";
 import navArrowLeft from "./svgs/nav-arrow-left.svg";
 import navArrowRight from "./svgs/nav-arrow-right.svg";
 import neighbourhood from "./svgs/neighbourhood.svg";
+import notification from "./svgs/notification.svg";
 import pageLeft from "./svgs/page-left.svg";
 import pageRight from "./svgs/page-right.svg";
 import planimetry from "./svgs/planimetry.svg";
@@ -83,6 +85,7 @@ const icons = {
   brightCrown,
   brightStar,
   cellar,
+  chat,
   chatLines,
   chessRook,
   collectbook,
@@ -106,6 +109,7 @@ const icons = {
   navArrowLeft,
   navArrowRight,
   neighbourhood,
+  notification,
   pageLeft,
   pageRight,
   planimetry,
