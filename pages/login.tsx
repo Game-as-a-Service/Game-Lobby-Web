@@ -83,11 +83,12 @@ const Login: NextPageWithProps = () => {
 Login.Anonymous = true;
 
 Login.getLayout = (page) => (
-  <div className="h-screen bg-[#252558]">
+  <div className="w-screen h-screen bg-[#252558]">
     <Cover
-      src="/images/login_bg.png"
+      src="/images/v2/login-bg.png"
       alt="login cover"
-      className="fixed bottom-0 w-[190%] lg:w-full bg-[#252558]"
+      className="fixed w-full h-screen bg-[#252558]"
+      fill
     />
     <div className="h-full flex flex-col items-end justify-evenly">{page}</div>
     <footer className="p-3 fixed bottom-0 w-full text-center bg-[#679BF9]">
