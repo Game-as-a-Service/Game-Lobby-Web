@@ -127,6 +127,15 @@ module.exports = {
         },
       });
     }),
+    plugin(({ addUtilities }) => {
+      /** custom effect */
+      addUtilities({
+        ".effect-new-2": {
+          "box-shadow": "0px 1.53px 36.72px -1.53px #0000002E",
+          "backdrop-filter": "blur(40px)",
+        },
+      });
+    }),
     plugin(({ addComponents }) => {
       /** custom scroll bar */
       addComponents({
