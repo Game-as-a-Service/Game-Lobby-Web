@@ -99,8 +99,8 @@ Login.getLayout = (page) => (
           // and the border-radius size must be at least twice that of ::before.padding,
           // otherwise, the inner circle will protrude.
           "w-full h-full relative bg-black/40 rounded-2xl effect-new-2",
-          "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:gradient-purple before:rounded-2xl before:p-[1px]",
-          "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]"
+          "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:rounded-2xl before:p-[1px]",
+          "before:gradient-purple, before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]"
         )}
       >
         <div className="h-full flex flex-col items-end justify-evenly">
