@@ -14,7 +14,7 @@ import { LoginType } from "@/requests/auth";
 
 import { NextPageWithProps } from "./_app";
 import { IconName } from "@/components/shared/Icon/icons";
-import { cn } from "@/lib/utils";
+import { BoxFancy } from "@/components/shared/BoxFancy";
 
 const Login: NextPageWithProps = () => {
   const { getLoginEndpoint } = useUser();
@@ -92,21 +92,11 @@ Login.getLayout = (page) => (
       fill
     />
     <div className="w-full h-full p-4 md:p-8 lg:px-36 lg:py-24">
-      <div
-        className={cn(
-          // Gradient border with semi-transparent background tips:
-          // The border-radius of ::before should be as consistent as possible with the original,
-          // and the border-radius size must be at least twice that of ::before.padding,
-          // otherwise, the inner circle will protrude.
-          "w-full h-full relative bg-black/40 rounded-2xl effect-new-2",
-          "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:rounded-2xl before:p-[1px]",
-          "before:gradient-purple, before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]"
-        )}
-      >
+      <BoxFancy>
         <div className="h-full flex flex-col items-end justify-evenly">
           {page}
         </div>
-      </div>
+      </BoxFancy>
     </div>
   </div>
 );
