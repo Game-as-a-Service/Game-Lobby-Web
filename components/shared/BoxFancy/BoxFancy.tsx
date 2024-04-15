@@ -78,7 +78,8 @@ const InternalBoxFancy: React.ForwardRefRenderFunction<
 
   const allClassName = useMemo(() => {
     return cn(
-      "w-full h-full relative bg-black/40 effect-new-2",
+      "w-full h-full relative bg-black/40 effect-new-2 text-primary-50",
+      "flex justify-center",
       "before:w-full before:h-full before:absolute before:top-0 before:left-0",
       "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
       borderSizeTwClassName,
@@ -103,8 +104,15 @@ const InternalBoxFancy: React.ForwardRefRenderFunction<
 };
 
 /**
- * `Box` component allows us to display a div with gradient colored border and default effects.
- * Don't use it if you don't need these features.
+ * The `BoxFancy` component enables the display of a div with a gradient-colored border and default effects.
+ *
+ * Avoid using it if these features are unnecessary.
+ *
+ * Usage suggestions:
+ *
+ * 1. The inner radius will appear awkward if the `borderRadius` prop is less than the `borderSize` prop.
+ *
+ * 2. Avoid modifying the CSS `position` property directly. If necessary, consider using a container to encapsulate it.
  */
 export const BoxFancy = forwardRef<HTMLDivElement, BoxFancyProps>(
   InternalBoxFancy
