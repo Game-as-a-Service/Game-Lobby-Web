@@ -43,33 +43,50 @@ const BorderGradientVariantTwClassName: Record<
   black: "before:gradient-black",
 };
 
-interface BoxFancyMainProps {
-  /** Border styles are recommended to be set by the following 'border' prefix props **/
-  borderSize?: BoxFancyBorderSizeVariant;
-  borderRadius?: BoxFancyBorderRadiusVariant;
-  /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
-  borderGradientColor?: BoxFancyBorderGradientVariant;
-  /** An object used to set the CSS styles of the BoxFancy. This is an optional property. */
-  style?: React.CSSProperties;
-  /** For BoxFancy class name */
-  className?: string;
-}
+type ComponentProp<C extends React.ElementType> = { component?: C };
+type PropsToOmit<C extends React.ElementType, P> = keyof (ComponentProp<C> & P);
+type PolymorphicComponentProp<
+  C extends React.ElementType,
+  Props = {},
+> = React.PropsWithChildren<Props & ComponentProp<C>> &
+  Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
+type PolymorphicRef<C extends React.ElementType> =
+  React.ComponentPropsWithRef<C>["ref"];
+type PolymorphicComponentPropWithRef<
+  C extends React.ElementType,
+  Props = {},
+> = PolymorphicComponentProp<C, Props> & { ref?: PolymorphicRef<C> };
 
-export type BoxFancyProps = React.PropsWithChildren<BoxFancyMainProps>;
+type BoxFancyProps<C extends React.ElementType> =
+  PolymorphicComponentPropWithRef<
+    C,
+    {
+      /** Border styles are recommended to be set by the following 'border' prefix props **/
+      borderSize?: BoxFancyBorderSizeVariant;
+      borderRadius?: BoxFancyBorderRadiusVariant;
+      /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
+      borderGradientColor?: BoxFancyBorderGradientVariant;
+    }
+  >;
 
-const InternalBoxFancy: React.ForwardRefRenderFunction<
-  HTMLDivElement,
-  BoxFancyProps
-> = (props, ref) => {
-  const {
-    children,
+type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
+  props: BoxFancyProps<C>,
+  ref?: PolymorphicRef<C>
+) => React.ReactElement | null;
+
+const InnerBoxFancy: InnerBoxFancyComponent = (
+  {
+    component,
     borderSize = "small",
     borderRadius = "xLarge",
     borderGradientColor = "purple",
-    style,
     className,
+    children,
     ...restProps
-  } = props;
+  },
+  ref
+) => {
+  const Component = component || "div";
 
   const borderSizeTwClassName = BorderSizeTwClassName[borderSize];
   const borderRadiusTwClassName = BorderRadiusTwClassName[borderRadius];
@@ -96,9 +113,9 @@ const InternalBoxFancy: React.ForwardRefRenderFunction<
 
   return (
     <>
-      <div ref={ref} className={allClassName} style={style} {...restProps}>
+      <Component ref={ref} className={allClassName} {...restProps}>
         {children}
-      </div>
+      </Component>
     </>
   );
 };
@@ -114,6 +131,4 @@ const InternalBoxFancy: React.ForwardRefRenderFunction<
  *
  * 2. Avoid modifying the CSS `position` property directly. If necessary, consider using a container to encapsulate it.
  */
-export const BoxFancy = forwardRef<HTMLDivElement, BoxFancyProps>(
-  InternalBoxFancy
-);
+export const BoxFancy = forwardRef(InnerBoxFancy);

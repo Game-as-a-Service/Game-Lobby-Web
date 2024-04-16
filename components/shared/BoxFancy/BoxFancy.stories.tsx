@@ -4,8 +4,6 @@ import BoxFancy, {
   BoxFancyBorderRadiusVariant,
   BoxFancyBorderSizeVariant,
 } from "@/components/shared/BoxFancy/index";
-import { toastStoryArgTypes } from "@/components/shared/Toast/toastStoryArgTypes";
-import Toast from "@/components/shared/Toast";
 
 const borderSizeOptions: (BoxFancyBorderSizeVariant | undefined)[] = [
   undefined,
@@ -30,6 +28,15 @@ const borderGradientColorOptions: (
   | BoxFancyBorderGradientVariant
   | undefined
 )[] = [undefined, "none", "purple", "black"];
+const componentOptions = [
+  undefined,
+  "div",
+  "a",
+  "button",
+  "span",
+  "canvas",
+  "textarea",
+];
 
 const meta: Meta<typeof BoxFancy> = {
   title: "general/BoxFancy",
@@ -60,8 +67,7 @@ const meta: Meta<typeof BoxFancy> = {
     },
     className: {
       control: { type: "text" },
-      description:
-        "custom class name, try mapped tailwindcss class name: 'bg-red-500'",
+      description: "custom class name",
       defaultValue: "",
     },
     style: {
@@ -69,6 +75,12 @@ const meta: Meta<typeof BoxFancy> = {
       description: "custom style",
       defaultValue: {},
     },
+    component: {
+      control: { type: "select" },
+      description: "Polymorphic element tag",
+      options: componentOptions,
+    },
+    ref: { control: { disable: true } },
   },
 };
 

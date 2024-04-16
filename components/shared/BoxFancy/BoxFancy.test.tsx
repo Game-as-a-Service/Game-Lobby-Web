@@ -5,7 +5,6 @@ import {
   BoxFancyBorderGradientVariant,
   BoxFancyBorderRadiusVariant,
   BoxFancyBorderSizeVariant,
-  BoxFancyProps,
 } from "./BoxFancy";
 
 type ClassesFoundTest = {
@@ -137,5 +136,20 @@ describe("BoxFancy", () => {
     expect(targetElement).toBeInTheDocument();
     expect(targetElement).toHaveClass("custom-class");
     expect(targetElement).toHaveStyle("background-color: red");
+  });
+
+  it("should render with ref", () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<BoxFancy ref={ref} />);
+    expect(ref.current).toBeInTheDocument();
+  });
+
+  it("should render with component(element tag) and ref", () => {
+    const ref = React.createRef<HTMLInputElement>();
+    render(
+      <BoxFancy component="input" ref={ref} type="number" defaultValue="123" />
+    );
+    expect(ref.current).toBeInTheDocument();
+    expect(ref.current?.value).toEqual("123");
   });
 });
