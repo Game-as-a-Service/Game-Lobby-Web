@@ -12,6 +12,8 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
+import { IconName } from "../../Icon/icons";
+import Icon from "../../Icon";
 
 export enum ButtonType {
   PRIMARY = "primary",
@@ -28,6 +30,7 @@ interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   type?: ButtonType;
   size?: ButtonSize;
   icon?: ReactNode;
+  iconName?: IconName;
   disabled?: boolean;
 }
 
@@ -45,11 +48,19 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
   regular: "h-11 px-6 gap-2",
 };
 
+const iconTypeClasses: Record<ButtonType, string> = {
+  primary:
+    "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
+  secondary: "stroke-primary-200",
+  highlight: "stroke-primary-50",
+};
+
 const InteralButton = (
   {
     type = ButtonType.PRIMARY,
     size = ButtonSize.REGULAR,
     icon,
+    iconName,
     children,
     className,
     disabled,
@@ -82,6 +93,11 @@ const InteralButton = (
     [className, size, type]
   );
 
+  const iconClassName = useMemo(
+    () => cn("w-6 h-6", iconTypeClasses[type], className),
+    [className, type]
+  );
+
   const borderGradientColor: BoxFancyBorderGradientVariant =
     type === ButtonType.SECONDARY && !disabled ? "purple" : "none";
 
@@ -97,7 +113,7 @@ const InteralButton = (
       onClick={handleClick}
       {...otherButtonAttributes}
     >
-      {icon && <div>{icon}</div>}
+      {icon || (iconName && <Icon name={iconName} className={iconClassName} />)}
       <span>{children}</span>
     </BoxFancy>
   );

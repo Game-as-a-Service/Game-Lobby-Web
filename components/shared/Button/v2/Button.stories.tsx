@@ -46,6 +46,8 @@ const meta: Meta<typeof Button> = {
     icon: {
       control: { type: "select" },
       options: buttonIconOptions,
+      description:
+        "Custom icons or any prefix component. If `iconName` is not `undefinded`, this prop will be ignored.",
     },
     className: {
       control: { type: "text" },
