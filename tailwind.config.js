@@ -108,6 +108,14 @@ module.exports = {
           "background-image":
             "linear-gradient(132.59deg, #7C7BA4 19.04%, #362662 86.03%)",
         },
+        ".gradient-purple-2": {
+          "background-image":
+            "linear-gradient(132.59deg, #AE99E8 19.04%, #362662 86.03%)",
+        },
+        ".gradient-purple-3": {
+          "background-image":
+            "linear-gradient(132.59deg, #8E7BC6 19.04%, #2C1B47 86.03%)",
+        },
         ".gradient-black": {
           "background-image":
             "linear-gradient(132.59deg, #06020B 19.04%, #362662 86.03%)",
