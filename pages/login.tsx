@@ -75,7 +75,7 @@ const Login: NextPageWithProps = () => {
   }, [internalEndpoint, onLoginClick]);
 
   return checkAuth ? (
-    <div className="w-full flex flex-col lg:flex-row justify-between items-center gap-4">
+    <div className="w-full flex flex-col lg:flex-row justify-between items-center p-4">
       <div className="flex-1">
         <h2 className="flex-1 relative flex items-center text-[22px] font-normal text-white z-10">
           <Icon name="logo" className="w-12 h-12" />
@@ -107,9 +107,7 @@ Login.getLayout = (page) => (
     />
     <div className="w-full h-full p-4 md:p-8 lg:px-36 lg:py-24">
       <BoxFancy>
-        <div className="h-full flex flex-col items-end justify-between p-4">
-          {page}
-        </div>
+        <div className="w-full h-full">{page}</div>
       </BoxFancy>
     </div>
   </div>
