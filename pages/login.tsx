@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Button from "@/components/shared/Button";
+import ButtonV2, { ButtonType } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
 import Icon from "@/components/shared/Icon";
 
@@ -60,32 +60,35 @@ const Login: NextPageWithProps = () => {
 
   const loginButtons = useMemo(() => {
     return LoginMethods.map(({ text, type, icon }) => (
-      <Button
+      <ButtonV2
         key={type}
-        component="a"
+        component={"a"}
+        iconName={icon}
+        variant={ButtonType.SECONDARY}
         href={`${internalEndpoint}/login?type=${type}`}
-        className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
+        // className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
         onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-        prefix={
-          <Icon
-            name={icon}
-            className="w-6 fill-blue2f group-hover:fill-white"
-          />
-        }
+
+        // prefix={
+        //   <Icon
+        //     name={icon}
+        //     className="w-6 fill-blue2f group-hover:fill-white"
+        //   />
+        // }
       >
         {text}
-      </Button>
+      </ButtonV2>
     ));
   }, [internalEndpoint, onLoginClick]);
 
   return checkAuth ? (
-    <div className="lg:w-1/2 w-full flex flex-col items-center">
-      <h1 className="relative flex gap-10 items-center text-[40px] font-normal text-white z-10">
+    <div className="w-full flex flex-col lg:flex-row justify-between items-center">
+      <h1 className="flex-1 relative flex gap-10 items-center text-[40px] font-normal text-white z-10">
         <Icon name="logo" className="w-20 h-20" />
         遊戲線上揪
       </h1>
 
-      <div className="pt-[15%] px-6 flex flex-col w-full items-center gap-2">
+      <div className="flex-1 min-w-[210px] px-6 flex flex-col w-full items-center gap-2">
         {loginButtons}
       </div>
     </div>

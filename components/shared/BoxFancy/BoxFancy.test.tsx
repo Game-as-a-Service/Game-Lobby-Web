@@ -4,7 +4,7 @@ import {
   BoxFancy,
   BoxFancyBorderGradientVariant,
   BoxFancyBorderRadiusVariant,
-  BoxFancyBorderSizeVariant,
+  BoxFancyBorderWidthVariant,
 } from "./BoxFancy";
 
 type ClassesFoundTest = {
@@ -13,7 +13,7 @@ type ClassesFoundTest = {
 };
 
 type BorderSizeTest = {
-  borderSize?: BoxFancyBorderSizeVariant;
+  borderSize?: BoxFancyBorderWidthVariant;
 } & ClassesFoundTest;
 
 type BorderRadiusTest = {

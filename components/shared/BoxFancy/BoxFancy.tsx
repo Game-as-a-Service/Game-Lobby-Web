@@ -1,21 +1,22 @@
 import { cn } from "@/lib/utils";
 import React, { forwardRef, useMemo } from "react";
+import type { PolymorphicComponentProp, PolymorphicRef } from "@/lib/types";
 
-export type BoxFancyBorderSizeVariant =
+export type BoxFancyBorderWidthVariant =
   | "none"
   | "small"
   | "medium"
   | "large"
   | "xLarge"
   | "extraLarge";
-export type BoxFancyBorderRadiusVariant = BoxFancyBorderSizeVariant | "full";
+export type BoxFancyBorderRadiusVariant = BoxFancyBorderWidthVariant | "full";
 export type BoxFancyBorderGradientVariant = "none" | "purple" | "black";
 
 // Gradient border with semi-transparent background tips:
 // The border-radius of ::before should be as consistent as possible with the original,
 // and the border-radius size must be at least twice that of ::before.padding,
 // otherwise, the inner circle will protrude.
-const BorderSizeTwClassName: Record<BoxFancyBorderSizeVariant, string> = {
+const BorderSizeTwClassName: Record<BoxFancyBorderWidthVariant, string> = {
   none: "",
   small: "p-[1px] before:p-[1px]",
   medium: "p-1 before:p-1",
@@ -43,31 +44,16 @@ const BorderGradientVariantTwClassName: Record<
   black: "before:gradient-black",
 };
 
-type ComponentProp<C extends React.ElementType> = { component?: C };
-type PropsToOmit<C extends React.ElementType, P> = keyof (ComponentProp<C> & P);
-type PolymorphicComponentProp<
-  C extends React.ElementType,
-  Props = {},
-> = React.PropsWithChildren<Props & ComponentProp<C>> &
-  Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
-type PolymorphicRef<C extends React.ElementType> =
-  React.ComponentPropsWithRef<C>["ref"];
-type PolymorphicComponentPropWithRef<
-  C extends React.ElementType,
-  Props = {},
-> = PolymorphicComponentProp<C, Props> & { ref?: PolymorphicRef<C> };
+export interface BaseBoxFancyProp {
+  /** Border styles are recommended to be set by the following 'border' prefix props **/
+  borderWdith?: BoxFancyBorderWidthVariant;
+  borderRadius?: BoxFancyBorderRadiusVariant;
+  /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
+  borderGradientColor?: BoxFancyBorderGradientVariant;
+}
 
-type BoxFancyProps<C extends React.ElementType> =
-  PolymorphicComponentPropWithRef<
-    C,
-    {
-      /** Border styles are recommended to be set by the following 'border' prefix props **/
-      borderSize?: BoxFancyBorderSizeVariant;
-      borderRadius?: BoxFancyBorderRadiusVariant;
-      /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
-      borderGradientColor?: BoxFancyBorderGradientVariant;
-    }
-  >;
+export type BoxFancyProps<C extends React.ElementType> =
+  PolymorphicComponentProp<C, BaseBoxFancyProp>;
 
 type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
   props: BoxFancyProps<C>,
@@ -77,7 +63,7 @@ type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
 const InnerBoxFancy: InnerBoxFancyComponent = (
   {
     component,
-    borderSize = "small",
+    borderWdith = "small",
     borderRadius = "xLarge",
     borderGradientColor = "purple",
     className,
@@ -88,7 +74,7 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
 ) => {
   const Component = component || "div";
 
-  const borderSizeTwClassName = BorderSizeTwClassName[borderSize];
+  const borderWidthTwClassName = BorderSizeTwClassName[borderWdith];
   const borderRadiusTwClassName = BorderRadiusTwClassName[borderRadius];
   const borderGradientColorTwClassName =
     BorderGradientVariantTwClassName[borderGradientColor];
@@ -99,7 +85,7 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
       "flex justify-center",
       "before:w-full before:h-full before:absolute before:top-0 before:left-0",
       "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
-      borderSizeTwClassName,
+      borderWidthTwClassName,
       borderRadiusTwClassName,
       borderGradientColorTwClassName,
       className
@@ -107,7 +93,7 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
   }, [
     borderGradientColorTwClassName,
     borderRadiusTwClassName,
-    borderSizeTwClassName,
+    borderWidthTwClassName,
     className,
   ]);
 
@@ -127,7 +113,7 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
  *
  * Usage suggestions:
  *
- * 1. The inner radius will appear awkward if the `borderRadius` prop is less than the `borderSize` prop.
+ * 1. The inner radius will appear awkward if the `borderRadius` prop is less than the `borderWdith` prop.
  *
  * 2. Avoid modifying the CSS `position` property directly. If necessary, consider using a container to encapsulate it.
  */

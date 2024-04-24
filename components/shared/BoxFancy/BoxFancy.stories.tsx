@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react";
 import BoxFancy, {
   BoxFancyBorderGradientVariant,
   BoxFancyBorderRadiusVariant,
-  BoxFancyBorderSizeVariant,
+  BoxFancyBorderWidthVariant,
 } from "@/components/shared/BoxFancy/index";
 
-const borderSizeOptions: (BoxFancyBorderSizeVariant | undefined)[] = [
+const borderSizeOptions: (BoxFancyBorderWidthVariant | undefined)[] = [
   undefined,
   "none",
   "small",

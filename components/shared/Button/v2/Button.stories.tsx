@@ -15,6 +15,9 @@ const buttonSizeOptions: (ButtonSize | undefined)[] = [
   ButtonSize.REGULAR,
   ButtonSize.SMALL,
 ];
+
+const buttonIconNameOptions: (string | undefined)[] = [undefined, "gamepad"];
+
 const buttonIconOptions: ReactNode = [
   null,
   <Icon key="1" name="gamepad" className="w-6 h-6 stroke-black" />,
@@ -35,13 +38,23 @@ const meta: Meta<typeof Button> = {
     children: "Button",
   },
   argTypes: {
-    type: {
+    component: {
+      control: { type: "select" },
+      options: ["button", "a"],
+    },
+    variant: {
       control: { type: "select" },
       options: buttonTypeOptions,
     },
     size: {
       control: { type: "select" },
       options: buttonSizeOptions,
+    },
+    iconName: {
+      control: { type: "select" },
+      options: buttonIconNameOptions,
+      description:
+        "Icon name from `Icon` component. If `icon` is not `undefinded`, this prop will be ignored.",
     },
     icon: {
       control: { type: "select" },
@@ -71,11 +84,11 @@ export const Playground: Story = {
   render: (args) => <Button {...args} />,
 };
 
-export const Type: Story = {
+export const Variant: Story = {
   render: (args) => (
     <>
-      {buttonTypeOptions.map((type) => (
-        <Button key={type} type={type} {...args}>
+      {buttonTypeOptions.map((variant) => (
+        <Button key={variant} variant={variant} {...args}>
           {args.children}
         </Button>
       ))}
