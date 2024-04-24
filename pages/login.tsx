@@ -21,6 +21,7 @@ import { LoginType } from "@/requests/auth";
 import { NextPageWithProps } from "./_app";
 import { IconName } from "@/components/shared/Icon/icons";
 import { BoxFancy } from "@/components/shared/BoxFancy";
+import Link from "next/link";
 
 const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
@@ -62,19 +63,11 @@ const Login: NextPageWithProps = () => {
     return LoginMethods.map(({ text, type, icon }) => (
       <ButtonV2
         key={type}
-        component={"a"}
+        component={Link}
+        href={`${internalEndpoint}/login?type=${type}`}
         iconName={icon}
         variant={ButtonType.SECONDARY}
-        href={`${internalEndpoint}/login?type=${type}`}
-        // className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
         onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-
-        // prefix={
-        //   <Icon
-        //     name={icon}
-        //     className="w-6 fill-blue2f group-hover:fill-white"
-        //   />
-        // }
       >
         {text}
       </ButtonV2>
@@ -82,13 +75,18 @@ const Login: NextPageWithProps = () => {
   }, [internalEndpoint, onLoginClick]);
 
   return checkAuth ? (
-    <div className="w-full flex flex-col lg:flex-row justify-between items-center">
-      <h1 className="flex-1 relative flex gap-10 items-center text-[40px] font-normal text-white z-10">
-        <Icon name="logo" className="w-20 h-20" />
-        遊戲線上揪
-      </h1>
+    <div className="w-full flex flex-col lg:flex-row justify-between items-center gap-4">
+      <div className="flex-1">
+        <h2 className="flex-1 relative flex items-center text-[22px] font-normal text-white z-10">
+          <Icon name="logo" className="w-12 h-12" />
+          遊戲微服務大平台
+        </h2>
 
-      <div className="flex-1 min-w-[210px] px-6 flex flex-col w-full items-center gap-2">
+        <p className="text-white text-xl">一起創造與冒險！</p>
+        <p>加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！</p>
+      </div>
+
+      <div className="flex-1 min-w-[210px] px-6 flex flex-col w-full gap-2">
         {loginButtons}
       </div>
     </div>
@@ -109,7 +107,7 @@ Login.getLayout = (page) => (
     />
     <div className="w-full h-full p-4 md:p-8 lg:px-36 lg:py-24">
       <BoxFancy>
-        <div className="h-full flex flex-col items-end justify-evenly">
+        <div className="h-full flex flex-col items-end justify-between p-4">
           {page}
         </div>
       </BoxFancy>

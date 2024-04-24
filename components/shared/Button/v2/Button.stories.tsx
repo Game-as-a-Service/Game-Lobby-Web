@@ -62,6 +62,11 @@ const meta: Meta<typeof Button> = {
       description:
         "Custom icons or any prefix component. If `iconName` is not `undefinded`, this prop will be ignored.",
     },
+    boxFancyClassName: {
+      control: { type: "text" },
+      description: "custom class name for inner div",
+      defaultValue: "",
+    },
     className: {
       control: { type: "text" },
       description: "custom class name",

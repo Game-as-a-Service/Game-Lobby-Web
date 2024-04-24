@@ -49,6 +49,8 @@ interface BaseButtonProps {
   icon?: ReactNode;
   iconName?: IconName;
   disabled?: boolean;
+  // inner div className for styling
+  boxFancyClassName?: string;
 }
 
 type ButtonProps<C extends ElementType = "button"> = PolymorphicComponentProp<
@@ -69,6 +71,7 @@ const InteralButton: InnerButtonComponent = (
     icon,
     iconName,
     disabled,
+    boxFancyClassName,
     children,
     className,
     onClick,
@@ -92,13 +95,13 @@ const InteralButton: InnerButtonComponent = (
   const buttonClassName = useMemo(
     () =>
       cn(
-        "w-auto items-center fz-16-b transition-colors transition-[border-image] ease-in",
+        "w-full items-center fz-16-b transition-colors transition-[border-image] ease-in",
         "disabled:text-grey-200 disabled:bg-grey-800",
         buttonTypeClasses[variant],
         buttonSizeClasses[size],
-        className
+        boxFancyClassName
       ),
-    [className, size, variant]
+    [boxFancyClassName, size, variant]
   );
 
   const iconClassName = useMemo(
@@ -112,6 +115,7 @@ const InteralButton: InnerButtonComponent = (
   return (
     <Component
       ref={ref}
+      className={className}
       onClick={handleClick}
       disabled={disabled}
       {...otherButtonAttributes}
