@@ -1,4 +1,10 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -16,6 +22,13 @@ import { NextPageWithProps } from "./_app";
 import { IconName } from "@/components/shared/Icon/icons";
 import { BoxFancy } from "@/components/shared/BoxFancy";
 
+const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
+  { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
+  { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "github" },
+  { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "linkedin" },
+  { text: "Discord 帳號登入", type: LoginType.DISCORD, icon: "discord" },
+];
+
 const Login: NextPageWithProps = () => {
   const { getLoginEndpoint } = useUser();
   const { token } = useAuth();
@@ -31,23 +44,39 @@ const Login: NextPageWithProps = () => {
     }
   }, [token, push]);
 
-  const onLoginClick = async (e: SyntheticEvent, type: LoginType) => {
-    if (isMock) {
-      e.preventDefault();
-      e.stopPropagation();
+  const onLoginClick = useCallback(
+    async (e: SyntheticEvent, type: LoginType) => {
+      if (isMock) {
+        e.preventDefault();
+        e.stopPropagation();
 
-      const endpoint = await getLoginEndpoint(type);
-      // mock: redirect to /auth/token
-      push(endpoint.url);
-    }
-  };
+        const endpoint = await getLoginEndpoint(type);
+        // mock: redirect to /auth/token
+        push(endpoint.url);
+      }
+    },
+    [getLoginEndpoint, isMock, push]
+  );
 
-  const buttons: { text: string; type: LoginType; icon: IconName }[] = [
-    { text: "Google 登入", type: LoginType.GOOGLE, icon: "google" },
-    { text: "GitHub 登入", type: LoginType.GITHUB, icon: "github" },
-    { text: "LinkedIn 登入", type: LoginType.LINKEDIN, icon: "linkedin" },
-    { text: "Discord 登入", type: LoginType.DISCORD, icon: "discord" },
-  ];
+  const loginButtons = useMemo(() => {
+    return LoginMethods.map(({ text, type, icon }) => (
+      <Button
+        key={type}
+        component="a"
+        href={`${internalEndpoint}/login?type=${type}`}
+        className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
+        onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
+        prefix={
+          <Icon
+            name={icon}
+            className="w-6 fill-blue2f group-hover:fill-white"
+          />
+        }
+      >
+        {text}
+      </Button>
+    ));
+  }, [internalEndpoint, onLoginClick]);
 
   return checkAuth ? (
     <div className="lg:w-1/2 w-full flex flex-col items-center">
@@ -57,23 +86,7 @@ const Login: NextPageWithProps = () => {
       </h1>
 
       <div className="pt-[15%] px-6 flex flex-col w-full items-center gap-2">
-        {buttons.map(({ text, type, icon }) => (
-          <Button
-            key={type}
-            component="a"
-            href={`${internalEndpoint}/login?type=${type}`}
-            className="group py-3 bg-[#D4DAE8] text-[#1E1F22] justify-center max-w-xs w-full rounded-[21px] hover:bg-blue2f hover:text-white"
-            onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-            prefix={
-              <Icon
-                name={icon}
-                className="w-6 fill-blue2f group-hover:fill-white"
-              />
-            }
-          >
-            {text}
-          </Button>
-        ))}
+        {loginButtons}
       </div>
     </div>
   ) : (
