@@ -14,7 +14,7 @@ type IconProps = {
  */
 const Icon = (props: IconProps) => {
   const { className, name, ...rest } = props;
-  const transformClassName = cn("stroke-transparent", className);
+  const transformClassName = cn("stroke-basic-black", className);
   const SvgIcon = name && icons[name];
 
   return (
