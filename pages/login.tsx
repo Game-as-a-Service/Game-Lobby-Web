@@ -76,24 +76,32 @@ const Login: NextPageWithProps = () => {
   }, [internalEndpoint, onLoginClick]);
 
   return checkAuth ? (
-    <div className="w-full h-full flex flex-col xl:flex-row justify-between items-center p-4 gap-[18px]">
-      <div className="px-2 sm:px-6 xl:pl-24 flex-1 flex flex-col justify-center items-start">
-        <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
-          <Icon name="logo" className="w-12 h-12" />
-          遊戲微服務大平台
-        </h2>
-        <p className="text-primary-50 text-2xl font-medium mb-4">
-          一起創造與冒險！
-        </p>
-        <p className="text-primary-50 text-[22px] font-normal">
-          加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
-        </p>
-      </div>
+    <>
+      <div className="relative w-full h-full flex flex-col xl:flex-row justify-between items-center p-4 gap-[18px]">
+        {/* fog */}
+        <div
+          className={
+            "absolute xl:-top-5 xl:-right-5 xl:w-[58%] xl:h-[calc(100%+40px)] rounded-2xl gradient-light shadow blur-[20px]"
+          }
+        />
+        <div className="px-2 sm:px-6 xl:pl-24 flex-1 flex flex-col justify-center items-start">
+          <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
+            <Icon name="logo" className="w-12 h-12" />
+            遊戲微服務大平台
+          </h2>
+          <p className="text-primary-50 text-2xl font-medium mb-4">
+            一起創造與冒險！
+          </p>
+          <p className="text-primary-50 text-[22px] font-normal">
+            加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
+          </p>
+        </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center w-full px-[124px] gap-5">
-        {loginButtons}
+        <div className="flex-1 flex flex-col justify-center items-center w-full px-[124px] gap-5">
+          {loginButtons}
+        </div>
       </div>
-    </div>
+    </>
   ) : (
     <></>
   );
@@ -110,7 +118,7 @@ Login.getLayout = (page) => (
       fill
     />
     <div className="w-full h-full p-4 md:p-8 xl:px-36 xl:py-24">
-      <BoxFancy>{page}</BoxFancy>
+      <BoxFancy className={"container m-auto"}>{page}</BoxFancy>
     </div>
   </div>
 );

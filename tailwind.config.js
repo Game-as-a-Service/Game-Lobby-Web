@@ -120,6 +120,10 @@ module.exports = {
           "background-image":
             "linear-gradient(132.59deg, #06020B 19.04%, #362662 86.03%)",
         },
+        ".gradient-light": {
+          "background-image":
+            "linear-gradient(to right, transparent 0%, rgba(206, 191, 239, 0.1) 1%)",
+        },
         ".body-bg": {
           "background-image":
             "linear-gradient(145.51deg, #06020B -7.4%, #2C1B47 154.79%)",
@@ -140,7 +144,7 @@ module.exports = {
       addUtilities({
         ".effect-new-2": {
           "box-shadow": "0px 1.53px 36.72px -1.53px #0000002E",
-          "backdrop-filter": "blur(40px)",
+          "backdrop-filter": "blur(20px)",
         },
       });
     }),
