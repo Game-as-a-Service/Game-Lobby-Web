@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
-import { IconName } from "../../Icon/icons";
-import Icon from "../../Icon";
+import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
+import IconV2 from "@/components/shared/Icon/v2";
 import { PolymorphicComponentProp, PolymorphicRef } from "@/lib/types";
 
 export enum ButtonType {
@@ -36,18 +36,18 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
   regular: "h-11 px-6 gap-2",
 };
 
-const iconTypeClasses: Record<ButtonType, string> = {
-  primary:
-    "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-  secondary: "stroke-primary-200",
-  highlight: "stroke-primary-50",
-};
+// const iconTypeClasses: Record<ButtonType, string> = {
+//   primary:
+//     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
+//   secondary: "stroke-primary-200",
+//   highlight: "stroke-primary-50",
+// };
 
 interface BaseButtonProps {
   variant?: ButtonType;
   size?: ButtonSize;
   icon?: ReactNode;
-  iconName?: IconName;
+  iconName?: IconNameV2;
   disabled?: boolean;
   // inner div className for styling
   boxFancyClassName?: string;
@@ -107,8 +107,8 @@ const InteralButton: InnerButtonComponent = (
   );
 
   const iconClasses = useMemo(
-    () => cn("w-6 h-6", iconTypeClasses[variant], iconClassName),
-    [iconClassName, variant]
+    () => cn("w-6 h-6 stroke-transparent", iconClassName),
+    [iconClassName]
   );
 
   const borderGradientColor: BoxFancyBorderGradientVariant =
@@ -127,7 +127,8 @@ const InteralButton: InnerButtonComponent = (
         borderGradientColor={borderGradientColor}
         className={buttonClassName}
       >
-        {icon || (iconName && <Icon name={iconName} className={iconClasses} />)}
+        {icon ||
+          (iconName && <IconV2 name={iconName} className={iconClasses} />)}
         <span>{children}</span>
       </BoxFancy>
     </Component>
