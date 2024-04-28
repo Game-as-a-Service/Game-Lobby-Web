@@ -51,6 +51,7 @@ interface BaseButtonProps {
   disabled?: boolean;
   // inner div className for styling
   boxFancyClassName?: string;
+  iconClassName?: string;
 }
 
 type ButtonProps<C extends ElementType = "button"> = PolymorphicComponentProp<
@@ -71,9 +72,10 @@ const InteralButton: InnerButtonComponent = (
     icon,
     iconName,
     disabled,
-    boxFancyClassName,
-    children,
     className,
+    boxFancyClassName,
+    iconClassName,
+    children,
     onClick,
     ...otherButtonAttributes
   },
@@ -104,9 +106,9 @@ const InteralButton: InnerButtonComponent = (
     [boxFancyClassName, size, variant]
   );
 
-  const iconClassName = useMemo(
-    () => cn("w-6 h-6", iconTypeClasses[variant], className),
-    [className, variant]
+  const iconClasses = useMemo(
+    () => cn("w-6 h-6", iconTypeClasses[variant], iconClassName),
+    [iconClassName, variant]
   );
 
   const borderGradientColor: BoxFancyBorderGradientVariant =
@@ -125,8 +127,7 @@ const InteralButton: InnerButtonComponent = (
         borderGradientColor={borderGradientColor}
         className={buttonClassName}
       >
-        {icon ||
-          (iconName && <Icon name={iconName} className={iconClassName} />)}
+        {icon || (iconName && <Icon name={iconName} className={iconClasses} />)}
         <span>{children}</span>
       </BoxFancy>
     </Component>
