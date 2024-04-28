@@ -23,6 +23,7 @@ import { BoxFancy } from "@/components/shared/BoxFancy";
 import Link from "next/link";
 import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
 import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const LoginMethods: { text: string; type: LoginType; icon: IconNameV2 }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
@@ -70,6 +71,9 @@ const Login: NextPageWithProps = () => {
         href={`${internalEndpoint}/login?type=${type}`}
         className={"w-full min-w-[300px] max-w-[50%] xl:max-w-[318px]"}
         boxFancyClassName={"text-primary-50"}
+        iconClassName={cn("stroke-none", {
+          "fill-current": type === LoginType.GITHUB,
+        })}
         iconName={icon}
         variant={ButtonType.SECONDARY}
         onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
