@@ -52,7 +52,7 @@ export interface BaseBoxFancyProp {
   borderGradientColor?: BoxFancyBorderGradientVariant;
 }
 
-export type BoxFancyProps<C extends React.ElementType> =
+export type BoxFancyProps<C extends React.ElementType = "div"> =
   PolymorphicComponentProp<C, BaseBoxFancyProp>;
 
 type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
@@ -98,11 +98,9 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
   ]);
 
   return (
-    <>
-      <Component ref={ref} className={allClassName} {...restProps}>
-        {children}
-      </Component>
-    </>
+    <Component ref={ref} className={allClassName} {...restProps}>
+      {children}
+    </Component>
   );
 };
 

@@ -5,6 +5,7 @@ import {
   BoxFancyBorderGradientVariant,
   BoxFancyBorderRadiusVariant,
   BoxFancyBorderWidthVariant,
+  BoxFancyProps,
 } from "./BoxFancy";
 
 type ClassesFoundTest = {
@@ -81,7 +82,7 @@ describe("BoxFancy", () => {
 
       const matchers = [
         () => expect(baseElement.querySelector(`.${classes}`)),
-        () => expect(baseElement.querySelector(`.before\\\:${classes}`)),
+        () => expect(baseElement.querySelector(`.before\\:${classes}`)),
       ];
       matchers.forEach((matcher) =>
         found ? matcher().toBeTruthy() : matcher().toBeFalsy()
@@ -98,7 +99,7 @@ describe("BoxFancy", () => {
 
       const matchers = [
         () => expect(baseElement.querySelector(`.${classes}`)),
-        () => expect(baseElement.querySelector(`.before\\\:${classes}`)),
+        () => expect(baseElement.querySelector(`.before\\:${classes}`)),
       ];
       matchers.forEach((matcher) =>
         found ? matcher().toBeTruthy() : matcher().toBeFalsy()
@@ -114,7 +115,7 @@ describe("BoxFancy", () => {
       );
 
       const matchers = [
-        () => expect(baseElement.querySelector(`.before\\\:${classes}`)),
+        () => expect(baseElement.querySelector(`.before\\:${classes}`)),
       ];
       matchers.forEach((matcher) =>
         found ? matcher().toBeTruthy() : matcher().toBeFalsy()
