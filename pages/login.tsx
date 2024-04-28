@@ -22,6 +22,7 @@ import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
 import Link from "next/link";
 import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
+import { useSearchParams } from "next/navigation";
 
 const LoginMethods: { text: string; type: LoginType; icon: IconNameV2 }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
@@ -36,6 +37,8 @@ const Login: NextPageWithProps = () => {
   const { push } = useRouter();
   const [checkAuth, setCheckAuth] = useState(false);
   const { internalEndpoint, isMock } = getEnv();
+  const searchParams = useSearchParams();
+  const bye = searchParams.get("bye") !== null;
 
   useEffect(() => {
     if (token) {
@@ -86,16 +89,29 @@ const Login: NextPageWithProps = () => {
           }
         />
         <div className="px-2 sm:px-6 xl:pl-24 2xl:px-24 flex-1 flex flex-col justify-center items-start">
+          {bye ? (
+            <p
+              className={
+                "text-primary-50 text-[22px] font-normal whitespace-pre-line mb-9"
+              }
+            >
+              {"原帳號已註銷成功。\n我們非常歡迎你再加入，\n和我們一起遊樂！"}
+            </p>
+          ) : null}
           <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
             <IconV2 name="leadingIcon" className="w-12 h-12" />
             遊戲微服務大平台
           </h2>
-          <p className="text-primary-50 text-[32px] font-medium mb-4">
-            一起創造與冒險！
-          </p>
-          <p className="text-primary-50 text-[22px] font-normal">
-            加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
-          </p>
+          {!bye ? (
+            <>
+              <p className="text-primary-50 text-[32px] font-medium mb-4">
+                一起創造與冒險！
+              </p>
+              <p className="text-primary-50 text-[22px] font-normal">
+                加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
+              </p>
+            </>
+          ) : null}
         </div>
 
         <div className="flex-1 flex flex-col justify-center items-center w-full px-[124px] gap-5">
