@@ -12,8 +12,8 @@ type ClassesFoundTest = {
   found: boolean;
 };
 
-type BorderSizeTest = {
-  borderSize?: BoxFancyBorderWidthVariant;
+type BorderWidthTest = {
+  borderWidth?: BoxFancyBorderWidthVariant;
 } & ClassesFoundTest;
 
 type BorderRadiusTest = {
@@ -24,13 +24,13 @@ type BorderGradientTest = {
   borderGradientColor?: BoxFancyBorderGradientVariant;
 } & ClassesFoundTest;
 
-const borderSizeTestTable: BorderSizeTest[] = [
-  { borderSize: "none", classes: "p-\\[1px\\]", found: false },
-  { borderSize: "small", classes: "p-\\[1px\\]", found: true },
-  { borderSize: "medium", classes: "p-1", found: true },
-  { borderSize: "large", classes: "p-1\\.5", found: true },
-  { borderSize: "xLarge", classes: "p-2", found: true },
-  { borderSize: "extraLarge", classes: "p-3", found: true },
+const borderWidthTestTable: BorderWidthTest[] = [
+  { borderWidth: "none", classes: "p-\\[1px\\]", found: false },
+  { borderWidth: "small", classes: "p-\\[1px\\]", found: true },
+  { borderWidth: "medium", classes: "p-1", found: true },
+  { borderWidth: "large", classes: "p-1\\.5", found: true },
+  { borderWidth: "xLarge", classes: "p-2", found: true },
+  { borderWidth: "extraLarge", classes: "p-3", found: true },
 ];
 
 const borderRadiusTestTable: BorderRadiusTest[] = [
@@ -72,11 +72,11 @@ describe("BoxFancy", () => {
     expect(baseElement.textContent).toContain("Test");
   });
 
-  it.each<BorderSizeTest>(borderSizeTestTable)(
+  it.each<BorderWidthTest>(borderWidthTestTable)(
     "should render with correct border size",
-    ({ borderSize, classes, found }) => {
+    ({ borderWidth, classes, found }) => {
       const { baseElement } = render(
-        <BoxFancy borderSize={borderSize}>Test</BoxFancy>
+        <BoxFancy borderWidth={borderWidth}>Test</BoxFancy>
       );
 
       const matchers = [

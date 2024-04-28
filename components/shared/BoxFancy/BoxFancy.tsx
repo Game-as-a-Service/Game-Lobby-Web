@@ -46,7 +46,7 @@ const BorderGradientVariantTwClassName: Record<
 
 export interface BaseBoxFancyProp {
   /** Border styles are recommended to be set by the following 'border' prefix props **/
-  borderWdith?: BoxFancyBorderWidthVariant;
+  borderWidth?: BoxFancyBorderWidthVariant;
   borderRadius?: BoxFancyBorderRadiusVariant;
   /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
   borderGradientColor?: BoxFancyBorderGradientVariant;
@@ -63,7 +63,7 @@ type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
 const InnerBoxFancy: InnerBoxFancyComponent = (
   {
     component,
-    borderWdith = "small",
+    borderWidth = "small",
     borderRadius = "xLarge",
     borderGradientColor = "purple",
     className,
@@ -74,7 +74,7 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
 ) => {
   const Component = component || "div";
 
-  const borderWidthTwClassName = BorderSizeTwClassName[borderWdith];
+  const borderWidthTwClassName = BorderSizeTwClassName[borderWidth];
   const borderRadiusTwClassName = BorderRadiusTwClassName[borderRadius];
   const borderGradientColorTwClassName =
     BorderGradientVariantTwClassName[borderGradientColor];
