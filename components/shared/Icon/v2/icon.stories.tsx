@@ -41,7 +41,7 @@ const AllIcons = () => {
 
   const handleClick = (iconName: string) => () => {
     const cb = navigator.clipboard;
-    const text = `<Icon name="${iconName}" className="w-6 h-6" />`;
+    const text = `<IconV2 name="${iconName}" className="w-6 h-6" />`;
 
     toast({ children: "已複製成功!!" }, { duration: 1000 });
 
