@@ -57,6 +57,13 @@ type InnerButtonComponent = <C extends ElementType = "button">(
   ref?: PolymorphicRef<C>
 ) => React.ReactElement | null;
 
+const iconTypeClasses: Record<ButtonType, string> = {
+  primary:
+    "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
+  secondary: "stroke-primary-200",
+  highlight: "stroke-primary-50",
+};
+
 const InteralButton: InnerButtonComponent = (
   {
     component,
@@ -94,13 +101,14 @@ const InteralButton: InnerButtonComponent = (
         "disabled:text-grey-200 disabled:bg-grey-800",
         buttonTypeClasses[variant],
         buttonSizeClasses[size],
+        iconTypeClasses[variant],
         boxFancyClassName
       ),
     [boxFancyClassName, size, variant]
   );
 
   const iconClasses = useMemo(
-    () => cn("w-6 h-6 stroke-transparent", iconClassName),
+    () => cn("w-6 h-6 stroke-inherit", iconClassName),
     [iconClassName]
   );
 

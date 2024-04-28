@@ -16,7 +16,7 @@ const buttonSizeOptions: (ButtonSize | undefined)[] = [
   ButtonSize.SMALL,
 ];
 
-const buttonIconNameOptions: (string | undefined)[] = [undefined, "gamepad"];
+const buttonIconNameOptions: (string | undefined)[] = [undefined, "arcade"];
 
 const buttonIconOptions: ReactNode = [
   null,
@@ -54,7 +54,7 @@ const meta: Meta<typeof Button> = {
       control: { type: "select" },
       options: buttonIconNameOptions,
       description:
-        "Icon name from `Icon` component. If `icon` is not `undefinded`, this prop will be ignored.",
+        "Icon name from `IconV2` component. If `icon` is not `undefinded`, this prop will be ignored.",
     },
     icon: {
       control: { type: "select" },
