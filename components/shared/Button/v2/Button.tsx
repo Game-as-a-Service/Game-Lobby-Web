@@ -36,13 +36,6 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
   regular: "h-11 px-6 gap-2",
 };
 
-// const iconTypeClasses: Record<ButtonType, string> = {
-//   primary:
-//     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-//   secondary: "stroke-primary-200",
-//   highlight: "stroke-primary-50",
-// };
-
 interface BaseButtonProps {
   variant?: ButtonType;
   size?: ButtonSize;
