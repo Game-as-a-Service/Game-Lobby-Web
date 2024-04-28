@@ -39,6 +39,7 @@ const Login: NextPageWithProps = () => {
   const [checkAuth, setCheckAuth] = useState(false);
   const { internalEndpoint, isMock } = getEnv();
   const searchParams = useSearchParams();
+  // if the account is withdrawn, show the message
   const bye = searchParams.get("bye") !== null;
 
   useEffect(() => {
