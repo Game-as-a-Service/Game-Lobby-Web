@@ -118,8 +118,10 @@ Login.getLayout = (page) => (
       className="fixed w-full h-screen bg-[#252558]"
       fill
     />
-    <div className="w-full h-full p-4 md:p-8 xl:px-36 xl:py-24">
-      <BoxFancy className={"container m-auto"}>{page}</BoxFancy>
+    <div className="w-full h-full flex items-center p-4 md:p-8 xl:px-36 xl:py-24">
+      <BoxFancy className={"container m-auto xl:max-h-[calc(max(560px,75%))]"}>
+        {page}
+      </BoxFancy>
     </div>
   </div>
 );
