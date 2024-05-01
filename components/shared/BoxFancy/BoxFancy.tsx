@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import React, { forwardRef, useMemo } from "react";
+import React, { forwardRef } from "react";
 import type { PolymorphicComponentProp, PolymorphicRef } from "@/lib/types";
 
 export type BoxFancyBorderWidthVariant =
@@ -79,23 +79,16 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
   const borderGradientColorTwClassName =
     BorderGradientVariantTwClassName[borderGradientColor];
 
-  const allClassName = useMemo(() => {
-    return cn(
-      "w-full h-full relative bg-black/40 effect-new-2 text-primary-50",
-      "flex justify-center",
-      "before:w-full before:h-full before:absolute before:top-0 before:left-0",
-      "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
-      borderWidthTwClassName,
-      borderRadiusTwClassName,
-      borderGradientColorTwClassName,
-      className
-    );
-  }, [
-    borderGradientColorTwClassName,
-    borderRadiusTwClassName,
+  const allClassName = cn(
+    "w-full h-full relative bg-black/40 effect-new-2 text-primary-50",
+    "flex justify-center",
+    "before:w-full before:h-full before:absolute before:top-0 before:left-0",
+    "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
     borderWidthTwClassName,
-    className,
-  ]);
+    borderRadiusTwClassName,
+    borderGradientColorTwClassName,
+    className
+  );
 
   return (
     <Component ref={ref} className={allClassName} {...restProps}>
