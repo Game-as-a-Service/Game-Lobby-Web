@@ -60,6 +60,28 @@ import star from "./svgs/star.svg";
 import tower from "./svgs/tower.svg";
 import trophy from "./svgs/trophy.svg";
 import tunnel from "./svgs/tunnel.svg";
+
+import calendar from "./svgs/calendar.svg";
+import chatDefault from "./svgs/chat-default.svg";
+import chatUpdates from "./svgs/chat-updates.svg";
+import clock from "./svgs/clock.svg";
+import editMode from "./svgs/edit-mode.svg";
+import frame from "./svgs/frame.svg";
+import helpCircle from "./svgs/help-circle.svg";
+import house from "./svgs/house.svg";
+import houseLock from "./svgs/house-lock.svg";
+import leadingIcon from "./svgs/leading-icon.svg";
+import logOut from "./svgs/log-out.svg";
+import longArrowUpLeft from "./svgs/long-arrow-up-left.svg";
+import nonpublic from "./svgs/nonpublic.svg";
+import notificationDefault from "./svgs/notification-default.svg";
+import notificationUpdates from "./svgs/notification-updates.svg";
+import preview from "./svgs/preview.svg";
+import refresh from "./svgs/refresh.svg";
+import sharing from "./svgs/sharing.svg";
+import sort from "./svgs/sort.svg";
+import x from "./svgs/x.svg";
+
 const icons = {
   logo,
   check,
@@ -123,6 +145,27 @@ const icons = {
   tower,
   trophy,
   tunnel,
+
+  calendar,
+  chatDefault,
+  chatUpdates,
+  clock,
+  editMode,
+  frame,
+  helpCircle,
+  house,
+  houseLock,
+  leadingIcon,
+  logOut,
+  longArrowUpLeft,
+  nonpublic,
+  notificationDefault,
+  notificationUpdates,
+  preview,
+  refresh,
+  sharing,
+  sort,
+  x,
 };
 
 export type IconName = keyof typeof icons;

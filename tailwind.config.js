@@ -108,9 +108,21 @@ module.exports = {
           "background-image":
             "linear-gradient(132.59deg, #7C7BA4 19.04%, #362662 86.03%)",
         },
+        ".gradient-purple-2": {
+          "background-image":
+            "linear-gradient(132.59deg, #AE99E8 19.04%, #362662 86.03%)",
+        },
+        ".gradient-purple-3": {
+          "background-image":
+            "linear-gradient(132.59deg, #8E7BC6 19.04%, #2C1B47 86.03%)",
+        },
         ".gradient-black": {
           "background-image":
             "linear-gradient(132.59deg, #06020B 19.04%, #362662 86.03%)",
+        },
+        ".gradient-light": {
+          "background-image":
+            "linear-gradient(to right, transparent 0%, rgba(206, 191, 239, 0.1) 1%)",
         },
         ".body-bg": {
           "background-image":
@@ -124,6 +136,15 @@ module.exports = {
         ".border-gradient-purple": {
           "border-image":
             "linear-gradient(132.59deg, #7C7BA4 19.04%, #362662 86.03%) 1",
+        },
+      });
+    }),
+    plugin(({ addUtilities }) => {
+      /** custom effect */
+      addUtilities({
+        ".effect-new-2": {
+          "box-shadow": "0px 1.53px 36.72px -1.53px #0000002E",
+          "backdrop-filter": "blur(20px)",
         },
       });
     }),
