@@ -6,6 +6,7 @@ import { HTMLProps } from "react";
 type IconProps = {
   name: IconNameV2;
   className?: ClassValue;
+  style?: React.CSSProperties;
 };
 
 /**

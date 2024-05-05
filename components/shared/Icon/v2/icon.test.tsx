@@ -24,4 +24,19 @@ describe("IconV2", () => {
     expect(svg).toHaveClass("stroke-red-500");
     expect(svg).toHaveClass("fill-black");
   });
+
+  it("should render Icon with correct style", () => {
+    const { container } = render(
+      <Icon
+        name={TEST_ICON_NAME}
+        style={{ width: "20px", height: "20px", stroke: "red", fill: "aqua" }}
+      />
+    );
+
+    const svg = container.querySelector("svg");
+    expect(svg).toHaveStyle("width: 20px");
+    expect(svg).toHaveStyle("height: 20px");
+    expect(svg).toHaveStyle("stroke: red");
+    expect(svg).toHaveStyle("fill: aqua");
+  });
 });
