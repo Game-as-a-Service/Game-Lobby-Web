@@ -22,11 +22,14 @@ export enum ButtonSize {
   SMALL = "small",
 }
 
+const commonDisabledClasses =
+  "disabled:cursor-not-allowed disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
+
 const buttonTypeClasses: Record<ButtonType, string> = {
   primary:
     "text-primary-700 bg-primary-200 hover:text-primary-50 hover:bg-primary-300 active:text-primary-50 active:bg-primary-400",
   secondary:
-    "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border-grey-500 disabled:border",
+    "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border",
   highlight:
     "text-primary-50 gradient-purple hover:gradient-purple-2 active:gradient-purple-3",
 };
@@ -60,7 +63,7 @@ type InnerButtonComponent = <C extends ElementType = "button">(
 const iconTypeClasses: Record<ButtonType, string> = {
   primary:
     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-  secondary: "stroke-primary-200",
+  secondary: "stroke-primary-200 disabled:stroke-gray-500",
   highlight: "stroke-primary-50",
 };
 
@@ -98,7 +101,7 @@ const InteralButton: InnerButtonComponent = (
     () =>
       cn(
         "w-full items-center fz-16-b transition-colors transition-[border-image] ease-in",
-        "disabled:text-grey-200 disabled:bg-grey-800",
+        commonDisabledClasses,
         buttonTypeClasses[variant],
         buttonSizeClasses[size],
         iconTypeClasses[variant],
@@ -124,6 +127,8 @@ const InteralButton: InnerButtonComponent = (
       {...otherButtonAttributes}
     >
       <BoxFancy
+        component={Component}
+        disabled={disabled}
         borderRadius="full"
         borderGradientColor={borderGradientColor}
         className={buttonClassName}

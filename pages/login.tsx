@@ -78,6 +78,7 @@ const Login: NextPageWithProps = () => {
         iconName={icon}
         variant={ButtonType.SECONDARY}
         onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
+        disabled
       >
         {text}
       </ButtonV2>
