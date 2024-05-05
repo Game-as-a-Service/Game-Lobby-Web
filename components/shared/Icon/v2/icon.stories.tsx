@@ -14,7 +14,7 @@ const meta: Meta<typeof IconV2> = {
   decorators: [
     (Story) => (
       <ToastQueueProvider>
-        <div className="relative flex flex-col items-center gap-5">
+        <div className="relative flex flex-col items-center gap-5 bg-amber-50">
           <Story />
         </div>
       </ToastQueueProvider>
