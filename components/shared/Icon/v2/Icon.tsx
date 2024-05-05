@@ -1,6 +1,7 @@
 import type { ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
 import icons, { IconNameV2 } from "./icons";
+import { HTMLProps } from "react";
 
 type IconProps = {
   name: IconNameV2;
@@ -15,16 +16,9 @@ type IconProps = {
 const Icon = (props: IconProps) => {
   const { className, name, ...rest } = props;
   const transformClassName = cn("stroke-basic-black", className);
-  const SvgIcon = name && icons[name];
+  const SvgIcon: React.FC<HTMLProps<"svg">> = name && icons[name];
 
-  return (
-    <SvgIcon
-      focusable={false}
-      className={transformClassName}
-      aria-hidden
-      {...rest}
-    />
-  );
+  return <SvgIcon className={transformClassName} aria-hidden {...rest} />;
 };
 
 export default Icon;
