@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 
 import IconV2 from ".";
 import icons from "./icons";
@@ -39,14 +39,18 @@ const AllIcons = () => {
   const [value, setValue] = useState("");
   const toast = useToast();
 
-  const handleClick = (iconName: string) => () => {
-    const cb = navigator.clipboard;
-    const text = `<IconV2 name="${iconName}" className="w-6 h-6" />`;
+  const handleClick =
+    (iconName: string): MouseEventHandler<HTMLButtonElement> =>
+    (e) => {
+      e.stopPropagation();
 
-    toast({ children: "已複製成功!!" }, { duration: 1000 });
+      const cb = navigator.clipboard;
+      const text = `<IconV2 name="${iconName}" className="w-6 h-6" />`;
 
-    cb.writeText(text).then();
-  };
+      toast({ children: "已複製成功!!" }, { duration: 1000 });
+
+      cb.writeText(text).then();
+    };
 
   return (
     <>
@@ -67,7 +71,7 @@ const AllIcons = () => {
         {keys(icons)
           .filter((iconName) => iconName.includes(value))
           .map((iconName) => (
-            <div
+            <button
               key={iconName}
               className="cursor-pointer"
               onClick={handleClick(iconName)}
@@ -76,7 +80,7 @@ const AllIcons = () => {
               <p className="text-center text-white/90 whitespace-nowrap">
                 {iconName}
               </p>
-            </div>
+            </button>
           ))}
       </div>
     </>
