@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
-import { IconName } from "@/components/shared/Icon/icons";
-import Icon from "@/components/shared/Icon";
+import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
+import IconV2 from "@/components/shared/Icon/v2";
 import { PolymorphicComponentProp, PolymorphicRef } from "@/lib/types";
 
 export enum ButtonType {
@@ -40,7 +40,7 @@ interface BaseButtonProps {
   variant?: ButtonType;
   size?: ButtonSize;
   icon?: ReactNode;
-  iconName?: IconName;
+  iconName?: IconNameV2;
   disabled?: boolean;
   // inner div className for styling
   boxFancyClassName?: string;
@@ -128,7 +128,8 @@ const InteralButton: InnerButtonComponent = (
         borderGradientColor={borderGradientColor}
         className={buttonClassName}
       >
-        {icon || (iconName && <Icon name={iconName} className={iconClasses} />)}
+        {icon ||
+          (iconName && <IconV2 name={iconName} className={iconClasses} />)}
         <span>{children}</span>
       </BoxFancy>
     </Component>
