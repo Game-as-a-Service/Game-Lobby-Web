@@ -83,7 +83,7 @@ const InteralButton: InnerButtonComponent = (
   );
 
   const boxFancyClassName = cn(
-    "w-full items-center fz-16-b transition-colors transition-[border-image] ease-in",
+    "w-fit items-center fz-16-b transition-colors transition-[border-image] ease-in",
     commonDisabledClasses,
     buttonTypeClasses[variant],
     buttonSizeClasses[size],
