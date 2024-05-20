@@ -17,7 +17,7 @@ export enum ButtonSize {
 }
 
 const commonDisabledClasses =
-  "disabled:cursor-not-allowed disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
+  "disabled:cursor-not-allowed disabled:bg-none disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
 
 const buttonTypeClasses: Record<ButtonType, string> = {
   primary:
