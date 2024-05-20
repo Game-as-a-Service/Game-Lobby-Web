@@ -38,49 +38,19 @@ const meta: Meta<typeof Button> = {
     children: "Button",
   },
   argTypes: {
-    component: {
-      control: { type: "select" },
-      options: ["button", "a"],
-    },
-    variant: {
-      control: { type: "select" },
-      options: buttonTypeOptions,
-    },
-    disabled: {
-      control: { type: "boolean" },
-    },
-    size: {
-      control: { type: "select" },
-      options: buttonSizeOptions,
-    },
-    iconName: {
-      control: { type: "select" },
-      options: buttonIconNameOptions,
-      description:
-        "Icon name from `IconV2` component. If `icon` is not `undefinded`, this prop will be ignored.",
-    },
-    icon: {
-      control: { type: "select" },
-      options: buttonIconOptions,
-      description:
-        "Custom icons or any prefix component. If `iconName` is not `undefinded`, this prop will be ignored.",
-    },
-    boxFancyClassName: {
-      control: { type: "text" },
-      description: "custom class name for inner div",
-      defaultValue: "",
-    },
     className: {
       control: { type: "text" },
       description: "custom class name",
       defaultValue: "",
+    },
+    disabled: {
+      control: { type: "boolean" },
     },
     style: {
       control: { type: "object" },
       description: "custom style",
       defaultValue: {},
     },
-    ref: { control: { disable: true } },
   },
 };
 

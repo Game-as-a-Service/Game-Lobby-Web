@@ -66,22 +66,22 @@ const Login: NextPageWithProps = () => {
 
   const loginButtons = useMemo(() => {
     return LoginMethods.map(({ text, type, icon }) => (
-      <ButtonV2
-        key={type}
-        component={Link}
-        href={`${internalEndpoint}/login?type=${type}`}
-        className={"w-full min-w-[300px] max-w-[50%] xl:max-w-[318px]"}
-        boxFancyClassName={"text-primary-50"}
-        iconClassName={cn("stroke-none", {
-          "fill-current": type === LoginType.GITHUB,
-        })}
-        iconName={icon}
-        variant={ButtonType.SECONDARY}
-        onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-        disabled
-      >
-        {text}
-      </ButtonV2>
+      <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
+        <ButtonV2
+          className={
+            "w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50"
+          }
+          iconClassName={cn("stroke-none", {
+            "fill-current": type === LoginType.GITHUB,
+          })}
+          iconName={icon}
+          variant={ButtonType.SECONDARY}
+          onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
+          // disabled
+        >
+          {text}
+        </ButtonV2>
+      </Link>
     ));
   }, [internalEndpoint, onLoginClick]);
 
