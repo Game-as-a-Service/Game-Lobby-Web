@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button, ButtonSize, ButtonType } from "./Button";
+import { Button, ButtonSize, ButtonVariant } from "./Button";
 import { ReactNode } from "react";
 import Icon from "../../Icon";
 
-const buttonTypeOptions: (ButtonType | undefined)[] = [
+const buttonVariantOptions: (ButtonVariant | undefined)[] = [
   undefined,
-  ButtonType.PRIMARY,
-  ButtonType.SECONDARY,
-  ButtonType.HIGHLIGHT,
+  ButtonVariant.PRIMARY,
+  ButtonVariant.SECONDARY,
+  ButtonVariant.HIGHLIGHT,
 ];
 
 const buttonSizeOptions: (ButtonSize | undefined)[] = [
@@ -65,7 +65,7 @@ export const Playground: Story = {
 export const Variant: Story = {
   render: (args) => (
     <>
-      {buttonTypeOptions.map((variant) => (
+      {buttonVariantOptions.map((variant) => (
         <Button key={variant} variant={variant} {...args}>
           {args.children}
         </Button>

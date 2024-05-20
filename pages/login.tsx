@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import ButtonV2, { ButtonType } from "@/components/shared/Button/v2";
+import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
 import Icon from "@/components/shared/Icon";
 
@@ -75,7 +75,7 @@ const Login: NextPageWithProps = () => {
             "fill-current": type === LoginType.GITHUB,
           })}
           iconName={icon}
-          variant={ButtonType.SECONDARY}
+          variant={ButtonVariant.SECONDARY}
           onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
           // disabled
         >

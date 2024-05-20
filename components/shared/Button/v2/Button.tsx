@@ -5,7 +5,7 @@ import { IconName } from "@/components/shared/Icon/icons";
 import Icon from "@/components/shared/Icon";
 import { PolymorphicRef } from "@/lib/types";
 
-export enum ButtonType {
+export enum ButtonVariant {
   PRIMARY = "primary",
   SECONDARY = "secondary",
   HIGHLIGHT = "highlight",
@@ -19,7 +19,7 @@ export enum ButtonSize {
 const commonDisabledClasses =
   "disabled:cursor-not-allowed disabled:bg-none disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
 
-const buttonTypeClasses: Record<ButtonType, string> = {
+const buttonTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "text-primary-700 bg-primary-200 hover:text-primary-50 hover:bg-primary-300 active:text-primary-50 active:bg-primary-400",
   secondary:
@@ -34,7 +34,7 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
 };
 
 interface BaseButtonProps {
-  variant?: ButtonType;
+  variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: ReactNode;
   iconName?: IconName;
@@ -48,7 +48,7 @@ type InnerButtonComponent = (
   ref?: PolymorphicRef<"button">
 ) => React.ReactElement | null;
 
-const iconTypeClasses: Record<ButtonType, string> = {
+const iconTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
   secondary: "stroke-primary-200 disabled:stroke-gray-500",
@@ -57,7 +57,7 @@ const iconTypeClasses: Record<ButtonType, string> = {
 
 const InteralButton: InnerButtonComponent = (
   {
-    variant = ButtonType.PRIMARY,
+    variant = ButtonVariant.PRIMARY,
     size = ButtonSize.REGULAR,
     icon,
     iconName,
@@ -93,7 +93,7 @@ const InteralButton: InnerButtonComponent = (
   const iconClasses = cn("w-6 h-6 stroke-inherit", iconClassName);
 
   const borderGradientColor: BoxFancyBorderGradientVariant =
-    variant === ButtonType.SECONDARY && !disabled ? "purple" : "none";
+    variant === ButtonVariant.SECONDARY && !disabled ? "purple" : "none";
 
   return (
     <BoxFancy

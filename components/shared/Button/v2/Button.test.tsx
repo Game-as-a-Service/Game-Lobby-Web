@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Button } from "./Button";
+import { Button, ButtonVariant } from "./Button";
 
 describe("ButtonV2", () => {
   it("should renders button text", () => {
@@ -16,7 +16,7 @@ describe("ButtonV2", () => {
 
   it("should have correct className", () => {
     render(
-      <Button variant="danger" className="test">
+      <Button variant={ButtonVariant.PRIMARY} className="test">
         Button
       </Button>
     );
