@@ -34,7 +34,7 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
 };
 
 interface BaseButtonProps {
-  variant?: ButtonVariant;
+  variant?: ButtonVariant | `${ButtonVariant}`;
   size?: ButtonSize;
   icon?: ReactNode;
   iconName?: IconName;
