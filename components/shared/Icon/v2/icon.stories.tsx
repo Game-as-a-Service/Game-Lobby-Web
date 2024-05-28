@@ -54,14 +54,14 @@ const AllIcons = () => {
 
   return (
     <>
-      <p className="absolute top-[-1.25rem] right-0 text-white/90">
+      <p className="absolute top-0 right-4 text-zinc-950">
         點擊 icon 即可複製
       </p>
       <Input
         label="搜尋"
         value={value}
         onChange={setValue}
-        labelClassName="mr-3 leading-normal"
+        labelClassName="mr-3 leading-normal text-zinc-950"
         inputClassName="border-white/90"
       />
       <div
@@ -77,7 +77,7 @@ const AllIcons = () => {
               onClick={handleClick(iconName)}
             >
               <IconV2 name={iconName} className="w-full h-full" />
-              <p className="text-center text-white/90 whitespace-nowrap">
+              <p className="text-center text-zinc-950 whitespace-nowrap">
                 {iconName}
               </p>
             </button>
