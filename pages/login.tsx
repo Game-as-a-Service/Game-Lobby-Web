@@ -11,7 +11,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
-import Icon from "@/components/shared/Icon";
+import IconV2 from "@/components/shared/Icon/v2";
 
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
@@ -21,11 +21,11 @@ import { LoginType } from "@/requests/auth";
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
 import Link from "next/link";
-import { IconName } from "@/components/shared/Icon/icons";
+import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
+const LoginMethods: { text: string; type: LoginType; icon: IconNameV2 }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
   { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "github" },
   { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "linkedin" },
@@ -103,7 +103,7 @@ const Login: NextPageWithProps = () => {
           </p>
         ) : null}
         <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
-          <Icon name="leadingIcon" className="w-12 h-12" />
+          <IconV2 name="leadingIcon" className="w-12 h-12" />
           遊戲微服務大平台
         </h2>
         {!bye ? (
