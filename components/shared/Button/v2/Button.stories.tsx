@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button, ButtonSize, ButtonType } from "./Button";
+import { Button, ButtonSize, ButtonVariant } from "./Button";
 import { ReactNode } from "react";
 import Icon from "../../Icon";
 
-const buttonTypeOptions: (ButtonType | undefined)[] = [
+const buttonVariantOptions: (ButtonVariant | undefined)[] = [
   undefined,
-  ButtonType.PRIMARY,
-  ButtonType.SECONDARY,
-  ButtonType.HIGHLIGHT,
+  ButtonVariant.PRIMARY,
+  ButtonVariant.SECONDARY,
+  ButtonVariant.HIGHLIGHT,
 ];
 
 const buttonSizeOptions: (ButtonSize | undefined)[] = [
@@ -38,46 +38,19 @@ const meta: Meta<typeof Button> = {
     children: "Button",
   },
   argTypes: {
-    component: {
-      control: { type: "select" },
-      options: ["button", "a"],
-    },
-    variant: {
-      control: { type: "select" },
-      options: buttonTypeOptions,
-    },
-    size: {
-      control: { type: "select" },
-      options: buttonSizeOptions,
-    },
-    iconName: {
-      control: { type: "select" },
-      options: buttonIconNameOptions,
-      description:
-        "Icon name from `IconV2` component. If `icon` is not `undefinded`, this prop will be ignored.",
-    },
-    icon: {
-      control: { type: "select" },
-      options: buttonIconOptions,
-      description:
-        "Custom icons or any prefix component. If `iconName` is not `undefinded`, this prop will be ignored.",
-    },
-    boxFancyClassName: {
-      control: { type: "text" },
-      description: "custom class name for inner div",
-      defaultValue: "",
-    },
     className: {
       control: { type: "text" },
       description: "custom class name",
       defaultValue: "",
+    },
+    disabled: {
+      control: { type: "boolean" },
     },
     style: {
       control: { type: "object" },
       description: "custom style",
       defaultValue: {},
     },
-    ref: { control: { disable: true } },
   },
 };
 
@@ -92,7 +65,7 @@ export const Playground: Story = {
 export const Variant: Story = {
   render: (args) => (
     <>
-      {buttonTypeOptions.map((variant) => (
+      {buttonVariantOptions.map((variant) => (
         <Button key={variant} variant={variant} {...args}>
           {args.children}
         </Button>

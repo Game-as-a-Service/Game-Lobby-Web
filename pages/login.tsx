@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import ButtonV2, { ButtonType } from "@/components/shared/Button/v2";
+import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
 import IconV2 from "@/components/shared/Icon/v2";
 
@@ -66,21 +66,21 @@ const Login: NextPageWithProps = () => {
 
   const loginButtons = useMemo(() => {
     return LoginMethods.map(({ text, type, icon }) => (
-      <ButtonV2
-        key={type}
-        component={Link}
-        href={`${internalEndpoint}/login?type=${type}`}
-        className={"w-full min-w-[300px] max-w-[50%] xl:max-w-[318px]"}
-        boxFancyClassName={"text-primary-50"}
-        iconClassName={cn("stroke-none", {
-          "fill-current": type === LoginType.GITHUB,
-        })}
-        iconName={icon}
-        variant={ButtonType.SECONDARY}
-        onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-      >
-        {text}
-      </ButtonV2>
+      <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
+        <ButtonV2
+          className={
+            "w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50"
+          }
+          iconClassName={cn("stroke-none", {
+            "fill-current": type === LoginType.GITHUB,
+          })}
+          iconName={icon}
+          variant={ButtonVariant.SECONDARY}
+          onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
+        >
+          {text}
+        </ButtonV2>
+      </Link>
     ));
   }, [internalEndpoint, onLoginClick]);
 

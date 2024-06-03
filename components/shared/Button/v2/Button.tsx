@@ -1,17 +1,11 @@
-import React, {
-  ElementType,
-  ReactNode,
-  forwardRef,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { ReactNode, forwardRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
 import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
-import IconV2 from "@/components/shared/Icon/v2";
-import { PolymorphicComponentProp, PolymorphicRef } from "@/lib/types";
+import Icon from "@/components/shared/Icon/v2";
+import { PolymorphicRef } from "@/lib/types";
 
-export enum ButtonType {
+export enum ButtonVariant {
   PRIMARY = "primary",
   SECONDARY = "secondary",
   HIGHLIGHT = "highlight",
@@ -22,11 +16,14 @@ export enum ButtonSize {
   SMALL = "small",
 }
 
-const buttonTypeClasses: Record<ButtonType, string> = {
+const commonDisabledClasses =
+  "disabled:cursor-not-allowed disabled:bg-none disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
+
+const buttonTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "text-primary-700 bg-primary-200 hover:text-primary-50 hover:bg-primary-300 active:text-primary-50 active:bg-primary-400",
   secondary:
-    "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border-grey-500 disabled:border",
+    "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border",
   highlight:
     "text-primary-50 gradient-purple hover:gradient-purple-2 active:gradient-purple-3",
 };
@@ -37,43 +34,35 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
 };
 
 interface BaseButtonProps {
-  variant?: ButtonType;
+  variant?: ButtonVariant | `${ButtonVariant}`;
   size?: ButtonSize;
   icon?: ReactNode;
   iconName?: IconNameV2;
-  disabled?: boolean;
-  // inner div className for styling
-  boxFancyClassName?: string;
   iconClassName?: string;
 }
 
-type ButtonProps<C extends ElementType = "button"> = PolymorphicComponentProp<
-  C,
-  BaseButtonProps
->;
+type ButtonProps = BaseButtonProps & React.ComponentPropsWithoutRef<"button">;
 
-type InnerButtonComponent = <C extends ElementType = "button">(
-  props: ButtonProps<C>,
-  ref?: PolymorphicRef<C>
+type InnerButtonComponent = (
+  props: ButtonProps,
+  ref?: PolymorphicRef<"button">
 ) => React.ReactElement | null;
 
-const iconTypeClasses: Record<ButtonType, string> = {
+const iconTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-  secondary: "stroke-primary-200",
+  secondary: "stroke-primary-200 disabled:stroke-gray-500",
   highlight: "stroke-primary-50",
 };
 
 const InteralButton: InnerButtonComponent = (
   {
-    component,
-    variant = ButtonType.PRIMARY,
+    variant = ButtonVariant.PRIMARY,
     size = ButtonSize.REGULAR,
     icon,
     iconName,
     disabled,
     className,
-    boxFancyClassName,
     iconClassName,
     children,
     onClick,
@@ -81,7 +70,6 @@ const InteralButton: InnerButtonComponent = (
   },
   ref
 ) => {
-  const Component = component || "button";
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled) {
@@ -94,45 +82,33 @@ const InteralButton: InnerButtonComponent = (
     [disabled, onClick]
   );
 
-  const buttonClassName = useMemo(
-    () =>
-      cn(
-        "w-full items-center fz-16-b transition-colors transition-[border-image] ease-in",
-        "disabled:text-grey-200 disabled:bg-grey-800",
-        buttonTypeClasses[variant],
-        buttonSizeClasses[size],
-        iconTypeClasses[variant],
-        boxFancyClassName
-      ),
-    [boxFancyClassName, size, variant]
+  const boxFancyClassName = cn(
+    "w-fit items-center fz-16-b transition-colors transition-[border-image] ease-in",
+    commonDisabledClasses,
+    buttonTypeClasses[variant],
+    buttonSizeClasses[size],
+    iconTypeClasses[variant],
+    className
   );
-
-  const iconClasses = useMemo(
-    () => cn("w-6 h-6 stroke-inherit", iconClassName),
-    [iconClassName]
-  );
+  const iconClasses = cn("w-6 h-6 stroke-inherit", iconClassName);
 
   const borderGradientColor: BoxFancyBorderGradientVariant =
-    variant === ButtonType.SECONDARY && !disabled ? "purple" : "none";
+    variant === ButtonVariant.SECONDARY && !disabled ? "purple" : "none";
 
   return (
-    <Component
+    <BoxFancy
       ref={ref}
-      className={className}
+      component={"button"}
+      borderRadius="full"
+      borderGradientColor={borderGradientColor}
+      className={boxFancyClassName}
       onClick={handleClick}
       disabled={disabled}
       {...otherButtonAttributes}
     >
-      <BoxFancy
-        borderRadius="full"
-        borderGradientColor={borderGradientColor}
-        className={buttonClassName}
-      >
-        {icon ||
-          (iconName && <IconV2 name={iconName} className={iconClasses} />)}
-        <span>{children}</span>
-      </BoxFancy>
-    </Component>
+      {icon || (iconName && <Icon name={iconName} className={iconClasses} />)}
+      <span>{children}</span>
+    </BoxFancy>
   );
 };
 
