@@ -13,10 +13,7 @@ export default function Home() {
   return (
     <>
       <h1 className="text-white">遊戲大廳！</h1>
-      <div
-        className="px-[18px] mt-[12px] mb-[22px]"
-        style={{ width: "calc(100vw - 71px)" }}
-      >
+      <div className="px-[18px] mt-[12px] mb-[22px] w-[calc(100vw-100px)]">
         <Carousel
           itemWidth={332}
           itemHeight={158}
