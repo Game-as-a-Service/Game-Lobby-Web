@@ -36,7 +36,7 @@ const useRequest = () => {
           toast: {
             show: true,
             options: {
-              position: "bottom-left",
+              position: "bottom-right",
             },
           },
         }

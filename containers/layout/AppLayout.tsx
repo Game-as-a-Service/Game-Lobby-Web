@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="container__ flex flex-grow gap-5">
         <Sidebar />
-        <main className="flex-grow w-full h-full">{children}</main>
+        <main className="flex-grow">{children}</main>
       </div>
       <Footer />
     </div>

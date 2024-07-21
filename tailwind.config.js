@@ -11,6 +11,9 @@ module.exports = {
       body: ['"Noto Sans TC"', "Roboto"],
     },
     extend: {
+      width: {
+        18: "4.5rem" /** 72px */,
+      },
       opacity: {
         4: 0.04,
         8: 0.08,
@@ -127,6 +130,13 @@ module.exports = {
         ".body-bg": {
           "background-image":
             "linear-gradient(145.51deg, #06020B -7.4%, #2C1B47 154.79%)",
+        },
+        ".glass-shadow": {
+          "box-shadow": `
+            0 8px 6px rgba(0, 0, 0, 0.05),
+            0 1px 1px rgba(255, 255, 255, 0.25),
+            0 -1px 1px rgba(255, 255, 255, 0.1)
+          `,
         },
       });
     }),
