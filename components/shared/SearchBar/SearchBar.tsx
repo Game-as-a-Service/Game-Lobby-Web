@@ -1,110 +1,57 @@
-import type { ClassValue } from "clsx";
-import { FormEvent, ForwardedRef } from "react";
-import { cn } from "@/lib/utils";
-
-import Button from "../Button";
-import Input, { ChangeHandler } from "../Input";
-
-type SubmitHandler = (value: string, event: FormEvent<HTMLFormElement>) => void;
+import { ReactNode, useState } from "react";
+import Icon from "../Icon/v2/Icon";
 
 interface SearchBarProps {
-  /** The current value of the input */
-  value: string;
-
   /** The placeholder text displayed in the search bar when it is empty */
   placeholder?: string;
 
-  /** For button text content */
-  buttonText?: string;
+  /** An optional React node that will be rendered on the left side of the input field */
+  leftSlot?: ReactNode;
 
-  /** If `true`, the button will be in loading mode  */
-  loading?: boolean;
-
-  /** If `true`, the input will receive autofocus when rendered.  */
-  autoFocus?: boolean;
-
-  /** The ref object used to access the underlying HTMLInputElement */
-  inputRef?: ForwardedRef<HTMLInputElement>;
-
-  /** The ref object used to access the underlying HTMLButtonElement */
-  buttonRef?: ForwardedRef<HTMLButtonElement>;
-
-  /** For root class name */
-  className?: ClassValue;
-
-  /** For input wrapper class name */
-  inputWrapperClassName?: ClassValue;
-
-  /** For input class name */
-  inputClassName?: ClassValue;
-
-  /** For button class name */
-  buttonClassName?: ClassValue;
-
-  /**
-   * Callback function that is called when the value of the input changes.
-   * @param value - The new value of the input.
-   * @param event - The event object associated with the change event.
-   */
-  onChange?: ChangeHandler;
+  /** An optional React node that will be rendered on the submit button */
+  buttonSlot?: ReactNode;
 
   /**
    * Callback function triggered when the user submits the search.
    * @param value - The current input value of the search bar.
-   * @param event - The form submission event.
    */
-  onSubmit?: SubmitHandler;
+  onSubmit?: (value: string) => void;
 }
 
 export const SearchBar = ({
-  value,
-  placeholder = "請輸入你想搜尋的遊戲,玩家名稱,帖子關鍵字...",
-  buttonText = "搜索",
-  loading,
-  autoFocus,
-  className,
-  inputRef,
-  buttonRef,
-  inputWrapperClassName: inputWrapperClassNameProps,
-  inputClassName: inputClassNameProps,
-  buttonClassName: buttonClassNameProps,
-  onChange,
+  placeholder = "在此輸入今天想玩的遊戲",
+  leftSlot,
+  buttonSlot = (
+    <Icon
+      name="search"
+      className="stroke-primary-100 w-6 h-6 pointer-events-none"
+    />
+  ),
   onSubmit,
 }: SearchBarProps) => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit?.(value, e);
-  };
-
-  const rootClassName = cn(
-    "group flex rounded-[10px] border border-[#2D2D2E] shadow focus-within:border-[#2F88FF]/80 focus-within:shadow-[#2F88FF]/40 transition-[box-shadow,border]",
-    className
-  );
-
-  const inputWrapperClassName = cn("flex-1", inputWrapperClassNameProps);
-
-  const inputClassName = cn("rounded-r-none border-0", inputClassNameProps);
-
-  const buttonClassName = cn(
-    "leading-none bg-[#2D2D2E] rounded-l-none rounded-r shadow-none group-focus-within:bg-[#2F88FF]/80 active:group-focus-within:bg-[#2173DD]",
-    buttonClassNameProps
-  );
+  const [value, setValue] = useState("");
 
   return (
-    <form onSubmit={handleSubmit} className={rootClassName}>
-      <Input
-        ref={inputRef}
-        role="search"
-        value={value}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        className={inputWrapperClassName}
-        inputClassName={inputClassName}
-        onChange={onChange}
-      />
-      <Button ref={buttonRef} className={buttonClassName} loading={loading}>
-        {buttonText}
-      </Button>
-    </form>
+    <div className="p-px gradient-purple rounded-full max-w-lg w-full">
+      <div className="body-bg rounded-full">
+        <div className="relative flex p-1 bg-white/8 rounded-full w-full">
+          {leftSlot}
+          <input
+            role="search"
+            className="py-2.5 px-4 leading-normal rounded-full bg-white/8 flex-1 text-primary-200"
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button
+            type="button"
+            className="absolute right-3 p-2.5"
+            onClick={() => onSubmit?.(value)}
+          >
+            {buttonSlot}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
