@@ -7,12 +7,21 @@ import { useTranslation } from "next-i18next";
 
 import Carousel, { mockCarouselItems } from "@/components/shared/Carousel";
 import FastJoinButton from "@/components/lobby/FastJoinButton";
+import SearchBar from "@/components/shared/SearchBar";
 
 export default function Home() {
   const { t } = useTranslation("rooms");
   return (
-    <>
-      <h1 className="text-white">遊戲大廳！</h1>
+    <div>
+      <div className="flex justify-center">
+        <SearchBar
+          leftSlot={
+            <button type="button" className="pl-5 pr-2.5 px-4 text-primary-300">
+              類型
+            </button>
+          }
+        />
+      </div>
       <div className="px-[18px] mt-[12px] mb-[22px] w-[calc(100vw-100px)]">
         <Carousel
           itemWidth={332}
@@ -27,7 +36,7 @@ export default function Home() {
         {t("rooms_list")}
       </Button>
       <FastJoinButton />
-    </>
+    </div>
   );
 }
 
