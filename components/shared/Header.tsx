@@ -20,7 +20,11 @@ interface ButtonProps {
   onClick: () => void;
 }
 
-export default function Header() {
+interface HeaderProps {
+  onClickChatButton: () => void;
+}
+
+export default function Header({ onClickChatButton }: Readonly<HeaderProps>) {
   const [openProfile, setOpenProfile] = useState(false);
 
   const buttons: ButtonProps[] = [
@@ -28,7 +32,7 @@ export default function Header() {
       iconName: "chatDefault",
       type: HeaderActions.CHAT,
       isActive: false,
-      onClick: () => {},
+      onClick: onClickChatButton,
     },
     {
       iconName: "notificationDefault",

@@ -38,7 +38,7 @@ export const SearchBar = ({
           {leftSlot}
           <input
             role="search"
-            className="py-2.5 px-4 leading-normal rounded-full bg-white/8 flex-1 text-primary-200"
+            className="py-2.5 px-4 leading-normal rounded-full bg-white/8 flex-1 text-primary-200 focus-within:outline-0"
             placeholder={placeholder}
             value={value}
             onChange={(e) => setValue(e.target.value)}

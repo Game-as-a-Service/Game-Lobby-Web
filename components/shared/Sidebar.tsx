@@ -30,7 +30,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <nav className="flex flex-col shrink-0 justify-start bg-white/8 glass-shadow my-6 ms-1.5 py-6 rounded-2xl w-18 gap-5">
+    <nav className="flex flex-col justify-start bg-white/8 glass-shadow py-6 rounded-2xl w-18 h-full gap-5">
       {buttons.map((ButtonProps) => (
         <Link
           href={ButtonProps.route}
