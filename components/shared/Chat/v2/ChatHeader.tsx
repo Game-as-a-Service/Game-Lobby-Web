@@ -32,7 +32,7 @@ export default function ChatHeader({
             )}
             onClick={toggleTab(id)}
           >
-            {notifications && (
+            {Number(notifications) > 0 && (
               <span className="absolute right-0 -top-2 fz-12 w-4 h-4 leading-4 rounded-full bg-secondary-500 text-basic-white">
                 {notifications}
               </span>

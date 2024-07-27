@@ -12,6 +12,7 @@ export type ChatProps = {
   lobbyMessages: MessageType[];
   friendList: FriendType[];
   roomMessages: MessageType[];
+  maxHeight?: string;
 };
 
 export default function Chat({
@@ -19,6 +20,7 @@ export default function Chat({
   lobbyMessages,
   friendList,
   roomMessages,
+  maxHeight = "calc(100vh - 10rem)",
 }: Readonly<ChatProps>) {
   const [messages, setMessages] = useState(lobbyMessages);
   const [target, setTarget] = useState<[ChatTab["id"], string | null]>([
@@ -70,7 +72,7 @@ export default function Chat({
   return (
     <div
       className="w-[308px] h-[var(--chat-height))] gradient-purple rounded-lg"
-      style={{ "--chat-height": "calc(100vh - 10rem)" } as CSSProperties}
+      style={{ "--chat-height": maxHeight } as CSSProperties}
     >
       <div className="h-full body-bg border border-transparent bg-clip-padding rounded-lg overflow-hidden">
         <ChatHeader
