@@ -9,6 +9,7 @@ import {
   RoomType,
   getRooms,
   postRoomEntry,
+  getRoomInfoEndpoint,
 } from "@/requests/rooms";
 import Button from "@/components/shared/Button";
 import RoomCard from "@/components/rooms/RoomCard";
@@ -73,6 +74,11 @@ const RoomsListView: FC<Props> = ({ status }) => {
   useEffect(() => {
     async function fetchRoomEntry(_roomId: string) {
       setIsLoading(true);
+
+      if (await fetch(getRoomInfoEndpoint(_roomId)).catch(() => {})) {
+        router.push(`/rooms/${_roomId}`);
+        return;
+      }
 
       fetch(postRoomEntry(_roomId, passwordValues.join("")))
         .then(() => {
