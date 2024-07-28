@@ -20,7 +20,7 @@ export default function Chat({
   lobbyMessages,
   friendList,
   roomMessages,
-  maxHeight = "calc(100vh - 10rem)",
+  maxHeight = "calc(100vh - 168px)",
 }: Readonly<ChatProps>) {
   const [messages, setMessages] = useState(lobbyMessages);
   const [target, setTarget] = useState<[ChatTab["id"], string | null]>([

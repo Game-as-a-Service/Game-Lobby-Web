@@ -27,7 +27,7 @@ import leadingIcon from "./svgs/leading-icon.svg";
 import linkedin from "./svgs/linkedin.svg";
 import logOut from "./svgs/log-out.svg";
 import longArrowUpLeft from "./svgs/long-arrow-up-left.svg";
-import navAarrowLeft from "./svgs/nav-arrow-left.svg";
+import navArrowLeft from "./svgs/nav-arrow-left.svg";
 import navArrowRight from "./svgs/nav-arrow-right.svg";
 import nonpublic from "./svgs/nonpublic.svg";
 import notificationDefault from "./svgs/notification-default.svg";
@@ -73,7 +73,7 @@ const icons = {
   linkedin,
   logOut,
   longArrowUpLeft,
-  navAarrowLeft,
+  navArrowLeft,
   navArrowRight,
   nonpublic,
   notificationDefault,
