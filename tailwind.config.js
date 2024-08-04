@@ -8,10 +8,10 @@ module.exports = {
     "./containers/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    fontFamily: {
-      body: ['"Noto Sans TC"', "Roboto"],
-    },
     extend: {
+      fontFamily: {
+        body: ['"Noto Sans TC"', "Roboto"],
+      },
       width: {
         18: "4.5rem" /** 72px */,
       },
@@ -137,6 +137,12 @@ module.exports = {
             0 8px 6px rgba(0, 0, 0, 0.05),
             0 1px 1px rgba(255, 255, 255, 0.25),
             0 -1px 1px rgba(255, 255, 255, 0.1)
+          `,
+        },
+        ".shadow-default": {
+          "box-shadow": `
+            inset 2px 2px 4px rgba(135, 135, 135, 0.1),
+            1px 2px 4px rgba(0, 0, 0, 0.1)
           `,
         },
       });
