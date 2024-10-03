@@ -5,7 +5,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import RoomBreadcrumb from "@/components/rooms/RoomBreadcrumb";
-import RoomChatroom from "@/components/rooms/RoomChatroom";
 import GameWindow from "@/components/rooms/GameWindow";
 import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";

@@ -22,9 +22,9 @@ export default function Tabs<T extends Key = string>({
   tabs,
   defaultActiveKey,
   renderTabPaneContent,
-}: TabsProps<T>) {
+}: Readonly<TabsProps<T>>) {
   const [activeKey, setActiveKey] = useState(
-    defaultActiveKey || tabs[0]?.tabKey
+    defaultActiveKey ?? tabs[0]?.tabKey
   );
   const activeTabItem = tabs.find((tab) => tab.tabKey === activeKey);
 
@@ -47,9 +47,7 @@ export default function Tabs<T extends Key = string>({
         ))}
       </div>
       <div role="tabpanel" aria-labelledby={`${activeTabItem?.label}`}>
-        {activeTabItem &&
-          renderTabPaneContent &&
-          renderTabPaneContent(activeTabItem)}
+        {activeTabItem && renderTabPaneContent?.(activeTabItem)}
       </div>
     </>
   );
