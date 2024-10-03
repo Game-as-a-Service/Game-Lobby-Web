@@ -1,25 +1,20 @@
 import { RoomType } from "@/requests/rooms";
 import RoomsListView from "@/containers/room/RoomListView";
-import Tabs from "@/components/shared/Tabs";
+import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetStaticProps } from "next";
 
-type TabsProps = {
-  key: RoomType;
-  label: string;
-}[];
-
 const Rooms = () => {
   const { t } = useTranslation("rooms");
 
-  const tabs: TabsProps = [
+  const tabs: TabItemType<RoomType>[] = [
     {
-      key: RoomType.WAITING,
+      tabKey: RoomType.WAITING,
       label: t("rooms_waiting"),
     },
     {
-      key: RoomType.PLAYING,
+      tabKey: RoomType.PLAYING,
       label: t("rooms_playing"),
     },
   ];
@@ -29,9 +24,8 @@ const Rooms = () => {
       <Tabs
         tabs={tabs}
         defaultActiveKey={RoomType.WAITING}
-        size="large"
         renderTabPaneContent={(currentTab) => (
-          <RoomsListView status={currentTab.key} key={currentTab.key} />
+          <RoomsListView status={currentTab.tabKey} key={currentTab.tabKey} />
         )}
       />
     </div>

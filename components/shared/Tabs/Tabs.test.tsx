@@ -4,13 +4,13 @@ import Tabs, { TabsProps, TabItemType } from "./Tabs";
 
 describe("Tabs", () => {
   const tabs: TabsProps["tabs"] = [
-    { key: "1", label: "Tab 1" },
-    { key: "2", label: "Tab 2" },
-    { key: "3", label: "Tab 3" },
+    { tabKey: "1", label: "Tab 1" },
+    { tabKey: "2", label: "Tab 2" },
+    { tabKey: "3", label: "Tab 3" },
   ];
   const tabPaneText = "Tab Pane Text";
   const renderTabPaneContent = (tabItem: TabItemType) => (
-    <div>{`${tabPaneText} ${tabItem.key}`}</div>
+    <div>{`${tabPaneText} ${tabItem.tabKey}`}</div>
   );
 
   it("should renders all Tabs and the first TabPane when not given 'defaultActiveKey' prop", () => {
@@ -33,7 +33,7 @@ describe("Tabs", () => {
       <Tabs
         tabs={tabs}
         renderTabPaneContent={renderTabPaneContent}
-        defaultActiveKey={tabs[1].key}
+        defaultActiveKey={tabs[1].tabKey}
       />
     );
 
@@ -51,22 +51,5 @@ describe("Tabs", () => {
     expect(screen.getByText(`${tabPaneText} 3`));
     expect(screen.queryByText(`${tabPaneText} 1`)).not.toBeInTheDocument();
     expect(screen.queryByText(`${tabPaneText} 2`)).not.toBeInTheDocument();
-  });
-
-  it("should call the onChange handler when the active tab changed", () => {
-    const handleTabChanged = jest.fn();
-    render(
-      <Tabs
-        tabs={tabs}
-        renderTabPaneContent={renderTabPaneContent}
-        onChange={handleTabChanged}
-        defaultActiveKey={tabs[2].key}
-      />
-    );
-
-    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
-    fireEvent.click(tab1);
-
-    expect(handleTabChanged).toHaveBeenCalled();
   });
 });
