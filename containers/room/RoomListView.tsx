@@ -4,8 +4,6 @@ import { AxiosError } from "axios";
 import { useTranslation } from "next-i18next";
 
 import {
-  Room,
-  RoomEntryError,
   RoomType,
   getRooms,
   postRoomEntry,
@@ -34,26 +32,16 @@ const RoomsListView: FC<Props> = ({ status }) => {
         fetch(getRooms({ page, perPage, status })),
       defaultPerPage: 20,
     });
-  const [selectedRoom, setSelectedRoom] = useState<Room | undefined>();
+  const [roomId, setRoomId] = useState<string | null>(null);
   const [passwordValues, setPasswordValues] = useState(INIT_PASSWORD);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const { Popup, firePopup } = usePopup();
-
-  const onSelectedRoom = (id: string) => {
-    const targetRoom = data.find((room) => room.id === id);
-
-    if (targetRoom?.currentPlayers === targetRoom?.maxPlayers) {
-      firePopup({ title: t("room_is_full") });
-      return;
-    }
-
-    setSelectedRoom(targetRoom);
-  };
+  const router = useRouter();
+  const isLocked = data.find((room) => room.id === roomId)?.isLocked;
 
   const handleClose = () => {
     setPasswordValues(INIT_PASSWORD);
-    setSelectedRoom(undefined);
+    setRoomId(null);
   };
 
   const handlePaste = (e: ClipboardEvent<HTMLDivElement>) => {
@@ -67,10 +55,6 @@ const RoomsListView: FC<Props> = ({ status }) => {
     setPasswordValues(Array.from(pastePassword, (text) => text ?? ""));
   };
 
-  const handleValues = (values: string[]) => {
-    setPasswordValues(values);
-  };
-
   useEffect(() => {
     async function fetchRoomEntry(_roomId: string) {
       setIsLoading(true);
@@ -80,27 +64,26 @@ const RoomsListView: FC<Props> = ({ status }) => {
         return;
       }
 
-      fetch(postRoomEntry(_roomId, passwordValues.join("")))
-        .then(() => {
-          router.push(`/rooms/${_roomId}`);
-        })
-        .catch((err: AxiosError<RoomEntryError>) => {
+      try {
+        await fetch(postRoomEntry(_roomId, passwordValues.join("")));
+        router.push(`/rooms/${_roomId}`);
+      } catch (err) {
+        if (err instanceof AxiosError) {
           const msg = err.response?.data.message.replaceAll(" ", "_");
           if (!msg) return firePopup({ title: "error!" });
           firePopup({ title: t(msg) });
-        })
-        .finally(() => {
-          // setSelectedRoom(undefined);
-          setPasswordValues(INIT_PASSWORD);
-          isLoading && setIsLoading(false);
-        });
+        }
+      } finally {
+        setPasswordValues(INIT_PASSWORD);
+        setIsLoading(false);
+      }
     }
 
-    if (!selectedRoom || isLoading) return;
-    if (!selectedRoom.isLocked || passwordValues.every((char) => char !== "")) {
-      fetchRoomEntry(selectedRoom.id);
+    if (!roomId || isLoading) return;
+    if (!isLocked || passwordValues.every((char) => char !== "")) {
+      fetchRoomEntry(roomId);
     }
-  }, [selectedRoom, passwordValues, isLoading, router, fetch, firePopup, t]);
+  }, [roomId, passwordValues, isLoading, router, fetch, firePopup, t]);
 
   const Pagination = () => {
     return (
@@ -129,8 +112,8 @@ const RoomsListView: FC<Props> = ({ status }) => {
               <RoomCard
                 key={_room.id}
                 room={_room}
-                active={_room.id === selectedRoom?.id}
-                onClick={onSelectedRoom}
+                active={_room.id === roomId}
+                onClick={setRoomId}
               />
             ))}
         </RoomsListWrapper>
@@ -138,10 +121,10 @@ const RoomsListView: FC<Props> = ({ status }) => {
       </RoomsList>
 
       <EnterPrivateRoomModal
-        isOpen={!!selectedRoom?.isLocked && !!selectedRoom?.id}
+        isOpen={!!isLocked && !!roomId}
         loading={isLoading}
         passwordValues={passwordValues}
-        setPasswordValues={handleValues}
+        setPasswordValues={setPasswordValues}
         onClose={handleClose}
         onPaste={handlePaste}
       />

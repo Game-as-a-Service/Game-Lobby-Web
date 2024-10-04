@@ -13,7 +13,7 @@ function RoomBreadcrumb({ roomInfo }: RoomBreadcrumbType) {
 
   const combinedText = roomInfo.name + "-" + maxPlayerText + "-" + statusText;
   return (
-    <Breadcrumb className="text-white">
+    <Breadcrumb className="text-primary-100">
       <Breadcrumb.Item text={isPublicText} href="/rooms" />
       <Breadcrumb.Item text={combinedText} href="" />
     </Breadcrumb>

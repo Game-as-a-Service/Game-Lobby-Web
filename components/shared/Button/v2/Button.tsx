@@ -17,7 +17,7 @@ export enum ButtonSize {
 }
 
 const commonDisabledClasses =
-  "disabled:cursor-not-allowed disabled:bg-none disabled:bg-gray-800 disabled:border-gray-500 disabled:text-gray-200 disabled:stroke-gray-200 disabled:fill-gray-200";
+  "disabled:cursor-not-allowed disabled:bg-none disabled:bg-grey-800 disabled:border-grey-500 disabled:text-grey-200 disabled:stroke-grey-200 disabled:fill-grey-200";
 
 const buttonTypeClasses: Record<ButtonVariant, string> = {
   primary:
@@ -51,7 +51,7 @@ type InnerButtonComponent = (
 const iconTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-  secondary: "stroke-primary-200 disabled:stroke-gray-500",
+  secondary: "stroke-primary-200 disabled:stroke-grey-500",
   highlight: "stroke-primary-50",
 };
 

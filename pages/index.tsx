@@ -10,6 +10,7 @@ import { mockCarouselItems } from "@/components/shared/Carousel";
 import CarouselV2 from "@/components/shared/Carousel/v2";
 import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
+import Tabs, { TabItemType } from "@/components/shared/Tabs";
 
 function CarouselCard({
   imgUrl,
@@ -94,8 +95,39 @@ function CarouselCard({
   );
 }
 
-export default function Home() {
+enum TabKey {
+  HOT = "hot",
+  NEW = "new",
+  LAST = "last",
+  GOOD = "good",
+  COLLECT = "collect",
+}
+
+const tabs: TabItemType<TabKey>[] = [
+  { tabKey: TabKey.HOT, label: "熱門遊戲" },
+  { tabKey: TabKey.NEW, label: "最新遊戲" },
+  { tabKey: TabKey.LAST, label: "上次遊玩" },
+  { tabKey: TabKey.GOOD, label: "好評遊戲" },
+  { tabKey: TabKey.COLLECT, label: "收藏遊戲" },
+];
+
+const TabPaneContent = (tabItem: TabItemType<TabKey>) => {
   const { t } = useTranslation("rooms");
+  if (tabItem.tabKey === TabKey.HOT) {
+    return (
+      <div className="my-6 flex gap-3">
+        <CreateRoomModal />
+        <Button component={Link} href="/rooms">
+          {t("rooms_list")}
+        </Button>
+        <FastJoinButton />
+      </div>
+    );
+  }
+  return <div>實作中...</div>;
+};
+
+export default function Home() {
   return (
     <div className="max-w-[1036px] mx-auto px-6">
       <div className="flex justify-center mb-6">
@@ -114,12 +146,8 @@ export default function Home() {
           Component={CarouselCard}
         />
       </div>
-      <div className="my-6 flex gap-3">
-        <CreateRoomModal />
-        <Button component={Link} href="/rooms">
-          {t("rooms_list")}
-        </Button>
-        <FastJoinButton />
+      <div className="mt-6">
+        <Tabs tabs={tabs} renderTabPaneContent={TabPaneContent} />
       </div>
     </div>
   );

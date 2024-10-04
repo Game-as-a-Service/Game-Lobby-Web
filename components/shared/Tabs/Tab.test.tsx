@@ -11,16 +11,9 @@ describe("Tab", () => {
     expect(screen.getByRole("tab")).toHaveTextContent(label);
   });
 
-  it("should renders tab button with the correct className", () => {
-    const className = "test-class test-class2";
-    render(<Tab label="test" tabKey={"test"} className={className} />);
-
-    expect(screen.getByRole("tab")).toHaveClass(className);
-  });
-
   it("should call the onClick handler when the tab is clicked", () => {
     const handleClickTab = jest.fn();
-    render(<Tab label="test" tabKey={"test"} onTabClick={handleClickTab} />);
+    render(<Tab label="test" tabKey={"test"} onClick={handleClickTab} />);
 
     fireEvent.click(screen.getByRole("tab"));
 
@@ -28,14 +21,17 @@ describe("Tab", () => {
   });
 
   it('should apply the active class when the "active" prop is true', () => {
-    render(<Tab label="test" tabKey={"test"} active />);
+    render(<Tab label="test" tabKey={"test"} isActive />);
 
-    expect(screen.getByRole("tab")).toHaveClass("is-active");
+    expect(screen.getByRole("tab")).toHaveAttribute("aria-selected", "true");
   });
 
   it('should not apply the active class when the "active" prop is falsy', () => {
     render(<Tab label="test" tabKey={"test"} />);
 
-    expect(screen.getByRole("tab")).not.toHaveClass("is-active");
+    expect(screen.getByRole("tab")).not.toHaveAttribute(
+      "aria-selected",
+      "true"
+    );
   });
 });

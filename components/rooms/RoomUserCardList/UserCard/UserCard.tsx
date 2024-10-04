@@ -45,26 +45,24 @@ function UserCard(props: any) {
   const nameText = getNameText();
 
   return (
-    <div className="max-w-[200px] aspect-square w-full rounded-[10px] ">
-      <div
-        className={cn(
-          "relative w-full h-[170px] rounded-[10px] border ",
-          isHost && hostClass,
-          disabled && disabledClass
-        )}
-      >
-        {onKickUser && (
-          <div
-            onClick={() => onKickUser({ id, nickname })}
-            data-testid="kick-user-svg"
-            className={"absolute top-[5px] right-[6px] cursor-pointer"}
-          >
-            <Icon name="kickUser" />
-          </div>
-        )}
+    <div
+      className={cn(
+        "relative h-28 rounded-[10px] border ",
+        isHost && hostClass,
+        disabled && disabledClass
+      )}
+    >
+      {onKickUser && (
+        <div
+          onClick={() => onKickUser({ id, nickname })}
+          data-testid="kick-user-svg"
+          className={"absolute top-[5px] right-[6px] cursor-pointer"}
+        >
+          <Icon name="kickUser" />
+        </div>
+      )}
 
-        {isReady && readyContent}
-      </div>
+      {isReady && readyContent}
       <span className="mt-[10px] block font-bold text-base text-white">
         {nameText}
       </span>
