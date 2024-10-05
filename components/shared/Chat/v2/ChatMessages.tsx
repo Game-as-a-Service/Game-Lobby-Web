@@ -1,11 +1,21 @@
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import Avatar from "../../Avatar";
+import Avatar from "@/components/shared/Avatar";
+import type { UserInfo } from "@/requests/users";
+
+type User = Pick<UserInfo, "id" | "nickname">;
 
 export type MessageType = {
-  from: string;
-  target: string;
+  /** The source of the message. */
+  from: "SYSTEM" | User;
+  /** The content of the user message. */
   content: string;
+  /** The recipient of the message.
+   * @ "LOBBY" | "ROOM_[:roomId]"  -
+   */
+  target: string;
+  /** The timestamp of the message. */
+  timestamp: string;
 };
 
 type ChatMessageProps = {
@@ -31,7 +41,7 @@ export default function ChatMessages({
       <div ref={messagesRef} className="overflow-y-scroll scrollbar">
         <div className="p-4 pr-0">
           {messages.map(({ from, content }, index) => {
-            const isSystem = from === "System";
+            const isSystem = from === "SYSTEM";
             const isMe = from === userId;
             const isSameUser = from === messages[index + 1]?.from;
 
@@ -71,7 +81,7 @@ export default function ChatMessages({
                           isMe && "text-right mt-1"
                         )}
                       >
-                        {isMe ? "我" : from}
+                        {isMe ? "我" : from.nickname}
                       </div>
                     </div>
                   </>
