@@ -16,6 +16,7 @@ import { RoomsList, RoomsListWrapper } from "@/components/rooms/RoomsList";
 import useRequest from "@/hooks/useRequest";
 import usePagination from "@/hooks/usePagination";
 import usePopup from "@/hooks/usePopup";
+import useUser from "@/hooks/useUser";
 
 type Props = {
   status: RoomType;
@@ -36,6 +37,7 @@ const RoomsListView: FC<Props> = ({ status }) => {
   const [passwordValues, setPasswordValues] = useState(INIT_PASSWORD);
   const [isLoading, setIsLoading] = useState(false);
   const { Popup, firePopup } = usePopup();
+  const { updateRoomId } = useUser();
   const router = useRouter();
   const isLocked = data.find((room) => room.id === roomId)?.isLocked;
 
@@ -61,12 +63,14 @@ const RoomsListView: FC<Props> = ({ status }) => {
 
       if (await fetch(getRoomInfoEndpoint(_roomId)).catch(() => {})) {
         router.push(`/rooms/${_roomId}`);
+        updateRoomId(_roomId);
         return;
       }
 
       try {
         await fetch(postRoomEntry(_roomId, passwordValues.join("")));
         router.push(`/rooms/${_roomId}`);
+        updateRoomId(_roomId);
       } catch (err) {
         if (err instanceof AxiosError) {
           const msg = err.response?.data.message.replaceAll(" ", "_");

@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -11,6 +12,8 @@ import CarouselV2 from "@/components/shared/Carousel/v2";
 import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
+import { GameType, getAllGamesEndpoint } from "@/requests/games";
+import useRequest from "@/hooks/useRequest";
 
 function CarouselCard({
   imgUrl,
@@ -23,7 +26,7 @@ function CarouselCard({
       </div>
       <div className="flex-[40%] p-4 rounded-lg bg-primary-50/8">
         <div className="text-xs text-primary-300">Massive Monster</div>
-        <div className="text-xl text-primary-100">AZUL ({imgAlt})</div>
+        <div className="text-xl text-primary-100">{imgAlt}</div>
         <div className="flex mb-2 text-xs text-primary-300">
           <div className="flex-1">4.6 ＊ ＊ ＊ ＊ ＊ (14)</div>
           <time className="flex-1">2023.08.25</time>
@@ -128,6 +131,23 @@ const TabPaneContent = (tabItem: TabItemType<TabKey>) => {
 };
 
 export default function Home() {
+  const { fetch } = useRequest();
+  const [gameList, setGameList] = useState<typeof mockCarouselItems>([]);
+
+  useEffect(() => {
+    async function handleGetAllGame() {
+      const result = await fetch(getAllGamesEndpoint());
+      setGameList(
+        result.map((gameItem) => ({
+          link: `/rooms/${gameItem.id}`,
+          imgUrl: gameItem.img,
+          imgAlt: gameItem.name,
+        }))
+      );
+    }
+    handleGetAllGame();
+  }, [fetch]);
+
   return (
     <div className="max-w-[1036px] mx-auto px-6">
       <div className="flex justify-center mb-6">
@@ -141,7 +161,7 @@ export default function Home() {
       </div>
       <div>
         <CarouselV2
-          items={mockCarouselItems}
+          items={gameList}
           uniqueKey="imgAlt"
           Component={CarouselCard}
         />

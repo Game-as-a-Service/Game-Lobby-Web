@@ -22,6 +22,7 @@ import {
   playerCancelReady,
   startGame,
 } from "@/requests/rooms";
+import useUser from "@/hooks/useUser";
 
 type User = Omit<RoomInfo.User, "isReady">;
 
@@ -38,6 +39,7 @@ export default function Room() {
   } = useRoom();
   const { socket } = useSocketCore();
   const { currentUser, token } = useAuth();
+  const { updateRoomId } = useUser();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
   const { query, replace } = useRouter();
@@ -70,6 +72,7 @@ export default function Room() {
 
     socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: User }) => {
       if (user.id === currentUser.id) {
+        updateRoomId();
         firePopup({
           title: `你已被踢出房間`,
           onConfirm: () => replace("/"),
@@ -105,6 +108,7 @@ export default function Room() {
     });
 
     socket.on(SOCKET_EVENT.ROOM_CLOSED, () => {
+      updateRoomId();
       firePopup({
         title: `房間已關閉!`,
         onConfirm: () => replace("/"),
@@ -149,6 +153,7 @@ export default function Room() {
       try {
         await fetch(closeRoom(roomId));
         replace("/rooms");
+        updateRoomId();
       } catch (err) {
         firePopup({ title: "error!" });
       }
@@ -167,6 +172,7 @@ export default function Room() {
       try {
         await fetch(leaveRoom(roomId));
         replace("/rooms");
+        updateRoomId();
       } catch (err) {
         firePopup({ title: "error!" });
       }

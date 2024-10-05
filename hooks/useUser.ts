@@ -13,7 +13,7 @@ import { useCallback } from "react";
 const useUser = () => {
   const { fetch } = useRequest();
   const { setToken: setTokenCtx } = useAuth();
-  const { token: tokenOperator } = useCookie();
+  const { token: tokenOperator, roomId: roomIdOperator } = useCookie();
 
   const getLoginEndpoint = async (type: LoginType) => {
     return await fetch(getLoginEndpointReq(type));
@@ -54,6 +54,18 @@ const useUser = () => {
     return await fetch(getCurrentUserReq());
   };
 
+  const getRoomId = () => {
+    return roomIdOperator.get();
+  };
+
+  const updateRoomId = (roomId?: string) => {
+    if (roomId) {
+      roomIdOperator.set(roomId);
+    } else {
+      roomIdOperator.remove();
+    }
+  };
+
   return {
     getLoginEndpoint,
     getMockToken,
@@ -63,6 +75,8 @@ const useUser = () => {
     getTokenInCookie,
     updateTokenInCookie,
     getCurrentUser,
+    getRoomId,
+    updateRoomId,
   };
 };
 
