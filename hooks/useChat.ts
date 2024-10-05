@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import type { MessageType } from "@/components/shared/Chat/v2/ChatMessages";
 import useChatroom from "./context/useChatroom";
 import useSocketCore from "./context/useSocketCore";
@@ -7,19 +7,20 @@ import useUser from "./useUser";
 export default function useChat() {
   const { lastMessage, sendChatMessage, joinChatroom, leaveChatroom } =
     useChatroom();
-  const [isChatVisible, toggleChatVisibility] = useReducer(
-    (preState: boolean) => !preState,
-    false
-  );
+  const [isChatVisible, setIsChatVisible] = useState(false);
   const { socket } = useSocketCore();
   const [messageList, setMessageList] = useState<MessageType[]>([]);
   const { getRoomId } = useUser();
   const roomId = getRoomId();
 
+  const toggleChatVisibility = () => {
+    setIsChatVisible((prev) => !prev);
+  };
+
   // join chatroom by roomId
   useEffect(() => {
     if (!roomId) return;
-    if (!socket || !socket.connected) return;
+    if (!socket?.connected) return;
     joinChatroom(roomId);
     return () => leaveChatroom(roomId);
   }, [joinChatroom, leaveChatroom, roomId, socket, socket?.connected]);
@@ -47,6 +48,7 @@ export default function useChat() {
     roomId,
     messageList,
     isChatVisible,
+    sendChatMessage,
     toggleChatVisibility,
     handleSubmitText,
   };

@@ -12,7 +12,7 @@ import CarouselV2 from "@/components/shared/Carousel/v2";
 import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { GameType, getAllGamesEndpoint } from "@/requests/games";
+import { getAllGamesEndpoint } from "@/requests/games";
 import useRequest from "@/hooks/useRequest";
 
 function CarouselCard({

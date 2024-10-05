@@ -1,9 +1,9 @@
 import ChatroomContext from "@/contexts/ChatroomContext";
 import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { MessageType } from "@/components/rooms/RoomChatroom";
 import useAuth from "@/hooks/context/useAuth";
 import useSocketCore from "@/hooks/context/useSocketCore";
 import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import type { MessageType } from "@/components/shared/Chat/v2/ChatMessages";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
