@@ -3,6 +3,7 @@ import cookie from "js-cookie";
 
 enum CookieKey {
   TOKEN = "_token",
+  ROOM_ID = "_room_id",
 }
 
 interface CookieOperator<T> {
@@ -37,8 +38,13 @@ const useCookie = () => {
     return generator<string>(CookieKey.TOKEN);
   }, []);
 
+  const roomIdOperator = useMemo(() => {
+    return generator<string>(CookieKey.ROOM_ID);
+  }, []);
+
   return {
     token: tokenOperator,
+    roomId: roomIdOperator,
   };
 };
 

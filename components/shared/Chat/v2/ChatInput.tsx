@@ -4,13 +4,13 @@ import Icon from "../../Icon";
 import type { MessageType } from "./ChatMessages";
 
 type ChatInputProps = {
-  userId: string;
+  roomId?: string;
   disabled: boolean;
-  onSubmit: (message: MessageType) => void;
+  onSubmit: (message: Pick<MessageType, "content" | "target">) => void;
 };
 
 export default function ChatInput({
-  userId,
+  roomId,
   disabled,
   onSubmit,
 }: Readonly<ChatInputProps>) {
@@ -24,8 +24,7 @@ export default function ChatInput({
     if (!content) return;
     setValue("");
     onSubmit({
-      from: userId,
-      target: "",
+      target: roomId ? `ROOM_${roomId}` : "TODO:OTHER",
       content,
     });
   };

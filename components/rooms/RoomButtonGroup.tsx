@@ -18,6 +18,7 @@ function RoomButtonGroup(props: RoomButtonGroupProps) {
     isHost,
     isReady,
   } = props;
+
   return (
     <div className="flex items-center gap-4 m-4">
       <Button

@@ -9,18 +9,22 @@ import Icon from "../../Icon";
 
 export type ChatProps = {
   userId: string;
+  roomId?: string;
   lobbyMessages: MessageType[];
   friendList: FriendType[];
   roomMessages: MessageType[];
   maxHeight?: string;
+  onSubmit: (message: Pick<MessageType, "content" | "target">) => void;
 };
 
 export default function Chat({
   userId,
+  roomId,
   lobbyMessages,
   friendList,
   roomMessages,
   maxHeight = "calc(100vh - 168px)",
+  onSubmit,
 }: Readonly<ChatProps>) {
   const [messages, setMessages] = useState(lobbyMessages);
   const [target, setTarget] = useState<[ChatTab["id"], string | null]>([
@@ -64,9 +68,9 @@ export default function Chat({
   const handleToggleTarget = (id: FriendType["target"]) =>
     setTarget(["friend", id]);
 
-  const handleSubmit = (message: MessageType) => {
+  const handleSubmit = (message: Pick<MessageType, "content" | "target">) => {
     if (activeTab === "friend" && !friendRoom) return;
-    setMessages((pre) => [...pre, message]);
+    onSubmit(message);
   };
 
   return (
@@ -108,7 +112,7 @@ export default function Chat({
           )}
         </div>
         <ChatInput
-          userId={userId}
+          roomId={roomId}
           onSubmit={handleSubmit}
           disabled={isFriendList}
         />
