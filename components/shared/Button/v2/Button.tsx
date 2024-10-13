@@ -7,6 +7,7 @@ import { PolymorphicRef } from "@/lib/types";
 
 export enum ButtonVariant {
   PRIMARY = "primary",
+  PRIMARY_TRANSPARENT = "primaryTransparent",
   SECONDARY = "secondary",
   HIGHLIGHT = "highlight",
 }
@@ -22,6 +23,8 @@ const commonDisabledClasses =
 const buttonTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "text-primary-700 bg-primary-200 hover:text-primary-50 hover:bg-primary-300 active:text-primary-50 active:bg-primary-400",
+  primaryTransparent:
+    "text-primary-800 bg-primary-200/60 hover:text-primary-800 hover:bg-primary-300/50 active:text-primary-800 active:bg-primary-300/50",
   secondary:
     "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border",
   highlight:
@@ -51,6 +54,8 @@ type InnerButtonComponent = (
 const iconTypeClasses: Record<ButtonVariant, string> = {
   primary:
     "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
+  primaryTransparent:
+    "stroke-primary-700 hover:stroke-primary-700 active:stroke-primary-700",
   secondary: "stroke-primary-200 disabled:stroke-grey-500",
   highlight: "stroke-primary-50",
 };

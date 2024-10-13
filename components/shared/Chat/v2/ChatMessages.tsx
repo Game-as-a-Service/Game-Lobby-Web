@@ -37,7 +37,7 @@ export default function ChatMessages({
   }, [messages]);
 
   return (
-    <div className="flex flex-col justify-end min-h-full max-h-[calc(var(--chat-height)-120px)]">
+    <div className="flex flex-col justify-end min-h-full max-h-[calc(100%-182px)]">
       <div ref={messagesRef} className="overflow-y-scroll scrollbar">
         <div className="p-4 pr-0">
           {messages.map(({ from, content }, index) => {
