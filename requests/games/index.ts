@@ -6,7 +6,7 @@ export type GameType = {
   img: string;
   minPlayers: number;
   maxPlayers: number;
-  category?: string;
+  createdOn: string;
 };
 
 export const getAllGamesEndpoint = (): IRequestWrapper<GameType[]> => {
