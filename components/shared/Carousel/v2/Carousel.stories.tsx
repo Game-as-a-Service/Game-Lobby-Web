@@ -21,7 +21,7 @@ const meta: Meta<typeof Carousel> = {
     },
   ],
   args: {
-    uniqueKey: "name",
+    renderKey: (props: any) => props.name,
     items: [{ name: "TEST 1" }, { name: "TEST 2" }, { name: "TEST 3" }],
     Component: Card,
   },

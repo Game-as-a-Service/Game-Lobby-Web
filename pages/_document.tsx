@@ -12,7 +12,7 @@ export default function Document() {
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <body className="body-bg text-primary-200 overflow-hidden">
+      <body className="body-bg text-primary-200">
         <Main />
         <NextScript />
       </body>

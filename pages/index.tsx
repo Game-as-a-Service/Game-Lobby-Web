@@ -1,96 +1,136 @@
 import { GetStaticProps } from "next";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import Link from "next/link";
+import { ReactEventHandler, useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+import { AxiosError } from "axios";
 
-import Button from "@/components/shared/Button";
+import Button from "@/components/shared/Button/v2";
 import CreateRoomModal from "@/components/lobby/CreateRoomModal";
-import { mockCarouselItems } from "@/components/shared/Carousel";
 import CarouselV2 from "@/components/shared/Carousel/v2";
 import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { getAllGamesEndpoint } from "@/requests/games";
+import { fastJoinGameEndpoint } from "@/requests/rooms";
+import { GameType, getAllGamesEndpoint } from "@/requests/games";
 import useRequest from "@/hooks/useRequest";
+import useUser from "@/hooks/useUser";
+import { useToast } from "@/components/shared/Toast";
+import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+
+const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
+  if (e.target instanceof HTMLImageElement) {
+    e.target.src = gameDefaultCoverImg.src;
+  }
+};
 
 function CarouselCard({
-  imgUrl,
-  imgAlt,
-}: Readonly<(typeof mockCarouselItems)[number]>) {
+  id,
+  img,
+  name,
+  createdOn,
+  maxPlayers,
+  minPlayers,
+}: Readonly<GameType>) {
+  // 待重構將邏輯統一管理
+  const { fetch } = useRequest();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const toast = useToast();
+  const { updateRoomId } = useUser();
+
+  const handleFastJoin = async () => {
+    try {
+      setIsLoading(true);
+      const { roomId } = await fetch(fastJoinGameEndpoint(id));
+      router.push(`/rooms/${roomId}`);
+      updateRoomId(roomId);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast(
+          { state: "error", children: error.response?.data.message },
+          { position: "top" }
+        );
+      } else {
+        toast(
+          { state: "error", children: `無法預期的錯誤： ${error}` },
+          { position: "top" }
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex text-white px-12 gap-4">
-      <div className="relative flex-[60%]">
-        <Image src={imgUrl} alt={imgAlt} draggable={false} priority fill />
+      <div className="relative flex items-end justify-end flex-[60%]">
+        <Image
+          src={img || gameDefaultCoverImg.src}
+          alt={name}
+          draggable={false}
+          priority
+          fill
+          objectFit="cover"
+          onError={onImageError}
+        />
+        <div className="m-4 flex gap-4">
+          <Button
+            variant="primaryTransparent"
+            disabled={isLoading}
+            onClick={handleFastJoin}
+          >
+            快速遊戲
+          </Button>
+          <Button variant="primaryTransparent" className="w-11 h-11 p-0">
+            ...
+          </Button>
+        </div>
       </div>
       <div className="flex-[40%] p-4 rounded-lg bg-primary-50/8">
-        <div className="text-xs text-primary-300">Massive Monster</div>
-        <div className="text-xl text-primary-100">{imgAlt}</div>
-        <div className="flex mb-2 text-xs text-primary-300">
-          <div className="flex-1">4.6 ＊ ＊ ＊ ＊ ＊ (14)</div>
-          <time className="flex-1">2023.08.25</time>
+        <div className="text-xs text-primary-300">Game Name</div>
+        <div className="text-xl text-primary-100">{name}</div>
+        <div className="flex gap-6 mb-2 text-xs text-primary-300">
+          <div className="flex-1">4.8 ＊ ＊ ＊ ＊ ＊ (66)</div>
+          <time className="flex-1">
+            {createdOn.slice(0, 10).replace(/-/g, ".")}
+          </time>
         </div>
         <div className="mb-3">
           <ul className="flex gap-3">
             <li className="relative w-16 h-10">
-              <Image
-                src="https://images.unsplash.com/photo-1533237264985-ee62f6d342bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
-                alt={imgAlt}
-                draggable={false}
-                priority
-                fill
-              />
-            </li>
-            <li className="relative w-16 h-10">
-              <Image
-                src="https://images.unsplash.com/photo-1613160717888-faa82cdb8a94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                alt={imgAlt}
-                draggable={false}
-                priority
-                fill
-              />
-            </li>
-            <li className="relative w-16 h-10">
-              <Image
-                src="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                alt={imgAlt}
-                draggable={false}
-                priority
-                fill
-              />
-            </li>
-            <li className="relative w-16 h-10">
-              <Image
-                src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
-                alt={imgAlt}
-                draggable={false}
-                priority
-                fill
-              />
+              {img && (
+                <Image
+                  src={img}
+                  alt={name}
+                  draggable={false}
+                  priority
+                  fill
+                  objectFit="cover"
+                  onError={onImageError}
+                />
+              )}
             </li>
           </ul>
         </div>
-        <div className="mb-3 text-xs text-primary-50">
-          《AZUL》是強手棋類休閒遊戲，在遊戲中，你可以任意選擇比賽地圖、參賽角色和組隊方式，使用卡片等方式賺取金錢，最終取得比賽勝利。
-        </div>
+        <div className="mb-3 text-xs text-primary-50 h-12">暫無描述</div>
         <div>
-          <ul className="flex flex-wrap gap-2 text-xs">
-            <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5">
-              回合制
-            </li>
-            <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5">
-              第三人稱
-            </li>
-            <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5">
-              策略型
-            </li>
-            <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5">
-              玩家對戰
-            </li>
-            <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5">
-              輕鬆休閒
-            </li>
+          <ul className="flex flex-wrap gap-2 text-xs h-12">
+            {maxPlayers === 1 && (
+              <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5 h-fit">
+                單人遊戲
+              </li>
+            )}
+            {maxPlayers === minPlayers && maxPlayers > 1 && (
+              <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5 h-fit">
+                {maxPlayers} 人遊戲
+              </li>
+            )}
+            {maxPlayers !== minPlayers && maxPlayers > 1 && (
+              <li className="bg-primary-800 text-primary-300 rounded-full px-2 py-0.5 h-fit">
+                {minPlayers} - {maxPlayers} 玩家
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -114,38 +154,59 @@ const tabs: TabItemType<TabKey>[] = [
   { tabKey: TabKey.COLLECT, label: "收藏遊戲" },
 ];
 
-const TabPaneContent = (tabItem: TabItemType<TabKey>) => {
-  const { t } = useTranslation("rooms");
-  if (tabItem.tabKey === TabKey.HOT) {
+const TabPaneContent = ({
+  tabKey,
+  gameList,
+}: TabItemType<TabKey> & { gameList: GameType[] }) => {
+  if ([TabKey.HOT, TabKey.NEW].includes(tabKey)) {
+    const data =
+      tabKey === TabKey.HOT
+        ? gameList
+        : gameList
+            .concat()
+            .sort(
+              (a, b) =>
+                new Date(b.createdOn).getTime() -
+                new Date(a.createdOn).getTime()
+            );
+
     return (
-      <div className="my-6 flex gap-3">
-        <CreateRoomModal />
-        <Button component={Link} href="/rooms">
-          {t("rooms_list")}
-        </Button>
-        <FastJoinButton />
-      </div>
+      <ul className="mt-6 grid grid-cols-4 gap-4">
+        {data.map((game) => (
+          <li key={game.id}>
+            <div
+              className="cursor-pointer"
+              onClick={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+              onKeyDown={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+            >
+              <picture className="relative aspect-game-cover overflow-hidden">
+                <Image
+                  src={game.img}
+                  alt={game.name}
+                  draggable={false}
+                  priority
+                  fill
+                  objectFit="cover"
+                  onError={onImageError}
+                />
+              </picture>
+              <h2>{game.name}</h2>
+            </div>
+          </li>
+        ))}
+      </ul>
     );
   }
-  return <div>實作中...</div>;
+
+  return <div className="mt-6">實作中...</div>;
 };
 
 export default function Home() {
   const { fetch } = useRequest();
-  const [gameList, setGameList] = useState<typeof mockCarouselItems>([]);
+  const [gameList, setGameList] = useState<GameType[]>([]);
 
   useEffect(() => {
-    async function handleGetAllGame() {
-      const result = await fetch(getAllGamesEndpoint());
-      setGameList(
-        result.map((gameItem) => ({
-          link: `/rooms/${gameItem.id}`,
-          imgUrl: gameItem.img,
-          imgAlt: gameItem.name,
-        }))
-      );
-    }
-    handleGetAllGame();
+    fetch(getAllGamesEndpoint()).then(setGameList);
   }, [fetch]);
 
   return (
@@ -162,12 +223,17 @@ export default function Home() {
       <div>
         <CarouselV2
           items={gameList}
-          uniqueKey="imgAlt"
+          renderKey={(item) => item.id}
           Component={CarouselCard}
         />
       </div>
       <div className="mt-6">
-        <Tabs tabs={tabs} renderTabPaneContent={TabPaneContent} />
+        <Tabs
+          tabs={tabs}
+          renderTabPaneContent={(props) => (
+            <TabPaneContent gameList={gameList} {...props} />
+          )}
+        />
       </div>
     </div>
   );

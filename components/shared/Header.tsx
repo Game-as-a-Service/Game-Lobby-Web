@@ -21,10 +21,14 @@ interface ButtonProps {
 }
 
 interface HeaderProps {
+  className?: string;
   onClickChatButton: () => void;
 }
 
-export default function Header({ onClickChatButton }: Readonly<HeaderProps>) {
+export default function Header({
+  className,
+  onClickChatButton,
+}: Readonly<HeaderProps>) {
   const [openProfile, setOpenProfile] = useState(false);
 
   const buttons: ButtonProps[] = [
@@ -51,7 +55,12 @@ export default function Header({ onClickChatButton }: Readonly<HeaderProps>) {
   ];
 
   return (
-    <header className="flex flex-row items-center justify-between px-8 py-2 bg-white/8 glass-shadow">
+    <header
+      className={cn(
+        "flex items-center justify-between px-8 py-2 bg-white/8 glass-shadow backdrop-blur-3xl",
+        className
+      )}
+    >
       <div className="flex items-center gap-3">
         <Icon name="logo" className="bg-transparent" />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>

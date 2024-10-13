@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ChatHeader, { ChatTab } from "./ChatHeader";
 import ChatMessages from "./ChatMessages";
 import ChatFriendList, { FriendType, getTargetUser } from "./ChatFriendList";
@@ -6,6 +6,7 @@ import ChatInput from "./ChatInput";
 import type { MessageType } from "./ChatMessages";
 import { createMockFriendMessages } from "./__mocks__/mock";
 import Icon from "../../Icon";
+import { cn } from "@/lib/utils";
 
 export type ChatProps = {
   userId: string;
@@ -13,7 +14,7 @@ export type ChatProps = {
   lobbyMessages: MessageType[];
   friendList: FriendType[];
   roomMessages: MessageType[];
-  maxHeight?: string;
+  className?: string;
   onSubmit: (message: Pick<MessageType, "content" | "target">) => void;
 };
 
@@ -23,7 +24,7 @@ export default function Chat({
   lobbyMessages,
   friendList,
   roomMessages,
-  maxHeight = "calc(100vh - 168px)",
+  className,
   onSubmit,
 }: Readonly<ChatProps>) {
   const [messages, setMessages] = useState(lobbyMessages);
@@ -74,17 +75,14 @@ export default function Chat({
   };
 
   return (
-    <div
-      className="w-[308px] h-[var(--chat-height))] gradient-purple rounded-lg"
-      style={{ "--chat-height": maxHeight } as CSSProperties}
-    >
+    <div className={cn("w-80 gradient-purple rounded-lg", className)}>
       <div className="h-full body-bg border border-transparent bg-clip-padding rounded-lg overflow-hidden">
         <ChatHeader
           tabs={chatTabs}
           activeTab={activeTab}
           onToggle={handleToggleTab}
         />
-        <div className="relative h-[calc(var(--chat-height)-120px)] bg-primary-50/4">
+        <div className="relative h-[calc(100%-182px)] bg-primary-50/4">
           {isFriendList ? (
             <ChatFriendList
               userId={userId}

@@ -15,9 +15,16 @@ module.exports = {
       width: {
         18: "4.5rem" /** 72px */,
       },
+      height: {
+        "main-height": "calc(100vh - 100px)",
+      },
+      aspectRatio: {
+        "game-cover": "235 / 156",
+      },
       opacity: {
         4: 0.04,
         8: 0.08,
+        60: 0.6,
       },
       colors: {
         primary: {

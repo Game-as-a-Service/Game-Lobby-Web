@@ -6,7 +6,7 @@ const mock_gameList: GameType[] = [
     img: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 10,
-    category: "心機",
+    createdOn: "2024-01-01T00:00:00",
   },
   {
     id: "133456",
@@ -14,6 +14,7 @@ const mock_gameList: GameType[] = [
     img: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 2,
     maxPlayers: 4,
+    createdOn: "2024-01-01T00:00:00",
   },
   {
     id: "133416",
@@ -21,6 +22,7 @@ const mock_gameList: GameType[] = [
     img: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 8,
+    createdOn: "2024-01-01T00:00:00",
   },
 
   {
@@ -29,6 +31,7 @@ const mock_gameList: GameType[] = [
     img: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 3,
     maxPlayers: 6,
+    createdOn: "2024-01-01T00:00:00",
   },
   {
     id: "184456",
@@ -36,7 +39,7 @@ const mock_gameList: GameType[] = [
     img: "http://localhost:3030/images/game-avatar.jpg",
     minPlayers: 1,
     maxPlayers: 5,
-    category: "策略",
+    createdOn: "2024-01-01T00:00:00",
   },
 ];
 

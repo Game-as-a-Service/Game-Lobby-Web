@@ -14,7 +14,7 @@ type GroupedGamesType = {
 
 function GameList({ gameList, onGameChange, activeGameId }: GameListProp) {
   const groupedGames = gameList.reduce((result: GroupedGamesType, game) => {
-    const category = game.category || "其他";
+    const category = "其他";
     if (!result[category]) {
       result[category] = [];
     }

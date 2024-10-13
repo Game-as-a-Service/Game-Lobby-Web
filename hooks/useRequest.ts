@@ -34,7 +34,7 @@ const useRequest = () => {
         requestWrapper: IRequestWrapper<T>,
         options: FetchOptions = {
           toast: {
-            show: true,
+            show: false,
             options: {
               position: "bottom-right",
             },

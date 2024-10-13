@@ -20,7 +20,11 @@ interface RouteProps {
   isShow: boolean;
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  className?: string;
+}
+
+export default function Sidebar({ className }: SidebarProps) {
   const { pathname } = useRouter();
   const { currentUser } = useAuth();
   const { logout, getRoomId } = useUser();
@@ -52,7 +56,12 @@ export default function Sidebar() {
   };
 
   return (
-    <nav className="flex flex-col justify-start bg-white/8 glass-shadow py-6 rounded-2xl w-18 h-full gap-5">
+    <nav
+      className={cn(
+        "flex flex-col justify-start bg-white/8 glass-shadow py-6 rounded-2xl w-18 gap-5",
+        className
+      )}
+    >
       {routes
         .filter((route) => route.isShow)
         .map((routeProps) => (

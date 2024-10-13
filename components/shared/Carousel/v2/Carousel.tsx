@@ -1,18 +1,15 @@
-import { CSSProperties, FC, useEffect, useRef, useState } from "react";
+import { CSSProperties, FC, Key, useEffect, useRef, useState } from "react";
 import Icon from "../../Icon/v2/Icon";
 
-interface CarouselProps<
-  Item extends Record<string, unknown>,
-  Key extends keyof Item = keyof Item,
-> {
-  items: (Item & Record<Key, string>)[];
-  uniqueKey: Key;
+interface CarouselProps<Item extends Record<string, unknown>> {
+  items: Item[];
+  renderKey: (item: Item) => Key;
   Component: FC<Item>;
 }
 
 export default function Carousel<Item extends Record<string, unknown>>({
   items,
-  uniqueKey,
+  renderKey,
   Component,
 }: Readonly<CarouselProps<Item>>) {
   const [showIndex, setShowIndex] = useState(0);
@@ -68,7 +65,7 @@ export default function Carousel<Item extends Record<string, unknown>>({
           {Array.isArray(items) &&
             items.map((item) => (
               <li
-                key={item[uniqueKey]}
+                key={renderKey(item)}
                 className="shrink-0 w-[var(--max-width)]"
                 style={
                   {

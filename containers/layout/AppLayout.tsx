@@ -14,16 +14,20 @@ export default function Layout({ children }: PropsWithChildren) {
   } = useChat();
 
   return (
-    <div className="inset-0 flex flex-col w-full h-full">
-      <Header onClickChatButton={toggleChatVisibility} />
-      <div className="ml-2 mr-4 my-6 flex grow max-w-[100vw]">
+    <>
+      <Header
+        className="sticky top-0 z-40"
+        onClickChatButton={toggleChatVisibility}
+      />
+      <div className="ml-2 mr-4 my-6 flex grow">
         <div className="shrink-0">
-          <Sidebar />
+          <Sidebar className="sticky top-20 z-30 h-main-height" />
         </div>
         <main className="grow overflow-x-hidden">{children}</main>
         {isChatVisible && (
           <div className="shrink-0">
             <Chat
+              className="sticky top-20 z-30 h-main-height"
               userId=""
               roomId={roomId}
               friendList={[]}
@@ -34,6 +38,6 @@ export default function Layout({ children }: PropsWithChildren) {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
