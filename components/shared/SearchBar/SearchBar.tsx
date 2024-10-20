@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import Icon from "../Icon/v2/Icon";
+import Icon from "@/components/shared/Icon/v3";
 
 interface SearchBarProps {
   /** The placeholder text displayed in the search bar when it is empty */
@@ -23,7 +23,7 @@ export const SearchBar = ({
   leftSlot,
   buttonSlot = (
     <Icon
-      name="search"
+      name="Search"
       className="stroke-primary-100 w-6 h-6 pointer-events-none"
     />
   ),

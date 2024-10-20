@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import type { IconNameV2 } from "@/components/shared/Icon/v2/icons";
-import Icon from "@/components/shared/Icon/v2";
+import Icon, { IconName } from "@/components/shared/Icon/v3";
 import Button from "@/components/shared/Button";
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
@@ -15,7 +14,7 @@ enum SidebarRoutes {
 
 interface RouteProps {
   text: string;
-  iconName: IconNameV2;
+  iconName: IconName;
   route: `${SidebarRoutes}${string}`;
   isShow: boolean;
 }
@@ -33,19 +32,19 @@ export default function Sidebar({ className }: SidebarProps) {
   const routes: RouteProps[] = [
     {
       text: "遊戲大廳",
-      iconName: "home",
+      iconName: "Home",
       route: SidebarRoutes.HOME,
       isShow: true,
     },
     {
       text: "遊戲房間",
-      iconName: "arcade",
+      iconName: "Arcade",
       route: SidebarRoutes.ROOMS,
       isShow: !roomId,
     },
     {
       text: "遊戲房間",
-      iconName: "arcade",
+      iconName: "Arcade",
       route: `${SidebarRoutes.ROOMS}/${roomId}`,
       isShow: !!roomId,
     },
@@ -93,7 +92,7 @@ export default function Sidebar({ className }: SidebarProps) {
           className="mt-auto bg-transparent px-0 justify-center opacity-[0.3] hover:shadow-none hover:opacity-100"
           onClick={logout}
         >
-          <Icon className="stroke-primary-400" name="logOut" />
+          <Icon className="stroke-primary-400" name="LogOut" />
           <span className="text-xs">登出</span>
         </Button>
       )}

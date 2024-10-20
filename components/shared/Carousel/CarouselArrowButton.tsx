@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import { cn } from "@/lib/utils";
-import Icon from "@/components/shared/Icon";
+import Icon from "@/components/shared/Icon/v3";
 
 export type CarouselArrowButtonType = "prev" | "next";
 
@@ -35,8 +35,8 @@ export default function CarouselArrowButton({
   );
 
   const arrowIcon = {
-    prev: <Icon name="navArrowLeft" className={svgClass} />,
-    next: <Icon name="navArrowRight" className={svgClass} />,
+    prev: <Icon name="NavArrowLeft" className={svgClass} />,
+    next: <Icon name="NavArrowRight" className={svgClass} />,
   };
 
   return (

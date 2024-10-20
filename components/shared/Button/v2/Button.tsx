@@ -1,8 +1,7 @@
 import React, { ReactNode, forwardRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
-import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
-import Icon from "@/components/shared/Icon/v2";
+import Icon, { IconName } from "@/components/shared/Icon/v3";
 import { PolymorphicRef } from "@/lib/types";
 
 export enum ButtonVariant {
@@ -40,7 +39,7 @@ interface BaseButtonProps {
   variant?: ButtonVariant | `${ButtonVariant}`;
   size?: ButtonSize;
   icon?: ReactNode;
-  iconName?: IconNameV2;
+  iconName?: IconName;
   iconClassName?: string;
 }
 

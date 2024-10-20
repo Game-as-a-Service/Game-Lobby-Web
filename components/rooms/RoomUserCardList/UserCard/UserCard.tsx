@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import Icon from "@/components/shared/Icon";
+import Icon from "@/components/shared/Icon/v3";
 import { ReactElement } from "react";
 import { RoomInfo } from "@/requests/rooms";
 export interface UserCardProps {
@@ -58,7 +58,7 @@ function UserCard(props: any) {
           data-testid="kick-user-svg"
           className={"absolute top-[5px] right-[6px] cursor-pointer"}
         >
-          <Icon name="kickUser" />
+          <Icon name="X" />
         </div>
       )}
 
