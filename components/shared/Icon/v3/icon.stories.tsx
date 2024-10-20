@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { MouseEventHandler, useState } from "react";
 
-import IconV2 from ".";
-import icons from "./icons";
 import { keys } from "@/lib/utils";
 import { Input } from "@/components/shared/Input";
 import { ToastQueueProvider, useToast } from "@/components/shared/Toast";
+import * as icons from "./icons";
+import Icon from "./Icon";
 
-const meta: Meta<typeof IconV2> = {
-  title: "General/IconV2",
-  component: IconV2,
+const meta: Meta<typeof Icon> = {
+  title: "General/IconV3",
+  component: Icon,
   tags: ["autodocs"],
   decorators: [
     (Story) => (
@@ -24,14 +24,14 @@ const meta: Meta<typeof IconV2> = {
 
 export default meta;
 
-type Story = StoryObj<typeof IconV2>;
+type Story = StoryObj<typeof Icon>;
 
 export const Playground: Story = {
-  render: (args) => <IconV2 {...args} />,
+  render: (args) => <Icon {...args} />,
 };
 
 Playground.args = {
-  name: "arcade",
+  name: "Arcade",
   className: "w-9 h-9",
 };
 
@@ -45,7 +45,7 @@ const AllIcons = () => {
       e.stopPropagation();
 
       const cb = navigator.clipboard;
-      const text = `<IconV2 name="${iconName}" className="w-6 h-6" />`;
+      const text = `<Icon name="${iconName}" className="w-6 h-6" />`;
 
       toast({ children: "已複製成功!!" }, { duration: 1000 });
 
@@ -63,18 +63,18 @@ const AllIcons = () => {
         inputClassName="border-white/90"
       />
       <div
-        className="px-6 w-full h-96 grid place-content-start gap-10 overflow-auto"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))" }}
+        className="px-6 w-full h-96 grid place-content-start gap-4 overflow-auto"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}
       >
         {keys(icons)
           .filter((iconName) => iconName.includes(value))
           .map((iconName) => (
             <button
               key={iconName}
-              className="cursor-pointer"
+              className="flex flex-col justify-center items-stretch cursor-pointer"
               onClick={handleClick(iconName)}
             >
-              <IconV2 name={iconName} className="w-full h-full" />
+              <Icon name={iconName} className="h-10" />
               <p className="text-center text-zinc-950 whitespace-nowrap">
                 {iconName}
               </p>
