@@ -18,7 +18,7 @@ const Token: NextPageWithProps = () => {
     }
   }, [token, login, push]);
 
-  return <h1>{token}</h1>;
+  return <></>;
 };
 
 Token.getLayout = (page: ReactElement) => page;

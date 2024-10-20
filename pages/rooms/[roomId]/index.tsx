@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { ReactEventHandler, useEffect, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
+import { useRouter } from "next/router";
+import Image from "next/image";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
@@ -22,9 +23,17 @@ import {
   playerCancelReady,
   startGame,
 } from "@/requests/rooms";
+import { GameType, getAllGamesEndpoint } from "@/requests/games";
 import useUser from "@/hooks/useUser";
+import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
 
 type User = Omit<RoomInfo.User, "isReady">;
+
+const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
+  if (e.target instanceof HTMLImageElement) {
+    e.target.src = gameDefaultCoverImg.src;
+  }
+};
 
 export default function Room() {
   const {
@@ -44,16 +53,27 @@ export default function Room() {
   const { fetch } = useRequest();
   const { query, replace } = useRouter();
   const [gameUrl, setGameUrl] = useState("");
+  const [gameList, setGameList] = useState<GameType[]>([]);
   const roomId = query.roomId as string;
   const player = roomInfo.players.find(
     (player) => player.id === currentUser?.id
   );
   const isHost = roomInfo.host.id === currentUser?.id;
+  const gameInfo = gameList.find((game) => game.id === roomInfo.game.id);
+
+  useEffect(() => {
+    fetch(getAllGamesEndpoint()).then(setGameList);
+  }, [fetch]);
 
   useEffect(() => {
     async function getRoomInfo() {
-      const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
-      initializeRoom(roomInfo);
+      try {
+        const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
+        initializeRoom(roomInfo);
+      } catch (err) {
+        updateRoomId();
+        replace("/rooms");
+      }
     }
 
     getRoomInfo();
@@ -119,6 +139,7 @@ export default function Room() {
     socket,
     currentUser?.id,
     roomId,
+    updateRoomId,
     addPlayer,
     removePlayer,
     updateUserReadyStatus,
@@ -211,40 +232,54 @@ export default function Room() {
   };
 
   return (
-    <section className="px-6">
-      <div className="relative w-full h-[280px] overflow-hidden">
-        <img
-          className="absolute inset-0 w-full h-full object-cover"
-          src="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-          alt="cover"
+    <section className="px-4">
+      {gameUrl ? (
+        <GameWindow
+          className="h-[calc(100dvh-104px)] w-full"
+          gameUrl={gameUrl}
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-[#0f0919] to-50% to-[#170D2500]"></div>
-        <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-          <RoomBreadcrumb roomInfo={roomInfo} />
-        </div>
-        <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-          {roomInfo.isLocked ? "非公開" : "公開"}
-        </div>
-        <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-          {roomInfo.currentPlayers} / {roomInfo.maxPlayers} 人
-        </div>
-        <div className="absolute bottom-0 right-0 flex items-center">
-          <RoomButtonGroup
-            onToggleReady={handleToggleReady}
-            onClickClose={handleClickClose}
-            onClickLeave={handleLeave}
-            onClickStart={handleStart}
-            isHost={isHost}
-            isReady={isHost || !!player?.isReady}
+      ) : (
+        <>
+          <div className="relative w-full h-[280px] overflow-hidden">
+            {roomInfo.currentPlayers && (
+              <Image
+                src={gameInfo?.img || gameDefaultCoverImg.src}
+                alt={gameInfo?.name || "default game cover"}
+                draggable={false}
+                priority
+                fill
+                className="object-cover"
+                onError={onImageError}
+              />
+            )}
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-[#0f0919] to-50% to-[#170D2500]"></div>
+            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
+              <RoomBreadcrumb roomInfo={roomInfo} />
+            </div>
+            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
+              {roomInfo.isLocked ? "非公開" : "公開"}
+            </div>
+            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
+              {roomInfo.currentPlayers} / {roomInfo.maxPlayers} 人
+            </div>
+            <div className="absolute bottom-0 right-0 flex items-center">
+              <RoomButtonGroup
+                onToggleReady={handleToggleReady}
+                onClickClose={handleClickClose}
+                onClickLeave={handleLeave}
+                onClickStart={handleStart}
+                isHost={isHost}
+                isReady={isHost || !!player?.isReady}
+              />
+            </div>
+          </div>
+          <RoomUserCardList
+            roomInfo={roomInfo}
+            currentUserId={currentUser?.id}
+            onKickUser={handleClickKick}
           />
-        </div>
-      </div>
-      <RoomUserCardList
-        roomInfo={roomInfo}
-        currentUserId={currentUser?.id}
-        onKickUser={handleClickKick}
-      />
-      {gameUrl && <GameWindow gameUrl={gameUrl} />}
+        </>
+      )}
       <Popup />
     </section>
   );

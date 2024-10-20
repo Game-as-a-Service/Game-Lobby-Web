@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { MessageType } from "@/components/shared/Chat/v2/ChatMessages";
 import useChatroom from "./context/useChatroom";
 import useSocketCore from "./context/useSocketCore";
@@ -16,6 +16,10 @@ export default function useChat() {
   const toggleChatVisibility = () => {
     setIsChatVisible((prev) => !prev);
   };
+
+  const openChat = useCallback(() => {
+    setIsChatVisible(true);
+  }, []);
 
   // join chatroom by roomId
   useEffect(() => {
@@ -48,6 +52,7 @@ export default function useChat() {
     roomId,
     messageList,
     isChatVisible,
+    openChat,
     sendChatMessage,
     toggleChatVisibility,
     handleSubmitText,

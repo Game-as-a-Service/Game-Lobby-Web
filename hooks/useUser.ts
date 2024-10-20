@@ -58,13 +58,16 @@ const useUser = () => {
     return roomIdOperator.get();
   };
 
-  const updateRoomId = (roomId?: string) => {
-    if (roomId) {
-      roomIdOperator.set(roomId);
-    } else {
-      roomIdOperator.remove();
-    }
-  };
+  const updateRoomId = useCallback(
+    (roomId?: string) => {
+      if (roomId) {
+        roomIdOperator.set(roomId);
+      } else {
+        roomIdOperator.remove();
+      }
+    },
+    [roomIdOperator]
+  );
 
   return {
     getLoginEndpoint,

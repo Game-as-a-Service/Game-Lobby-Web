@@ -1,14 +1,12 @@
 type GameWindowProps = {
+  className?: string;
   gameUrl: string;
 };
 
-export default function GameWindow({ gameUrl }: GameWindowProps) {
+export default function GameWindow({ className, gameUrl }: GameWindowProps) {
   return (
     <div>
-      <iframe
-        className="absolute inset-0 m-auto w-[95%] h-[95vh] border"
-        src={gameUrl}
-      >
+      <iframe className={className} src={gameUrl}>
         <p>Your browser does not support iframes.</p>
       </iframe>
     </div>
