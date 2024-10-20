@@ -15,6 +15,7 @@ export type ChatProps = {
   friendList: FriendType[];
   roomMessages: MessageType[];
   className?: string;
+  defaultTarget?: ChatTab["id"];
   onSubmit: (message: Pick<MessageType, "content" | "target">) => void;
 };
 
@@ -25,11 +26,12 @@ export default function Chat({
   friendList,
   roomMessages,
   className,
+  defaultTarget,
   onSubmit,
 }: Readonly<ChatProps>) {
   const [messages, setMessages] = useState(lobbyMessages);
   const [target, setTarget] = useState<[ChatTab["id"], string | null]>([
-    "lobby",
+    defaultTarget || "lobby",
     null,
   ]);
   const [activeTab, friendRoom] = target;

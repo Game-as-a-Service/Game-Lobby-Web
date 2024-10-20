@@ -71,7 +71,7 @@ function CarouselCard({
           draggable={false}
           priority
           fill
-          objectFit="cover"
+          className="object-cover"
           onError={onImageError}
         />
         <div className="m-4 flex gap-4">
@@ -106,7 +106,7 @@ function CarouselCard({
                   draggable={false}
                   priority
                   fill
-                  objectFit="cover"
+                  className="object-cover"
                   onError={onImageError}
                 />
               )}
@@ -181,12 +181,12 @@ const TabPaneContent = ({
             >
               <picture className="relative aspect-game-cover overflow-hidden">
                 <Image
-                  src={game.img}
+                  src={game.img || gameDefaultCoverImg.src}
                   alt={game.name}
                   draggable={false}
                   priority
                   fill
-                  objectFit="cover"
+                  className="object-cover"
                   onError={onImageError}
                 />
               </picture>
