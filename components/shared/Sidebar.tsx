@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Icon, { IconName } from "@/components/shared/Icon/v3";
+import Icon, { IconName } from "@/components/shared/Icon";
 import Button from "@/components/shared/Button";
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";

@@ -8,13 +8,13 @@ import * as icons from "./icons";
 import Icon from "./Icon";
 
 const meta: Meta<typeof Icon> = {
-  title: "General/IconV3",
+  title: "General/Icon",
   component: Icon,
   tags: ["autodocs"],
   decorators: [
     (Story) => (
       <ToastQueueProvider>
-        <div className="relative flex flex-col items-center gap-5 bg-amber-50">
+        <div className="relative flex flex-col items-center gap-5">
           <Story />
         </div>
       </ToastQueueProvider>
@@ -54,12 +54,12 @@ const AllIcons = () => {
 
   return (
     <>
-      <p className="absolute top-0 right-4 text-zinc-950">點擊 icon 即可複製</p>
+      <p className="absolute top-0 right-4">點擊 icon 即可複製</p>
       <Input
         label="搜尋"
         value={value}
         onChange={setValue}
-        labelClassName="mr-3 leading-normal text-zinc-950"
+        labelClassName="mr-3 leading-normal"
         inputClassName="border-white/90"
       />
       <div
@@ -75,9 +75,7 @@ const AllIcons = () => {
               onClick={handleClick(iconName)}
             >
               <Icon name={iconName} className="h-10" />
-              <p className="text-center text-zinc-950 whitespace-nowrap">
-                {iconName}
-              </p>
+              <p className="text-center whitespace-nowrap">{iconName}</p>
             </button>
           ))}
       </div>

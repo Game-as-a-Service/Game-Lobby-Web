@@ -1,5 +1,5 @@
 import { ApiHistory, Status } from "@/contexts/HistoryContext";
-import Icon, { IconName } from "@/components/shared/Icon/v3";
+import Icon, { IconName } from "@/components/shared/Icon";
 
 const ApiHistoryItem = (props: ApiHistory) => {
   let color = "";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import IconV2, { IconName } from "@/components/shared/Icon/v3";
+import IconV2, { IconName } from "@/components/shared/Icon";
 import Button from "@/components/shared/Button";
 import Badge from "@/components/shared/Badge";
 import UserInfoModal from "@/components/lobby/UserInfoModal";

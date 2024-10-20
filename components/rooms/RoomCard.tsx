@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Room } from "@/requests/rooms";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 import Cover from "@/components/shared/Cover";
 
 type RoomsCardProps = {

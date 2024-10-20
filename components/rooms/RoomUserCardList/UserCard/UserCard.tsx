@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 import { ReactElement } from "react";
 import { RoomInfo } from "@/requests/rooms";
 export interface UserCardProps {

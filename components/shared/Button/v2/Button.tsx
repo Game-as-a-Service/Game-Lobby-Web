@@ -1,7 +1,7 @@
 import React, { ReactNode, forwardRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
-import Icon, { IconName } from "@/components/shared/Icon/v3";
+import Icon, { IconName } from "@/components/shared/Icon";
 import { PolymorphicRef } from "@/lib/types";
 
 export enum ButtonVariant {

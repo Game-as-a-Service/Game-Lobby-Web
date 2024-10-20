@@ -1,5 +1,5 @@
 import { CSSProperties, FC, Key, useEffect, useRef, useState } from "react";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 
 interface CarouselProps<Item extends Record<string, unknown>> {
   items: Item[];

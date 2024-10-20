@@ -8,7 +8,7 @@ import Modalow from "@/components/shared/Modalow";
 import GameListModal from "./GameListModal";
 import Input from "@/components/shared/Input";
 import PasswordField from "@/components/shared/PasswordField";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 import styles from "./createRoomModall.module.css";
 
 const initialRoomFormState = {

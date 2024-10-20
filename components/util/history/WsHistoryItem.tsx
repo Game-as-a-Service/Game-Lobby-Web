@@ -2,7 +2,7 @@ import {
   WebSocketHistory,
   WebSocketHistoryType,
 } from "@/contexts/HistoryContext";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 import { cn } from "@/lib/utils";
 const WsHistoryItem = (props: WebSocketHistory) => {
   let color = "";

@@ -4,10 +4,7 @@ import { parse } from "node-html-parser";
 
 const rootDir = path.join(__dirname, "../../");
 const iconsDir = path.join(rootDir, "/assets/icons");
-const outputDir = path.join(
-  rootDir,
-  "/components/shared/Icon/v3/icons/generate"
-);
+const outputDir = path.join(rootDir, "/components/shared/Icon/icons/generate");
 const iconTemplate = fs.readFileSync(
   path.join(__dirname, "iconTemplate.tsx"),
   "utf-8"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 import ChatHeader, { ChatTab } from "./ChatHeader";
 import ChatMessages from "./ChatMessages";
 import ChatFriendList, { FriendType, getTargetUser } from "./ChatFriendList";

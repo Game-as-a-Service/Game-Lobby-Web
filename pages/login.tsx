@@ -11,7 +11,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
-import IconV2, { IconName } from "@/components/shared/Icon/v3";
+import IconV2, { IconName } from "@/components/shared/Icon";
 
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";

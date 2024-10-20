@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 
 interface SearchBarProps {
   /** The placeholder text displayed in the search bar when it is empty */

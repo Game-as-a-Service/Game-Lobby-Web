@@ -2,16 +2,8 @@ import fs from "fs";
 import path from "path";
 
 const rootDir = path.join(__dirname, "../../");
-// const iconsDir = path.join(rootDir, "/components/shared/Icon/icons/generated");
-// const exportFile = path.join(rootDir, "/components/shared/Icon/icons/index.ts");
-const iconsDir = path.join(
-  rootDir,
-  "/components/shared/Icon/v3/icons/generate"
-);
-const exportFile = path.join(
-  rootDir,
-  "/components/shared/Icon/v3/icons/index.ts"
-);
+const iconsDir = path.join(rootDir, "/components/shared/Icon/icons/generate");
+const exportFile = path.join(rootDir, "/components/shared/Icon/icons/index.ts");
 
 (async () => {
   const files = await fs.promises.readdir(iconsDir);

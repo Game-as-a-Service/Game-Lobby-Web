@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import { cn } from "@/lib/utils";
-import Icon from "@/components/shared/Icon/v3";
+import Icon from "@/components/shared/Icon";
 
 export type CarouselArrowButtonType = "prev" | "next";
 
