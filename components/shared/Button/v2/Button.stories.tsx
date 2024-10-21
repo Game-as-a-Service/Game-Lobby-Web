@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button, ButtonSize, ButtonVariant } from "./Button";
-import { ReactNode } from "react";
-import Icon from "../../Icon";
 
 const buttonVariantOptions: (ButtonVariant | undefined)[] = [
   undefined,
@@ -14,13 +12,6 @@ const buttonSizeOptions: (ButtonSize | undefined)[] = [
   undefined,
   ButtonSize.REGULAR,
   ButtonSize.SMALL,
-];
-
-const buttonIconNameOptions: (string | undefined)[] = [undefined, "arcade"];
-
-const buttonIconOptions: ReactNode = [
-  null,
-  <Icon key="1" name="gamepad" className="w-6 h-6 stroke-black" />,
 ];
 
 const meta: Meta<typeof Button> = {

@@ -11,7 +11,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
-import IconV2 from "@/components/shared/Icon/v2";
+import IconV2, { IconName } from "@/components/shared/Icon";
 
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
@@ -21,15 +21,14 @@ import { LoginType } from "@/requests/auth";
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
 import Link from "next/link";
-import { IconNameV2 } from "@/components/shared/Icon/v2/icons";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const LoginMethods: { text: string; type: LoginType; icon: IconNameV2 }[] = [
-  { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "google" },
-  { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "github" },
-  { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "linkedin" },
-  { text: "Discord 帳號登入", type: LoginType.DISCORD, icon: "discord" },
+const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
+  { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "Google" },
+  { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "Github" },
+  { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "Linkedin" },
+  { text: "Discord 帳號登入", type: LoginType.DISCORD, icon: "Discord" },
 ];
 
 const Login: NextPageWithProps = () => {
@@ -103,7 +102,7 @@ const Login: NextPageWithProps = () => {
           </p>
         ) : null}
         <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
-          <IconV2 name="leadingIcon" className="w-12 h-12" />
+          <IconV2 name="Logo" className="w-12 h-12" />
           遊戲微服務大平台
         </h2>
         {!bye ? (

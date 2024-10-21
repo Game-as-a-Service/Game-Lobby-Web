@@ -1,21 +1,20 @@
 import { ApiHistory, Status } from "@/contexts/HistoryContext";
-import Icon from "@/components/shared/Icon";
-import { IconName } from "@/components/shared/Icon/icons";
+import Icon, { IconName } from "@/components/shared/Icon";
 
 const ApiHistoryItem = (props: ApiHistory) => {
   let color = "";
   let iconName: IconName;
   switch (props.status) {
     case Status.RESOLVED:
-      iconName = "check";
+      iconName = "Check";
       color = "text-green-500";
       break;
     case Status.REJECTED:
-      iconName = "error";
+      iconName = "X";
       color = "text-red-500";
       break;
     default:
-      iconName = "pending";
+      iconName = "Nonpublic";
       color = "text-zinc-400";
   }
 

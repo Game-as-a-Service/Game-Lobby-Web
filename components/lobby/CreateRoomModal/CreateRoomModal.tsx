@@ -150,10 +150,7 @@ export default function CreateRoomModal() {
                 className="ml-[9px] absolute top-1/2 right-[-8px] translate-x-[100%] translate-y-[-50%]"
                 onClick={() => setShowGameListModal(true)}
               >
-                <Icon
-                  className="[&_*]:hover:stroke-[#2F88FF]"
-                  name="gamepadSimple"
-                />
+                <Icon className="[&_*]:hover:stroke-[#2F88FF]" name="Gamepad" />
               </button>
             </div>
             <div className="flex gap-2 ">

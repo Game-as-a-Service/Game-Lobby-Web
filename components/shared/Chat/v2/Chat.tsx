@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import Icon from "@/components/shared/Icon";
 import ChatHeader, { ChatTab } from "./ChatHeader";
 import ChatMessages from "./ChatMessages";
 import ChatFriendList, { FriendType, getTargetUser } from "./ChatFriendList";
 import ChatInput from "./ChatInput";
 import type { MessageType } from "./ChatMessages";
 import { createMockFriendMessages } from "./__mocks__/mock";
-import Icon from "../../Icon";
 import { cn } from "@/lib/utils";
 
 export type ChatProps = {
@@ -100,7 +100,7 @@ export default function Chat({
                     aria-label="go to friend tag"
                   >
                     <Icon
-                      name="navArrowLeft"
+                      name="NavArrowLeft"
                       className="mr-4 w-6 h-6 stroke-primary-100"
                     />
                   </button>

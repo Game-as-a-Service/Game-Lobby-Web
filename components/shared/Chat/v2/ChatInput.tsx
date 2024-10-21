@@ -1,6 +1,6 @@
 import { FormEventHandler, useState } from "react";
 import { cn } from "@/lib/utils";
-import Icon from "../../Icon";
+import Icon from "@/components/shared/Icon";
 import type { MessageType } from "./ChatMessages";
 
 type ChatInputProps = {
@@ -48,7 +48,7 @@ export default function ChatInput({
               />
               <button type="submit" aria-label="send message">
                 <Icon
-                  name="sent"
+                  name="Sent"
                   className={cn(
                     "w-6 h-6 stroke-grey-500 fill-grey-700",
                     value.trim() && "stroke-primary-100 fill-grey-700"
