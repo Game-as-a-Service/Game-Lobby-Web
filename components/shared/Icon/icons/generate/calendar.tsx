@@ -4,7 +4,7 @@ type CalendarProps = {
   className?: string;
 };
 
-export default function Calendar({ className }: CalendarProps) {
+export default function Calendar({ className }: Readonly<CalendarProps>) {
   return (
     <svg
       className={className}

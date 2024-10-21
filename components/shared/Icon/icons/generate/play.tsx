@@ -4,7 +4,7 @@ type PlayProps = {
   className?: string;
 };
 
-export default function Play({ className }: PlayProps) {
+export default function Play({ className }: Readonly<PlayProps>) {
   return (
     <svg
       className={className}

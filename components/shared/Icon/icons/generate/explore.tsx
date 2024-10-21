@@ -4,7 +4,7 @@ type ExploreProps = {
   className?: string;
 };
 
-export default function Explore({ className }: ExploreProps) {
+export default function Explore({ className }: Readonly<ExploreProps>) {
   return (
     <svg
       className={className}

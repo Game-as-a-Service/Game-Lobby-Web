@@ -4,7 +4,7 @@ type HouseLockProps = {
   className?: string;
 };
 
-export default function HouseLock({ className }: HouseLockProps) {
+export default function HouseLock({ className }: Readonly<HouseLockProps>) {
   return (
     <svg
       className={className}

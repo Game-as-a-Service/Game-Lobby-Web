@@ -4,7 +4,7 @@ type StarProps = {
   className?: string;
 };
 
-export default function Star({ className }: StarProps) {
+export default function Star({ className }: Readonly<StarProps>) {
   return (
     <svg
       className={className}

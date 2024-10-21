@@ -4,7 +4,7 @@ type SharingProps = {
   className?: string;
 };
 
-export default function Sharing({ className }: SharingProps) {
+export default function Sharing({ className }: Readonly<SharingProps>) {
   return (
     <svg
       className={className}

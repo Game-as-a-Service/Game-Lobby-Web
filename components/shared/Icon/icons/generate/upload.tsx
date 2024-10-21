@@ -4,7 +4,7 @@ type UploadProps = {
   className?: string;
 };
 
-export default function Upload({ className }: UploadProps) {
+export default function Upload({ className }: Readonly<UploadProps>) {
   return (
     <svg
       className={className}

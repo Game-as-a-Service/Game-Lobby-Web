@@ -4,7 +4,7 @@ type BadgeProps = {
   className?: string;
 };
 
-export default function Badge({ className }: BadgeProps) {
+export default function Badge({ className }: Readonly<BadgeProps>) {
   return (
     <svg
       className={className}

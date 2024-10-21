@@ -4,7 +4,7 @@ type MenuProps = {
   className?: string;
 };
 
-export default function Menu({ className }: MenuProps) {
+export default function Menu({ className }: Readonly<MenuProps>) {
   return (
     <svg
       className={className}

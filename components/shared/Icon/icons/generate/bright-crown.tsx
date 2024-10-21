@@ -4,7 +4,7 @@ type BrightCrownProps = {
   className?: string;
 };
 
-export default function BrightCrown({ className }: BrightCrownProps) {
+export default function BrightCrown({ className }: Readonly<BrightCrownProps>) {
   return (
     <svg
       className={className}

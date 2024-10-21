@@ -4,7 +4,7 @@ type HomeProps = {
   className?: string;
 };
 
-export default function Home({ className }: HomeProps) {
+export default function Home({ className }: Readonly<HomeProps>) {
   return (
     <svg
       className={className}

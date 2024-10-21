@@ -4,7 +4,7 @@ type CollectbookProps = {
   className?: string;
 };
 
-export default function Collectbook({ className }: CollectbookProps) {
+export default function Collectbook({ className }: Readonly<CollectbookProps>) {
   return (
     <svg
       className={className}

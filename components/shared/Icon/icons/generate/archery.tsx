@@ -4,7 +4,7 @@ type ArcheryProps = {
   className?: string;
 };
 
-export default function Archery({ className }: ArcheryProps) {
+export default function Archery({ className }: Readonly<ArcheryProps>) {
   return (
     <svg
       className={className}

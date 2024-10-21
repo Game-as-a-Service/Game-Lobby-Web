@@ -4,7 +4,9 @@ type LongArrowUpLeftProps = {
   className?: string;
 };
 
-export default function LongArrowUpLeft({ className }: LongArrowUpLeftProps) {
+export default function LongArrowUpLeft({
+  className,
+}: Readonly<LongArrowUpLeftProps>) {
   return (
     <svg
       className={className}

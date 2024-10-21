@@ -4,7 +4,7 @@ type LinkedinProps = {
   className?: string;
 };
 
-export default function Linkedin({ className }: LinkedinProps) {
+export default function Linkedin({ className }: Readonly<LinkedinProps>) {
   return (
     <svg
       className={className}

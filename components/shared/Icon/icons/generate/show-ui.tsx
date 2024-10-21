@@ -4,7 +4,7 @@ type ShowUiProps = {
   className?: string;
 };
 
-export default function ShowUi({ className }: ShowUiProps) {
+export default function ShowUi({ className }: Readonly<ShowUiProps>) {
   return (
     <svg
       className={className}

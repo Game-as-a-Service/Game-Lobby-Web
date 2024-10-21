@@ -4,7 +4,7 @@ type PlayerProps = {
   className?: string;
 };
 
-export default function Player({ className }: PlayerProps) {
+export default function Player({ className }: Readonly<PlayerProps>) {
   return (
     <svg
       className={className}

@@ -4,7 +4,7 @@ type CheckProps = {
   className?: string;
 };
 
-export default function Check({ className }: CheckProps) {
+export default function Check({ className }: Readonly<CheckProps>) {
   return (
     <svg
       className={className}

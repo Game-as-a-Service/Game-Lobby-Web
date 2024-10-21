@@ -4,7 +4,7 @@ type LogOutProps = {
   className?: string;
 };
 
-export default function LogOut({ className }: LogOutProps) {
+export default function LogOut({ className }: Readonly<LogOutProps>) {
   return (
     <svg
       className={className}

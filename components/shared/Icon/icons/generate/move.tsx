@@ -4,7 +4,7 @@ type MoveProps = {
   className?: string;
 };
 
-export default function Move({ className }: MoveProps) {
+export default function Move({ className }: Readonly<MoveProps>) {
   return (
     <svg
       className={className}

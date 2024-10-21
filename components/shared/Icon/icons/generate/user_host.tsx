@@ -4,7 +4,7 @@ type User_hostProps = {
   className?: string;
 };
 
-export default function User_host({ className }: User_hostProps) {
+export default function User_host({ className }: Readonly<User_hostProps>) {
   return (
     <svg
       className={className}

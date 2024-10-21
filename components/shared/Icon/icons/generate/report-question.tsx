@@ -4,7 +4,9 @@ type ReportQuestionProps = {
   className?: string;
 };
 
-export default function ReportQuestion({ className }: ReportQuestionProps) {
+export default function ReportQuestion({
+  className,
+}: Readonly<ReportQuestionProps>) {
   return (
     <svg
       className={className}

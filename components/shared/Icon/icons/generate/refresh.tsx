@@ -4,7 +4,7 @@ type RefreshProps = {
   className?: string;
 };
 
-export default function Refresh({ className }: RefreshProps) {
+export default function Refresh({ className }: Readonly<RefreshProps>) {
   return (
     <svg
       className={className}

@@ -4,7 +4,7 @@ type FullScreenProps = {
   className?: string;
 };
 
-export default function FullScreen({ className }: FullScreenProps) {
+export default function FullScreen({ className }: Readonly<FullScreenProps>) {
   return (
     <svg
       className={className}

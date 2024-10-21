@@ -4,7 +4,7 @@ type UserProps = {
   className?: string;
 };
 
-export default function User({ className }: UserProps) {
+export default function User({ className }: Readonly<UserProps>) {
   return (
     <svg
       className={className}

@@ -4,7 +4,7 @@ type SentProps = {
   className?: string;
 };
 
-export default function Sent({ className }: SentProps) {
+export default function Sent({ className }: Readonly<SentProps>) {
   return (
     <svg
       className={className}

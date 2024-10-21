@@ -4,7 +4,7 @@ type HeartProps = {
   className?: string;
 };
 
-export default function Heart({ className }: HeartProps) {
+export default function Heart({ className }: Readonly<HeartProps>) {
   return (
     <svg
       className={className}

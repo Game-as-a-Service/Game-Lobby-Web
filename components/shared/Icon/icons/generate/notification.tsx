@@ -4,7 +4,9 @@ type NotificationProps = {
   className?: string;
 };
 
-export default function Notification({ className }: NotificationProps) {
+export default function Notification({
+  className,
+}: Readonly<NotificationProps>) {
   return (
     <svg
       className={className}

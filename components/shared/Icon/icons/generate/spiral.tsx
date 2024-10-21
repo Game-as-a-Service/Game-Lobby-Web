@@ -4,7 +4,7 @@ type SpiralProps = {
   className?: string;
 };
 
-export default function Spiral({ className }: SpiralProps) {
+export default function Spiral({ className }: Readonly<SpiralProps>) {
   return (
     <svg
       className={className}

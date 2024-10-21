@@ -4,7 +4,7 @@ type GamepadProps = {
   className?: string;
 };
 
-export default function Gamepad({ className }: GamepadProps) {
+export default function Gamepad({ className }: Readonly<GamepadProps>) {
   return (
     <svg
       className={className}

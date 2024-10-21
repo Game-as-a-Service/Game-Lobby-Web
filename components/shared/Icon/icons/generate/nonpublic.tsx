@@ -4,7 +4,7 @@ type NonpublicProps = {
   className?: string;
 };
 
-export default function Nonpublic({ className }: NonpublicProps) {
+export default function Nonpublic({ className }: Readonly<NonpublicProps>) {
   return (
     <svg
       className={className}

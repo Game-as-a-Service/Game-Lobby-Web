@@ -4,7 +4,7 @@ type ArrowLeftProps = {
   className?: string;
 };
 
-export default function ArrowLeft({ className }: ArrowLeftProps) {
+export default function ArrowLeft({ className }: Readonly<ArrowLeftProps>) {
   return (
     <svg
       className={className}

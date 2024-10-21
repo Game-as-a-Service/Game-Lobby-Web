@@ -4,7 +4,7 @@ type SearchProps = {
   className?: string;
 };
 
-export default function Search({ className }: SearchProps) {
+export default function Search({ className }: Readonly<SearchProps>) {
   return (
     <svg
       className={className}

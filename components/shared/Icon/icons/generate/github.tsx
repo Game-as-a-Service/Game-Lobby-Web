@@ -4,7 +4,7 @@ type GithubProps = {
   className?: string;
 };
 
-export default function Github({ className }: GithubProps) {
+export default function Github({ className }: Readonly<GithubProps>) {
   return (
     <svg
       className={className}

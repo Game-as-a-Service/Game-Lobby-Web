@@ -4,7 +4,7 @@ type PreviewProps = {
   className?: string;
 };
 
-export default function Preview({ className }: PreviewProps) {
+export default function Preview({ className }: Readonly<PreviewProps>) {
   return (
     <svg
       className={className}

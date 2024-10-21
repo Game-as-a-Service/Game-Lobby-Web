@@ -6,7 +6,7 @@ type IconProps = {
   className?: string;
 };
 
-const Icon = ({ name, className }: IconProps) => {
+const Icon = ({ name, className }: Readonly<IconProps>) => {
   const GenerateIcon = icons[name];
 
   return <GenerateIcon className={className} aria-hidden />;

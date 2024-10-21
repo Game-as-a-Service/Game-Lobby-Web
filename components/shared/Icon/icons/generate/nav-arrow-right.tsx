@@ -4,7 +4,9 @@ type NavArrowRightProps = {
   className?: string;
 };
 
-export default function NavArrowRight({ className }: NavArrowRightProps) {
+export default function NavArrowRight({
+  className,
+}: Readonly<NavArrowRightProps>) {
   return (
     <svg
       className={className}

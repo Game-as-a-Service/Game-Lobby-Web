@@ -4,7 +4,7 @@ type HostProps = {
   className?: string;
 };
 
-export default function Host({ className }: HostProps) {
+export default function Host({ className }: Readonly<HostProps>) {
   return (
     <svg
       className={className}

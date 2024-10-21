@@ -4,7 +4,7 @@ type GoogleProps = {
   className?: string;
 };
 
-export default function Google({ className }: GoogleProps) {
+export default function Google({ className }: Readonly<GoogleProps>) {
   return (
     <svg
       className={className}

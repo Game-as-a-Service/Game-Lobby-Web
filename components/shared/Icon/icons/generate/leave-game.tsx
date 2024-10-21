@@ -4,7 +4,7 @@ type LeaveGameProps = {
   className?: string;
 };
 
-export default function LeaveGame({ className }: LeaveGameProps) {
+export default function LeaveGame({ className }: Readonly<LeaveGameProps>) {
   return (
     <svg
       className={className}

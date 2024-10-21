@@ -4,7 +4,7 @@ type PlusProps = {
   className?: string;
 };
 
-export default function Plus({ className }: PlusProps) {
+export default function Plus({ className }: Readonly<PlusProps>) {
   return (
     <svg
       className={className}

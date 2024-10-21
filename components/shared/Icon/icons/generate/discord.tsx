@@ -4,7 +4,7 @@ type DiscordProps = {
   className?: string;
 };
 
-export default function Discord({ className }: DiscordProps) {
+export default function Discord({ className }: Readonly<DiscordProps>) {
   return (
     <svg
       className={className}

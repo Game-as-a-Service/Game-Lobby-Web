@@ -4,7 +4,7 @@ type ArcadeProps = {
   className?: string;
 };
 
-export default function Arcade({ className }: ArcadeProps) {
+export default function Arcade({ className }: Readonly<ArcadeProps>) {
   return (
     <svg
       className={className}

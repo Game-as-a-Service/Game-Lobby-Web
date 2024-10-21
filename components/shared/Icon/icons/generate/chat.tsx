@@ -4,7 +4,7 @@ type ChatProps = {
   className?: string;
 };
 
-export default function Chat({ className }: ChatProps) {
+export default function Chat({ className }: Readonly<ChatProps>) {
   return (
     <svg
       className={className}

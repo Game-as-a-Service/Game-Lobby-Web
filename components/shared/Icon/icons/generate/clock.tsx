@@ -4,7 +4,7 @@ type ClockProps = {
   className?: string;
 };
 
-export default function Clock({ className }: ClockProps) {
+export default function Clock({ className }: Readonly<ClockProps>) {
   return (
     <svg
       className={className}

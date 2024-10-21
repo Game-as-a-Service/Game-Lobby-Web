@@ -4,7 +4,9 @@ type HotAirBalloonProps = {
   className?: string;
 };
 
-export default function HotAirBalloon({ className }: HotAirBalloonProps) {
+export default function HotAirBalloon({
+  className,
+}: Readonly<HotAirBalloonProps>) {
   return (
     <svg
       className={className}

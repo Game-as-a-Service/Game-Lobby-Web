@@ -4,7 +4,7 @@ type HelpCircleProps = {
   className?: string;
 };
 
-export default function HelpCircle({ className }: HelpCircleProps) {
+export default function HelpCircle({ className }: Readonly<HelpCircleProps>) {
   return (
     <svg
       className={className}

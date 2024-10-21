@@ -4,7 +4,7 @@ type SortProps = {
   className?: string;
 };
 
-export default function Sort({ className }: SortProps) {
+export default function Sort({ className }: Readonly<SortProps>) {
   return (
     <svg
       className={className}

@@ -4,7 +4,7 @@ type ChessRookProps = {
   className?: string;
 };
 
-export default function ChessRook({ className }: ChessRookProps) {
+export default function ChessRook({ className }: Readonly<ChessRookProps>) {
   return (
     <svg
       className={className}

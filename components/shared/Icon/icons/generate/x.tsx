@@ -4,7 +4,7 @@ type XProps = {
   className?: string;
 };
 
-export default function X({ className }: XProps) {
+export default function X({ className }: Readonly<XProps>) {
   return (
     <svg
       className={className}

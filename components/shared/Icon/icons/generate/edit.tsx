@@ -4,7 +4,7 @@ type EditProps = {
   className?: string;
 };
 
-export default function Edit({ className }: EditProps) {
+export default function Edit({ className }: Readonly<EditProps>) {
   return (
     <svg
       className={className}
