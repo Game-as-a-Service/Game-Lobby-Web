@@ -1,5 +1,5 @@
 import { CSSProperties, FC, Key, useEffect, useRef, useState } from "react";
-import Icon from "../../Icon/v2/Icon";
+import Icon from "@/components/shared/Icon";
 
 interface CarouselProps<Item extends Record<string, unknown>> {
   items: Item[];
@@ -51,7 +51,7 @@ export default function Carousel<Item extends Record<string, unknown>>({
         className={buttonClassName}
         onClick={handleChangePage("prev")}
       >
-        <Icon name="navArrowLeft" className={buttonIconClassName} />
+        <Icon name="NavArrowLeft" className={buttonIconClassName} />
       </button>
       <div ref={carouselRef} className="overflow-hidden w-full">
         <ul
@@ -83,7 +83,7 @@ export default function Carousel<Item extends Record<string, unknown>>({
         className={buttonClassName}
         onClick={handleChangePage("next")}
       >
-        <Icon name="navArrowRight" className={buttonIconClassName} />
+        <Icon name="NavArrowRight" className={buttonIconClassName} />
       </button>
     </div>
   );

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 
-import Icon from ".";
-import icons from "./icons";
-import Input from "../Input";
 import { keys } from "@/lib/utils";
-import { ToastQueueProvider, useToast } from "../Toast";
+import { Input } from "@/components/shared/Input";
+import { ToastQueueProvider, useToast } from "@/components/shared/Toast";
+import * as icons from "./icons";
+import Icon from "./Icon";
 
 const meta: Meta<typeof Icon> = {
   title: "General/Icon",
@@ -31,7 +31,7 @@ export const Playground: Story = {
 };
 
 Playground.args = {
-  name: "check",
+  name: "Arcade",
   className: "w-9 h-9",
 };
 
@@ -39,20 +39,22 @@ const AllIcons = () => {
   const [value, setValue] = useState("");
   const toast = useToast();
 
-  const handleClick = (iconName: string) => () => {
-    const cb = navigator.clipboard;
-    const text = `<Icon name="${iconName}" className="w-6 h-6" />`;
+  const handleClick =
+    (iconName: string): MouseEventHandler<HTMLButtonElement> =>
+    (e) => {
+      e.stopPropagation();
 
-    toast({ children: "已複製成功!!" }, { duration: 1000 });
+      const cb = navigator.clipboard;
+      const text = `<Icon name="${iconName}" className="w-6 h-6" />`;
 
-    cb.writeText(text);
-  };
+      toast({ children: "已複製成功!!" }, { duration: 1000 });
+
+      cb.writeText(text).then();
+    };
 
   return (
     <>
-      <p className="absolute top-[-1.25rem] right-0 text-white/90">
-        點擊 icon 即可複製
-      </p>
+      <p className="absolute top-0 right-4">點擊 icon 即可複製</p>
       <Input
         label="搜尋"
         value={value}
@@ -61,22 +63,20 @@ const AllIcons = () => {
         inputClassName="border-white/90"
       />
       <div
-        className="px-6 w-full h-96 grid place-content-start gap-10 overflow-auto"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(48px, 1fr))" }}
+        className="px-6 w-full h-96 grid place-content-start gap-4 overflow-auto"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}
       >
         {keys(icons)
           .filter((iconName) => iconName.includes(value))
           .map((iconName) => (
-            <div
+            <button
               key={iconName}
-              className="cursor-pointer"
+              className="flex flex-col justify-center items-stretch cursor-pointer"
               onClick={handleClick(iconName)}
             >
-              <Icon name={iconName} className="w-full h-full" />
-              <p className="text-center text-white/90 whitespace-nowrap">
-                {iconName}
-              </p>
-            </div>
+              <Icon name={iconName} className="h-10" />
+              <p className="text-center whitespace-nowrap">{iconName}</p>
+            </button>
           ))}
       </div>
     </>

@@ -1,7 +1,5 @@
 import { useState } from "react";
-import type { IconNameV2 } from "@/components/shared/Icon/v2/icons";
-import Icon from "@/components/shared/Icon";
-import IconV2 from "@/components/shared/Icon/v2";
+import IconV2, { IconName } from "@/components/shared/Icon";
 import Button from "@/components/shared/Button";
 import Badge from "@/components/shared/Badge";
 import UserInfoModal from "@/components/lobby/UserInfoModal";
@@ -15,7 +13,7 @@ enum HeaderActions {
 
 interface ButtonProps {
   type: HeaderActions;
-  iconName: IconNameV2;
+  iconName: IconName;
   isActive: boolean;
   onClick: () => void;
 }
@@ -33,19 +31,19 @@ export default function Header({
 
   const buttons: ButtonProps[] = [
     {
-      iconName: "chatDefault",
+      iconName: "Chat",
       type: HeaderActions.CHAT,
       isActive: false,
       onClick: onClickChatButton,
     },
     {
-      iconName: "notificationDefault",
+      iconName: "Notification",
       type: HeaderActions.NOTIFICATION,
       isActive: false,
       onClick: () => {},
     },
     {
-      iconName: "player",
+      iconName: "Player",
       type: HeaderActions.PROFILE,
       isActive: openProfile,
       onClick: () => {
@@ -62,7 +60,7 @@ export default function Header({
       )}
     >
       <div className="flex items-center gap-3">
-        <Icon name="logo" className="bg-transparent" />
+        <IconV2 name="Logo" className="w-10 h-10" />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>
       </div>
       <div className="header___actions flex gap-5">

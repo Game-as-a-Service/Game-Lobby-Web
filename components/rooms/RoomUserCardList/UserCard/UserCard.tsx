@@ -58,7 +58,7 @@ function UserCard(props: any) {
           data-testid="kick-user-svg"
           className={"absolute top-[5px] right-[6px] cursor-pointer"}
         >
-          <Icon name="kickUser" />
+          <Icon name="X" />
         </div>
       )}
 

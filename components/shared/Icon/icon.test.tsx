@@ -1,27 +1,24 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Icon from "./index";
+import Icon from "./Icon";
 import type { IconName } from "./icons";
 
-jest.mock("path/to/image.svg", () => "svg");
-
-describe("Icon", () => {
-  const TEST_ICON_NAME: IconName = "arcade";
-  it("render Icon with correct name", () => {
+describe("IconV2", () => {
+  const TEST_ICON_NAME: IconName = "Arcade";
+  it("should render Icon with correct name", () => {
     const { container } = render(<Icon name={TEST_ICON_NAME} />);
 
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
   });
 
-  it("Icon has correct className", () => {
-    const className = "test class";
+  it("should render Icon with correct class name", () => {
     const { container } = render(
-      <Icon name={TEST_ICON_NAME} className={className} />
+      <Icon name={TEST_ICON_NAME} className="stroke-red-500 fill-black" />
     );
 
     const svg = container.querySelector("svg");
-    expect(svg).toHaveClass(className);
+    expect(svg).toHaveClass("stroke-red-500");
+    expect(svg).toHaveClass("fill-black");
   });
 });
