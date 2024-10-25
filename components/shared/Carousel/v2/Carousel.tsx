@@ -1,5 +1,6 @@
-import { CSSProperties, FC, Key, useEffect, useRef, useState } from "react";
+import { CSSProperties, FC, Key, useRef, useState } from "react";
 import Icon from "@/components/shared/Icon";
+import useResizeObserver from "@/hooks/useResizeObserver";
 
 interface CarouselProps<Item extends Record<string, unknown>> {
   items: Item[];
@@ -15,6 +16,11 @@ export default function Carousel<Item extends Record<string, unknown>>({
   const [showIndex, setShowIndex] = useState(0);
   const [maxWidth, setMaxWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  useResizeObserver({
+    elementRef: carouselRef,
+    callback: (rect) => setMaxWidth(rect.contentRect.width),
+  });
 
   const handleChangePage = (action: "prev" | "next") => () => {
     const maxIndex = items.length - 1;
@@ -39,10 +45,6 @@ export default function Carousel<Item extends Record<string, unknown>>({
   const buttonClassName =
     "p-2.5 shrink-0 bg-white/4 shadow-default rounded-2xl";
   const buttonIconClassName = "stroke-white w-6 h-6 pointer-events-none";
-
-  useEffect(() => {
-    setMaxWidth(carouselRef.current?.clientWidth || 0);
-  }, []);
 
   return (
     <div className="flex items-center">
