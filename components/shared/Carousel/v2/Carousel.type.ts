@@ -5,6 +5,7 @@ export type TItem = Record<string, unknown> & { id: Key };
 
 export type CarouselItemProps<Item extends TItem> = Item & {
   showIndex: number;
+  index: number;
 };
 
 export interface ICarouselContext<Item extends TItem = TItem> {

@@ -8,14 +8,17 @@ function useAutoReset<T>(initialValue: T, resetDelayMs = 1000) {
     clearTimeout(timerRef.current);
   }, []);
 
-  const setValue = (newValue: T) => {
-    setInternalValue(newValue);
-    clearTimer();
-    timerRef.current = setTimeout(
-      () => setInternalValue(initialValue),
-      resetDelayMs
-    );
-  };
+  const setValue = useCallback(
+    (newValue: T) => {
+      setInternalValue(newValue);
+      clearTimer();
+      timerRef.current = setTimeout(
+        () => setInternalValue(initialValue),
+        resetDelayMs
+      );
+    },
+    [clearTimer, initialValue, resetDelayMs]
+  );
 
   useEffect(() => {
     return () => clearTimer();

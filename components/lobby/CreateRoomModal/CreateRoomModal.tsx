@@ -18,7 +18,7 @@ const initialRoomFormState = {
   maxPlayers: 0,
 };
 
-export default function CreateRoomModal() {
+export default function CreateRoomModal({ tabIndex }: { tabIndex: number }) {
   const [showThisModal, setshowThisModal] = useState(false);
   const [showGameListModal, setShowGameListModal] = useState(false);
   const [gameList, setGameList] = useState<GameType[]>([]);
@@ -102,6 +102,7 @@ export default function CreateRoomModal() {
       <button
         type="button"
         className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+        tabIndex={tabIndex}
         onClick={() => setshowThisModal(true)}
       >
         開設新房間

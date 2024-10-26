@@ -9,7 +9,6 @@ import { AxiosError } from "axios";
 import Button from "@/components/shared/Button/v2";
 import CreateRoomModal from "@/components/lobby/CreateRoomModal";
 import CarouselV2 from "@/components/shared/Carousel/v2";
-import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { fastJoinGameEndpoint } from "@/requests/rooms";
@@ -20,6 +19,7 @@ import { useToast } from "@/components/shared/Toast";
 import Icon from "@/components/shared/Icon";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
 import { CarouselItemProps } from "@/components/shared/Carousel/v2/Carousel.type";
+import { cn } from "@/lib/utils";
 
 const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
   if (e.target instanceof HTMLImageElement) {
@@ -28,6 +28,8 @@ const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
 };
 
 function CarouselCard({
+  showIndex,
+  index,
   id,
   img,
   name,
@@ -42,6 +44,7 @@ function CarouselCard({
   const toast = useToast();
   const { updateRoomId } = useUser();
   const [open, setOpen] = useState(false);
+  const tabIndex = index === showIndex ? 0 : -1;
 
   const handleFastJoin = async () => {
     try {
@@ -70,7 +73,6 @@ function CarouselCard({
     <div
       className="flex text-white px-12 gap-4"
       onMouseLeave={() => setOpen(false)}
-      role="menuitem"
     >
       <div className="relative flex items-end justify-end flex-[60%]">
         <Image
@@ -87,6 +89,7 @@ function CarouselCard({
             variant="primaryTransparent"
             className="flex"
             disabled={isLoading}
+            tabIndex={tabIndex}
             onClick={handleFastJoin}
           >
             <Icon name="Gamepad" className="w-6 h-6" />
@@ -96,43 +99,43 @@ function CarouselCard({
             <Button
               variant="primaryTransparent"
               className="w-11 h-11 p-0"
+              tabIndex={tabIndex}
               onClick={() => setOpen((pre) => !pre)}
             >
               <Icon name="Menu" className="w-6 h-6 rotate-90" />
             </Button>
-            {open && (
-              <div
-                className="absolute bottom-full right-0 mb-2"
-                onMouseLeave={() => setOpen(false)}
-                role="menuitem"
-              >
-                <ul className="py-4 effect-new-2 text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
-                  <li>
-                    <Link
-                      href="/rooms"
-                      className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
-                    >
-                      加入現有房間
-                    </Link>
-                  </li>
-                  <li>
-                    <CreateRoomModal />
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
-                      onClick={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
-                      onKeyDown={() =>
-                        alert("遊戲詳細介紹頁尚未實作，敬請期待")
-                      }
-                    >
-                      遊戲詳情
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
+            <div
+              className={cn(
+                "absolute bottom-full right-0 mb-2 transition-transform origin-[calc(100%-22px)_bottom] z-20",
+                !open && "scale-0"
+              )}
+            >
+              <ul className="py-4 effect-new-2 text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
+                <li>
+                  <Link
+                    href="/rooms"
+                    className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+                    tabIndex={open ? tabIndex : -1}
+                  >
+                    加入現有房間
+                  </Link>
+                </li>
+                <li>
+                  <CreateRoomModal tabIndex={open ? tabIndex : -1} />
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+                    onClick={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+                    onKeyDown={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+                    tabIndex={open ? tabIndex : -1}
+                  >
+                    遊戲詳情
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
