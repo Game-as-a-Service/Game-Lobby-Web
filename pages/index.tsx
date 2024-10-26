@@ -70,6 +70,7 @@ function CarouselCard({
     <div
       className="flex text-white px-12 gap-4"
       onMouseLeave={() => setOpen(false)}
+      role="menuitem"
     >
       <div className="relative flex items-end justify-end flex-[60%]">
         <Image
@@ -103,6 +104,7 @@ function CarouselCard({
               <div
                 className="absolute bottom-full right-0 mb-2"
                 onMouseLeave={() => setOpen(false)}
+                role="menuitem"
               >
                 <ul className="py-4 effect-new-2 text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
                   <li>

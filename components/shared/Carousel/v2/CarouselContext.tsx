@@ -87,7 +87,7 @@ export function CarouselProvider<Item extends TItem>({
   items,
   Component,
   renderKey = (item) => item.id,
-}: CarouselProviderProps<Item>) {
+}: Readonly<CarouselProviderProps<Item>>) {
   const [state, dispatch] = useReducer(reducer<Item>, {
     ...initialState,
     items,
