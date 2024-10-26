@@ -99,7 +99,13 @@ export default function CreateRoomModal() {
 
   return (
     <>
-      <Button onClick={() => setshowThisModal(true)}>開創房間</Button>
+      <button
+        type="button"
+        className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+        onClick={() => setshowThisModal(true)}
+      >
+        開設新房間
+      </button>
       <Modalow
         title="create-room"
         hasTitle={false}
