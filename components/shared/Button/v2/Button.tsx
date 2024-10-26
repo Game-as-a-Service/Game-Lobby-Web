@@ -1,7 +1,6 @@
-import React, { ReactNode, forwardRef, useCallback } from "react";
+import React, { forwardRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import BoxFancy, { BoxFancyBorderGradientVariant } from "../../BoxFancy";
-import Icon, { IconName } from "@/components/shared/Icon";
 import { PolymorphicRef } from "@/lib/types";
 
 export enum ButtonVariant {
@@ -38,9 +37,6 @@ const buttonSizeClasses: Record<ButtonSize, string> = {
 interface BaseButtonProps {
   variant?: ButtonVariant | `${ButtonVariant}`;
   size?: ButtonSize;
-  icon?: ReactNode;
-  iconName?: IconName;
-  iconClassName?: string;
 }
 
 type ButtonProps = BaseButtonProps & React.ComponentPropsWithoutRef<"button">;
@@ -50,24 +46,12 @@ type InnerButtonComponent = (
   ref?: PolymorphicRef<"button">
 ) => React.ReactElement | null;
 
-const iconTypeClasses: Record<ButtonVariant, string> = {
-  primary:
-    "stroke-primary-700 hover:stroke-primary-50 active:stroke-primary-50",
-  primaryTransparent:
-    "stroke-primary-700 hover:stroke-primary-700 active:stroke-primary-700",
-  secondary: "stroke-primary-200 disabled:stroke-grey-500",
-  highlight: "stroke-primary-50",
-};
-
 const InteralButton: InnerButtonComponent = (
   {
     variant = ButtonVariant.PRIMARY,
     size = ButtonSize.REGULAR,
-    icon,
-    iconName,
     disabled,
     className,
-    iconClassName,
     children,
     onClick,
     ...otherButtonAttributes
@@ -91,10 +75,8 @@ const InteralButton: InnerButtonComponent = (
     commonDisabledClasses,
     buttonTypeClasses[variant],
     buttonSizeClasses[size],
-    iconTypeClasses[variant],
     className
   );
-  const iconClasses = cn("w-6 h-6 stroke-inherit", iconClassName);
 
   const borderGradientColor: BoxFancyBorderGradientVariant =
     variant === ButtonVariant.SECONDARY && !disabled ? "purple" : "none";
@@ -110,8 +92,7 @@ const InteralButton: InnerButtonComponent = (
       disabled={disabled}
       {...otherButtonAttributes}
     >
-      {icon || (iconName && <Icon name={iconName} className={iconClasses} />)}
-      <span>{children}</span>
+      {children}
     </BoxFancy>
   );
 };
