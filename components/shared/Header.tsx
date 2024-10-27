@@ -1,5 +1,5 @@
 import { useState } from "react";
-import IconV2, { IconName } from "@/components/shared/Icon";
+import Icon, { IconName } from "@/components/shared/Icon";
 import Button from "@/components/shared/Button";
 import Badge from "@/components/shared/Badge";
 import UserInfoModal from "@/components/lobby/UserInfoModal";
@@ -60,7 +60,7 @@ export default function Header({
       )}
     >
       <div className="flex items-center gap-3">
-        <IconV2 name="Logo" className="w-10 h-10" />
+        <Icon name="Logo" className="w-10 h-10" />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>
       </div>
       <div className="header___actions flex gap-5">
@@ -71,17 +71,14 @@ export default function Header({
             placement="top-right"
             className={cn("top-1 right-1")}
           >
-            <Button
-              className="relative bg-transparent hover:shadow-none p-2.5"
-              onClick={onClick}
-            >
-              <IconV2
+            <button className="p-2.5" onClick={onClick}>
+              <Icon
                 name={iconName}
-                className={cn("w-5 h-5 [&_*]:stroke-white", {
-                  "fill-blue": isActive,
+                className={cn("w-5 h-5", {
+                  "[&_*]:stroke-white": isActive,
                 })}
               />
-            </Button>
+            </button>
           </Badge>
         ))}
       </div>
