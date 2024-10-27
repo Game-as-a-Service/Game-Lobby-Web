@@ -8,10 +8,11 @@ import {
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
 
 import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
 import Cover from "@/components/shared/Cover";
-import IconV2, { IconName } from "@/components/shared/Icon";
+import Icon, { IconName } from "@/components/shared/Icon";
 
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
@@ -20,9 +21,7 @@ import { LoginType } from "@/requests/auth";
 
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "Google" },
@@ -67,16 +66,11 @@ const Login: NextPageWithProps = () => {
     return LoginMethods.map(({ text, type, icon }) => (
       <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
         <ButtonV2
-          className={
-            "w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50"
-          }
-          iconClassName={cn("stroke-none", {
-            "fill-current": type === LoginType.GITHUB,
-          })}
-          iconName={icon}
+          className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50"
           variant={ButtonVariant.SECONDARY}
           onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
         >
+          <Icon name={icon} className="w-6 h-6 stroke-none" />
           {text}
         </ButtonV2>
       </Link>
@@ -102,7 +96,7 @@ const Login: NextPageWithProps = () => {
           </p>
         ) : null}
         <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
-          <IconV2 name="Logo" className="w-12 h-12" />
+          <Icon name="Logo" className="w-12 h-12" />
           遊戲微服務大平台
         </h2>
         {!bye ? (

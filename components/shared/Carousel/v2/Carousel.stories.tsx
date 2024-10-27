@@ -21,8 +21,11 @@ const meta: Meta<typeof Carousel> = {
     },
   ],
   args: {
-    renderKey: (props: any) => props.name,
-    items: [{ name: "TEST 1" }, { name: "TEST 2" }, { name: "TEST 3" }],
+    items: [
+      { id: 1, name: "TEST 1" },
+      { id: 2, name: "TEST 2" },
+      { id: 3, name: "TEST 3" },
+    ],
     Component: Card,
   },
   argTypes: {

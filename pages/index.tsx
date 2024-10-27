@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Image from "next/image";
 import { ReactEventHandler, useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -8,7 +9,6 @@ import { AxiosError } from "axios";
 import Button from "@/components/shared/Button/v2";
 import CreateRoomModal from "@/components/lobby/CreateRoomModal";
 import CarouselV2 from "@/components/shared/Carousel/v2";
-import FastJoinButton from "@/components/lobby/FastJoinButton";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { fastJoinGameEndpoint } from "@/requests/rooms";
@@ -16,7 +16,10 @@ import { GameType, getAllGamesEndpoint } from "@/requests/games";
 import useRequest from "@/hooks/useRequest";
 import useUser from "@/hooks/useUser";
 import { useToast } from "@/components/shared/Toast";
+import Icon from "@/components/shared/Icon";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+import { CarouselItemProps } from "@/components/shared/Carousel/v2/Carousel.type";
+import { cn } from "@/lib/utils";
 
 const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
   if (e.target instanceof HTMLImageElement) {
@@ -25,19 +28,23 @@ const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
 };
 
 function CarouselCard({
+  showIndex,
+  index,
   id,
   img,
   name,
   createdOn,
   maxPlayers,
   minPlayers,
-}: Readonly<GameType>) {
+}: Readonly<CarouselItemProps<GameType>>) {
   // 待重構將邏輯統一管理
   const { fetch } = useRequest();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const toast = useToast();
   const { updateRoomId } = useUser();
+  const [open, setOpen] = useState(false);
+  const tabIndex = index === showIndex ? 0 : -1;
 
   const handleFastJoin = async () => {
     try {
@@ -63,7 +70,10 @@ function CarouselCard({
   };
 
   return (
-    <div className="flex text-white px-12 gap-4">
+    <div
+      className="flex text-white px-12 gap-4"
+      onMouseLeave={() => setOpen(false)}
+    >
       <div className="relative flex items-end justify-end flex-[60%]">
         <Image
           src={img || gameDefaultCoverImg.src}
@@ -77,22 +87,73 @@ function CarouselCard({
         <div className="m-4 flex gap-4">
           <Button
             variant="primaryTransparent"
+            className="flex"
             disabled={isLoading}
+            tabIndex={tabIndex}
             onClick={handleFastJoin}
           >
+            <Icon name="Gamepad" className="w-6 h-6" />
             快速遊戲
           </Button>
-          <Button variant="primaryTransparent" className="w-11 h-11 p-0">
-            ...
-          </Button>
+          <div className="relative">
+            <Button
+              variant="primaryTransparent"
+              className="w-11 h-11 p-0"
+              tabIndex={tabIndex}
+              onClick={() => setOpen((pre) => !pre)}
+            >
+              <Icon name="Menu" className="w-6 h-6 rotate-90" />
+            </Button>
+            <div
+              className={cn(
+                "absolute bottom-full right-0 mb-2 transition-transform origin-[calc(100%-22px)_bottom] z-20",
+                !open && "scale-0"
+              )}
+            >
+              <ul className="py-4 effect-new-2 text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
+                <li>
+                  <Link
+                    href="/rooms"
+                    className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+                    tabIndex={open ? tabIndex : -1}
+                  >
+                    加入現有房間
+                  </Link>
+                </li>
+                <li>
+                  <CreateRoomModal tabIndex={open ? tabIndex : -1} />
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    className="block w-full text-left px-4 py-1 hover:bg-primary-900/20 cursor-pointer"
+                    onClick={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+                    onKeyDown={() => alert("遊戲詳細介紹頁尚未實作，敬請期待")}
+                    tabIndex={open ? tabIndex : -1}
+                  >
+                    遊戲詳情
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex-[40%] p-4 rounded-lg bg-primary-50/8">
         <div className="text-xs text-primary-300">Game Name</div>
         <div className="text-xl text-primary-100">{name}</div>
         <div className="flex gap-6 mb-2 text-xs text-primary-300">
-          <div className="flex-1">4.8 ＊ ＊ ＊ ＊ ＊ (66)</div>
-          <time className="flex-1">
+          <div className="flex-1 flex items-center gap-1.5">
+            <span>4.8</span>
+            <Icon name="Star" className="w-3 h-3 fill-yellow-400" />
+            <Icon name="Star" className="w-3 h-3 fill-yellow-400" />
+            <Icon name="Star" className="w-3 h-3 fill-yellow-400" />
+            <Icon name="Star" className="w-3 h-3 fill-yellow-400" />
+            <Icon name="Star" className="w-3 h-3 fill-yellow-400" />
+            <span>(66)</span>
+          </div>
+          <time className="flex-1 flex items-center gap-1">
+            <Icon name="Calendar" className="w-3 h-3" />
             {createdOn.slice(0, 10).replace(/-/g, ".")}
           </time>
         </div>
@@ -221,11 +282,7 @@ export default function Home() {
         />
       </div>
       <div>
-        <CarouselV2
-          items={gameList}
-          renderKey={(item) => item.id}
-          Component={CarouselCard}
-        />
+        <CarouselV2 items={gameList} Component={CarouselCard} />
       </div>
       <div className="mt-6">
         <Tabs
