@@ -66,7 +66,7 @@ const Login: NextPageWithProps = () => {
     return LoginMethods.map(({ text, type, icon }) => (
       <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
         <ButtonV2
-          className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50"
+          className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50 flex justify-center items-center"
           variant={ButtonVariant.SECONDARY}
           onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
         >

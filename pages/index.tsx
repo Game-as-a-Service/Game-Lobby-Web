@@ -6,7 +6,7 @@ import { ReactEventHandler, useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { AxiosError } from "axios";
 
-import Button from "@/components/shared/Button/v2";
+import Button, { ButtonSize } from "@/components/shared/Button/v2";
 import CreateRoomModal from "@/components/lobby/CreateRoomModal";
 import CarouselV2 from "@/components/shared/Carousel/v2";
 import SearchBar from "@/components/shared/SearchBar";
@@ -98,7 +98,7 @@ function CarouselCard({
           <div className="relative">
             <Button
               variant="primaryTransparent"
-              className="w-11 h-11 p-0"
+              size={ButtonSize.Icon}
               tabIndex={tabIndex}
               onClick={() => setOpen((pre) => !pre)}
             >

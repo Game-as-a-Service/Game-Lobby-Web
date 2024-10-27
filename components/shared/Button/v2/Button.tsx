@@ -11,6 +11,7 @@ export enum ButtonVariant {
 }
 
 export enum ButtonSize {
+  Icon = "icon",
   REGULAR = "regular",
   SMALL = "small",
 }
@@ -24,14 +25,15 @@ const buttonTypeClasses: Record<ButtonVariant, string> = {
   primaryTransparent:
     "text-primary-800 bg-primary-200/60 hover:text-primary-800 hover:bg-primary-300/50 active:text-primary-800 active:bg-primary-300/50",
   secondary:
-    "text-primary-200 bg-transparent hover:bg-primary-300/40 active:bg-primary-200/20 disabled:bg-transparent disabled:border",
+    "text-primary-200 bg-primary-700/40 hover:bg-primary-600/40 active:bg-primary-600/40",
   highlight:
     "text-primary-50 gradient-purple hover:gradient-purple-2 active:gradient-purple-3",
 };
 
 const buttonSizeClasses: Record<ButtonSize, string> = {
-  small: "h-9 px-4 gap-1",
-  regular: "h-11 px-6 gap-2",
+  icon: "p-2",
+  small: "py-2 px-4 gap-1",
+  regular: "py-2 px-6 gap-2",
 };
 
 interface BaseButtonProps {
