@@ -84,6 +84,24 @@ module.exports = {
   },
   plugins: [
     plugin(({ addComponents }) => {
+      /** custom scroll bar */
+      addComponents({
+        ".scrollbar": {
+          "&::-webkit-scrollbar": {
+            width: "16px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            boxShadow: "inset 0 0 8px 8px #7C7BA4",
+            border: "solid 4px transparent",
+            borderRadius: "8px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            boxShadow: "inset 0 0 8px 8px #4C4B6E",
+          },
+        },
+      });
+    }),
+    plugin(({ addComponents }) => {
       /** typography */
       const largeSizes = [64, 56, 44, 36];
       const mediumSizes = [32, 28, 24, 22, 16, 14, 12];
@@ -166,27 +184,9 @@ module.exports = {
     plugin(({ addUtilities }) => {
       /** custom effect */
       addUtilities({
-        ".effect-new-2": {
-          "box-shadow": "0px 1.53px 36.72px -1.53px #0000002E",
+        ".frosted-shadow-box": {
+          "box-shadow": "0 2px 36px -2px #0000002E",
           "backdrop-filter": "blur(20px)",
-        },
-      });
-    }),
-    plugin(({ addComponents }) => {
-      /** custom scroll bar */
-      addComponents({
-        ".scrollbar": {
-          "&::-webkit-scrollbar": {
-            width: "16px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            boxShadow: "inset 0 0 8px 8px #7C7BA4",
-            border: "solid 4px transparent",
-            borderRadius: "8px",
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            boxShadow: "inset 0 0 8px 8px #4C4B6E",
-          },
         },
       });
     }),

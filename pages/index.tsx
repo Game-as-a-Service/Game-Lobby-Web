@@ -110,7 +110,7 @@ function CarouselCard({
                 !open && "scale-0"
               )}
             >
-              <ul className="py-4 effect-new-2 text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
+              <ul className="py-4 frosted-shadow-box text-primary-800 bg-primary-200/60 whitespace-nowrap rounded-lg">
                 <li>
                   <Link
                     href="/rooms"
