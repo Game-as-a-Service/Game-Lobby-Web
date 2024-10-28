@@ -4,7 +4,7 @@ import useRequest from "@/hooks/useRequest";
 import { createRoomEndpoint, CreateRoomFormType } from "@/requests/rooms";
 import { getAllGamesEndpoint, GameType } from "@/requests/games";
 import Button from "@/components/shared/Button";
-import Modalow from "@/components/shared/Modalow";
+import Modal from "@/components/shared/Modal";
 import GameListModal from "./GameListModal";
 import Input from "@/components/shared/Input";
 import PasswordField from "@/components/shared/PasswordField";
@@ -107,12 +107,11 @@ export default function CreateRoomModal({ tabIndex }: { tabIndex: number }) {
       >
         開設新房間
       </button>
-      <Modalow
+      <Modal
         title="create-room"
-        hasTitle={false}
         isOpen={showThisModal}
         onClose={handleCloseModal}
-        size="xLarge"
+        size="medium"
       >
         {showGameListModal ? (
           <GameListModal
@@ -257,7 +256,7 @@ export default function CreateRoomModal({ tabIndex }: { tabIndex: number }) {
             </Button>
           </form>
         )}
-      </Modalow>
+      </Modal>
     </>
   );
 }

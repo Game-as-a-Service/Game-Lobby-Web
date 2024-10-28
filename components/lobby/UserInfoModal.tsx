@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { cn } from "@/lib/utils";
 import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
-import Modalow from "@/components/shared/Modalow";
+import Modal from "@/components/shared/Modal";
 import useRequest from "@/hooks/useRequest";
 import useUser from "@/hooks/useUser";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
@@ -30,7 +30,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
 
   const handleClose = () => {
     setIsOpenModal((prev) => !prev);
-    setTimeout(() => onClose(), 200); // 要等 modalow 關閉動畫結束，才能關閉
+    setTimeout(() => onClose(), 200); // 要等 Modal 關閉動畫結束，才能關閉
   };
   const handleCancelEdit = () => {
     setEditMode(false);
@@ -95,12 +95,11 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Modalow
-        hasTitle={false}
+      <Modal
         isOpen={isOpenModal}
         onClose={handleClose}
         maskClosable={!loading}
-        size="xLarge"
+        size="medium"
       >
         <div className="flex flex-col">
           <div className="flex justify-between items-center">
@@ -173,7 +172,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
             )}
           </div>
         </div>
-      </Modalow>
+      </Modal>
     </>
   );
 };
