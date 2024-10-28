@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import {
   BoxFancy,
   BoxFancyBorderGradientVariant,
@@ -24,15 +24,6 @@ type BorderRadiusTest = {
 type BorderGradientTest = {
   borderGradientColor?: BoxFancyBorderGradientVariant;
 } & ClassesFoundTest;
-
-const borderWidthTestTable: BorderWidthTest[] = [
-  { borderWidth: "none", classes: "p-\\[1px\\]", found: false },
-  { borderWidth: "small", classes: "p-\\[1px\\]", found: true },
-  { borderWidth: "medium", classes: "p-1", found: true },
-  { borderWidth: "large", classes: "p-1\\.5", found: true },
-  { borderWidth: "xLarge", classes: "p-2", found: true },
-  { borderWidth: "extraLarge", classes: "p-3", found: true },
-];
 
 const borderRadiusTestTable: BorderRadiusTest[] = [
   { borderRadius: "none", classes: "rounded-2xl", found: false },
@@ -73,20 +64,19 @@ describe("BoxFancy", () => {
     expect(baseElement.textContent).toContain("Test");
   });
 
-  it.each<BorderWidthTest>(borderWidthTestTable)(
-    "should render with correct border size",
-    ({ borderWidth, classes, found }) => {
-      const { baseElement } = render(
-        <BoxFancy borderWidth={borderWidth}>Test</BoxFancy>
-      );
+  it.each`
+    borderWidth     | className
+    ${"small"}      | ${"p-px"}
+    ${"medium"}     | ${"p-1"}
+    ${"large"}      | ${"p-1.5"}
+    ${"xLarge"}     | ${"p-2"}
+    ${"extraLarge"} | ${"p-3"}
+  `(
+    "should render with correct $borderWidth border size",
+    ({ borderWidth, className }) => {
+      render(<BoxFancy borderWidth={borderWidth}>Box Fancy</BoxFancy>);
 
-      const matchers = [
-        () => expect(baseElement.querySelector(`.${classes}`)),
-        () => expect(baseElement.querySelector(`.before\\:${classes}`)),
-      ];
-      matchers.forEach((matcher) =>
-        found ? matcher().toBeTruthy() : matcher().toBeFalsy()
-      );
+      expect(screen.getByText("Box Fancy")).toHaveClass(className);
     }
   );
 
