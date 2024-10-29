@@ -21,8 +21,8 @@ const containerSizeMap: Record<ModalSizeVariant, string> = {
 };
 
 const dialogSize: Record<ModalSizeVariant, string> = {
-  small: "w-80",
-  medium: "w-[460px]",
+  small: "w-[398px]",
+  medium: "w-[564px]",
 };
 
 export interface ModalProps {

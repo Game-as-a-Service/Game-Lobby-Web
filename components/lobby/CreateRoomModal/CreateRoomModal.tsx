@@ -108,7 +108,7 @@ export default function CreateRoomModal({ tabIndex }: { tabIndex: number }) {
         開設新房間
       </button>
       <Modal
-        title="create-room"
+        title="開新房間"
         isOpen={showThisModal}
         onClose={handleCloseModal}
         size="medium"
