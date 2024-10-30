@@ -94,12 +94,11 @@ const PasswordField: FC<PasswordFieldProps> = ({
           <div key={index}>
             <Input
               id={`input-password-${index}`}
-              inputRef={(element) => (passwordRefs.current[index] = element)}
+              ref={(element) => (passwordRefs.current[index] = element)}
               type="text"
               maxLength={1}
               inputClassName="w-[34px] aspect-square rounded-[10px] text-[#2F88FF] text-center cursor-default caret-transparent p-0"
               value={password}
-              maxLengthClassName="hidden"
               onKeyUp={(e) => handlePasswordKeyUp(e, index)}
               onClick={(event) => {
                 event.stopPropagation(); // 防止冒泡到父層的onClick

@@ -149,11 +149,11 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ isOpen, onClose }) => {
                           "rounded-[10px] w-full border border-dark29",
                           "focus:border-blue2f transition-[border-color] duration-300 ease-in-out"
                         )}
-                        errorClassName={cn("w-full flex justify-end")}
+                        hintTextClassName={cn("w-full flex justify-end")}
                         value={userInfo.nickname}
                         onChange={handleNicknameChange}
                         error={hasError}
-                        errorMessage={errorMsg.nickname}
+                        hintText={errorMsg.nickname}
                       />
                     </div>
                   ) : (
