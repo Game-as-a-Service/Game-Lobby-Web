@@ -1,16 +1,11 @@
-import {
-  CSSProperties,
-  PropsWithChildren,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import { CSSProperties, useCallback, useRef, useState } from "react";
 import useResizeObserver from "@/hooks/useResizeObserver";
-import { useCarousel } from "./CarouselContext";
 import useAutoReset from "@/hooks/useAutoReset";
 import { cn } from "@/lib/utils";
+import { useCarousel } from "./CarouselContext";
+import { CarouselMainProps } from "./Carousel.type";
 
-export default function CarouselMain({ children }: PropsWithChildren) {
+export default function CarouselMain({ className }: CarouselMainProps) {
   const { showIndex, items, Component, renderKey } = useCarousel();
   const [carouselItemWidth, setCarouselItemWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -30,10 +25,10 @@ export default function CarouselMain({ children }: PropsWithChildren) {
   });
 
   return (
-    <div ref={carouselRef} className="overflow-hidden w-full">
+    <div ref={carouselRef} className={cn("w-full overflow-hidden", className)}>
       <ul
         className={cn(
-          "mb-4 flex translate-x-[var(--translate-x)]",
+          "flex translate-x-[var(--translate-x)]",
           isAnimating && "transition-transform"
         )}
         style={
@@ -57,7 +52,6 @@ export default function CarouselMain({ children }: PropsWithChildren) {
             </li>
           ))}
       </ul>
-      {children}
     </div>
   );
 }

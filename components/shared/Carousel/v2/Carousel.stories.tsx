@@ -1,8 +1,10 @@
+import { useEffect } from "react";
+import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import Carousel from "./";
 
 const Card = (props: any) => (
-  <div className="text-white mx-4 px-12 py-8 border border-white rounded-md text-8xl font-mono">
+  <div className="text-white mx-12 px-12 py-8 border border-white rounded-md text-8xl font-mono">
     {props.name}
   </div>
 );
@@ -13,6 +15,19 @@ const meta: Meta<typeof Carousel> = {
   tags: ["autodocs"],
   decorators: [
     (Story, ctx) => {
+      const [, setArgs] = useArgs<typeof ctx.args>();
+
+      useEffect(() => {
+        const handleResize = () => {
+          setArgs({ maxWidth: window.innerWidth - 60 });
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+      }, [setArgs]);
+
       return (
         <div className="flex justify-center">
           <Story {...ctx} />
