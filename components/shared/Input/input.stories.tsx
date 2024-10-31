@@ -37,9 +37,6 @@ const meta: Meta<typeof Input> = {
     placeholder: "Placeholder",
   },
   argTypes: {
-    maxLength: {
-      type: "number",
-    },
     hintText: {
       type: "string",
     },

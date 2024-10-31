@@ -78,7 +78,7 @@ const InternalBoxFancy: InternalBoxFancyComponent = (
       ref={ref}
       className={cn(
         "relative bg-black/40 frosted-shadow-box text-primary-50",
-        "before:w-full before:h-full before:absolute before:top-0 before:left-0",
+        "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:pointer-events-none",
         "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
         borderWidthMap[borderWidth],
         borderRadiusMap[borderRadius],
