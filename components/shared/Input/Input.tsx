@@ -113,11 +113,13 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       )}
       <div
         className={cn(
-          "mb-1 px-4 py-2 box-border inline-flex gap-2.5",
+          "mb-1 inline-flex items-center gap-2.5 rounded-lg",
           "leading-tight bg-primary-200/20 placeholder:text-primary-300",
-          "border-2 border-transparent focus:border-primary-200 rounded-lg",
+          "outline outline-2 -outline-offset-2 outline-transparent focus-within:outline-primary-200",
+          prefix && "pl-4",
+          suffix && "pr-4",
           disabled && "bg-grey-800",
-          error && "border-error-300",
+          error && "outline-error-300",
           inputWrapperClassName
         )}
       >
@@ -126,9 +128,11 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           ref={ref}
           id={inputId}
           className={cn(
-            "bg-transparent focus:outline-none",
+            "grow px-4 py-2 bg-transparent border-2 border-transparent focus:outline-none",
             "disabled:text-grey-400 disabled:placeholder:text-grey-400",
-            error && "placeholder:text-error-300",
+            prefix && "pl-0",
+            suffix && "pr-0",
+            error && "text-error-300 placeholder:text-error-300",
             inputClassName
           )}
           onChange={handleChange}

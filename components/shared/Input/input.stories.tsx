@@ -23,9 +23,7 @@ const meta: Meta<typeof Input> = {
 
       return (
         <div className="flex justify-center">
-          <div className="w-3/4">
-            <Story args={{ ...ctx.args, onChange }} />
-          </div>
+          <Story args={{ ...ctx.args, onChange }} />
         </div>
       );
     },
