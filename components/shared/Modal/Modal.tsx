@@ -56,6 +56,7 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     let timer: NodeJS.Timeout;
 
     if (isOpen) {
+      document.body.classList.add("overflow-y-hidden");
       setRemoveDOM(false);
     } else {
       timer = setTimeout(() => {
@@ -63,7 +64,10 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
       }, 200);
     }
 
-    return () => clearTimeout(timer);
+    return () => {
+      document.body.classList.remove("overflow-y-hidden");
+      clearTimeout(timer);
+    };
   }, [isOpen]);
 
   return (
