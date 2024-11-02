@@ -31,6 +31,7 @@ export default function Layout({ children }: PropsWithChildren) {
       </Head>
       <Header
         className="fixed top-0 inset-x-0 z-40"
+        isChatVisible={isChatVisible}
         onClickChatButton={toggleChatVisibility}
       />
       <div className="pl-2 pt-20 flex grow">
