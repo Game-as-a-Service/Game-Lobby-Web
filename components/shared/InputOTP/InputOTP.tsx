@@ -1,26 +1,46 @@
-import { useRef, KeyboardEvent, useId, useState, useEffect } from "react";
+import {
+  useRef,
+  KeyboardEvent,
+  useId,
+  useState,
+  useEffect,
+  ForwardRefRenderFunction,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import Input from "@/components/shared/Input";
 import { cn } from "@/lib/utils";
 
-type InputOTPProps = {
+export interface InputOTPRef {
+  focus: () => void;
+}
+
+interface InputOTPProps {
   length: number;
   value?: string;
   defaultValue?: string;
   label?: string;
   error?: boolean;
+  hintText?: string;
   labelClassName?: string;
+  hintTextClassName?: string;
   onChange?: (value: string) => void;
-};
+}
 
-function InputOTP({
-  length,
-  value,
-  defaultValue = "",
-  label,
-  error,
-  labelClassName,
-  onChange,
-}: InputOTPProps) {
+const InternalInputOTP: ForwardRefRenderFunction<InputOTPRef, InputOTPProps> = (
+  {
+    length,
+    value,
+    defaultValue = "",
+    label,
+    error,
+    hintText,
+    labelClassName,
+    hintTextClassName,
+    onChange,
+  },
+  ref
+) => {
   const reactId = useId();
   const inputOPTId = `input_opt_${reactId}`;
   const [chars, setChars] = useState(() => (value || defaultValue).split(""));
@@ -80,6 +100,20 @@ function InputOTP({
     }
   }, [value]);
 
+  useImperativeHandle(
+    ref,
+    () => {
+      const firstElement = inputsRef.current[0];
+
+      return {
+        focus() {
+          firstElement?.focus();
+        },
+      };
+    },
+    []
+  );
+
   return (
     <div>
       {label && (
@@ -107,8 +141,21 @@ function InputOTP({
           />
         ))}
       </div>
+      {hintText && (
+        <div
+          className={cn(
+            "text-grey-500 text-sm",
+            error && "text-error-300",
+            hintTextClassName
+          )}
+        >
+          {hintText}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+const InputOTP = forwardRef(InternalInputOTP);
 
 export default InputOTP;
