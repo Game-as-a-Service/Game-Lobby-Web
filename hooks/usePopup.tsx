@@ -1,4 +1,4 @@
-import Modalow, { ModalProps } from "@/components/shared/Modalow";
+import Modal, { ModalProps } from "@/components/shared/Modal";
 import Button from "@/components/shared/Button";
 import { useState, useEffect, useCallback, useMemo } from "react";
 interface PopupConfig extends Pick<ModalProps, "isOpen"> {
@@ -71,8 +71,7 @@ export default function usePopup() {
   const Popup = useMemo(() => {
     function PopupComponent() {
       return (
-        <Modalow
-          hasTitle={false}
+        <Modal
           isOpen={popupConfig.isOpen}
           onClose={handleClose}
           maskClosable={false}
@@ -84,7 +83,7 @@ export default function usePopup() {
             )}
             <Button onClick={handleConfirm}>確定</Button>
           </div>
-        </Modalow>
+        </Modal>
       );
     }
     return PopupComponent;

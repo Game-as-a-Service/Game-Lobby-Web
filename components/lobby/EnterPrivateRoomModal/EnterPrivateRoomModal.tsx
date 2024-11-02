@@ -1,6 +1,6 @@
 import type { ClipboardEvent } from "react";
 
-import Modalow from "@/components/shared/Modalow";
+import Modal from "@/components/shared/Modal";
 import PasswordField from "@/components/shared/PasswordField";
 
 type EnterPrivateRoomModalProps = {
@@ -21,7 +21,7 @@ export default function EnterPrivateRoomModal({
   onPaste,
 }: EnterPrivateRoomModalProps) {
   return (
-    <Modalow hasTitle={false} isOpen={isOpen} onClose={onClose} size="small">
+    <Modal isOpen={isOpen} onClose={onClose} size="small">
       <div
         className="p-3 m-[26px] border-2 border-blue2f rounded-[10px] flex justify-center text-center"
         onPaste={onPaste}
@@ -40,6 +40,6 @@ export default function EnterPrivateRoomModal({
           <div className="border-4 border-white/40 border-t-white/10 w-6 h-6 rounded-full animate-spin"></div>
         </div>
       )}
-    </Modalow>
+    </Modal>
   );
 }

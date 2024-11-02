@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MouseEventHandler, useState } from "react";
 
 import { keys } from "@/lib/utils";
-import { Input } from "@/components/shared/Input";
+import Input from "@/components/shared/Input";
 import { ToastQueueProvider, useToast } from "@/components/shared/Toast";
 import * as icons from "./icons";
 import Icon from "./Icon";
@@ -59,8 +59,8 @@ const AllIcons = () => {
         label="搜尋"
         value={value}
         onChange={setValue}
-        labelClassName="mr-3 leading-normal"
-        inputClassName="border-white/90"
+        className="flex items-center gap-4"
+        inputWrapperClassName="px-2 py-1"
       />
       <div
         className="px-6 w-full h-96 grid place-content-start gap-4 overflow-auto"

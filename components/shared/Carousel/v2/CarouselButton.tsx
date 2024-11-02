@@ -1,15 +1,12 @@
 import Icon from "@/components/shared/Icon";
 import { useCarouselDispatch } from "./CarouselContext";
-import { CarouselActionType, CarouselButtonConfig } from "./Carousel.type";
-
-export const enum CarouselButtonType {
-  Previous = "previous",
-  Next = "next",
-}
-
-interface CarouselButtonProps {
-  type: CarouselButtonType | `${CarouselButtonType}`;
-}
+import {
+  CarouselActionType,
+  CarouselButtonConfig,
+  CarouselButtonProps,
+  CarouselButtonType,
+} from "./Carousel.type";
+import { cn } from "@/lib/utils";
 
 const configs: Record<CarouselButtonType, CarouselButtonConfig> = {
   [CarouselButtonType.Previous]: {
@@ -24,13 +21,14 @@ const configs: Record<CarouselButtonType, CarouselButtonConfig> = {
 
 export default function CarouselButton({
   type,
+  className,
 }: Readonly<CarouselButtonProps>) {
   const dispatch = useCarouselDispatch();
   const config = configs[type];
   return (
     <button
       type="button"
-      className="p-2.5 shrink-0 bg-white/4 shadow-default rounded-2xl"
+      className={cn("p-2.5 bg-white/4 shadow-default rounded-2xl", className)}
       onClick={() => dispatch({ type: config.actionType })}
     >
       <Icon

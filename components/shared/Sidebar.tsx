@@ -72,18 +72,12 @@ export default function Sidebar({ className }: SidebarProps) {
           >
             <Button
               className={cn(
-                "bg-transparent p-3 rounded-full hover:shadow-none",
-                {
-                  "bg-primary-200/20": isActive(routeProps.route),
-                }
+                "bg-transparent p-3 rounded-full hover:shadow-none text-primary-400",
+                isActive(routeProps.route) &&
+                  "bg-primary-200/20 text-primary-200"
               )}
             >
-              <Icon
-                name={routeProps.iconName}
-                className={cn("w-6 h-6 stroke-primary-400", {
-                  "stroke-primary-200": isActive(routeProps.route),
-                })}
-              />
+              <Icon name={routeProps.iconName} className="w-6 h-6" />
             </Button>
           </Link>
         ))}

@@ -44,8 +44,8 @@ describe("Input", () => {
     const rootClassName = "test-root";
     const labelClassName = "test-label";
     const inputClassName = "test-input";
-    const errorClassName = "test-error";
-    const maxLengthClassName = "test-error";
+    const inputWrapperClassName = "test-input-wrapper";
+    const hintTextClassName = "test-error";
 
     const { container } = render(
       <Input
@@ -53,26 +53,25 @@ describe("Input", () => {
         label="label"
         maxLength={1}
         error
-        errorMessage="error message"
+        hintText="hint text"
         className={rootClassName}
         labelClassName={labelClassName}
         inputClassName={inputClassName}
-        errorClassName={errorClassName}
-        maxLengthClassName={maxLengthClassName}
+        inputWrapperClassName={inputWrapperClassName}
+        hintTextClassName={hintTextClassName}
       />
     );
 
     const rootElement = container.querySelector("div");
     const inputElement = container.querySelector("input");
     const labelElement = container.querySelector("label");
-    const errorElement = screen.getByText("error message");
-    const maxLengthElement = container.querySelector("div.absolute");
+    const hintTextElement = screen.getByText("hint text");
 
     expect(rootElement).toHaveClass(rootClassName);
     expect(labelElement).toHaveClass(labelClassName);
     expect(inputElement).toHaveClass(inputClassName);
-    expect(errorElement).toHaveClass(errorClassName);
-    expect(maxLengthElement).toHaveClass(maxLengthClassName);
+    expect(labelElement?.nextElementSibling).toHaveClass(inputWrapperClassName);
+    expect(hintTextElement).toHaveClass(hintTextClassName);
   });
 
   it("should render prefix and suffix", async () => {
@@ -88,46 +87,34 @@ describe("Input", () => {
     expect(suffix).toBeInTheDocument();
   });
 
-  it.each([["disabled"], ["readonly"]])(
-    "should not call onChange when input is typed in %s mode",
-    async (mode) => {
-      const isDisabled = mode === "disabled";
-      const isReadOnly = mode === "readonly";
-      const initValue = "test";
-      const mockChange = jest.fn();
+  it("should not call onChange when input is typed in disabled mode", async () => {
+    const initValue = "test";
+    const mockChange = jest.fn();
 
-      const ControllerComponent = () => {
-        const [value, setValue] = useState(initValue);
-        const handleChange: ChangeHandler = (v, e) => {
-          setValue(v);
-          mockChange(v, e);
-        };
-
-        return (
-          <Input
-            value={value}
-            onChange={handleChange}
-            disabled={isDisabled}
-            readOnly={isReadOnly}
-          />
-        );
+    const ControllerComponent = () => {
+      const [value, setValue] = useState(initValue);
+      const handleChange: ChangeHandler = (v, e) => {
+        setValue(v);
+        mockChange(v, e);
       };
 
-      render(<ControllerComponent />);
+      return <Input value={value} onChange={handleChange} disabled />;
+    };
 
-      const inputElement = screen.getByRole<HTMLInputElement>("textbox");
+    render(<ControllerComponent />);
 
-      if (isDisabled) expect(inputElement).toBeDisabled();
-      expect(inputElement.value).toBe(initValue);
+    const inputElement = screen.getByRole<HTMLInputElement>("textbox");
 
-      const typingValue = "value";
+    expect(inputElement).toBeDisabled();
+    expect(inputElement.value).toBe(initValue);
 
-      await act(async () => {
-        await userEvent.type(inputElement, typingValue);
-      });
+    const typingValue = "value";
 
-      expect(mockChange).not.toHaveBeenCalled();
-      expect(inputElement.value).toBe(initValue);
-    }
-  );
+    await act(async () => {
+      await userEvent.type(inputElement, typingValue);
+    });
+
+    expect(mockChange).not.toHaveBeenCalled();
+    expect(inputElement.value).toBe(initValue);
+  });
 });

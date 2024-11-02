@@ -16,16 +16,16 @@ export type BoxFancyBorderGradientVariant = "none" | "purple" | "black";
 // The border-radius of ::before should be as consistent as possible with the original,
 // and the border-radius size must be at least twice that of ::before.padding,
 // otherwise, the inner circle will protrude.
-const BorderSizeTwClassName: Record<BoxFancyBorderWidthVariant, string> = {
+const borderWidthMap: Record<BoxFancyBorderWidthVariant, string> = {
   none: "",
-  small: "p-[1px] before:p-[1px]",
+  small: "p-px before:p-px",
   medium: "p-1 before:p-1",
   large: "p-1.5 before:p-1.5",
   xLarge: "p-2 before:p-2",
   extraLarge: "p-3 before:p-3",
 };
 
-const BorderRadiusTwClassName: Record<BoxFancyBorderRadiusVariant, string> = {
+const borderRadiusMap: Record<BoxFancyBorderRadiusVariant, string> = {
   none: "",
   small: "rounded-sm before:rounded-sm",
   medium: "rounded-lg before:rounded-lg",
@@ -35,18 +35,17 @@ const BorderRadiusTwClassName: Record<BoxFancyBorderRadiusVariant, string> = {
   full: "rounded-full before:rounded-full",
 };
 
-const BorderGradientVariantTwClassName: Record<
-  BoxFancyBorderGradientVariant,
-  string
-> = {
-  none: "",
-  purple: "before:gradient-purple",
-  black: "before:gradient-black",
-};
+const borderGradientVariantMap: Record<BoxFancyBorderGradientVariant, string> =
+  {
+    none: "",
+    purple: "before:gradient-purple",
+    black: "before:gradient-black",
+  };
 
 export interface BaseBoxFancyProp {
   /** Border styles are recommended to be set by the following 'border' prefix props **/
   borderWidth?: BoxFancyBorderWidthVariant;
+  /** Border styles are recommended to be set by the following 'border' prefix props **/
   borderRadius?: BoxFancyBorderRadiusVariant;
   /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
   borderGradientColor?: BoxFancyBorderGradientVariant;
@@ -55,12 +54,12 @@ export interface BaseBoxFancyProp {
 export type BoxFancyProps<C extends React.ElementType = "div"> =
   PolymorphicComponentProp<C, BaseBoxFancyProp>;
 
-type InnerBoxFancyComponent = <C extends React.ElementType = "div">(
+type InternalBoxFancyComponent = <C extends React.ElementType = "div">(
   props: BoxFancyProps<C>,
   ref?: PolymorphicRef<C>
 ) => React.ReactElement | null;
 
-const InnerBoxFancy: InnerBoxFancyComponent = (
+const InternalBoxFancy: InternalBoxFancyComponent = (
   {
     component,
     borderWidth = "small",
@@ -74,24 +73,20 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
 ) => {
   const Component = component || "div";
 
-  const borderWidthTwClassName = BorderSizeTwClassName[borderWidth];
-  const borderRadiusTwClassName = BorderRadiusTwClassName[borderRadius];
-  const borderGradientColorTwClassName =
-    BorderGradientVariantTwClassName[borderGradientColor];
-
-  const allClassName = cn(
-    "w-full h-full relative bg-black/40 effect-new-2 text-primary-50",
-    "flex justify-center",
-    "before:w-full before:h-full before:absolute before:top-0 before:left-0",
-    "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
-    borderWidthTwClassName,
-    borderRadiusTwClassName,
-    borderGradientColorTwClassName,
-    className
-  );
-
   return (
-    <Component ref={ref} className={allClassName} {...restProps}>
+    <Component
+      ref={ref}
+      className={cn(
+        "relative bg-black/40 frosted-shadow-box text-primary-50",
+        "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:pointer-events-none",
+        "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
+        borderWidthMap[borderWidth],
+        borderRadiusMap[borderRadius],
+        borderGradientVariantMap[borderGradientColor],
+        className
+      )}
+      {...restProps}
+    >
       {children}
     </Component>
   );
@@ -108,4 +103,4 @@ const InnerBoxFancy: InnerBoxFancyComponent = (
  *
  * 2. Avoid modifying the CSS `position` property directly. If necessary, consider using a container to encapsulate it.
  */
-export const BoxFancy = forwardRef(InnerBoxFancy);
+export const BoxFancy = forwardRef(InternalBoxFancy);

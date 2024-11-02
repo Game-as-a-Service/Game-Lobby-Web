@@ -17,6 +17,7 @@ export interface ICarouselContext<Item extends TItem = TItem> {
 
 export interface CarouselProps<Item extends TItem = TItem> {
   items: ICarouselContext<Item>["items"];
+  maxWidth?: number;
   Component: ICarouselContext<Item>["Component"];
   renderKey?: ICarouselContext<Item>["renderKey"];
 }
@@ -48,4 +49,22 @@ export interface CarouselProviderProps<Item extends TItem>
 export interface CarouselButtonConfig {
   iconName: IconName;
   actionType: CarouselActionType.Previous | CarouselActionType.Next;
+}
+
+export const enum CarouselButtonType {
+  Previous = "previous",
+  Next = "next",
+}
+
+export interface CarouselButtonProps {
+  type: CarouselButtonType;
+  className?: string;
+}
+
+export interface CarouselMainProps {
+  className?: string;
+}
+
+export interface CarouselPaginationProps {
+  className?: string;
 }
