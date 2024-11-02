@@ -4,5 +4,6 @@
   "you_can_only_join_1_room": "一人只能進入一間房!",
   "rooms_list": "查看房間列表",
   "rooms_waiting": "正在等待玩家配對",
-  "rooms_playing": "遊戲已開始"
+  "rooms_playing": "遊戲已開始",
+  "enter_game_password": "請輸入遊戲密碼"
 }

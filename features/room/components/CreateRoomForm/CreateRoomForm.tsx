@@ -1,5 +1,6 @@
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import useRequest from "@/hooks/useRequest";
 import Button from "@/components/shared/Button/v2";
 import Input from "@/components/shared/Input";
@@ -55,6 +56,7 @@ function CreateRoomForm({
   });
   const { fetch } = useRequest();
   const router = useRouter();
+  const { t } = useTranslation("rooms");
   const [isLockRoom, setIsLockRoom] = useState(false);
   const passwordInputRef = useRef<InputOTPRef>(null);
   const gameNameInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +79,7 @@ function CreateRoomForm({
 
     if (isLockRoom && roomForm.password?.length !== 4) {
       passwordInputRef.current?.focus();
-      newErrors.password = "請輸入遊戲密碼";
+      newErrors.password = t("enter_game_password");
     }
     if (!roomForm.name) {
       gameNameInputRef.current?.focus();
