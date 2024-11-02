@@ -6,7 +6,6 @@ import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/router";
 import { useToast } from "@/components/shared/Toast";
 import useUser from "@/hooks/useUser";
-import { CarouselItemProps } from "@/components/shared/Carousel/v2";
 import { GameType } from "@/requests/games";
 import { fastJoinGameEndpoint } from "@/requests/rooms";
 import Icon from "@/components/shared/Icon";

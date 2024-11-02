@@ -44,7 +44,7 @@ function SelectBoxGroup<T = string>({
   itemClassName,
   itemWrapperClassName,
   onChange,
-}: SelectBoxGroupProps<T>) {
+}: Readonly<SelectBoxGroupProps<T>>) {
   const reactId = useId();
   const selectBoxId = `select_box_${reactId}`;
 

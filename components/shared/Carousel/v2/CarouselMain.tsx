@@ -5,7 +5,9 @@ import { cn } from "@/lib/utils";
 import { useCarousel } from "./CarouselContext";
 import { CarouselMainProps } from "./Carousel.type";
 
-export default function CarouselMain({ className }: CarouselMainProps) {
+export default function CarouselMain({
+  className,
+}: Readonly<CarouselMainProps>) {
   const { showIndex, items, Component, renderKey } = useCarousel();
   const [carouselItemWidth, setCarouselItemWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);

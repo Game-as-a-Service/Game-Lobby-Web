@@ -4,7 +4,7 @@ import { CarouselActionType, CarouselPaginationProps } from "./Carousel.type";
 
 export default function CarouselPagination({
   className,
-}: CarouselPaginationProps) {
+}: Readonly<CarouselPaginationProps>) {
   const { showIndex, items, renderKey } = useCarousel();
   const dispatch = useCarouselDispatch();
 

@@ -3,6 +3,7 @@ import React, {
   useEffect,
   ForwardRefRenderFunction,
   forwardRef,
+  KeyboardEventHandler,
 } from "react";
 import { cn } from "@/lib/utils";
 import Portal from "../Portal/Portal";
@@ -52,6 +53,12 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
 
   const [removeDOM, setRemoveDOM] = useState(!isOpen);
 
+  const handleKeyUp: KeyboardEventHandler = (e) => {
+    if (maskClosable && e.key === "Enter") {
+      onClose?.();
+    }
+  };
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -80,7 +87,9 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
             isOpen ? "opacity-100" : "opacity-0"
           )}
           data-testid="modal-mask"
+          tabIndex={maskClosable ? 0 : -1}
           onClick={maskClosable ? onClose : undefined}
+          onKeyUp={handleKeyUp}
         />
         <div
           className={cn(
@@ -88,7 +97,6 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
             containerSizeMap[size],
             isOpen ? "opacity-100" : "opacity-0"
           )}
-          data-testid="modal-container"
         >
           <BoxFancy
             ref={ref}
@@ -98,7 +106,7 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
               dialogSize[size]
             )}
             {...restProps}
-            role="dialog"
+            role="alertdialog"
           >
             <header className="text-[22px] text-center">{title}</header>
             <div>{children}</div>
