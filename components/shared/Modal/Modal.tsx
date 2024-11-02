@@ -77,12 +77,23 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    const handleWindowKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose?.();
+      }
+    };
+    window.addEventListener("keyup", handleWindowKeyUp);
+
+    return () => window.removeEventListener("keyup", handleWindowKeyUp);
+  }, [onClose]);
+
   return (
     !removeDOM && (
       <Portal>
-        <div
+        <button
           className={cn(
-            "duration-200",
+            "cursor-auto duration-200",
             "fixed top-0 left-0 w-screen h-screen bg-basic-black/60 z-10",
             isOpen ? "opacity-100" : "opacity-0"
           )}
@@ -100,13 +111,13 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
         >
           <BoxFancy
             ref={ref}
+            component="dialog"
             className={cn(
               "px-10 py-12 flex flex-col gap-8",
               "text-primary-100 bg-primary-700/40 rounded-2xl drop-shadow-md",
               dialogSize[size]
             )}
             {...restProps}
-            role="alertdialog"
           >
             <header className="text-[22px] text-center">{title}</header>
             <div>{children}</div>

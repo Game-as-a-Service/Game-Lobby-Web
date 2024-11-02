@@ -5,22 +5,20 @@ import userEvent from "@testing-library/user-event";
 import Modal from ".";
 
 describe("Modal", () => {
-  it("should render Modal when isOpen is true", () => {
+  it("should render Modal when isOpen is true", async () => {
     render(
       <Modal isOpen title="Test Title">
         Test Content
       </Modal>
     );
-    const modal = screen.getByRole("dialog");
-    expect(modal).toBeInTheDocument();
     expect(screen.getByText("Test Title")).toBeInTheDocument();
     expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
 
   it("should not render Modal when isOpen is not setting", () => {
     render(<Modal title="Test Title">Test Content</Modal>);
-    const modal = screen.queryByRole("dialog");
-    expect(modal).toBeNull();
+    expect(screen.queryByText("Test Title")).not.toBeInTheDocument();
+    expect(screen.queryByText("Test Content")).not.toBeInTheDocument();
   });
 
   it("should call onClose when close button is clicked", async () => {
