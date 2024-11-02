@@ -61,6 +61,8 @@ const RoomsListView: FC<Props> = ({ status }) => {
     async function fetchRoomEntry(_roomId: string) {
       setIsLoading(true);
 
+      // Automatically enter the room if room information is accessible,
+      // indicating the user is already in the room
       if (await fetch(getRoomInfoEndpoint(_roomId)).catch(() => {})) {
         router.push(`/rooms/${_roomId}`);
         updateRoomId(_roomId);
@@ -80,6 +82,7 @@ const RoomsListView: FC<Props> = ({ status }) => {
       } finally {
         setPasswordValues(INIT_PASSWORD);
         setIsLoading(false);
+        setRoomId(null);
       }
     }
 
