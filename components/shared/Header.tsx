@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Icon, { IconName } from "@/components/shared/Icon";
-import Button from "@/components/shared/Button";
 import Badge from "@/components/shared/Badge";
-import UserInfoModal from "@/components/lobby/UserInfoModal";
 import { cn } from "@/lib/utils";
+import Modal from "./Modal";
+import { UserInfoForm } from "@/features/user";
+import useUser from "@/hooks/useUser";
+import { UserInfo } from "@/requests/users";
 
 enum HeaderActions {
   CHAT = "CHAT",
@@ -20,20 +22,29 @@ interface ButtonProps {
 
 interface HeaderProps {
   className?: string;
+  isChatVisible: boolean;
   onClickChatButton: () => void;
 }
 
 export default function Header({
   className,
+  isChatVisible,
   onClickChatButton,
 }: Readonly<HeaderProps>) {
-  const [openProfile, setOpenProfile] = useState(false);
+  const [isUserInfoVisible, setIsUserInfoVisible] = useState(false);
+  // TODO: 待優化登入就應可以取使用者資料
+  const [currentUserInfo, setCurrentUserInfo] = useState<UserInfo>();
+  const { getCurrentUser } = useUser();
+
+  useEffect(() => {
+    getCurrentUser().then((result) => setCurrentUserInfo(result));
+  }, []);
 
   const buttons: ButtonProps[] = [
     {
       iconName: "Chat",
       type: HeaderActions.CHAT,
-      isActive: false,
+      isActive: isChatVisible,
       onClick: onClickChatButton,
     },
     {
@@ -45,9 +56,9 @@ export default function Header({
     {
       iconName: "Player",
       type: HeaderActions.PROFILE,
-      isActive: openProfile,
+      isActive: isUserInfoVisible,
       onClick: () => {
-        setOpenProfile(true);
+        setIsUserInfoVisible(true);
       },
     },
   ];
@@ -71,22 +82,27 @@ export default function Header({
             placement="top-right"
             className={cn("top-1 right-1")}
           >
-            <button className="p-2.5" onClick={onClick}>
-              <Icon
-                name={iconName}
-                className={cn("w-5 h-5", {
-                  "[&_*]:stroke-white": isActive,
-                })}
-              />
+            <button
+              className={cn("p-2.5", isActive && "text-white")}
+              onClick={onClick}
+            >
+              <Icon name={iconName} className="w-5 h-5" />
             </button>
           </Badge>
         ))}
       </div>
-      {openProfile && (
-        <UserInfoModal
-          isOpen={openProfile}
-          onClose={() => setOpenProfile(false)}
-        />
+      {isUserInfoVisible && currentUserInfo && (
+        <Modal
+          title="修改暱稱"
+          isOpen={isUserInfoVisible}
+          onClose={() => setIsUserInfoVisible(false)}
+          size="medium"
+        >
+          <UserInfoForm
+            {...currentUserInfo}
+            onCancel={() => setIsUserInfoVisible(false)}
+          />
+        </Modal>
       )}
     </header>
   );
