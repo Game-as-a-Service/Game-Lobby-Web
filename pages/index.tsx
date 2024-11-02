@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import CarouselV2 from "@/components/shared/Carousel/v2";
 import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
+import { useToast } from "@/components/shared/Toast";
 import { GameType, getAllGamesEndpoint } from "@/requests/games";
 import useRequest from "@/hooks/useRequest";
 import { CarouselItemProps } from "@/components/shared/Carousel/v2/Carousel.type";
@@ -73,6 +74,7 @@ const TabPaneContent = ({
 
 export default function Home() {
   const { fetch } = useRequest();
+  const toast = useToast();
   const [gameList, setGameList] = useState<GameType[]>([]);
 
   useEffect(() => {
@@ -83,6 +85,12 @@ export default function Home() {
     <div className="max-w-[1036px] mx-auto px-6">
       <div className="flex justify-center mb-6">
         <SearchBar
+          onSubmit={() =>
+            toast(
+              { children: "此功能暫未實現", state: "warning" },
+              { position: "top" }
+            )
+          }
           leftSlot={
             <button type="button" className="pl-5 pr-2.5 px-4 text-primary-300">
               類型
