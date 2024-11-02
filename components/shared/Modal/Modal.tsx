@@ -41,8 +41,8 @@ const InternalModal: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
 ) => {
   const {
     isOpen,
+    title,
     size = "medium",
-    title = "title",
     hideCloseIcon = false,
     maskClosable = true,
     children,

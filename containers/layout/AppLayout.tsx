@@ -4,6 +4,7 @@ import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
 import Chat from "@/components/shared/Chat/v2/Chat";
 import useChat from "@/hooks/useChat";
+import Head from "next/head";
 
 export default function Layout({ children }: PropsWithChildren) {
   const router = useRouter();
@@ -25,6 +26,9 @@ export default function Layout({ children }: PropsWithChildren) {
 
   return (
     <>
+      <Head>
+        <title>遊戲微服務大平台</title>
+      </Head>
       <Header
         className="fixed top-0 inset-x-0 z-40"
         onClickChatButton={toggleChatVisibility}
@@ -33,7 +37,7 @@ export default function Layout({ children }: PropsWithChildren) {
         <div className="shrink-0 w-18">
           <Sidebar className="fixed top-20 bottom-6 z-30" />
         </div>
-        <main className="grow overflow-x-hidden">{children}</main>
+        <main className="grow pb-4 overflow-x-hidden">{children}</main>
         {isChatVisible && (
           <div className="shrink-0 w-80 mr-4">
             <Chat

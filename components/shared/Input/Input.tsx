@@ -68,7 +68,7 @@ interface InputProps
   onChange?: ChangeHandler;
 }
 
-const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
+const InternalInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   {
     value,
     label,
@@ -158,6 +158,6 @@ const InteralInput: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   );
 };
 
-const Input = forwardRef(InteralInput);
+const Input = forwardRef(InternalInput);
 
 export default Input;

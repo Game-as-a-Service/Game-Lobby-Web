@@ -25,7 +25,7 @@ const buttonTypeClasses: Record<ButtonVariant, string> = {
   primaryTransparent:
     "text-primary-800 bg-primary-200/60 hover:text-primary-800 hover:bg-primary-300/50 active:text-primary-800 active:bg-primary-300/50",
   secondary:
-    "text-primary-200 bg-primary-700/40 hover:bg-primary-600/40 active:bg-primary-600/40",
+    "text-primary-200 bg-primary-700/0 hover:bg-primary-700/40 active:bg-primary-200/20",
   highlight:
     "text-primary-50 gradient-purple hover:gradient-purple-2 active:gradient-purple-3",
 };

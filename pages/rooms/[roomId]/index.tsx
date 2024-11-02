@@ -1,8 +1,9 @@
-import { ReactEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+import Cover from "@/components/shared/Cover";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import RoomBreadcrumb from "@/components/rooms/RoomBreadcrumb";
@@ -28,12 +29,6 @@ import useUser from "@/hooks/useUser";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
 
 type User = Omit<RoomInfo.User, "isReady">;
-
-const onImageError: ReactEventHandler<HTMLImageElement> = (e) => {
-  if (e.target instanceof HTMLImageElement) {
-    e.target.src = gameDefaultCoverImg.src;
-  }
-};
 
 export default function Room() {
   const {
@@ -242,14 +237,13 @@ export default function Room() {
         <>
           <div className="relative w-full h-[280px] overflow-hidden">
             {roomInfo.currentPlayers && (
-              <Image
+              <Cover
                 src={gameInfo?.img || gameDefaultCoverImg.src}
                 alt={gameInfo?.name || "default game cover"}
                 draggable={false}
                 priority
                 fill
                 className="object-cover"
-                onError={onImageError}
               />
             )}
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-[#0f0919] to-50% to-[#170D2500]"></div>
