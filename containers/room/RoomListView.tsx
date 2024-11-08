@@ -10,7 +10,7 @@ import {
   getRoomInfoEndpoint,
 } from "@/requests/rooms";
 import Button from "@/components/shared/Button";
-import RoomCard from "@/components/rooms/RoomCard";
+import { RoomCard } from "@/features/room";
 import EnterPrivateRoomModal from "@/components/lobby/EnterPrivateRoomModal";
 import { RoomsList, RoomsListWrapper } from "@/components/rooms/RoomsList";
 import useRequest from "@/hooks/useRequest";
