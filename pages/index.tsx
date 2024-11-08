@@ -74,7 +74,6 @@ const TabPaneContent = ({
 
 export default function Home() {
   const { fetch } = useRequest();
-  const toast = useToast();
   const [gameList, setGameList] = useState<GameType[]>([]);
 
   useEffect(() => {
@@ -83,21 +82,6 @@ export default function Home() {
 
   return (
     <div className="max-w-[1036px] mx-auto px-6">
-      <div className="flex justify-center mb-6">
-        <SearchBar
-          onSubmit={() =>
-            toast(
-              { children: "此功能暫未實現", state: "warning" },
-              { position: "top" }
-            )
-          }
-          leftSlot={
-            <button type="button" className="pl-5 pr-2.5 px-4 text-primary-300">
-              類型
-            </button>
-          }
-        />
-      </div>
       <div>
         <CarouselV2 items={gameList} Component={CarouselCard} />
       </div>

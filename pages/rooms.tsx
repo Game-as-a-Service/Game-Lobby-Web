@@ -20,7 +20,7 @@ const Rooms = () => {
   ];
 
   return (
-    <div className="bg-dark29 rounded-[10px] py-5 px-6 h-full">
+    <div className="pb-5 px-6">
       <Tabs
         tabs={tabs}
         defaultActiveKey={RoomType.WAITING}
