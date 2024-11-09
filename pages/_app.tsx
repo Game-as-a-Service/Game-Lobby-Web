@@ -2,6 +2,7 @@ import { AppProps } from "next/app";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import { appWithTranslation } from "next-i18next";
+import Head from "next/head";
 
 import "@/styles/reset.css";
 import "@/styles/global.css";
@@ -46,22 +47,27 @@ function App({ Component, pageProps }: AppWithProps) {
   };
 
   return (
-    <ToastQueueProvider>
-      <AxiosProvider>
-        <AuthProvider>
-          {getHistory(
-            <SocketProvider>
-              <ChatroomContextProvider>
-                <Startup isAnonymous={isAnonymous}>
-                  {getLayout(<Component {...pageProps} />)}
-                  {!isProduction && <HistoryList />}
-                </Startup>
-              </ChatroomContextProvider>
-            </SocketProvider>
-          )}
-        </AuthProvider>
-      </AxiosProvider>
-    </ToastQueueProvider>
+    <>
+      <Head>
+        <title>遊戲微服務大平台</title>
+      </Head>
+      <ToastQueueProvider>
+        <AxiosProvider>
+          <AuthProvider>
+            {getHistory(
+              <SocketProvider>
+                <ChatroomContextProvider>
+                  <Startup isAnonymous={isAnonymous}>
+                    {getLayout(<Component {...pageProps} />)}
+                    {!isProduction && <HistoryList />}
+                  </Startup>
+                </ChatroomContextProvider>
+              </SocketProvider>
+            )}
+          </AuthProvider>
+        </AxiosProvider>
+      </ToastQueueProvider>
+    </>
   );
 }
 

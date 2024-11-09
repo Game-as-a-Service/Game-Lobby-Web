@@ -17,7 +17,7 @@ function RoomCard({ room, onClick }: RoomsCardProps) {
       <div className="flex p-4 gap-4 text-primary-50">
         <Cover
           className="w-16 h-16 rounded-lg object-cover"
-          src="/images/game-avatar.jpg"
+          src={room.game.imgUrl}
           alt={room.game.name}
           width={68}
           height={68}

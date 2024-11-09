@@ -7,6 +7,7 @@ import useChat from "@/hooks/useChat";
 import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
+import { GameListProvider } from "@/features/game";
 
 export default function Layout({ children }: PropsWithChildren) {
   const toast = useToast();
@@ -28,7 +29,7 @@ export default function Layout({ children }: PropsWithChildren) {
   }, [router.pathname, openChat]);
 
   return (
-    <>
+    <GameListProvider>
       <Head>
         <title>遊戲微服務大平台</title>
       </Head>
@@ -79,6 +80,6 @@ export default function Layout({ children }: PropsWithChildren) {
           </div>
         )}
       </div>
-    </>
+    </GameListProvider>
   );
 }

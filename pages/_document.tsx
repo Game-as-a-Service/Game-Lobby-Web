@@ -11,7 +11,6 @@ export default function Document() {
         {/* <meta property="og:image" /> */}
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
-        <title>{siteTitle}</title>
       </Head>
       <body className="body-bg min-h-screen text-primary-200">
         <Main />
