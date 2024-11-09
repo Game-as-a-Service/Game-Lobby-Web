@@ -6,10 +6,10 @@ import Button, { ButtonSize } from "@/components/shared/Button/v2";
 interface RoomsCardProps {
   room: Room;
   className?: string;
-  onClick: (id: string) => void;
+  onJoin: (id: string) => void;
 }
 
-function RoomCard({ room, onClick }: RoomsCardProps) {
+function RoomCard({ room, onJoin: onClick }: RoomsCardProps) {
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
 
   return (
@@ -27,7 +27,7 @@ function RoomCard({ room, onClick }: RoomsCardProps) {
           <h4 className="text-base truncate">{room.name}</h4>
         </div>
       </div>
-      <div className="flex justify-between px-4 py-2 rounded-b-2xl bg-primary-700/40 text-primary-300 overflow-hidden">
+      <footer className="flex justify-between px-4 py-2 rounded-b-2xl bg-primary-700/40 text-primary-300 overflow-hidden">
         {lackTotalPlayers > 0 ? (
           <div className="truncate">
             <span className="text-secondary-300">
@@ -45,7 +45,7 @@ function RoomCard({ room, onClick }: RoomsCardProps) {
         >
           加入
         </Button>
-      </div>
+      </footer>
     </div>
   );
 }

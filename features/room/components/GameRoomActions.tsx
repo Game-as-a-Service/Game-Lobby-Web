@@ -11,7 +11,7 @@ import { fastJoinGameEndpoint } from "@/requests/rooms";
 import Icon from "@/components/shared/Icon";
 import Modal from "@/components/shared/Modal";
 import { cn } from "@/lib/utils";
-import CreateRoomModal from "./CreateRoomForm";
+import CreateRoomForm from "./CreateRoomForm";
 
 interface GameRoomActions extends GameType {
   tabIndex?: number;
@@ -117,7 +117,7 @@ function GameRoomActions({
                 onClose={() => setShowCreateRoomModal(false)}
                 size="medium"
               >
-                <CreateRoomModal
+                <CreateRoomForm
                   gameId={id}
                   minPlayers={minPlayers}
                   maxPlayers={maxPlayers}

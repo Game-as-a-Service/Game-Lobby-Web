@@ -52,7 +52,6 @@ function CreateRoomForm({
     gameId,
     minPlayers,
     maxPlayers,
-    password: "",
   });
   const { fetch } = useRequest();
   const router = useRouter();
@@ -99,10 +98,7 @@ function CreateRoomForm({
     if (isLockRoom) {
       passwordInputRef.current?.focus();
     } else {
-      setRoomForm((pre) => ({
-        ...pre,
-        password: "",
-      }));
+      setRoomForm((pre) => ({ ...pre, password: undefined }));
     }
   }, [isLockRoom]);
 
