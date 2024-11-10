@@ -44,7 +44,7 @@ export default function EditMode({ className }: Readonly<EditModeProps>) {
       </g>
       <defs>
         <clipPath id="clip0_1218_1936">
-          <rect width="24" height="24" fill="white"></rect>
+          <rect width="24" height="24" fill="currentColor"></rect>
         </clipPath>
       </defs>
     </svg>

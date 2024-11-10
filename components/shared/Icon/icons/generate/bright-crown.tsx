@@ -22,7 +22,7 @@ export default function BrightCrown({ className }: Readonly<BrightCrownProps>) {
           width="24"
           height="24"
         >
-          <path d="M0 0H24V24H0V0Z" fill="white"></path>
+          <path d="M0 0H24V24H0V0Z" fill="currentColor"></path>
         </mask>
         <g mask="url(#mask0_15_3937)">
           <path
@@ -36,7 +36,7 @@ export default function BrightCrown({ className }: Readonly<BrightCrownProps>) {
       </g>
       <defs>
         <clipPath id="clip0_15_3937">
-          <rect width="24" height="24" fill="white"></rect>
+          <rect width="24" height="24" fill="currentColor"></rect>
         </clipPath>
       </defs>
     </svg>
