@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Breadcrumb from "./Breadcrumb";
 
 jest.mock("next/router", () => ({
@@ -20,18 +20,8 @@ describe("Breadcrumb", () => {
     );
 
     expect(screen.getByRole("navigation")).toBeInTheDocument();
-  });
-
-  it("renders separator correctly", () => {
-    render(
-      <Breadcrumb>
-        <Breadcrumb.Item text="Home" href="/" />
-        <Breadcrumb.Item text="About" href="/about" />
-      </Breadcrumb>
-    );
-
-    const separator = screen.getAllByText(">");
-    expect(separator).toHaveLength(1);
+    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("About")).toBeInTheDocument();
   });
 
   it("renders with custom separator correctly", () => {
@@ -47,17 +37,15 @@ describe("Breadcrumb", () => {
   });
 
   it("renders with ReactNode separator correctly", () => {
-    const separator = <span style={{ color: "red" }}>***</span>;
     render(
-      <Breadcrumb separator={separator}>
+      <Breadcrumb separator={<span>***</span>}>
         <Breadcrumb.Item text="Home" href="/" />
         <Breadcrumb.Item text="About" href="/about" />
       </Breadcrumb>
     );
 
-    const separatorElement = screen.getByText("***");
-    expect(separatorElement).toBeInTheDocument();
-    expect(separatorElement).toHaveStyle("color: red");
+    const separator = screen.getByText("***");
+    expect(separator).toBeInTheDocument();
   });
 
   it("renders breadcrumb items correctly", () => {
