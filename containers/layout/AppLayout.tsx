@@ -9,7 +9,7 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
 import { GameListProvider } from "@/features/game";
 
-export default function Layout({ children }: PropsWithChildren) {
+export default function AppLayout({ children }: PropsWithChildren) {
   const toast = useToast();
   const router = useRouter();
   const {
@@ -21,6 +21,7 @@ export default function Layout({ children }: PropsWithChildren) {
     handleSubmitText,
   } = useChat();
   const roomPathname = "/rooms/[roomId]";
+  const isSearchBarVisible = ["/", "/rooms"].includes(router.pathname);
 
   useEffect(() => {
     if (router.pathname === roomPathname) {
@@ -43,24 +44,26 @@ export default function Layout({ children }: PropsWithChildren) {
           <Sidebar className="fixed top-20 bottom-6 z-30" />
         </div>
         <main className="grow pb-4 overflow-x-hidden">
-          <div className="flex justify-center mb-6">
-            <SearchBar
-              onSubmit={() =>
-                toast(
-                  { children: "此功能暫未實現", state: "warning" },
-                  { position: "top" }
-                )
-              }
-              leftSlot={
-                <button
-                  type="button"
-                  className="pl-5 pr-2.5 px-4 text-primary-300"
-                >
-                  類型
-                </button>
-              }
-            />
-          </div>
+          {isSearchBarVisible && (
+            <div className="flex justify-center mb-6">
+              <SearchBar
+                onSubmit={() =>
+                  toast(
+                    { children: "此功能暫未實現", state: "warning" },
+                    { position: "top" }
+                  )
+                }
+                leftSlot={
+                  <button
+                    type="button"
+                    className="pl-5 pr-2.5 px-4 text-primary-300"
+                  >
+                    類型
+                  </button>
+                }
+              />
+            </div>
+          )}
           {children}
         </main>
         {isChatVisible && (
