@@ -1,7 +1,6 @@
 import { RoomInfo } from "@/requests/rooms";
-import UserCard, { UserCardProps } from "./UserCard/UserCard";
-
-const SEAT_AMOUNT = 10;
+import { UserCard } from "@/features/user";
+import { generateUUID } from "@/lib/utils";
 
 type RoomUserCardListProps = {
   roomInfo: RoomInfo.Room;
@@ -14,40 +13,26 @@ function RoomUserCardList({
   currentUserId,
   onKickUser,
 }: RoomUserCardListProps) {
-  function renderUserCards(users: RoomInfo.User[]) {
-    const userCount = users.length;
+  const players = Array.isArray(roomInfo.players) ? roomInfo.players : [];
+  const lackTotalPlayers = Array.from(
+    { length: roomInfo.maxPlayers - players.length },
+    generateUUID
+  );
 
-    const haveRightToKick = (userId: string) =>
-      currentUserId === roomInfo.host.id && currentUserId !== userId;
-
-    const userCards = users.map((user) => {
-      const props: UserCardProps = {
-        id: user.id,
-        nickname: user.nickname,
-        isReady: user.isReady,
-        isSelf: user.id === currentUserId,
-        isHost: user.id === roomInfo.host.id,
-        onKickUser: haveRightToKick(user.id) ? onKickUser : undefined,
-      };
-      return <UserCard key={user.id} {...props} />;
-    });
-
-    // render rest seats
-    const emptyCards = Array.from({
-      length: SEAT_AMOUNT - userCount,
-    }).map((_, index) => {
-      // render wating seat
-      if (userCount + index < roomInfo.maxPlayers)
-        return <UserCard key={userCount + index} isWating />;
-      // render disabled seat
-      return <UserCard key={userCount + index} disabled />;
-    });
-
-    return [...userCards, ...emptyCards];
-  }
   return (
     <div className="pt-4 grid grid-cols-5 gap-5">
-      {renderUserCards(roomInfo.players)}
+      {players.map((player) => (
+        <UserCard
+          key={player.id}
+          id={player.id}
+          nickname={player.nickname}
+          isSelf={player.id === currentUserId}
+          isHost={player.id === roomInfo.host.id}
+        />
+      ))}
+      {lackTotalPlayers.map((id) => (
+        <UserCard key={id} />
+      ))}
     </div>
   );
 }

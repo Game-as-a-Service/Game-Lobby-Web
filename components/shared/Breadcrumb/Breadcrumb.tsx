@@ -1,6 +1,7 @@
-import React, { ReactNode } from "react";
+import { Children } from "react";
 import { cn } from "@/lib/utils";
 import BreadcrumbItem, { BreadcrumbItemProps } from "./BreadcrumbItem";
+import Icon from "../Icon";
 
 export interface BreadcrumbProps {
   /** `Breadcrumb.Item` with text and href */
@@ -11,22 +12,22 @@ export interface BreadcrumbProps {
   className?: string;
 }
 
+const defaultSeparator = <Icon name="NavArrowRight" className="w-4 h-4" />;
+
 const Breadcrumb: React.FC<BreadcrumbProps> & {
   Item: React.ComponentType<BreadcrumbItemProps>;
-} = ({ children, separator = ">", className }) => {
-  const rootClass = cn(`flex space-x-2 text-base`, className);
-  const childrenRender = React.Children.map(children, (child, index) => (
-    <>
-      {child}
-      {index < React.Children.count(children) - 1 && (
-        <span className={``}>{separator}</span>
-      )}
-    </>
-  ));
-
+} = ({ children, separator = defaultSeparator, className }) => {
   return (
-    <nav className={rootClass} aria-label="breadcrumb">
-      {childrenRender}
+    <nav
+      className={cn(`flex items-center gap-2`, className)}
+      aria-label="breadcrumb"
+    >
+      {Children.map(children, (child, index) => (
+        <>
+          {child}
+          {index < Children.count(children) - 1 && <span>{separator}</span>}
+        </>
+      ))}
     </nav>
   );
 };

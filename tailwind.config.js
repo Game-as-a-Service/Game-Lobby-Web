@@ -154,6 +154,10 @@ module.exports = {
           "background-image":
             "linear-gradient(to right, transparent 0%, rgba(206, 191, 239, 0.1) 1%)",
         },
+        ".gradient-cyberpunk": {
+          "background-image":
+            "linear-gradient(315.43deg, #68FDFA 15%, #E208BF 85%)",
+        },
         ".body-bg": {
           "background-image":
             "linear-gradient(145.51deg, #06020B -7.4%, #2C1B47 154.79%)",
@@ -183,11 +187,19 @@ module.exports = {
       });
     }),
     plugin(({ addUtilities }) => {
-      /** custom effect */
+      /** custom shadow */
       addUtilities({
         ".frosted-shadow-box": {
           "box-shadow": "0 2px 36px -2px #0000002E",
           "backdrop-filter": "blur(20px)",
+        },
+        ".drop-shadow-secondary": {
+          "--tw-drop-shadow": `
+            drop-shadow(0px 0px 2px currentColor)
+            drop-shadow(0px 0px 4px currentColor)
+          `,
+          filter:
+            "var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)",
         },
       });
     }),

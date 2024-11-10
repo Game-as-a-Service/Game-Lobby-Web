@@ -10,7 +10,11 @@ export type BoxFancyBorderWidthVariant =
   | "xLarge"
   | "extraLarge";
 export type BoxFancyBorderRadiusVariant = BoxFancyBorderWidthVariant | "full";
-export type BoxFancyBorderGradientVariant = "none" | "purple" | "black";
+export type BoxFancyBorderGradientVariant =
+  | "none"
+  | "purple"
+  | "black"
+  | "cyberpunk";
 
 // Gradient border with semi-transparent background tips:
 // The border-radius of ::before should be as consistent as possible with the original,
@@ -40,6 +44,7 @@ const borderGradientVariantMap: Record<BoxFancyBorderGradientVariant, string> =
     none: "",
     purple: "before:gradient-purple",
     black: "before:gradient-black",
+    cyberpunk: "before:gradient-cyberpunk",
   };
 
 export interface BaseBoxFancyProp {

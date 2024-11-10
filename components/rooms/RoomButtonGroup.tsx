@@ -1,4 +1,5 @@
 import Button from "@/components/shared/Button/v2";
+import Icon from "../shared/Icon";
 
 type RoomButtonGroupProps = {
   isHost: boolean;
@@ -10,30 +11,22 @@ type RoomButtonGroupProps = {
 };
 
 function RoomButtonGroup(props: RoomButtonGroupProps) {
-  const {
-    onToggleReady,
-    onClickLeave,
-    onClickClose,
-    onClickStart,
-    isHost,
-    isReady,
-  } = props;
+  const { onClickLeave, onClickClose, onClickStart, isHost } = props;
 
   return (
     <div className="flex items-center gap-4 m-4">
       <Button
         variant="secondary"
+        className="flex"
         onClick={isHost ? onClickClose : onClickLeave}
       >
+        <Icon name="LeaveGame" className="w-6 h-6" />
         離開房間
       </Button>
-      {isHost ? (
-        <Button variant="primary" onClick={onClickStart}>
+      {isHost && (
+        <Button variant="primary" className="flex" onClick={onClickStart}>
+          <Icon name="Play" className="w-6 h-6" />
           開始遊戲
-        </Button>
-      ) : (
-        <Button variant="secondary" onClick={onToggleReady}>
-          {isReady ? "取消準備" : "準備"}
         </Button>
       )}
     </div>
