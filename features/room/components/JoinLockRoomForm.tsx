@@ -1,15 +1,15 @@
 import { FormEvent, PropsWithChildren, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/shared/Button/v2";
 import Icon from "@/components/shared/Icon";
 import InputOTP from "@/components/shared/InputOTP";
+import { useJoinRoom } from "../hooks";
 
 interface JoinLockRoomFormProps extends PropsWithChildren {
-  onSubmit: (password: string) => Promise<void>;
+  id: string;
 }
 
-function JoinLockRoomForm({ children, onSubmit }: JoinLockRoomFormProps) {
-  const { t } = useTranslation("rooms");
+function JoinLockRoomForm({ id, children }: JoinLockRoomFormProps) {
+  const { handleJoinRoom } = useJoinRoom(id);
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,7 +22,7 @@ function JoinLockRoomForm({ children, onSubmit }: JoinLockRoomFormProps) {
     event.preventDefault();
     setErrorMessage("");
     try {
-      await onSubmit(password);
+      await handleJoinRoom(password);
     } catch (error) {
       if (typeof error === "string") {
         setErrorMessage(error);

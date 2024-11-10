@@ -2,15 +2,22 @@ import type { Room } from "@/requests/rooms";
 
 import Cover from "@/components/shared/Cover";
 import Button, { ButtonSize } from "@/components/shared/Button/v2";
+import { useJoinRoom } from "../hooks";
 
 interface RoomsCardProps {
   room: Room;
-  className?: string;
-  onJoin: (id: string) => void;
+  onClick: () => void;
 }
 
-function RoomCard({ room, onJoin: onClick }: RoomsCardProps) {
+function RoomCard({ room, onClick }: RoomsCardProps) {
+  const { handleJoinRoom } = useJoinRoom(room.id);
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
+
+  const handleClick = () => {
+    onClick();
+    if (room.isLocked) return;
+    handleJoinRoom();
+  };
 
   return (
     <div className="bg-primary-700/40 rounded-2xl">
@@ -41,7 +48,7 @@ function RoomCard({ room, onJoin: onClick }: RoomsCardProps) {
         <Button
           variant="highlight"
           size={ButtonSize.SMALL}
-          onClick={() => onClick(room.id)}
+          onClick={handleClick}
         >
           加入
         </Button>
