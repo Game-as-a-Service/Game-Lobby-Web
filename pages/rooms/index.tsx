@@ -11,7 +11,7 @@ import usePagination from "@/hooks/usePagination";
 import useRequest from "@/hooks/useRequest";
 import { Room, RoomType, getRooms } from "@/requests/rooms";
 
-function TabPaneContent({ tabKey }: TabItemType<RoomType>) {
+function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
   const { fetch } = useRequest();
   const gameList = useGameList();
   const [room, setRoom] = useState<Room | null>(null);

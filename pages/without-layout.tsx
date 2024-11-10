@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 import { NextPageWithProps } from "./_app";
 import Button from "@/components/shared/Button";
 import Link from "next/link";
@@ -14,7 +13,7 @@ const WithoutLayout: NextPageWithProps = () => {
   );
 };
 
-WithoutLayout.getLayout = (page: ReactElement) => page;
+WithoutLayout.getLayout = ({ children }) => children;
 WithoutLayout.Anonymous = true;
 
 export default WithoutLayout;

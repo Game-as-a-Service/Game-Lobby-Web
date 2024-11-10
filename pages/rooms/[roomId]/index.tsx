@@ -273,12 +273,10 @@ export default function Room() {
             </div>
             <div className="absolute bottom-0 right-0 flex items-center">
               <RoomButtonGroup
-                onToggleReady={handleToggleReady}
                 onClickClose={handleClickClose}
                 onClickLeave={handleLeave}
                 onClickStart={handleStart}
                 isHost={isHost}
-                isReady={isHost || !!player?.isReady}
               />
             </div>
           </div>

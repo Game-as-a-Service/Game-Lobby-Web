@@ -3,8 +3,6 @@ import Icon from "../shared/Icon";
 
 type RoomButtonGroupProps = {
   isHost: boolean;
-  isReady: boolean;
-  onToggleReady: () => void;
   onClickLeave: () => void;
   onClickClose: () => void;
   onClickStart: () => void;

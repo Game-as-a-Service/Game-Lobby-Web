@@ -116,7 +116,7 @@ const InteralButton = <C extends ElementType = "button">(
     "relative px-4 py-1.5 inline-flex items-center gap-1.5 rounded-lg shadow-md text-white/90 focus:outline-8 transition-[box-shadow,background,opacity] ease-in",
     buttonVariants[variant],
     (disabled || loading) &&
-      "opacity-70 pointer-events-none select-none text-gray-200",
+      "opacity-70 pointer-events-none select-none text-grey-200",
     active && buttonVariants[`${variant}_active`],
     className
   );

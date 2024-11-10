@@ -29,7 +29,7 @@ function CarouselCard({
   );
 }
 
-function TabPaneContent({ tabKey }: TabItemType<TabKey>) {
+function TabPaneContent({ tabKey }: Readonly<TabItemType<TabKey>>) {
   const gameList = useGameList();
 
   if ([TabKey.HOT, TabKey.NEW].includes(tabKey)) {

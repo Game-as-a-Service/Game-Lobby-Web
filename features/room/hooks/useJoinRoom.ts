@@ -38,7 +38,7 @@ function useJoinRoom(id: string) {
         const msg = err.response?.data.message.replaceAll(" ", "_");
         if (!msg) return toast({ children: "error!", state: "error" });
         toast({ children: t(msg), state: "error" });
-        return Promise.reject(t(msg));
+        throw err;
       }
     } finally {
       setIsLoading(false);

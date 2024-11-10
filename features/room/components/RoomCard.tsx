@@ -9,7 +9,7 @@ interface RoomsCardProps {
   onClick: () => void;
 }
 
-function RoomCard({ room, onClick }: RoomsCardProps) {
+function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
   const { handleJoinRoom } = useJoinRoom(room.id);
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
 

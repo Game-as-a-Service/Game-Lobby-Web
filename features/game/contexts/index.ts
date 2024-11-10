@@ -1,2 +1,2 @@
-export { default as GameListProvider } from "./gameList";
-export * from "./gameList";
+export { default as GameListProvider } from "./GameList";
+export * from "./GameList";

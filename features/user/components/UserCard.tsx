@@ -14,7 +14,7 @@ interface IUserRole {
   text: string;
 }
 
-function UserCard({ id, nickname, isSelf, isHost }: UserCardProps) {
+function UserCard({ id, nickname, isSelf, isHost }: Readonly<UserCardProps>) {
   if (!id) {
     return <BoxFancy className="h-28" borderGradientColor="cyberpunk" />;
   }
