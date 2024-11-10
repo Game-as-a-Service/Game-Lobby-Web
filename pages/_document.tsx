@@ -6,7 +6,7 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
         <meta name="Game Lobby" content="Game Lobby" />
         {/* <meta property="og:image" /> */}
         <meta name="og:title" content={siteTitle} />
