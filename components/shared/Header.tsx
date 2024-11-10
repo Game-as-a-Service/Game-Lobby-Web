@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import Icon, { IconName } from "@/components/shared/Icon";
 import Badge from "@/components/shared/Badge";
 import { cn } from "@/lib/utils";
-import Modal from "./Modal";
 import { UserInfoForm } from "@/features/user";
 import useUser from "@/hooks/useUser";
 import { UserInfo } from "@/requests/users";
+import Modal from "./Modal";
+import Cover from "./Cover";
 
 enum HeaderActions {
   CHAT = "CHAT",
@@ -71,7 +72,7 @@ export default function Header({
       )}
     >
       <div className="flex items-center gap-3">
-        <Icon name="Logo" className="w-10 h-10" />
+        <Cover src="/logo.png" alt="logo" width={40} height={40} />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>
       </div>
       <div className="header___actions flex gap-5">

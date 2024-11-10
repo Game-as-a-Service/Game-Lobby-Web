@@ -1,7 +1,8 @@
 import { AppProps } from "next/app";
 import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactElement } from "react";
 import { appWithTranslation } from "next-i18next";
+import Head from "next/head";
 
 import "@/styles/reset.css";
 import "@/styles/global.css";
@@ -19,7 +20,7 @@ import { SocketProvider } from "@/containers/provider/SocketProvider";
 import ChatroomContextProvider from "@/containers/provider/ChatroomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: FC<PropsWithChildren>;
   Anonymous?: boolean;
 };
 
@@ -33,9 +34,9 @@ function App({ Component, pageProps }: AppWithProps) {
     Component.Anonymous || !!process.env.NEXT_PUBLIC_CI_MODE || false;
   const isProduction = env !== Env.PROD ? false : true;
 
-  const getLayout =
+  const Layout =
     Component.getLayout ??
-    ((page: ReactElement) => <AppLayout>{page}</AppLayout>);
+    (({ children }) => <AppLayout>{children}</AppLayout>);
 
   const getHistory = (children: ReactElement) => {
     return isProduction ? (
@@ -46,22 +47,29 @@ function App({ Component, pageProps }: AppWithProps) {
   };
 
   return (
-    <ToastQueueProvider>
-      <AxiosProvider>
-        <AuthProvider>
-          {getHistory(
-            <SocketProvider>
-              <ChatroomContextProvider>
-                <Startup isAnonymous={isAnonymous}>
-                  {getLayout(<Component {...pageProps} />)}
-                  {!isProduction && <HistoryList />}
-                </Startup>
-              </ChatroomContextProvider>
-            </SocketProvider>
-          )}
-        </AuthProvider>
-      </AxiosProvider>
-    </ToastQueueProvider>
+    <>
+      <Head>
+        <title>遊戲微服務大平台</title>
+      </Head>
+      <ToastQueueProvider>
+        <AxiosProvider>
+          <AuthProvider>
+            {getHistory(
+              <SocketProvider>
+                <ChatroomContextProvider>
+                  <Startup isAnonymous={isAnonymous}>
+                    <Layout>
+                      <Component {...pageProps} />
+                    </Layout>
+                    {!isProduction && <HistoryList />}
+                  </Startup>
+                </ChatroomContextProvider>
+              </SocketProvider>
+            )}
+          </AuthProvider>
+        </AxiosProvider>
+      </ToastQueueProvider>
+    </>
   );
 }
 

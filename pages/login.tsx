@@ -1,10 +1,4 @@
-import {
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -21,9 +15,8 @@ import { LoginType } from "@/requests/auth";
 
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
-import { useSearchParams } from "next/navigation";
 
-const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
+const loginMethods: { text: string; type: LoginType; icon: IconName }[] = [
   { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "Google" },
   { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "Github" },
   { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "Linkedin" },
@@ -33,86 +26,57 @@ const LoginMethods: { text: string; type: LoginType; icon: IconName }[] = [
 const Login: NextPageWithProps = () => {
   const { getLoginEndpoint } = useUser();
   const { token } = useAuth();
-  const { push } = useRouter();
+  const router = useRouter();
   const [checkAuth, setCheckAuth] = useState(false);
   const { internalEndpoint, isMock } = getEnv();
-  const searchParams = useSearchParams();
-  // if the account is withdrawn, show the message
-  const bye = searchParams.get("bye") !== null;
 
   useEffect(() => {
     if (token) {
-      push("/");
+      router.push("/");
     } else {
       setCheckAuth(true);
     }
-  }, [token, push]);
+  }, [token, router]);
 
-  const onLoginClick = useCallback(
-    async (e: SyntheticEvent, type: LoginType) => {
-      if (isMock) {
-        e.preventDefault();
-        e.stopPropagation();
+  const onLoginClick = async (e: SyntheticEvent, type: LoginType) => {
+    if (isMock) {
+      e.preventDefault();
+      e.stopPropagation();
 
-        const endpoint = await getLoginEndpoint(type);
-        // mock: redirect to /auth/token
-        push(endpoint.url);
-      }
-    },
-    [getLoginEndpoint, isMock, push]
-  );
-
-  const loginButtons = useMemo(() => {
-    return LoginMethods.map(({ text, type, icon }) => (
-      <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
-        <ButtonV2
-          className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50 flex justify-center items-center"
-          variant={ButtonVariant.SECONDARY}
-          onClick={(e: SyntheticEvent) => onLoginClick(e, type)}
-        >
-          <Icon name={icon} className="w-6 h-6 stroke-none" />
-          {text}
-        </ButtonV2>
-      </Link>
-    ));
-  }, [internalEndpoint, onLoginClick]);
+      const endpoint = await getLoginEndpoint(type);
+      router.push(endpoint.url);
+    }
+  };
 
   return checkAuth ? (
     <div className="relative w-full h-full flex flex-col xl:flex-row justify-between items-center p-4 gap-[18px]">
-      {/* fog */}
-      <div
-        className={
-          "absolute xl:-top-5 xl:-right-5 xl:w-[58%] xl:h-[calc(100%+40px)] rounded-2xl gradient-light shadow blur-[20px]"
-        }
-      />
+      <div className="absolute xl:-top-5 xl:-right-5 xl:w-[58%] xl:h-[calc(100%+40px)] rounded-2xl gradient-light shadow blur-[20px]" />
       <div className="px-2 sm:px-6 xl:pl-24 2xl:px-24 flex-1 flex flex-col justify-center items-start">
-        {bye ? (
-          <p
-            className={
-              "text-primary-50 text-[22px] font-normal whitespace-pre-line mb-9"
-            }
-          >
-            {"原帳號已註銷成功。\n我們非常歡迎你再加入，\n和我們一起遊樂！"}
-          </p>
-        ) : null}
-        <h2 className="relative flex items-center text-[22px] font-normal text-primary-100 mb-12">
-          <Icon name="Logo" className="w-12 h-12" />
+        <h2 className="relative flex items-center gap-2 text-2xl font-normal text-primary-100 mb-12">
+          <Cover src="/logo.png" alt="logo" width={48} height={48} />
           遊戲微服務大平台
         </h2>
-        {!bye ? (
-          <>
-            <p className="text-primary-50 text-[32px] font-medium mb-4">
-              一起創造與冒險！
-            </p>
-            <p className="text-primary-50 text-[22px] font-normal">
-              加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
-            </p>
-          </>
-        ) : null}
+        <p className="text-primary-50 text-3xl font-medium mb-4">
+          一起創造與冒險！
+        </p>
+        <p className="text-primary-50 text-2xl font-normal">
+          加入遊戲微服務大平台，和100+遊戲開發者共同創建更多可能！
+        </p>
       </div>
 
       <div className="flex-1 flex flex-col justify-center items-center w-full px-[124px] gap-5">
-        {loginButtons}
+        {loginMethods.map(({ text, type, icon }) => (
+          <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
+            <ButtonV2
+              className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50 flex justify-center items-center"
+              variant={ButtonVariant.SECONDARY}
+              onClick={(e) => onLoginClick(e, type)}
+            >
+              <Icon name={icon} className="w-6 h-6 stroke-none" />
+              {text}
+            </ButtonV2>
+          </Link>
+        ))}
       </div>
     </div>
   ) : (
@@ -122,7 +86,7 @@ const Login: NextPageWithProps = () => {
 
 Login.Anonymous = true;
 
-Login.getLayout = (page) => (
+Login.getLayout = ({ children }) => (
   <div className="w-screen h-screen bg-[#252558]">
     <Cover
       src="/images/v2/login-bg.png"
@@ -132,7 +96,7 @@ Login.getLayout = (page) => (
     />
     <div className="w-full h-full flex items-center p-4 md:p-8 xl:px-36 xl:py-24">
       <BoxFancy className="container m-auto h-full xl:max-h-[calc(max(560px,75%))]">
-        {page}
+        {children}
       </BoxFancy>
     </div>
   </div>
@@ -143,7 +107,7 @@ export default Login;
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "zh-TW", [""])),
+      ...(await serverSideTranslations(locale ?? "zh-TW", ["rooms"])),
     },
   };
 };

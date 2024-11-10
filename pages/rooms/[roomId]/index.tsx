@@ -6,7 +6,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Cover from "@/components/shared/Cover";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
-import RoomBreadcrumb from "@/components/rooms/RoomBreadcrumb";
 import GameWindow from "@/components/rooms/GameWindow";
 import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";
@@ -27,6 +26,7 @@ import {
 import { GameType, getAllGamesEndpoint } from "@/requests/games";
 import useUser from "@/hooks/useUser";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 
 type User = Omit<RoomInfo.User, "isReady">;
 
@@ -220,11 +220,18 @@ export default function Room() {
       // Check all players are ready
       const allReady = roomInfo.players.every((player) => player.isReady);
       if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
-      await fetch(startGame(roomId));
+      const result = await fetch(startGame(roomId));
+      setGameUrl(`${result.url}?token=${token}`);
     } catch (err) {
       firePopup({ title: `error!` });
     }
   };
+
+  useEffect(() => {
+    if (!player?.isReady && roomId) {
+      fetch(playerReady(roomId));
+    }
+  }, [player?.isReady, roomId, fetch]);
 
   return (
     <section className="px-4">
@@ -247,23 +254,29 @@ export default function Room() {
               />
             )}
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-[#0f0919] to-50% to-[#170D2500]"></div>
-            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-              <RoomBreadcrumb roomInfo={roomInfo} />
+            <div className="m-2 py-1 px-2 w-fit bg-basic-black/50 backdrop-blur-sm rounded-lg text-sm">
+              <Breadcrumb className="text-primary-100">
+                <Breadcrumb.Item
+                  text={`${roomInfo.isLocked ? "私人" : "公開"}遊戲房間`}
+                />
+                <Breadcrumb.Item
+                  text={`${roomInfo.game.name} - ${roomInfo.name}`}
+                />
+              </Breadcrumb>
             </div>
-            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-              {roomInfo.isLocked ? "非公開" : "公開"}
+            <div className="m-2 py-1 px-2 w-fit bg-error-700/50 backdrop-blur-sm rounded-lg text-sm text-grey-100">
+              等待玩家加入中
             </div>
-            <div className="m-2 py-1 px-2 w-fit bg-gray-950/50 backdrop-blur-sm rounded-lg text-sm">
-              {roomInfo.currentPlayers} / {roomInfo.maxPlayers} 人
+            <div className="m-2 py-1 px-2 w-fit bg-basic-black/50 backdrop-blur-sm rounded-lg text-sm text-grey-100">
+              {roomInfo.currentPlayers} / {roomInfo.maxPlayers} 人 ({" "}
+              {roomInfo.minPlayers} - {roomInfo.maxPlayers} )
             </div>
             <div className="absolute bottom-0 right-0 flex items-center">
               <RoomButtonGroup
-                onToggleReady={handleToggleReady}
                 onClickClose={handleClickClose}
                 onClickLeave={handleLeave}
                 onClickStart={handleStart}
                 isHost={isHost}
-                isReady={isHost || !!player?.isReady}
               />
             </div>
           </div>

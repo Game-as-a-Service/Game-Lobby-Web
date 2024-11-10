@@ -32,7 +32,7 @@ const buttonTypeClasses: Record<ButtonVariant, string> = {
 
 const buttonSizeClasses: Record<ButtonSize, string> = {
   icon: "p-2",
-  small: "py-2 px-4 gap-1",
+  small: "py-0 px-4 gap-1",
   regular: "py-2 px-6 gap-2",
 };
 
@@ -73,7 +73,7 @@ const InteralButton: InnerButtonComponent = (
   );
 
   const boxFancyClassName = cn(
-    "w-fit items-center fz-16-b transition-colors transition-[border-image] ease-in",
+    "w-fit items-center fz-16-b transition-colors transition-[border-image] ease-in whitespace-nowrap",
     commonDisabledClasses,
     buttonTypeClasses[variant],
     buttonSizeClasses[size],

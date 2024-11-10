@@ -7,6 +7,7 @@ import {
   ForwardRefRenderFunction,
   forwardRef,
   useImperativeHandle,
+  ClipboardEvent,
 } from "react";
 import Input from "@/components/shared/Input";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ interface InputOTPProps {
   hintText?: string;
   labelClassName?: string;
   hintTextClassName?: string;
+  autoFocus?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -37,6 +39,7 @@ const InternalInputOTP: ForwardRefRenderFunction<InputOTPRef, InputOTPProps> = (
     hintText,
     labelClassName,
     hintTextClassName,
+    autoFocus,
     onChange,
   },
   ref
@@ -94,11 +97,26 @@ const InternalInputOTP: ForwardRefRenderFunction<InputOTPRef, InputOTPProps> = (
     }
   };
 
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    const pastePassword = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .split("");
+
+    pastePassword.length = length;
+
+    setChars(pastePassword);
+  };
+
   useEffect(() => {
-    if (value) {
+    if (typeof value === "string") {
       setChars(value.split(""));
     }
   }, [value]);
+
+  useEffect(() => {
+    if (autoFocus) inputsRef.current[0]?.focus();
+  }, [autoFocus]);
 
   useImperativeHandle(
     ref,
@@ -138,6 +156,7 @@ const InternalInputOTP: ForwardRefRenderFunction<InputOTPRef, InputOTPProps> = (
             error={error}
             value={chars[index] || ""}
             onKeyUp={handleKeyUp(index)}
+            onPaste={handlePaste}
           />
         ))}
       </div>

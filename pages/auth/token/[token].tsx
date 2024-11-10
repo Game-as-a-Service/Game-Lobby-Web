@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -21,7 +21,7 @@ const Token: NextPageWithProps = () => {
   return <></>;
 };
 
-Token.getLayout = (page: ReactElement) => page;
+Token.getLayout = ({ children }) => children;
 Token.Anonymous = true;
 
 export default Token;

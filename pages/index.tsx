@@ -1,16 +1,21 @@
+import type { GameType } from "@/requests/games";
+
 import { GetStaticProps } from "next";
-import { useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import CarouselV2 from "@/components/shared/Carousel/v2";
-import SearchBar from "@/components/shared/SearchBar";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { useToast } from "@/components/shared/Toast";
-import { GameType, getAllGamesEndpoint } from "@/requests/games";
-import useRequest from "@/hooks/useRequest";
 import { CarouselItemProps } from "@/components/shared/Carousel/v2/Carousel.type";
-import { GameCardDetailed, GameCardSimple } from "@/features/game";
+import { GameCardDetailed, GameCardSimple, useGameList } from "@/features/game";
 import { GameRoomActions } from "@/features/room";
+
+enum TabKey {
+  HOT = "hot",
+  NEW = "new",
+  LAST = "last",
+  GOOD = "good",
+  COLLECT = "collect",
+}
 
 function CarouselCard({
   showIndex,
@@ -24,26 +29,9 @@ function CarouselCard({
   );
 }
 
-enum TabKey {
-  HOT = "hot",
-  NEW = "new",
-  LAST = "last",
-  GOOD = "good",
-  COLLECT = "collect",
-}
+function TabPaneContent({ tabKey }: Readonly<TabItemType<TabKey>>) {
+  const gameList = useGameList();
 
-const tabs: TabItemType<TabKey>[] = [
-  { tabKey: TabKey.HOT, label: "熱門遊戲" },
-  { tabKey: TabKey.NEW, label: "最新遊戲" },
-  { tabKey: TabKey.LAST, label: "上次遊玩" },
-  { tabKey: TabKey.GOOD, label: "好評遊戲" },
-  { tabKey: TabKey.COLLECT, label: "收藏遊戲" },
-];
-
-const TabPaneContent = ({
-  tabKey,
-  gameList,
-}: TabItemType<TabKey> & { gameList: GameType[] }) => {
   if ([TabKey.HOT, TabKey.NEW].includes(tabKey)) {
     const data =
       tabKey === TabKey.HOT
@@ -70,44 +58,26 @@ const TabPaneContent = ({
   }
 
   return <div className="mt-6">實作中...</div>;
-};
+}
 
 export default function Home() {
-  const { fetch } = useRequest();
-  const toast = useToast();
-  const [gameList, setGameList] = useState<GameType[]>([]);
+  const gameList = useGameList();
 
-  useEffect(() => {
-    fetch(getAllGamesEndpoint()).then(setGameList);
-  }, [fetch]);
+  const tabs: TabItemType<TabKey>[] = [
+    { tabKey: TabKey.HOT, label: "熱門遊戲" },
+    { tabKey: TabKey.NEW, label: "最新遊戲" },
+    { tabKey: TabKey.LAST, label: "上次遊玩" },
+    { tabKey: TabKey.GOOD, label: "好評遊戲" },
+    { tabKey: TabKey.COLLECT, label: "收藏遊戲" },
+  ];
 
   return (
     <div className="max-w-[1036px] mx-auto px-6">
-      <div className="flex justify-center mb-6">
-        <SearchBar
-          onSubmit={() =>
-            toast(
-              { children: "此功能暫未實現", state: "warning" },
-              { position: "top" }
-            )
-          }
-          leftSlot={
-            <button type="button" className="pl-5 pr-2.5 px-4 text-primary-300">
-              類型
-            </button>
-          }
-        />
-      </div>
       <div>
         <CarouselV2 items={gameList} Component={CarouselCard} />
       </div>
       <div className="mt-6">
-        <Tabs
-          tabs={tabs}
-          renderTabPaneContent={(props) => (
-            <TabPaneContent gameList={gameList} {...props} />
-          )}
-        />
+        <Tabs tabs={tabs} renderTabPaneContent={TabPaneContent} />
       </div>
     </div>
   );

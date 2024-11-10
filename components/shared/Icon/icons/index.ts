@@ -29,7 +29,6 @@ export { default as House } from "./generate/house";
 export { default as LeaveGame } from "./generate/leave-game";
 export { default as Linkedin } from "./generate/linkedin";
 export { default as LogOut } from "./generate/log-out";
-export { default as Logo } from "./generate/logo";
 export { default as LongArrowUpLeft } from "./generate/long-arrow-up-left";
 export { default as Menu } from "./generate/menu";
 export { default as Move } from "./generate/move";
@@ -53,8 +52,8 @@ export { default as Sort } from "./generate/sort";
 export { default as Spiral } from "./generate/spiral";
 export { default as Star } from "./generate/star";
 export { default as Upload } from "./generate/upload";
+export { default as UserHost } from "./generate/user-host";
 export { default as User } from "./generate/user";
-export { default as User_host } from "./generate/user_host";
 export { default as X } from "./generate/x";
 export type IconName =
   | "Arcade"
@@ -87,7 +86,6 @@ export type IconName =
   | "LeaveGame"
   | "Linkedin"
   | "LogOut"
-  | "Logo"
   | "LongArrowUpLeft"
   | "Menu"
   | "Move"
@@ -111,6 +109,6 @@ export type IconName =
   | "Spiral"
   | "Star"
   | "Upload"
+  | "UserHost"
   | "User"
-  | "User_host"
   | "X";

@@ -1,1 +1,1 @@
-export { default as UserInfoForm } from "./components/UserInfoForm";
+export * from "./components";

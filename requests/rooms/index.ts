@@ -171,9 +171,7 @@ export const playerCancelReady = (
   });
 };
 
-export const startGame = (
-  roomId: string
-): IRequestWrapper<{ gameUrl: string }> => {
+export const startGame = (roomId: string): IRequestWrapper<{ url: string }> => {
   return requestWrapper({
     url: `/api/internal/rooms/${roomId}:startGame`,
     method: "POST",

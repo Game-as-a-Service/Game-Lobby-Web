@@ -1,4 +1,4 @@
-import { useState, Key, ReactNode } from "react";
+import { useState, Key, FC } from "react";
 import Tab, { TabProps } from "./Tab";
 
 export type TabItemType<T extends Key = string> = TabProps<T>;
@@ -15,13 +15,13 @@ export interface TabsProps<T extends Key = string> {
   /**
    * Function that recieved activeTabItem and render content of tabPane
    */
-  renderTabPaneContent?: (tabItem: TabItemType<T>) => ReactNode;
+  renderTabPaneContent: FC<TabItemType<T>>;
 }
 
 export default function Tabs<T extends Key = string>({
   tabs,
   defaultActiveKey,
-  renderTabPaneContent,
+  renderTabPaneContent: TabPaneContent,
 }: Readonly<TabsProps<T>>) {
   const [activeKey, setActiveKey] = useState(
     defaultActiveKey ?? tabs[0]?.tabKey
@@ -47,7 +47,7 @@ export default function Tabs<T extends Key = string>({
         ))}
       </div>
       <div role="tabpanel" aria-labelledby={`${activeTabItem?.label}`}>
-        {activeTabItem && renderTabPaneContent?.(activeTabItem)}
+        {activeTabItem && <TabPaneContent key={activeKey} {...activeTabItem} />}
       </div>
     </>
   );

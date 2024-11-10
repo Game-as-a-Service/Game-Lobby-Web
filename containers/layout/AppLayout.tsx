@@ -5,8 +5,12 @@ import Sidebar from "@/components/shared/Sidebar";
 import Chat from "@/components/shared/Chat/v2/Chat";
 import useChat from "@/hooks/useChat";
 import Head from "next/head";
+import SearchBar from "@/components/shared/SearchBar";
+import { useToast } from "@/components/shared/Toast";
+import { GameListProvider } from "@/features/game";
 
-export default function Layout({ children }: PropsWithChildren) {
+export default function AppLayout({ children }: PropsWithChildren) {
+  const toast = useToast();
   const router = useRouter();
   const {
     roomId,
@@ -17,6 +21,7 @@ export default function Layout({ children }: PropsWithChildren) {
     handleSubmitText,
   } = useChat();
   const roomPathname = "/rooms/[roomId]";
+  const isSearchBarVisible = ["/", "/rooms"].includes(router.pathname);
 
   useEffect(() => {
     if (router.pathname === roomPathname) {
@@ -25,7 +30,7 @@ export default function Layout({ children }: PropsWithChildren) {
   }, [router.pathname, openChat]);
 
   return (
-    <>
+    <GameListProvider>
       <Head>
         <title>遊戲微服務大平台</title>
       </Head>
@@ -38,7 +43,29 @@ export default function Layout({ children }: PropsWithChildren) {
         <div className="shrink-0 w-18">
           <Sidebar className="fixed top-20 bottom-6 z-30" />
         </div>
-        <main className="grow pb-4 overflow-x-hidden">{children}</main>
+        <main className="grow pb-4 overflow-x-hidden">
+          {isSearchBarVisible && (
+            <div className="flex justify-center mb-6">
+              <SearchBar
+                onSubmit={() =>
+                  toast(
+                    { children: "此功能暫未實現", state: "warning" },
+                    { position: "top" }
+                  )
+                }
+                leftSlot={
+                  <button
+                    type="button"
+                    className="pl-5 pr-2.5 px-4 text-primary-300"
+                  >
+                    類型
+                  </button>
+                }
+              />
+            </div>
+          )}
+          {children}
+        </main>
         {isChatVisible && (
           <div className="shrink-0 w-80 mr-4">
             <Chat
@@ -56,6 +83,6 @@ export default function Layout({ children }: PropsWithChildren) {
           </div>
         )}
       </div>
-    </>
+    </GameListProvider>
   );
 }

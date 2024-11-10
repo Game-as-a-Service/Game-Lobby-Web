@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -25,7 +25,7 @@ const Login: NextPageWithProps = () => {
   return <></>;
 };
 
-Login.getLayout = (page: ReactElement) => page;
+Login.getLayout = ({ children }) => children;
 Login.Anonymous = true;
 
 export default Login;

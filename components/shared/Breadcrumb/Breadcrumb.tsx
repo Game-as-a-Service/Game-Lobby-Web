@@ -1,6 +1,30 @@
-import React, { ReactNode } from "react";
+import { Children } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
-import BreadcrumbItem, { BreadcrumbItemProps } from "./BreadcrumbItem";
+import Icon from "../Icon";
+
+export interface BreadcrumbItemProps {
+  /** The displayed text of the breadcrumb item */
+  text: string;
+  /** The href of the breadcrumb item */
+  href?: string;
+  /** A CSS class name for styling the breadcrumb item */
+  className?: string;
+}
+
+export const BreadcrumbItem = ({
+  text,
+  href,
+  className,
+}: BreadcrumbItemProps) => {
+  return href ? (
+    <Link href={href} className={className}>
+      {text}
+    </Link>
+  ) : (
+    <span className={className}>{text}</span>
+  );
+};
 
 export interface BreadcrumbProps {
   /** `Breadcrumb.Item` with text and href */
@@ -11,22 +35,22 @@ export interface BreadcrumbProps {
   className?: string;
 }
 
+const defaultSeparator = <Icon name="NavArrowRight" className="w-4 h-4" />;
+
 const Breadcrumb: React.FC<BreadcrumbProps> & {
   Item: React.ComponentType<BreadcrumbItemProps>;
-} = ({ children, separator = ">", className }) => {
-  const rootClass = cn(`flex space-x-2 text-base`, className);
-  const childrenRender = React.Children.map(children, (child, index) => (
-    <>
-      {child}
-      {index < React.Children.count(children) - 1 && (
-        <span className={``}>{separator}</span>
-      )}
-    </>
-  ));
-
+} = ({ children, separator = defaultSeparator, className }) => {
   return (
-    <nav className={rootClass} aria-label="breadcrumb">
-      {childrenRender}
+    <nav
+      className={cn(`flex items-center gap-2`, className)}
+      aria-label="breadcrumb"
+    >
+      {Children.map(children, (child, index) => (
+        <>
+          {child}
+          {index < Children.count(children) - 1 && <span>{separator}</span>}
+        </>
+      ))}
     </nav>
   );
 };
