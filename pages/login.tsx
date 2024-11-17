@@ -107,7 +107,7 @@ export default Login;
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "zh-TW", ["rooms"])),
+      ...(await serverSideTranslations(locale ?? "zh-TW")),
     },
   };
 };
