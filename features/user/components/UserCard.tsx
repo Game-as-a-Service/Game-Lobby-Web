@@ -37,7 +37,7 @@ function UserCard({ id, nickname, isSelf, isHost }: Readonly<UserCardProps>) {
         )}
       >
         <div className="relative">
-          <h3 className="truncate text-secondary-300">非凡之人</h3>
+          {/* <h3 className="truncate text-secondary-300">非凡之人</h3> */}
           <h4 className="truncate">{nickname}</h4>
         </div>
       </div>

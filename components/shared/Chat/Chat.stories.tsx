@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
-import Chat from "./Chat";
 import {
   mockFriendList,
   mockLobbyMessages,
   mockRoomMessages,
 } from "./__mocks__/mock";
+import Chat from ".";
 
 const meta: Meta = {
   title: "Room/Chat",
@@ -32,7 +32,6 @@ export const Playground: Story = {
 };
 
 Playground.args = {
-  userId: "玩家名字3",
   friendList: mockFriendList,
   lobbyMessages: mockLobbyMessages,
   roomMessages: mockRoomMessages,

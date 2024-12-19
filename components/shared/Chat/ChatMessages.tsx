@@ -4,10 +4,11 @@ import Avatar from "@/components/shared/Avatar";
 import type { UserInfo } from "@/requests/users";
 
 type User = Pick<UserInfo, "id" | "nickname">;
+type System = { id: "SYSTEM"; nickname: "SYSTEM" };
 
 export type MessageType = {
   /** The source of the message. */
-  from: "SYSTEM" | User;
+  from: System | User;
   /** The content of the user message. */
   content: string;
   /** The recipient of the message.
@@ -40,14 +41,14 @@ export default function ChatMessages({
     <div className="flex flex-col justify-end min-h-full max-h-[calc(100%-182px)]">
       <div ref={messagesRef} className="overflow-y-scroll scrollbar">
         <div className="p-4 pr-0">
-          {messages.map(({ from, content }, index) => {
-            const isSystem = from === "SYSTEM";
-            const isMe = from === userId;
-            const isSameUser = from === messages[index + 1]?.from;
+          {messages.map(({ from, content, timestamp }, index) => {
+            const isSystem = from.id === "SYSTEM";
+            const isMe = from.id === userId;
+            const isSameUser = from.id === messages[index + 1]?.from.id;
 
             return (
               <div
-                key={from + content}
+                key={`${from.id}_${content}_${timestamp}`}
                 className={cn(
                   "flex items-end mb-6 last-of-type:mb-0",
                   isSameUser && "mb-2",

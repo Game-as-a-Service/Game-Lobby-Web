@@ -9,7 +9,7 @@ import useUser from "@/hooks/useUser";
 import { useToast } from "@/components/shared/Toast";
 
 function useJoinRoom(id: string) {
-  const { t } = useTranslation("rooms");
+  const { t } = useTranslation();
   const { fetch } = useRequest();
   const { updateRoomId } = useUser();
   const toast = useToast();

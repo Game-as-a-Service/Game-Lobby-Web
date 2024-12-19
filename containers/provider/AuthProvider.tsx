@@ -17,7 +17,9 @@ const AuthProvider: FC<Props> = ({ children }) => {
         setToken,
         currentUser,
         setCurrentUser: (currentUser: UserInfo | null) =>
-          setCurrentUser(currentUser),
+          setCurrentUser((pre) =>
+            currentUser ? { ...pre, ...currentUser } : null
+          ),
       }}
     >
       {children}

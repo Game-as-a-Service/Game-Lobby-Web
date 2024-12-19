@@ -1,16 +1,13 @@
 import { FormEventHandler, useState } from "react";
 import { cn } from "@/lib/utils";
 import Icon from "@/components/shared/Icon";
-import type { MessageType } from "./ChatMessages";
 
 type ChatInputProps = {
-  roomId?: string;
   disabled: boolean;
-  onSubmit: (message: Pick<MessageType, "content" | "target">) => void;
+  onSubmit: (content: string) => void;
 };
 
 export default function ChatInput({
-  roomId,
   disabled,
   onSubmit,
 }: Readonly<ChatInputProps>) {
@@ -22,11 +19,8 @@ export default function ChatInput({
     if (disabled) return;
     const content = value.trim();
     if (!content) return;
+    onSubmit(content);
     setValue("");
-    onSubmit({
-      target: roomId ? `ROOM_${roomId}` : "TODO:OTHER",
-      content,
-    });
   };
 
   return (

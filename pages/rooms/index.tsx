@@ -73,7 +73,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
 }
 
 const Rooms = () => {
-  const { t } = useTranslation("rooms");
+  const { t } = useTranslation();
 
   const tabs: TabItemType<RoomType>[] = [
     {
@@ -100,7 +100,7 @@ const Rooms = () => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "zh-TW", ["rooms"])),
+      ...(await serverSideTranslations(locale ?? "zh-TW")),
     },
   };
 };

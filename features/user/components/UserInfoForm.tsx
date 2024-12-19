@@ -6,38 +6,46 @@ import Input from "@/components/shared/Input";
 import useRequest from "@/hooks/useRequest";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
 import { useToast } from "@/components/shared/Toast";
+import useAuth from "@/hooks/context/useAuth";
 
-interface UserInfoFormProps extends UserInfo {
+interface UserInfoFormProps {
+  userInfo: UserInfo;
+  onSuccess: () => void;
   onCancel: () => void;
 }
 
 type UserInfoFormErrors = Partial<Record<keyof UserInfo, string>>;
 
 function UserInfoForm({
+  userInfo,
+  onSuccess,
   onCancel,
-  ...userInfoProps
 }: Readonly<UserInfoFormProps>) {
   const { fetch } = useRequest();
   const toast = useToast();
-  const [userInfo, setUserInfo] = useState<UserInfo>(userInfoProps);
+  const { setCurrentUser } = useAuth();
+  const [data, setData] = useState<UserInfo>(userInfo);
   const [errors, setErrors] = useState<UserInfoFormErrors>({});
   const nicknameInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (Object.keys(errors).length) {
+    if (Object.values(errors).some(Boolean)) {
       nicknameInputRef.current?.focus();
       return;
     }
 
     try {
-      await fetch(
+      const result = await fetch(
         putUserinfoEndpoint({
-          ...userInfo,
-          nickname: userInfo.nickname.trim(),
+          ...data,
+          nickname: data.nickname.trim(),
         }),
         { toast: { show: false } }
       );
+      toast({ state: "success", children: "修改成功" });
+      setCurrentUser(result);
+      onSuccess();
     } catch (error) {
       if (error instanceof AxiosError) {
         toast(
@@ -61,7 +69,7 @@ function UserInfoForm({
     // Regex pattern for special characters. Allow only alphanumeric and spaces
     const validNameRegex = /^[a-zA-Z0-9\u4E00-\u9FFF ]+$/;
 
-    setUserInfo((prev) => ({ ...prev, nickname }));
+    setData((prev) => ({ ...prev, nickname }));
 
     if (nickname.trim().length === 0) {
       setErrors((pre) => ({ ...pre, nickname: "不可空白" }));
@@ -91,7 +99,7 @@ function UserInfoForm({
           onChange={handleNicknameChange}
           hintText={errors.nickname}
           error={!!errors.nickname}
-          value={userInfo.nickname}
+          value={data.nickname}
           autoFocus
         />
       </div>
