@@ -3,16 +3,14 @@ import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import useAuth from "@/hooks/context/useAuth";
 import useSocketCore from "@/hooks/context/useSocketCore";
 import { SOCKET_EVENT } from "@/contexts/SocketContext";
-import type { MessageType } from "@/components/shared/Chat/v2/ChatMessages";
+import type { MessageType } from "@/components/shared/Chat/ChatMessages";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
 
 function useChatroomCore() {
   const { socket } = useSocketCore();
   const { currentUser } = useAuth();
-  const [lastMessage, setLastMessage] = useState<MessageType | undefined>(
-    undefined
-  );
+  const [lastMessage, setLastMessage] = useState<MessageType | null>(null);
 
   /**
    * Dispatches a socket event to the server.
@@ -70,6 +68,7 @@ function useChatroomCore() {
 
   const leaveChatroom = useCallback(
     (roomId: string) => {
+      setLastMessage(null);
       if (!currentUser) return;
       if (socket) {
         const payload = {

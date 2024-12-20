@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "JohnsonMao"
+    open-pull-requests-limit: 3
+    labels:
+      - "security"
+    commit-message:
+      prefix: "[SECURITY]"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"

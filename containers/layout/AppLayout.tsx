@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
-import Chat from "@/components/shared/Chat/v2/Chat";
+import Chat from "@/components/shared/Chat";
 import useChat from "@/hooks/useChat";
 import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
@@ -18,7 +18,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
     isChatVisible,
     openChat,
     toggleChatVisibility,
-    handleSubmitText,
+    sendChatMessage,
   } = useChat();
   const roomPathname = "/rooms/[roomId]";
   const isSearchBarVisible = ["/", "/rooms"].includes(router.pathname);
@@ -70,7 +70,6 @@ export default function AppLayout({ children }: PropsWithChildren) {
           <div className="shrink-0 w-80 mr-4">
             <Chat
               className="fixed top-20 bottom-6 z-30"
-              userId=""
               roomId={roomId}
               friendList={[]}
               lobbyMessages={[]}
@@ -78,7 +77,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
               defaultTarget={
                 router.pathname === roomPathname ? "room" : "lobby"
               }
-              onSubmit={handleSubmitText}
+              onSubmit={sendChatMessage}
             />
           </div>
         )}

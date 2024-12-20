@@ -4,6 +4,7 @@ import cookie from "js-cookie";
 enum CookieKey {
   TOKEN = "_token",
   ROOM_ID = "_room_id",
+  GAME_URL = "_game_url",
 }
 
 interface CookieOperator<T> {
@@ -42,9 +43,14 @@ const useCookie = () => {
     return generator<string>(CookieKey.ROOM_ID);
   }, []);
 
+  const gameUrlOperator = useMemo(() => {
+    return generator<string>(CookieKey.GAME_URL);
+  }, []);
+
   return {
-    token: tokenOperator,
-    roomId: roomIdOperator,
+    tokenOperator,
+    roomIdOperator,
+    gameUrlOperator,
   };
 };
 

@@ -11,7 +11,7 @@ interface JoinLockRoomFormProps extends PropsWithChildren {
 }
 
 function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
-  const { t } = useTranslation("rooms");
+  const { t } = useTranslation();
   const { handleJoinRoom } = useJoinRoom(id);
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

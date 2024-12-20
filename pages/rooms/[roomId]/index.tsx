@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -20,7 +20,6 @@ import {
   RoomInfo,
   leaveRoom,
   playerReady,
-  playerCancelReady,
   startGame,
 } from "@/requests/rooms";
 import { GameType, getAllGamesEndpoint } from "@/requests/games";
@@ -41,13 +40,14 @@ export default function Room() {
     updateUserReadyStatus,
     cleanUpRoom,
   } = useRoom();
+  const isFirstReady = useRef(true);
   const { socket } = useSocketCore();
   const { currentUser, token } = useAuth();
-  const { updateRoomId } = useUser();
+  const { updateRoomId, updateGameUrl, getGameUrl } = useUser();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
   const { query, replace } = useRouter();
-  const [gameUrl, setGameUrl] = useState("");
+  const [gameUrl, setGameUrl] = useState(getGameUrl);
   const [gameList, setGameList] = useState<GameType[]>([]);
   const roomId = query.roomId as string;
   const player = roomInfo.players.find(
@@ -111,11 +111,13 @@ export default function Room() {
     socket.on(SOCKET_EVENT.GAME_STARTED, ({ gameUrl }: { gameUrl: string }) => {
       updateRoomStatus("PLAYING");
       setGameUrl(`${gameUrl}?token=${token}`);
+      updateGameUrl(`${gameUrl}?token=${token}`);
     });
 
     socket.on(SOCKET_EVENT.GAME_ENDED, () => {
       updateRoomStatus("WAITING");
       setGameUrl("");
+      updateGameUrl();
       firePopup({
         title: `遊戲已結束!`,
       });
@@ -170,6 +172,7 @@ export default function Room() {
         await fetch(closeRoom(roomId));
         replace("/rooms");
         updateRoomId();
+        updateGameUrl();
       } catch (err) {
         firePopup({ title: "error!" });
       }
@@ -189,6 +192,7 @@ export default function Room() {
         await fetch(leaveRoom(roomId));
         replace("/rooms");
         updateRoomId();
+        updateGameUrl();
       } catch (err) {
         firePopup({ title: "error!" });
       }
@@ -203,35 +207,25 @@ export default function Room() {
     });
   };
 
-  // Event: toggle ready
-  const handleToggleReady = async () => {
-    try {
-      player?.isReady
-        ? await fetch(playerCancelReady(roomId))
-        : await fetch(playerReady(roomId));
-    } catch (err) {
-      firePopup({ title: `error!` });
-    }
-  };
-
-  // Event: start game
   const handleStart = async () => {
     try {
-      // Check all players are ready
       const allReady = roomInfo.players.every((player) => player.isReady);
       if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
       const result = await fetch(startGame(roomId));
-      setGameUrl(`${result.url}?token=${token}`);
+      const newGameUrl = `${result.url}?token=${token}`;
+      setGameUrl(newGameUrl);
+      updateGameUrl(newGameUrl);
     } catch (err) {
       firePopup({ title: `error!` });
     }
   };
 
   useEffect(() => {
-    if (!player?.isReady && roomId) {
+    if (!player?.isReady && roomId && isFirstReady.current) {
       fetch(playerReady(roomId));
+      isFirstReady.current = false;
     }
-  }, [player?.isReady, roomId, fetch]);
+  }, [player?.isReady, roomId, fetch, isFirstReady]);
 
   return (
     <section className="px-4">
