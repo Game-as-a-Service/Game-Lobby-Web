@@ -13,7 +13,7 @@ const WithoutLayout: NextPageWithProps = () => {
   );
 };
 
-WithoutLayout.getLayout = ({ children }) => children;
+WithoutLayout.getLayout = (page) => page;
 WithoutLayout.Anonymous = true;
 
 export default WithoutLayout;

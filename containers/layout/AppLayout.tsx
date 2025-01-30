@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
@@ -9,7 +9,7 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
 import { GameListProvider } from "@/features/game";
 
-function AppLayout({ children }: PropsWithChildren) {
+function AppLayout({ children }: React.PropsWithChildren) {
   const toast = useToast();
   const router = useRouter();
   const {
@@ -86,4 +86,6 @@ function AppLayout({ children }: PropsWithChildren) {
   );
 }
 
-export default memo(AppLayout);
+export default function getAppLayout(page: React.ReactElement) {
+  return <AppLayout>{page}</AppLayout>;
+}

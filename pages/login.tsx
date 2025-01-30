@@ -86,7 +86,7 @@ const Login: NextPageWithProps = () => {
 
 Login.Anonymous = true;
 
-Login.getLayout = ({ children }) => (
+Login.getLayout = (page) => (
   <div className="w-screen h-screen bg-[#252558]">
     <Image
       src="/images/v2/login-bg.png"
@@ -96,7 +96,7 @@ Login.getLayout = ({ children }) => (
     />
     <div className="w-full h-full flex items-center p-4 md:p-8 xl:px-36 xl:py-24">
       <BoxFancy className="container m-auto h-full xl:max-h-[calc(max(560px,75%))]">
-        {children}
+        {page}
       </BoxFancy>
     </div>
   </div>
