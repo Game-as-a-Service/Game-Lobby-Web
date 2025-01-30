@@ -1,0 +1,11 @@
+{
+  "room_is_full": "房間人數已滿! R003",
+  "wrong_password": "密碼錯誤",
+  "you_can_only_join_1_room": "一人只能進入一間房! P003",
+  "P005": "不在這個房間中 P005",
+  "rooms_list": "查看房間列表",
+  "rooms_waiting": "玩家募集中",
+  "rooms_playing": "進行中",
+  "enter_game_password": "請輸入遊戲密碼",
+  "U003": "暱稱已重複"
+}

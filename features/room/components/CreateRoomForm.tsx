@@ -55,7 +55,7 @@ function CreateRoomForm({
   });
   const { fetch } = useRequest();
   const router = useRouter();
-  const { t } = useTranslation("rooms");
+  const { t } = useTranslation();
   const [isLockRoom, setIsLockRoom] = useState(false);
   const passwordInputRef = useRef<InputOTPRef>(null);
   const gameNameInputRef = useRef<HTMLInputElement>(null);

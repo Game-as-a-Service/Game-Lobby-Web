@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Icon, { IconName } from "@/components/shared/Icon";
 import Badge from "@/components/shared/Badge";
 import { cn } from "@/lib/utils";
 import { UserInfoForm } from "@/features/user";
-import useUser from "@/hooks/useUser";
-import { UserInfo } from "@/requests/users";
+import useAuth from "@/hooks/context/useAuth";
 import Modal from "./Modal";
-import Cover from "./Cover";
+import Image from "./Image";
 
 enum HeaderActions {
   CHAT = "CHAT",
@@ -33,13 +32,7 @@ export default function Header({
   onClickChatButton,
 }: Readonly<HeaderProps>) {
   const [isUserInfoVisible, setIsUserInfoVisible] = useState(false);
-  // TODO: 待優化登入就應可以取使用者資料
-  const [currentUserInfo, setCurrentUserInfo] = useState<UserInfo>();
-  const { getCurrentUser } = useUser();
-
-  useEffect(() => {
-    getCurrentUser().then((result) => setCurrentUserInfo(result));
-  }, []);
+  const { currentUser } = useAuth();
 
   const buttons: ButtonProps[] = [
     {
@@ -72,7 +65,7 @@ export default function Header({
       )}
     >
       <div className="flex items-center gap-3">
-        <Cover src="/logo.png" alt="logo" width={40} height={40} />
+        <Image src="/logo.png" alt="logo" width={40} height={40} priority />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>
       </div>
       <div className="header___actions flex gap-5">
@@ -92,7 +85,7 @@ export default function Header({
           </Badge>
         ))}
       </div>
-      {isUserInfoVisible && currentUserInfo && (
+      {isUserInfoVisible && currentUser && (
         <Modal
           title="修改暱稱"
           isOpen={isUserInfoVisible}
@@ -100,8 +93,9 @@ export default function Header({
           size="medium"
         >
           <UserInfoForm
-            {...currentUserInfo}
+            userInfo={currentUser}
             onCancel={() => setIsUserInfoVisible(false)}
+            onSuccess={() => setIsUserInfoVisible(false)}
           />
         </Modal>
       )}

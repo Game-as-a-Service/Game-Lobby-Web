@@ -25,7 +25,7 @@ const Login: NextPageWithProps = () => {
   return <></>;
 };
 
-Login.getLayout = ({ children }) => children;
+Login.getLayout = (page) => page;
 Login.Anonymous = true;
 
 export default Login;

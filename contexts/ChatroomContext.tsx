@@ -2,7 +2,7 @@ import { createContext } from "react";
 import { ChatroomContextType } from "@/containers/provider/ChatroomProvider";
 
 const defaultValue: ChatroomContextType = {
-  lastMessage: undefined,
+  lastMessage: null,
   sendChatMessage: () => {},
   joinChatroom: () => {},
   leaveChatroom: () => {},

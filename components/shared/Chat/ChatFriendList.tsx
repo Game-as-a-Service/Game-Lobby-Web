@@ -1,8 +1,12 @@
-import Avatar from "../../Avatar";
+import type { UserInfo } from "@/requests/users";
+
+import Avatar from "../Avatar";
+
+type User = Pick<UserInfo, "id" | "nickname">;
 
 export type FriendType = {
   target: string;
-  lastUser: string | null;
+  lastUser: User | null;
   lastContent: string | null;
   isRead: boolean;
 };
@@ -31,7 +35,7 @@ export default function ChatFriendList({
         <div className="p-4 pt-2 pr-0">
           {friendList.map(({ target, lastUser, lastContent, isRead }) => {
             const targetUser = getTargetUser(target, userId);
-            const isMe = lastUser === userId;
+            const isMe = lastUser?.id === userId;
 
             return (
               <div
