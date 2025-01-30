@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
@@ -9,7 +9,7 @@ import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
 import { GameListProvider } from "@/features/game";
 
-export default function AppLayout({ children }: PropsWithChildren) {
+function AppLayout({ children }: React.PropsWithChildren) {
   const toast = useToast();
   const router = useRouter();
   const {
@@ -84,4 +84,8 @@ export default function AppLayout({ children }: PropsWithChildren) {
       </div>
     </GameListProvider>
   );
+}
+
+export default function getAppLayout(page: React.ReactElement) {
+  return <AppLayout>{page}</AppLayout>;
 }
