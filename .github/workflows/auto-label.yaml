@@ -5,10 +5,11 @@ on:
 
 jobs:
   label:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Label PR based on title and comments
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -24,7 +25,6 @@ jobs:
               { keyword: 'refactor', label: 'refactor' },
               { keyword: 'fix', label: 'bug' },
               { keyword: '[RENOVATE-BOT]', label: 'dependency upgrade' },
-              { keyword: '[SECURITY]', label: 'security' },
             ];
 
             // Collect all labels that should be added according to the title
