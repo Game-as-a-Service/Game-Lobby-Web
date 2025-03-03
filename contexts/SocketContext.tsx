@@ -1,6 +1,7 @@
 import { Env, getEnv } from "@/lib/env";
 import { createContext } from "react";
 import { Socket, io } from "socket.io-client";
+import { SocketService } from "@/services/socket/SocketService";
 
 const { internalSocketEndpoint, env, isMock } = getEnv();
 
@@ -44,10 +45,12 @@ export const createSocket = (token: string | null | undefined) => {
 };
 
 type StoreContextType = {
-  socket: Socket | null;
+  socketService: SocketService;
+  socket: Socket | null; // Kept for backward compatibility
 };
 
 const SocketContext = createContext<StoreContextType>({
+  socketService: new SocketService(),
   socket: null,
 });
 
