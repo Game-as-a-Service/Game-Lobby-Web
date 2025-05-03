@@ -1,101 +1,19 @@
 import ChatroomContext from "@/contexts/ChatroomContext";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
-import useAuth from "@/hooks/context/useAuth";
-import useSocketCore from "@/hooks/context/useSocketCore";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
-import type { MessageType } from "@/components/shared/Chat/ChatMessages";
+import { PropsWithChildren } from "react";
+import useChatroomService from "@/hooks/context/useChatroomService";
 
-export type ChatroomContextType = ReturnType<typeof useChatroomCore>;
+export type ChatroomContextType = ReturnType<typeof useChatroomService>;
 
-function useChatroomCore() {
-  const { socket } = useSocketCore();
-  const { currentUser } = useAuth();
-  const [lastMessage, setLastMessage] = useState<MessageType | null>(null);
-
-  /**
-   * Dispatches a socket event to the server.
-   * @param {string} action.type - The type of the socket event.
-   * @param {any} action.payload - The payload of the socket event.
-   */
-
-  useEffect(() => {
-    if (!currentUser) return;
-
-    socket?.on(SOCKET_EVENT.CHAT_MESSAGE, (data: any) => {
-      setLastMessage(data);
-    });
-
-    return () => {
-      socket?.off(SOCKET_EVENT.CHAT_MESSAGE);
-    };
-  }, [currentUser, socket]);
-
-  /**
-   * Sends a chat message to the server.
-   * @param {string} message.content - The content of the message.
-   * @param {string} message.target - The target chatroomId of the message.
-   */
-  const sendChatMessage = useCallback(
-    (message: Pick<MessageType, "content" | "target">) => {
-      if (!currentUser) return;
-      const payload: Omit<MessageType, "timestamp"> = {
-        from: { id: currentUser.id, nickname: currentUser.nickname },
-        ...message,
-      };
-      if (socket) {
-        socket?.emit(SOCKET_EVENT.CHAT_MESSAGE, payload);
-      }
-    },
-    [currentUser, socket]
-  );
-
-  const joinChatroom = useCallback(
-    (roomId: string) => {
-      if (!currentUser) return;
-      if (socket) {
-        const payload = {
-          user: {
-            id: currentUser.id,
-            nickname: currentUser.nickname,
-          },
-          target: `ROOM_${roomId}`,
-        };
-        socket?.emit(SOCKET_EVENT.JOIN_ROOM, payload);
-      }
-    },
-    [currentUser, socket]
-  );
-
-  const leaveChatroom = useCallback(
-    (roomId: string) => {
-      setLastMessage(null);
-      if (!currentUser) return;
-      if (socket) {
-        const payload = {
-          user: {
-            id: currentUser.id,
-            nickname: currentUser.nickname,
-          },
-          target: `ROOM_${roomId}`,
-        };
-        socket?.emit(SOCKET_EVENT.LEAVE_ROOM, payload);
-      }
-    },
-    [currentUser, socket]
-  );
-
-  return {
-    lastMessage,
-    sendChatMessage,
-    joinChatroom,
-    leaveChatroom,
-  };
-}
-
+/**
+ * Provider component for chat room functionality
+ * Uses the new socket service architecture instead of direct socket operations
+ */
 export default function ChatroomContextProvider({
   children,
 }: PropsWithChildren) {
-  const contextValue = useChatroomCore();
+  // Use the new service-based hook
+  const contextValue = useChatroomService();
+
   return (
     <ChatroomContext.Provider value={contextValue}>
       {children}
