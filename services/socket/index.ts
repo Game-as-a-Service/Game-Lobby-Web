@@ -10,7 +10,7 @@
 
 // Export services
 export { BaseSocketService } from "./BaseSocketService";
-export { SocketService, socketService } from "./SocketService";
+export { SocketService } from "./SocketService";
 export {
   RoomSocketService,
   createRoomSocketService,

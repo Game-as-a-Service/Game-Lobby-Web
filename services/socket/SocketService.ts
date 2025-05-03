@@ -23,6 +23,11 @@ import {
  */
 export class SocketService {
   /**
+   * Singleton instance of the SocketService
+   */
+  private static instance: SocketService | null = null;
+
+  /**
    * The underlying socket.io Socket instance
    */
   private socket: Socket | null = null;
@@ -45,11 +50,24 @@ export class SocketService {
   /**
    * Creates a new SocketService instance and initializes specialized services
    * No socket connection is established until initialize() is called
+   *
+   * This constructor is private to prevent direct instantiation
    */
-  constructor() {
+  private constructor() {
     this.roomService = createRoomSocketService(null);
     this.chatService = createChatSocketService(null);
     this.gameService = createGameSocketService(null);
+  }
+
+  /**
+   * Get the singleton instance of SocketService
+   * @returns {SocketService} The singleton instance
+   */
+  public static getInstance(): SocketService {
+    if (!SocketService.instance) {
+      SocketService.instance = new SocketService();
+    }
+    return SocketService.instance;
   }
 
   /**
@@ -162,9 +180,3 @@ export class SocketService {
     }
   }
 }
-
-/**
- * Singleton instance of the SocketService
- * This provides a global access point to socket functionality throughout the application
- */
-export const socketService = new SocketService();
