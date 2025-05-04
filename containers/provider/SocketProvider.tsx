@@ -4,7 +4,7 @@ import useAuth from "@/hooks/context/useAuth";
 import useHistory from "@/hooks/context/useHistory";
 import { WebSocketHistoryType } from "@/contexts/HistoryContext";
 import { Socket } from "socket.io-client";
-import { SocketService } from "@/services/socket/SocketService";
+import { SocketService } from "@/services/socket";
 
 type Props = {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ export const SocketProvider: FC<Props> = ({ children }) => {
   const { addWsHistory } = useHistory();
   const { currentUser, token } = useAuth();
   const [socket, setSocket] = useState<Socket | null>(null);
-  const socketServiceRef = useRef(new SocketService());
+  const socketServiceRef = useRef(SocketService.getInstance());
   const socketService = socketServiceRef.current;
 
   useEffect(() => {

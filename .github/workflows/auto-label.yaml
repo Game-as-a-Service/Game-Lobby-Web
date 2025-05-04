@@ -24,7 +24,6 @@ jobs:
               { keyword: '[WIP]', label: "don't merge" },
               { keyword: 'refactor', label: 'refactor' },
               { keyword: 'fix', label: 'bug' },
-              { keyword: '[RENOVATE-BOT]', label: 'dependency upgrade' },
             ];
 
             // Collect all labels that should be added according to the title
