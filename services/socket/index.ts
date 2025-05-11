@@ -9,41 +9,6 @@
  */
 
 // Export services
-export { BaseSocketService } from "./BaseSocketService";
-export { SocketService } from "./SocketService";
-export {
-  RoomSocketService,
-  createRoomSocketService,
-} from "./RoomSocketService";
-export {
-  ChatSocketService,
-  createChatSocketService,
-} from "./ChatSocketService";
-export {
-  GameSocketService,
-  createGameSocketService,
-} from "./GameSocketService";
+import { SocketService } from "./SocketService";
 
-// Export types and utilities
-export * from "./utils";
-
-/**
- * Socket Service Architecture
- *
- * The socket service follows a hierarchical organization:
- *
- * 1. BaseSocketService - Core socket functionality
- *    ↑
- * 2. Specialized Services - Domain-specific implementations
- *    - RoomSocketService - Room management
- *    - ChatSocketService - Chat functionality
- *    - GameSocketService - Game events
- *    ↑
- * 3. SocketService - Coordinates all specialized services
- *
- * Each service provides type-safe event handling with proper
- * resource management to prevent memory leaks.
- *
- * The API is designed to be intuitive and consistent across services,
- * while also providing specialized functionality for each domain.
- */
+export default SocketService.getInstance();
