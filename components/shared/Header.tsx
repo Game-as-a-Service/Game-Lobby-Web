@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import Icon, { IconName } from "@/components/shared/Icon";
 import Badge from "@/components/shared/Badge";
 import { cn } from "@/lib/utils";
@@ -24,12 +24,14 @@ interface HeaderProps {
   className?: string;
   isChatVisible: boolean;
   onClickChatButton: () => void;
+  socketStatusIndicator?: ReactNode;
 }
 
 export default function Header({
   className,
   isChatVisible,
   onClickChatButton,
+  socketStatusIndicator,
 }: Readonly<HeaderProps>) {
   const [isUserInfoVisible, setIsUserInfoVisible] = useState(false);
   const { currentUser } = useAuth();
@@ -68,7 +70,10 @@ export default function Header({
         <Image src="/logo.png" alt="logo" width={40} height={40} priority />
         <h2 className="text-primary-100 text-2xl">遊戲微服務大平台</h2>
       </div>
-      <div className="header___actions flex gap-5">
+      <div className="header___actions flex items-center gap-5">
+        {socketStatusIndicator && (
+          <div className="mr-2">{socketStatusIndicator}</div>
+        )}
         {buttons.map(({ type, iconName, isActive, onClick }) => (
           <Badge
             dot

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
@@ -8,6 +8,49 @@ import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
 import { GameListProvider } from "@/features/game";
+import useSocketCore from "@/hooks/context/useSocketCore";
+
+type SocketConnectionStatus =
+  | "connecting"
+  | "connected"
+  | "disconnected"
+  | "error";
+
+const SocketStatusIndicator = ({
+  status,
+}: {
+  status: SocketConnectionStatus;
+}) => {
+  let bgColor = "bg-gray-400";
+  let statusText = "連線中";
+
+  switch (status) {
+    case "connected":
+      bgColor = "bg-green-500";
+      statusText = "已連線";
+      break;
+    case "disconnected":
+      bgColor = "bg-red-500";
+      statusText = "已斷線";
+      break;
+    case "error":
+      bgColor = "bg-yellow-500";
+      statusText = "連線錯誤";
+      break;
+  }
+
+  return (
+    <div
+      className="flex items-center space-x-2"
+      aria-label={`Socket 狀態: ${statusText}`}
+    >
+      <div className={`w-3 h-3 rounded-full ${bgColor}`} />
+      <span className="text-sm text-gray-300 hidden md:inline">
+        {statusText}
+      </span>
+    </div>
+  );
+};
 
 function AppLayout({ children }: React.PropsWithChildren) {
   const toast = useToast();
@@ -22,12 +65,40 @@ function AppLayout({ children }: React.PropsWithChildren) {
   } = useChat();
   const roomPathname = "/rooms/[roomId]";
   const isSearchBarVisible = ["/", "/rooms"].includes(router.pathname);
+  const { socketService } = useSocketCore();
+
+  const [socketStatus, setSocketStatus] =
+    useState<SocketConnectionStatus>("connecting");
 
   useEffect(() => {
     if (router.pathname === roomPathname) {
       openChat();
     }
   }, [router.pathname, openChat]);
+
+  useEffect(() => {
+    const socketInstance = socketService.getSocket();
+
+    if (socketInstance) {
+      setSocketStatus(socketInstance.connected ? "connected" : "connecting");
+
+      const handleConnect = () => setSocketStatus("connected");
+      const handleDisconnect = () => setSocketStatus("disconnected");
+      const handleConnectError = () => setSocketStatus("error");
+
+      socketInstance.on("connect", handleConnect);
+      socketInstance.on("disconnect", handleDisconnect);
+      socketInstance.on("connect_error", handleConnectError);
+
+      return () => {
+        socketInstance.off("connect", handleConnect);
+        socketInstance.off("disconnect", handleDisconnect);
+        socketInstance.off("connect_error", handleConnectError);
+      };
+    } else {
+      setSocketStatus("disconnected");
+    }
+  }, [socketService]);
 
   return (
     <GameListProvider>
@@ -38,6 +109,7 @@ function AppLayout({ children }: React.PropsWithChildren) {
         className="fixed top-0 inset-x-0 z-40"
         isChatVisible={isChatVisible}
         onClickChatButton={toggleChatVisibility}
+        socketStatusIndicator={<SocketStatusIndicator status={socketStatus} />}
       />
       <div className="pl-2 pt-20 flex grow">
         <div className="shrink-0 w-18">
