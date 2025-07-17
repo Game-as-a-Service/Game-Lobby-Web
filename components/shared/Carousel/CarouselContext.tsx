@@ -17,7 +17,7 @@ const initialState: ICarouselContext = {
   items: [],
   showIndex: 0,
   renderKey: (item) => item.id,
-  Component: (props) => <>{props.id}</>,
+  Component: (props) => props.id.toString(),
 };
 
 const calcPage = <Item extends TItem>(

@@ -3,9 +3,9 @@ import type { GameType } from "@/requests/games";
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import CarouselV2 from "@/components/shared/Carousel/v2";
+import Carousel from "@/components/shared/Carousel";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { CarouselItemProps } from "@/components/shared/Carousel/v2/Carousel.type";
+import { CarouselItemProps } from "@/components/shared/Carousel/Carousel.type";
 import { GameCardDetailed, GameCardSimple, useGameList } from "@/features/game";
 import { GameRoomActions } from "@/features/room";
 
@@ -74,7 +74,7 @@ export default function Home() {
   return (
     <div className="max-w-[1036px] mx-auto px-6">
       <div>
-        <CarouselV2 items={gameList} Component={CarouselCard} />
+        <Carousel items={gameList} Component={CarouselCard} />
       </div>
       <div className="mt-6">
         <Tabs tabs={tabs} renderTabPaneContent={TabPaneContent} />
