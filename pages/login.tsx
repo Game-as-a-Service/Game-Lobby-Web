@@ -89,7 +89,7 @@ Login.Anonymous = true;
 Login.getLayout = (page) => (
   <div className="w-screen h-screen bg-[#252558]">
     <Image
-      src="/images/v2/login-bg.png"
+      src="/images/v2/login-bg.webp"
       alt="login cover"
       className="fixed w-full h-screen bg-[#252558]"
       fill
