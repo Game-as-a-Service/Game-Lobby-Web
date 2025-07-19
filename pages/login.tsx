@@ -8,7 +8,7 @@ import Button, { ButtonVariant } from "@/components/shared/Button";
 import Image from "@/components/shared/Image";
 import Icon, { IconName } from "@/components/shared/Icon";
 
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import useUser from "@/hooks/useUser";
 import { getEnv } from "@/lib/env";
 import { LoginType } from "@/requests/auth";

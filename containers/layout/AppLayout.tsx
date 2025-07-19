@@ -7,8 +7,8 @@ import useChat from "@/hooks/useChat";
 import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
-import { GameListProvider } from "@/features/game";
-import useSocketCore from "@/hooks/context/useSocketCore";
+import { GameListProvider } from "@/contexts/game";
+import { useSocketCore } from "@/contexts/socket";
 
 type SocketConnectionStatus =
   | "connecting"

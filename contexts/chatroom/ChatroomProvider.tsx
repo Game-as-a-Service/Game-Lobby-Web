@@ -1,6 +1,6 @@
-import ChatroomContext from "@/contexts/ChatroomContext";
+import ChatroomContext from "./ChatroomContext";
 import { PropsWithChildren } from "react";
-import useChatroomService from "@/hooks/context/useChatroomService";
+import useChatroomService from "./useChatroomService";
 
 export type ChatroomContextType = ReturnType<typeof useChatroomService>;
 

@@ -1,5 +1,7 @@
 import { createContext } from "react";
-import { ChatroomContextType } from "@/containers/provider/ChatroomProvider";
+import type useChatroomService from "./useChatroomService";
+
+export type ChatroomContextType = ReturnType<typeof useChatroomService>;
 
 const defaultValue: ChatroomContextType = {
   lastMessage: null,

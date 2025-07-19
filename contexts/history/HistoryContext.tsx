@@ -1,6 +1,6 @@
 import { HttpMethod } from "@/requests/request";
 import { createContext } from "react";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT } from "../socket/SocketContext";
 
 export enum Status {
   RESOLVED = "RESOLVED",

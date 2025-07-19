@@ -1,7 +1,6 @@
-import { ApiHistory, WebSocketHistory } from "@/contexts/HistoryContext";
+import { ApiHistory, WebSocketHistory, useHistory } from "@/contexts/history";
 import ApiHistoryItem from "./ApiHistoryItem";
 import WsHistoryItem from "./WsHistoryItem";
-import useHistory from "@/hooks/context/useHistory";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 

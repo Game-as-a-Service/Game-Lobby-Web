@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Icon, { IconName } from "@/components/shared/Icon";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import useUser from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
 

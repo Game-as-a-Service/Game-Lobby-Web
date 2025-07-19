@@ -6,7 +6,7 @@ import Input from "@/components/shared/Input";
 import useRequest from "@/hooks/useRequest";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
 import { useToast } from "@/components/shared/Toast";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 
 interface UserInfoFormProps {
   userInfo: UserInfo;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import useAuth from "@/hooks/context/useAuth";
-import useSocketCore from "@/hooks/context/useSocketCore";
+import { useAuth } from "../auth";
+import { useSocketCore } from "../socket";
 import type { MessageType } from "@/components/shared/Chat/ChatMessages";
 
 /**

@@ -6,7 +6,7 @@ import {
 } from "@/requests/auth";
 import { getCurrentUser as getCurrentUserReq } from "@/requests/users/index";
 import useRequest from "./useRequest";
-import useAuth from "./context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import useCookie from "./useCookie";
 import { useCallback } from "react";
 

@@ -1,4 +1,4 @@
-import HistoryContext from "@/contexts/HistoryContext";
+import HistoryContext from "./HistoryContext";
 import { useContext } from "react";
 
 const useHistory = () => {

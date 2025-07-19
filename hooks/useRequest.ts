@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { AxiosError, AxiosRequestConfig } from "axios";
 
 import { IRequestWrapper } from "@/requests/request";
-import useAxios from "./context/useAxios";
-import useAuth from "./context/useAuth";
-import useHistory from "./context/useHistory";
-import { Status } from "@/contexts/HistoryContext";
+import { useAxios } from "@/contexts/axios";
+import { useAuth } from "@/contexts/auth";
+import { useHistory } from "@/contexts/history";
+import { Status } from "@/contexts/history";
 import {
   useToast,
   UseToastComponent,

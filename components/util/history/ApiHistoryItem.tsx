@@ -1,4 +1,4 @@
-import { ApiHistory, Status } from "@/contexts/HistoryContext";
+import { ApiHistory, Status } from "@/contexts/history";
 import Icon, { IconName } from "@/components/shared/Icon";
 
 const ApiHistoryItem = (props: ApiHistory) => {

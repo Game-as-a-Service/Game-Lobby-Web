@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { MessageType } from "@/components/shared/Chat/ChatMessages";
-import useChatroom from "./context/useChatroom";
-import useSocketCore from "./context/useSocketCore";
+import { useChatroom } from "@/contexts/chatroom";
+import { useSocketCore } from "@/contexts/socket";
 import useUser from "./useUser";
 
 export default function useChat() {

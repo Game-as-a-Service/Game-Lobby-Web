@@ -8,16 +8,16 @@ import "@/styles/reset.css";
 import "@/styles/global.css";
 import "@/scripts/whyDidYouRender";
 
-import AxiosProvider from "@/containers/provider/AxiosProvider";
 import getAppLayout from "@/containers/layout/AppLayout";
-import AuthProvider from "@/containers/provider/AuthProvider";
+import { AuthProvider } from "@/contexts/auth";
+import { AxiosProvider } from "@/contexts/axios";
+import { HistoryProvider } from "@/contexts/history";
+import { SocketProvider } from "@/contexts/socket";
+import { ChatroomProvider } from "@/contexts/chatroom";
 import Startup from "@/containers/util/Startup";
-import HistoryProvider from "@/containers/provider/HistoryProvider";
 import HistoryList from "@/components/util/history/HistoryList";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
-import { SocketProvider } from "@/containers/provider/SocketProvider";
-import ChatroomContextProvider from "@/containers/provider/ChatroomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactElement;
@@ -54,12 +54,12 @@ function App({ Component, pageProps }: AppWithProps) {
           <AuthProvider>
             {getHistory(
               <SocketProvider>
-                <ChatroomContextProvider>
+                <ChatroomProvider>
                   <Startup isAnonymous={isAnonymous}>
                     {getLayout(<Component {...pageProps} />)}
                     {!isProduction && <HistoryList />}
                   </Startup>
-                </ChatroomContextProvider>
+                </ChatroomProvider>
               </SocketProvider>
             )}
           </AuthProvider>

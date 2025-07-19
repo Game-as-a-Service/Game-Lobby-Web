@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT } from "@/contexts/socket";
 
 /**
  * Interface representing a socket event handler function

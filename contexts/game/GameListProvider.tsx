@@ -1,15 +1,7 @@
 import { getAllGamesEndpoint, type GameType } from "@/requests/games";
-
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import useRequest from "@/hooks/useRequest";
-
-const GameListContext = createContext<GameType[]>([]);
+import GameListContext from "./GameListContext";
 
 function GameListProvider({ children }: PropsWithChildren) {
   const { fetch } = useRequest();
@@ -25,13 +17,5 @@ function GameListProvider({ children }: PropsWithChildren) {
     </GameListContext.Provider>
   );
 }
-
-export const useGameList = () => {
-  const result = useContext(GameListContext);
-  if (!result) {
-    throw new Error("useGameList must be used within a GameListProvider");
-  }
-  return result;
-};
 
 export default GameListProvider;

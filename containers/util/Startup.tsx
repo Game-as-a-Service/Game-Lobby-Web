@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import useUser from "@/hooks/useUser";
 
 type Props = {

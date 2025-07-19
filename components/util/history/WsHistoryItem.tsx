@@ -1,7 +1,4 @@
-import {
-  WebSocketHistory,
-  WebSocketHistoryType,
-} from "@/contexts/HistoryContext";
+import { WebSocketHistory, WebSocketHistoryType } from "@/contexts/history";
 import Icon from "@/components/shared/Icon";
 import { cn } from "@/lib/utils";
 const WsHistoryItem = (props: WebSocketHistory) => {

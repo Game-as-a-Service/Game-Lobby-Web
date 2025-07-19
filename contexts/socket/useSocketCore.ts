@@ -1,4 +1,4 @@
-import SocketContext from "@/contexts/SocketContext";
+import SocketContext from "./SocketContext";
 import { useContext } from "react";
 import { SocketService } from "@/services/socket/SocketService";
 import { Socket } from "socket.io-client";

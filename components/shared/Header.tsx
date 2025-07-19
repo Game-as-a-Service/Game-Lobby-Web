@@ -3,7 +3,7 @@ import Icon, { IconName } from "@/components/shared/Icon";
 import Badge from "@/components/shared/Badge";
 import { cn } from "@/lib/utils";
 import { UserInfoForm } from "@/features/user";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import Modal from "./Modal";
 import Image from "./Image";
 

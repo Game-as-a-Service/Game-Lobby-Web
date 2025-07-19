@@ -1,4 +1,4 @@
-import ChatroomContext from "@/contexts/ChatroomContext";
+import ChatroomContext from "./ChatroomContext";
 import { useContext } from "react";
 
 const useChatroom = () => {

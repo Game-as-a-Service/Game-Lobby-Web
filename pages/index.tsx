@@ -6,7 +6,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Carousel from "@/components/shared/Carousel";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { CarouselItemProps } from "@/components/shared/Carousel/Carousel.type";
-import { GameCardDetailed, GameCardSimple, useGameList } from "@/features/game";
+import { GameCardDetailed, GameCardSimple } from "@/features/game";
+import { useGameList } from "@/contexts/game";
 import { GameRoomActions } from "@/features/room";
 
 enum TabKey {

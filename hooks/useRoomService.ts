@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from "react";
 import useRoom from "@/hooks/useRoom";
-import useSocketCore from "@/hooks/context/useSocketCore";
+import { useSocketCore } from "@/contexts/socket";
 import { RoomInfo } from "@/requests/rooms";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 
 type User = Omit<RoomInfo.User, "isReady">;
 

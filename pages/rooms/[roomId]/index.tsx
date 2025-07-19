@@ -9,10 +9,10 @@ import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import GameWindow from "@/components/rooms/GameWindow";
 import useRequest from "@/hooks/useRequest";
 import useRoom from "@/hooks/useRoom";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import usePopup from "@/hooks/usePopup";
-import useSocketCore from "@/hooks/context/useSocketCore";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { useSocketCore } from "@/contexts/socket";
+import { SOCKET_EVENT } from "@/contexts/socket";
 import {
   getRoomInfoEndpoint,
   kickUser,

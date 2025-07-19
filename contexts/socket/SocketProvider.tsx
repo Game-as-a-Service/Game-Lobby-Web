@@ -1,8 +1,8 @@
 import React, { useEffect, FC, useState, useRef } from "react";
-import SocketContext, { SOCKET_EVENT } from "@/contexts/SocketContext";
-import useAuth from "@/hooks/context/useAuth";
-import useHistory from "@/hooks/context/useHistory";
-import { WebSocketHistoryType } from "@/contexts/HistoryContext";
+import SocketContext, { SOCKET_EVENT } from "./SocketContext";
+import useAuth from "../auth/useAuth";
+import useHistory from "../history/useHistory";
+import { WebSocketHistoryType } from "../history/HistoryContext";
 import { Socket } from "socket.io-client";
 import socketService from "@/services/socket";
 
@@ -87,3 +87,5 @@ export const SocketProvider: FC<Props> = ({ children }) => {
     </SocketContext.Provider>
   );
 };
+
+export default SocketProvider;

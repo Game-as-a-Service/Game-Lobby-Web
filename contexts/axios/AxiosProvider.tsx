@@ -7,7 +7,7 @@ import type { AxiosInstance } from "axios";
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 
 import { axios as axiosConfig } from "@/configs/axios";
-import AxiosContext from "@/contexts/AxiosContext";
+import AxiosContext from "./AxiosContext";
 
 type Props = {
   children: ReactNode;

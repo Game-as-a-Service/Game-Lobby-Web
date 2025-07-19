@@ -1,7 +1,4 @@
-import HistoryContext, {
-  ApiHistory,
-  WebSocketHistory,
-} from "@/contexts/HistoryContext";
+import HistoryContext, { ApiHistory, WebSocketHistory } from "./HistoryContext";
 import { FC, ReactNode, useState, useCallback } from "react";
 
 type Props = {
