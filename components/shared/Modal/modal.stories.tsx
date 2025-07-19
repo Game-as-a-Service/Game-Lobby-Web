@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useArgs } from "@storybook/preview-api";
 
 import Modal, { ModalProps } from "./index";
-import Button from "../Button/v2";
+import Button from "../Button";
 
 const meta: Meta<typeof Modal> = {
   title: "General/Modal",

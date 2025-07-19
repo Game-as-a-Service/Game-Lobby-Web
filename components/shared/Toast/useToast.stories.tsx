@@ -14,8 +14,8 @@ import Toast from "@/components/shared/Toast/index";
 import type { ToastProps } from "@/components/shared/Toast/index";
 import { ToastQueueProvider } from "@/components/shared/Toast/index";
 import { FC, useEffect, useRef, useState } from "react";
-import { Button, ButtonVariant } from "@/components/shared/Button";
 import { toastStoryArgTypes } from "@/components/shared/Toast/toastStoryArgTypes";
+import Button from "@/components/shared/Button";
 
 interface DemoUseToastProps
   extends ToastProps,
@@ -81,17 +81,12 @@ const DemoUseToast: FC<DemoUseToastProps> = ({
   return (
     <div className={"w-full h-[400px] grid grid-cols-2"}>
       <div className={"flex justify-center items-center"}>
-        <Button onClick={handleButtonClick("left")}>
+        <Button variant="secondary" onClick={handleButtonClick("left")}>
           What do we say when we win something?
         </Button>
       </div>
       <div ref={rightDivRef} className={"relative bg-yellow-100 p-4"}>
-        <Button
-          variant={ButtonVariant.DARK}
-          onClick={handleButtonClick("right")}
-        >
-          yay
-        </Button>
+        <Button onClick={handleButtonClick("right")}>yay</Button>
       </div>
     </div>
   );

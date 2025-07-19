@@ -4,7 +4,7 @@ import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 
-import ButtonV2, { ButtonVariant } from "@/components/shared/Button/v2";
+import Button, { ButtonVariant } from "@/components/shared/Button";
 import Image from "@/components/shared/Image";
 import Icon, { IconName } from "@/components/shared/Icon";
 
@@ -67,14 +67,14 @@ const Login: NextPageWithProps = () => {
       <div className="flex-1 flex flex-col justify-center items-center w-full px-[124px] gap-5">
         {loginMethods.map(({ text, type, icon }) => (
           <Link key={type} href={`${internalEndpoint}/login?type=${type}`}>
-            <ButtonV2
+            <Button
               className="w-full min-w-[300px] max-w-[50%] xl:max-w-[318px] text-primary-50 flex justify-center items-center"
               variant={ButtonVariant.SECONDARY}
               onClick={(e) => onLoginClick(e, type)}
             >
               <Icon name={icon} className="w-6 h-6 stroke-none" />
               {text}
-            </ButtonV2>
+            </Button>
           </Link>
         ))}
       </div>

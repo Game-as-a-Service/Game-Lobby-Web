@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AxiosError } from "axios";
-import { Button, ButtonSize } from "@/components/shared/Button/v2";
+import Button, { ButtonSize } from "@/components/shared/Button";
 import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/router";
 import { useToast } from "@/components/shared/Toast";

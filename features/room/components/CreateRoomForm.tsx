@@ -2,7 +2,7 @@ import { useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import useRequest from "@/hooks/useRequest";
-import Button from "@/components/shared/Button/v2";
+import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
 import InputOTP, { InputOTPRef } from "@/components/shared/InputOTP";
 import Icon from "@/components/shared/Icon";

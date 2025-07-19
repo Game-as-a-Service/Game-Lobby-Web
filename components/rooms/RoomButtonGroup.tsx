@@ -1,4 +1,4 @@
-import Button from "@/components/shared/Button/v2";
+import Button from "@/components/shared/Button";
 import Icon from "../shared/Icon";
 
 type RoomButtonGroupProps = {

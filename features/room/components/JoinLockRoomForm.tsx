@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { FormEvent, PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/shared/Button/v2";
+import Button from "@/components/shared/Button";
 import Icon from "@/components/shared/Icon";
 import InputOTP from "@/components/shared/InputOTP";
 import { useJoinRoom } from "../hooks";

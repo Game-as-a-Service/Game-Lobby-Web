@@ -1,13 +1,13 @@
-import { NextPageWithProps } from "./_app";
-import Button from "@/components/shared/Button";
 import Link from "next/link";
+import Button from "@/components/shared/Button";
+import { NextPageWithProps } from "./_app";
 
 const WithoutLayout: NextPageWithProps = () => {
   return (
     <>
       <h1>這頁沒Layout</h1>
-      <Button component={Link} href={"/"}>
-        to Index
+      <Button asChild>
+        <Link href={"/"}>to Index</Link>
       </Button>
     </>
   );

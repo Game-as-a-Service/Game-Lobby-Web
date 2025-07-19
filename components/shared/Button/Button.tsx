@@ -1,150 +1,107 @@
-import type { ClassValue } from "clsx";
-import {
-  ComponentProps,
-  ElementType,
-  ForwardedRef,
-  ReactNode,
-  SyntheticEvent,
-  forwardRef,
-} from "react";
+import React, { forwardRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
-
-/**
- * 為了實現 forwardRef 泛型推斷特性
- * @see https://fettblog.eu/typescript-react-generic-forward-refs/#option-3%3A-augment-forwardref
- */
-declare module "react" {
-  function forwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-}
+import BoxFancy, { BoxFancyBorderGradientVariant } from "../BoxFancy";
+import { PolymorphicRef } from "@/lib/types";
 
 export enum ButtonVariant {
   PRIMARY = "primary",
+  PRIMARY_TRANSPARENT = "primaryTransparent",
   SECONDARY = "secondary",
-  DANGER = "danger",
-  DARK = "dark",
+  HIGHLIGHT = "highlight",
 }
 
-interface BaseButtonProps<C extends ElementType = "button"> {
-  /** Button root node component @default button */
-  component?: C | "button";
-
-  /** Button variant @default primary */
-  variant?: Lowercase<keyof typeof ButtonVariant> | ButtonVariant;
-
-  /** If `true`, the button will be in disabled mode */
-  disabled?: boolean;
-
-  /** If `true`, the button will be in active mode */
-  active?: boolean;
-
-  /** If `true`, the button will be in loading mode  */
-  loading?: boolean;
-
-  /** Can be replcaed loading component @default LoadingIcon */
-  loadingComponent?: ReactNode;
-
-  /** Button prefix */
-  prefix?: ReactNode;
-
-  /** Button suffix */
-  suffix?: ReactNode;
-
-  /** The content of the component */
-  children?: ReactNode;
-
-  /** For button class name */
-  className?: ClassValue;
-
-  /**
-   * Callback function that is called when the button is clicked.
-   * @param event - The event object associated with the click event.
-   */
-  onClick?: (event: SyntheticEvent) => void;
+export enum ButtonSize {
+  Icon = "icon",
+  REGULAR = "regular",
+  SMALL = "small",
 }
 
-type ButtonProps<C extends ElementType = "button"> = BaseButtonProps<C> &
-  Omit<ComponentProps<C>, keyof BaseButtonProps<C>>;
+const commonDisabledClasses =
+  "disabled:cursor-not-allowed disabled:bg-none disabled:bg-grey-800 disabled:border-grey-500 disabled:text-grey-200 disabled:stroke-grey-200 disabled:fill-grey-200";
 
-const InteralButton = <C extends ElementType = "button">(
+const buttonTypeClasses: Record<ButtonVariant, string> = {
+  primary:
+    "text-primary-700 bg-primary-200 hover:text-primary-50 hover:bg-primary-300 active:text-primary-50 active:bg-primary-400",
+  primaryTransparent:
+    "text-primary-800 bg-primary-200/60 hover:text-primary-800 hover:bg-primary-300/50 active:text-primary-800 active:bg-primary-300/50",
+  secondary:
+    "text-primary-200 bg-primary-700/0 hover:bg-primary-700/40 active:bg-primary-200/20",
+  highlight:
+    "text-primary-50 gradient-purple hover:gradient-purple-2 active:gradient-purple-3",
+};
+
+const buttonSizeClasses: Record<ButtonSize, string> = {
+  icon: "p-2",
+  small: "py-0 px-4 gap-1",
+  regular: "py-2 px-6 gap-2",
+};
+
+interface BaseButtonProps {
+  variant?: ButtonVariant | `${ButtonVariant}`;
+  size?: ButtonSize;
+  asChild?: boolean;
+}
+
+type ButtonProps = BaseButtonProps & React.ComponentPropsWithoutRef<"button">;
+
+type InnerButtonComponent = (
+  props: ButtonProps,
+  ref?: PolymorphicRef<"button">
+) => React.ReactElement | null;
+
+const InternalButton: InnerButtonComponent = (
   {
-    component: Component = "button",
-    variant = "primary",
+    variant = ButtonVariant.PRIMARY,
+    size = ButtonSize.REGULAR,
+    asChild,
     disabled,
-    active,
-    loading,
-    loadingComponent = <LoadingIcon />,
-    prefix,
-    suffix,
-    children,
     className,
+    children,
     onClick,
-    ...attributes
-  }: ButtonProps<C>,
-  ref: ForwardedRef<HTMLButtonElement>
+    ...otherButtonAttributes
+  },
+  ref
 ) => {
-  const showLoading = loading && !prefix && !suffix;
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      onClick?.(event);
+    },
+    [disabled, onClick]
+  );
 
-  const handleClick = (event: SyntheticEvent) => {
-    if (disabled) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-    onClick?.(event);
-  };
-
-  const buttonVariants: Record<
-    ButtonVariant | `${ButtonVariant}_active`,
-    string
-  > = {
-    primary:
-      "bg-[#2F88FF] outline-[#2F88FF]/60 hover:shadow-[#2F88FF]/40 active:bg-[#2173DD]",
-    primary_active: "bg-[#2173DD] hover:bg-[#2173DD]",
-    secondary:
-      "bg-[#23A55A] outline-[#23A55A]/60 hover:shadow-[#23A55A]/40 active:bg-[#1D8C4C]",
-    secondary_active: "bg-[#1D8C4C] hover:bg-[#1D8C4C]",
-    danger:
-      "bg-[#CC2431] outline-[#CC2431]/60 hover:shadow-[#CC2431]/40 active:bg-[#B01C29]",
-    danger_active: "bg-[#B01C29] hover:bg-[#B01C29]",
-    dark: "bg-[#2D2D2E] outline-[#2D2D2E]/60 hover:shadow-[#2D2D2E]/40 active:bg-[#1F1F20]",
-    dark_active: "bg-[#1F1F20] hover:bg-[#1F1F20]",
-  };
-
-  const buttonClassName = cn(
-    "relative px-4 py-1.5 inline-flex items-center gap-1.5 rounded-lg shadow-md text-white/90 focus:outline-8 transition-[box-shadow,background,opacity] ease-in",
-    buttonVariants[variant],
-    (disabled || loading) &&
-      "opacity-70 pointer-events-none select-none text-grey-200",
-    active && buttonVariants[`${variant}_active`],
+  const boxFancyClassName = cn(
+    "w-fit items-center fz-16-b transition-colors transition-[border-image] ease-in whitespace-nowrap",
+    commonDisabledClasses,
+    buttonTypeClasses[variant],
+    buttonSizeClasses[size],
     className
   );
 
+  const borderGradientColor: BoxFancyBorderGradientVariant =
+    variant === ButtonVariant.SECONDARY && !disabled ? "purple" : "none";
+
   return (
-    <Component
+    <BoxFancy
       ref={ref}
-      role="button"
-      className={buttonClassName}
+      asChild={asChild}
+      component={"button"}
+      borderRadius="full"
+      borderGradientColor={borderGradientColor}
+      className={boxFancyClassName}
       onClick={handleClick}
       disabled={disabled}
-      aria-disabled={disabled}
-      {...attributes}
+      {...otherButtonAttributes}
     >
-      {prefix && <>{loading ? loadingComponent : prefix}</>}
-      <span className={showLoading ? "opacity-0" : ""}>{children}</span>
-      {showLoading && (
-        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          {loadingComponent}
-        </span>
-      )}
-      {suffix && <>{loading ? loadingComponent : suffix}</>}
-    </Component>
+      {children}
+    </BoxFancy>
   );
 };
 
-const LoadingIcon = () => (
-  <div className="border-2 border-t-white/30 w-4 h-4 rounded-full animate-spin"></div>
-);
+const Button = forwardRef(InternalButton);
 
-export const Button = forwardRef(InteralButton);
+export default Button;

@@ -27,8 +27,8 @@ import {
   TOAST_QUEUE_STATE,
 } from "./constants";
 import clsx from "clsx";
-import Button from "@/components/shared/Button";
 import Portal from "@/components/shared/Portal";
+import Icon from "@/components/shared/Icon";
 
 interface CtxToastQueueValue {
   addToast: Toaster;
@@ -176,16 +176,17 @@ export const ToastQueueProvider: FC<CtxToastQueueProviderProps> = ({
               >
                 <div className="relative">
                   {component}
-                  {manualClosePlan === "closeButton" ? (
-                    <Button
+                  {manualClosePlan === "closeButton" && (
+                    <button
+                      type="button"
                       className={
                         "absolute top-0 right-0 bg-transparent shadow-none text-sm font-bold px-1 py-0.5"
                       }
                       onClick={removeToastHandler}
                     >
-                      X
-                    </Button>
-                  ) : null}
+                      <Icon name="X" className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
             </Portal>

@@ -1,7 +1,7 @@
 import { useState, FormEvent, useRef } from "react";
 import { AxiosError } from "axios";
 
-import Button from "@/components/shared/Button/v2";
+import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
 import useRequest from "@/hooks/useRequest";
 import { UserInfo, putUserinfoEndpoint } from "@/requests/users";

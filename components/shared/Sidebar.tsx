@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Icon, { IconName } from "@/components/shared/Icon";
-import Button from "@/components/shared/Button";
 import useAuth from "@/hooks/context/useAuth";
 import useUser from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
@@ -70,7 +69,8 @@ export default function Sidebar({ className }: SidebarProps) {
             title={routeProps.text}
             className="flex justify-center items-center"
           >
-            <Button
+            <button
+              type="button"
               className={cn(
                 "bg-transparent p-3 rounded-full hover:shadow-none text-primary-400",
                 isActive(routeProps.route) &&
@@ -78,17 +78,18 @@ export default function Sidebar({ className }: SidebarProps) {
               )}
             >
               <Icon name={routeProps.iconName} className="w-6 h-6" />
-            </Button>
+            </button>
           </Link>
         ))}
       {currentUser && (
-        <Button
+        <button
+          type="button"
           className="mt-auto bg-transparent px-0 justify-center opacity-[0.3] hover:shadow-none hover:opacity-100"
           onClick={logout}
         >
-          <Icon className="stroke-primary-400" name="LogOut" />
+          <Icon className="stroke-primary-400 w-6 h-6 mx-auto" name="LogOut" />
           <span className="text-xs">登出</span>
-        </Button>
+        </button>
       )}
     </nav>
   );
