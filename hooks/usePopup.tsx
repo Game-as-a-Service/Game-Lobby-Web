@@ -1,6 +1,6 @@
 import Modal, { ModalProps } from "@/components/shared/Modal";
-import Button from "@/components/shared/Button";
 import { useState, useEffect, useCallback, useMemo } from "react";
+import Button from "@/components/shared/Button";
 interface PopupConfig extends Pick<ModalProps, "isOpen"> {
   title?: string;
   showCancelButton?: boolean;
@@ -75,11 +75,13 @@ export default function usePopup() {
           isOpen={popupConfig.isOpen}
           onClose={handleClose}
           maskClosable={false}
+          title={popupConfig.title}
         >
-          <p className="text-center text-lg pt-3">{popupConfig.title}</p>
-          <div className="flex px-8 py-3 justify-center w-full gap-2 flex-nowrap">
+          <div className="flex justify-center w-full gap-2 flex-nowrap">
             {popupConfig.showCancelButton && (
-              <Button onClick={handleClose}>取消</Button>
+              <Button variant="secondary" onClick={handleClose}>
+                取消
+              </Button>
             )}
             <Button onClick={handleConfirm}>確定</Button>
           </div>

@@ -1,7 +1,7 @@
 import type { Room } from "@/requests/rooms";
 
 import Image from "@/components/shared/Image";
-import Button, { ButtonSize } from "@/components/shared/Button/v2";
+import Button, { ButtonSize } from "@/components/shared/Button";
 import { useJoinRoom } from "../hooks";
 
 interface RoomsCardProps {
@@ -16,7 +16,7 @@ function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
   const handleClick = () => {
     onClick();
     if (room.isLocked) return;
-    handleJoinRoom();
+    handleJoinRoom().catch(() => {});
   };
 
   return (

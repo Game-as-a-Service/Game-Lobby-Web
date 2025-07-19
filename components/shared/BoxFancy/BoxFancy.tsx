@@ -54,6 +54,8 @@ export interface BaseBoxFancyProp {
   borderRadius?: BoxFancyBorderRadiusVariant;
   /** The border gradient color of the BoxFancy. If you set a border color by className or style, this should be covered. */
   borderGradientColor?: BoxFancyBorderGradientVariant;
+  /** If true, the component will be rendered as a child of the parent component. */
+  asChild?: boolean;
 }
 
 export type BoxFancyProps<C extends React.ElementType = "div"> =
@@ -67,6 +69,7 @@ type InternalBoxFancyComponent = <C extends React.ElementType = "div">(
 const InternalBoxFancy: InternalBoxFancyComponent = (
   {
     component,
+    asChild,
     borderWidth = "small",
     borderRadius = "xLarge",
     borderGradientColor = "purple",
@@ -76,23 +79,27 @@ const InternalBoxFancy: InternalBoxFancyComponent = (
   },
   ref
 ) => {
-  const Component = component || "div";
+  const Component = asChild ? React.Fragment : component || "div";
+
+  const boxFancyClassName = cn(
+    "relative bg-black/40 frosted-shadow-box text-primary-50",
+    "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:pointer-events-none",
+    "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
+    borderWidthMap[borderWidth],
+    borderRadiusMap[borderRadius],
+    borderGradientVariantMap[borderGradientColor],
+    className
+  );
 
   return (
-    <Component
-      ref={ref}
-      className={cn(
-        "relative bg-black/40 frosted-shadow-box text-primary-50",
-        "before:w-full before:h-full before:absolute before:top-0 before:left-0 before:pointer-events-none",
-        "before:[mask:linear-gradient(#fff_0_0)_exclude_content-box,linear-gradient(#fff_0_0)]",
-        borderWidthMap[borderWidth],
-        borderRadiusMap[borderRadius],
-        borderGradientVariantMap[borderGradientColor],
-        className
-      )}
-      {...restProps}
-    >
-      {children}
+    <Component ref={ref} className={boxFancyClassName} {...restProps}>
+      {asChild && React.isValidElement(children)
+        ? React.cloneElement(children, {
+            ref,
+            className: cn(boxFancyClassName, children.props.className),
+            ...restProps,
+          })
+        : children}
     </Component>
   );
 };

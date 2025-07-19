@@ -42,8 +42,8 @@ export default function Room() {
   } = useRoom();
   const isFirstReady = useRef(true);
   const { socket } = useSocketCore();
-  const { currentUser, token } = useAuth();
-  const { updateRoomId, updateGameUrl, getGameUrl } = useUser();
+  const { currentUser, token, setToken } = useAuth();
+  const { authentication, updateRoomId, updateGameUrl, getGameUrl } = useUser();
   const { Popup, firePopup } = usePopup();
   const { fetch } = useRequest();
   const { query, replace } = useRouter();
@@ -108,11 +108,18 @@ export default function Room() {
       updateHost(user.id);
     });
 
-    socket.on(SOCKET_EVENT.GAME_STARTED, ({ gameUrl }: { gameUrl: string }) => {
-      updateRoomStatus("PLAYING");
-      setGameUrl(`${gameUrl}?token=${token}`);
-      updateGameUrl(`${gameUrl}?token=${token}`);
-    });
+    socket.on(
+      SOCKET_EVENT.GAME_STARTED,
+      async ({ gameUrl }: { gameUrl: string }) => {
+        if (!token) return;
+        const authResult = await authentication(token);
+        const newGameUrl = `${gameUrl}?token=${authResult.token}`;
+        updateRoomStatus("PLAYING");
+        setToken(authResult.token);
+        setGameUrl(newGameUrl);
+        updateGameUrl(newGameUrl);
+      }
+    );
 
     socket.on(SOCKET_EVENT.GAME_ENDED, () => {
       updateRoomStatus("WAITING");
@@ -210,12 +217,10 @@ export default function Room() {
 
   const handleStart = async () => {
     try {
+      if (!token) return;
       const allReady = roomInfo.players.every((player) => player.isReady);
       if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
-      const result = await fetch(startGame(roomId));
-      const newGameUrl = `${result.url}?token=${token}`;
-      setGameUrl(newGameUrl);
-      updateGameUrl(newGameUrl);
+      await fetch(startGame(roomId));
     } catch (err) {
       firePopup({ title: `error!` });
     }

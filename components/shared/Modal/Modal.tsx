@@ -6,10 +6,10 @@ import React, {
   KeyboardEventHandler,
 } from "react";
 import { cn } from "@/lib/utils";
-import Portal from "../Portal/Portal";
-import BoxFancy from "../BoxFancy";
-import { Button, ButtonSize } from "../Button/v2";
-import Icon from "../Icon";
+import Portal from "@/components/shared/Portal";
+import BoxFancy from "@/components/shared/BoxFancy";
+import Button, { ButtonSize } from "@/components/shared/Button";
+import Icon from "@/components/shared/Icon";
 
 enum ModalSizeVariant {
   small = "small",
