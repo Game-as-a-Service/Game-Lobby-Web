@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { FormEvent, PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@/components/shared/Button";
@@ -12,7 +11,7 @@ interface JoinLockRoomFormProps extends PropsWithChildren {
 
 function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
   const { t } = useTranslation();
-  const { handleJoinRoom } = useJoinRoom(id);
+  const { trigger: joinRoom } = useJoinRoom();
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -25,13 +24,12 @@ function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
     event.preventDefault();
     setErrorMessage("");
     try {
-      await handleJoinRoom(password);
-    } catch (error) {
+      await joinRoom({ roomId: id, data: { password } });
+    } catch (error: any) {
       /// 待調整重構
-      if (error instanceof AxiosError) {
-        const msg = error.response?.data.message.replaceAll(" ", "_");
-        if (!msg) return;
-        setErrorMessage(t(msg));
+      if (error instanceof Error) {
+        const msg = error.message || "加入房間失敗";
+        setErrorMessage(t(msg.replaceAll(" ", "_")));
       }
     }
   };

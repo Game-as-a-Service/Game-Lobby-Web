@@ -89,24 +89,6 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
               roomId: message.to,
             });
             break;
-          case SOCKET_EVENT.USER_READY:
-            socket.emit(SOCKET_EVENT.USER_READY, {
-              user: {
-                id: "mock_user_id",
-                nickname: "mock_user",
-              },
-              roomId: message.to,
-            });
-            break;
-          case SOCKET_EVENT.USER_NOT_READY:
-            socket.emit(SOCKET_EVENT.USER_NOT_READY, {
-              user: {
-                id: "mock_user_id",
-                nickname: "mock_user",
-              },
-              roomId: message.to,
-            });
-            break;
           case SOCKET_EVENT.HOST_CHANGED:
             socket.emit(SOCKET_EVENT.HOST_CHANGED, {
               user: {

@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { AxiosError } from "axios";
 import Button, { ButtonSize } from "@/components/shared/Button";
-import useRequest from "@/hooks/useRequest";
 import { useRouter } from "next/router";
 import { useToast } from "@/components/shared/Toast";
-import useUser from "@/hooks/useUser";
-import { GameType } from "@/requests/games";
-import { fastJoinGameEndpoint } from "@/requests/rooms";
+import useRoom from "@/hooks/useRoom";
+import { useFastJoinGame } from "@/features/game/hooks";
+import type { Game } from "@/api";
 import Icon from "@/components/shared/Icon";
 import Modal from "@/components/shared/Modal";
 import { cn } from "@/lib/utils";
 import CreateRoomForm from "./CreateRoomForm";
 
-interface GameRoomActions extends GameType {
+interface GameRoomActions extends Game {
   tabIndex?: number;
 }
 
@@ -24,25 +22,23 @@ function GameRoomActions({
   maxPlayers,
   tabIndex,
 }: Readonly<GameRoomActions>) {
-  const { fetch } = useRequest();
+  const { trigger: fastJoinGame, isMutating } = useFastJoinGame();
   const toast = useToast();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showCreateRoomModal, setShowCreateRoomModal] = useState(false);
-  const { updateRoomId } = useUser();
+  const { updateRoomId } = useRoom();
   const menuTabIndex = showMenu ? tabIndex : -1;
 
   const handleFastJoin = async () => {
     try {
-      setIsLoading(true);
-      const { roomId } = await fetch(fastJoinGameEndpoint(id));
-      router.push(`/rooms/${roomId}`);
-      updateRoomId(roomId);
-    } catch (error) {
-      if (error instanceof AxiosError) {
+      const result = await fastJoinGame({ gameId: id });
+      router.push(`/rooms/${result.roomId}`);
+      updateRoomId(result.roomId);
+    } catch (error: any) {
+      if (error instanceof Error) {
         toast(
-          { state: "error", children: error.response?.data.message },
+          { state: "error", children: error.message || "快速加入失敗" },
           { position: "top" }
         );
       } else {
@@ -51,8 +47,6 @@ function GameRoomActions({
           { position: "top" }
         );
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -70,7 +64,7 @@ function GameRoomActions({
       <Button
         variant="primaryTransparent"
         className="flex"
-        disabled={isLoading}
+        disabled={isMutating}
         tabIndex={tabIndex}
         onClick={handleFastJoin}
       >

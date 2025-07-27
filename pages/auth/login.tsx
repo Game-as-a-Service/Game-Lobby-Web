@@ -4,11 +4,11 @@ import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { NextPageWithProps } from "../_app";
-import useUser from "@/hooks/useUser";
+import useAuthActions from "@/hooks/useAuthActions";
 
 // This page is for mock redirect
 const Login: NextPageWithProps = () => {
-  const { getMockToken } = useUser();
+  const { getMockToken } = useAuthActions();
   const { push } = useRouter();
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import { GameType } from "@/requests/games";
-const mock_gameList: GameType[] = [
+import { Game } from "@/api";
+const mock_gameList: Game[] = [
   {
     id: "123456",
     name: "狼人殺",
@@ -7,6 +7,8 @@ const mock_gameList: GameType[] = [
     minPlayers: 3,
     maxPlayers: 10,
     createdOn: "2024-01-01T00:00:00",
+    rating: 4.5,
+    numberOfComments: 120,
   },
   {
     id: "133456",
@@ -15,6 +17,8 @@ const mock_gameList: GameType[] = [
     minPlayers: 2,
     maxPlayers: 4,
     createdOn: "2024-01-01T00:00:00",
+    rating: 4.2,
+    numberOfComments: 85,
   },
   {
     id: "133416",
@@ -23,6 +27,8 @@ const mock_gameList: GameType[] = [
     minPlayers: 3,
     maxPlayers: 8,
     createdOn: "2024-01-01T00:00:00",
+    rating: 4.7,
+    numberOfComments: 203,
   },
 
   {
@@ -32,6 +38,8 @@ const mock_gameList: GameType[] = [
     minPlayers: 3,
     maxPlayers: 6,
     createdOn: "2024-01-01T00:00:00",
+    rating: 4.1,
+    numberOfComments: 67,
   },
   {
     id: "184456",
@@ -40,12 +48,14 @@ const mock_gameList: GameType[] = [
     minPlayers: 1,
     maxPlayers: 5,
     createdOn: "2024-01-01T00:00:00",
+    rating: 4.3,
+    numberOfComments: 94,
   },
 ];
 
-export const mock_getGameList = (times?: number): GameType[] => {
+export const mock_getGameList = (times?: number): Game[] => {
   if (!times) return mock_gameList;
-  const result = [] as GameType[];
+  const result = [] as Game[];
 
   for (let i = 0; i < times; i++) {
     result.push(

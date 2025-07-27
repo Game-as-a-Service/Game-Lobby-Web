@@ -7,41 +7,58 @@ import Modal from "@/components/shared/Modal";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { useGameList } from "@/contexts/game";
 import { JoinLockRoomForm, RoomCard } from "@/features/room";
-import usePagination from "@/hooks/usePagination";
-import useRequest from "@/hooks/useRequest";
-import { Room, RoomType, getRooms } from "@/requests/rooms";
+import { useRooms } from "@/features/room/hooks";
+import type { Room, RoomStatus } from "@/api";
+
+type RoomType = RoomStatus;
+
+const RoomTypeMap = {
+  WAITING: "WAITING" as const,
+  PLAYING: "PLAYING" as const,
+};
 
 function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
-  const { fetch } = useRequest();
   const gameList = useGameList();
   const [room, setRoom] = useState<Room | null>(null);
 
-  const { data, loading } = usePagination({
-    source: (page: number, perPage: number) =>
-      fetch(getRooms({ page, perPage, status: tabKey })),
-    defaultPerPage: 20,
+  const {
+    data: roomsResponse,
+    error,
+    isLoading,
+  } = useRooms({
+    status: tabKey,
+    page: 0,
+    perPage: 20,
   });
 
-  if (loading) return <div className="my-5">Loading...</div>;
+  if (isLoading) return <div className="my-5">Loading...</div>;
+  if (error) return <div className="my-5">Error loading rooms</div>;
+
+  const rooms = roomsResponse?.data || [];
 
   return (
     <>
       <ul className="grid grid-cols-3 gap-5 my-5">
-        {Array.isArray(data) &&
-          data
-            .map((room) => ({
-              ...room,
-              game: {
-                ...room.game,
-                imgUrl:
-                  gameList.find((game) => game.id === room.game.id)?.img || "",
-              },
-            }))
-            .map((room) => (
-              <li key={room.id}>
-                <RoomCard room={room} onClick={() => setRoom(room)} />
-              </li>
-            ))}
+        {rooms
+          .map((room) => ({
+            ...room,
+            game: {
+              ...room.game,
+              imgUrl:
+                gameList.find((game) => game.id === room.game.id)?.img || "",
+            },
+          }))
+          .map((room) => (
+            <li key={room.id}>
+              <RoomCard
+                room={{
+                  ...room,
+                  isLocked: room.isLocked,
+                }}
+                onClick={() => setRoom(room)}
+              />
+            </li>
+          ))}
       </ul>
 
       <Modal
@@ -55,7 +72,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
             <div className="flex mb-4 gap-4 text-primary-50">
               <Image
                 className="w-12 h-12 rounded-lg object-cover"
-                src={room.game.imgUrl}
+                src={room.game.img || "/images/game-default-cover.png"}
                 alt={room.game.name}
                 width={48}
                 height={48}
@@ -77,11 +94,11 @@ const Rooms = () => {
 
   const tabs: TabItemType<RoomType>[] = [
     {
-      tabKey: RoomType.WAITING,
+      tabKey: RoomTypeMap.WAITING,
       label: t("rooms_waiting"),
     },
     {
-      tabKey: RoomType.PLAYING,
+      tabKey: RoomTypeMap.PLAYING,
       label: t("rooms_playing"),
     },
   ];
@@ -90,7 +107,7 @@ const Rooms = () => {
     <div className="pb-5 px-6">
       <Tabs
         tabs={tabs}
-        defaultActiveKey={RoomType.WAITING}
+        defaultActiveKey={RoomTypeMap.WAITING}
         renderTabPaneContent={TabPaneContent}
       />
     </div>

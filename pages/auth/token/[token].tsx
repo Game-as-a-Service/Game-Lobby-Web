@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { NextPageWithProps } from "@/pages/_app";
-import useUser from "@/hooks/useUser";
+import useAuthActions from "@/hooks/useAuthActions";
 
 const Token: NextPageWithProps = () => {
   const { push, asPath } = useRouter();
   const regex = /^\/auth\/token\/(.+)$/;
   const token = asPath.match(regex)?.[1];
 
-  const { login } = useUser();
+  const { login } = useAuthActions();
   useEffect(() => {
     if (token) {
       login(token as string);

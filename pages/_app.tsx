@@ -10,7 +10,6 @@ import "@/scripts/whyDidYouRender";
 
 import getAppLayout from "@/containers/layout/AppLayout";
 import { AuthProvider } from "@/contexts/auth";
-import { AxiosProvider } from "@/contexts/axios";
 import { HistoryProvider } from "@/contexts/history";
 import { SocketProvider } from "@/contexts/socket";
 import { ChatroomProvider } from "@/contexts/chatroom";
@@ -50,20 +49,18 @@ function App({ Component, pageProps }: AppWithProps) {
         <title>遊戲微服務大平台</title>
       </Head>
       <ToastQueueProvider>
-        <AxiosProvider>
-          <AuthProvider>
-            {getHistory(
-              <SocketProvider>
-                <ChatroomProvider>
-                  <Startup isAnonymous={isAnonymous}>
-                    {getLayout(<Component {...pageProps} />)}
-                    {!isProduction && <HistoryList />}
-                  </Startup>
-                </ChatroomProvider>
-              </SocketProvider>
-            )}
-          </AuthProvider>
-        </AxiosProvider>
+        <AuthProvider>
+          {getHistory(
+            <SocketProvider>
+              <ChatroomProvider>
+                <Startup isAnonymous={isAnonymous}>
+                  {getLayout(<Component {...pageProps} />)}
+                  {!isProduction && <HistoryList />}
+                </Startup>
+              </ChatroomProvider>
+            </SocketProvider>
+          )}
+        </AuthProvider>
       </ToastQueueProvider>
     </>
   );

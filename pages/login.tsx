@@ -9,22 +9,26 @@ import Image from "@/components/shared/Image";
 import Icon, { IconName } from "@/components/shared/Icon";
 
 import { useAuth } from "@/contexts/auth";
-import useUser from "@/hooks/useUser";
+import useAuthActions from "@/hooks/useAuthActions";
 import { getEnv } from "@/lib/env";
-import { LoginType } from "@/requests/auth";
+import { LoginRequest } from "@/api";
 
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";
 
-const loginMethods: { text: string; type: LoginType; icon: IconName }[] = [
-  { text: "Google 帳號登入", type: LoginType.GOOGLE, icon: "Google" },
-  { text: "GitHub 帳號登入", type: LoginType.GITHUB, icon: "Github" },
-  { text: "LinkedIn 帳號登入", type: LoginType.LINKEDIN, icon: "Linkedin" },
-  { text: "Discord 帳號登入", type: LoginType.DISCORD, icon: "Discord" },
+const loginMethods: {
+  text: string;
+  type: LoginRequest["type"];
+  icon: IconName;
+}[] = [
+  { text: "Google 帳號登入", type: "google-oauth2", icon: "Google" },
+  { text: "GitHub 帳號登入", type: "github", icon: "Github" },
+  { text: "LinkedIn 帳號登入", type: "linkedin", icon: "Linkedin" },
+  { text: "Discord 帳號登入", type: "discord", icon: "Discord" },
 ];
 
 const Login: NextPageWithProps = () => {
-  const { getLoginEndpoint } = useUser();
+  const { getLoginEndpoint } = useAuthActions();
   const { token } = useAuth();
   const router = useRouter();
   const [checkAuth, setCheckAuth] = useState(false);
@@ -38,13 +42,18 @@ const Login: NextPageWithProps = () => {
     }
   }, [token, router]);
 
-  const onLoginClick = async (e: SyntheticEvent, type: LoginType) => {
+  const onLoginClick = async (
+    e: SyntheticEvent,
+    type: LoginRequest["type"]
+  ) => {
     if (isMock) {
       e.preventDefault();
       e.stopPropagation();
 
       const endpoint = await getLoginEndpoint(type);
-      router.push(endpoint.url);
+      if (endpoint.url) {
+        router.push(endpoint.url);
+      }
     }
   };
 

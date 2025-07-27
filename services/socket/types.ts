@@ -71,12 +71,6 @@ export interface IRoomSocketService
   leaveRoom(): void;
 
   /**
-   * Set the player's ready status
-   * @param isReady Whether the player is ready
-   */
-  setReady(isReady: boolean): void;
-
-  /**
    * Register a handler for player joined events
    * @param handler The callback handler
    */
@@ -157,7 +151,6 @@ export interface IGameSocketService
 export interface Player {
   id: string;
   name: string;
-  isReady: boolean;
   isHost: boolean;
 }
 

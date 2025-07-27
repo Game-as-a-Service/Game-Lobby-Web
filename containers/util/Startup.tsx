@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { useAuth } from "@/contexts/auth";
-import useUser from "@/hooks/useUser";
+import { useAuth, useCurrentUser } from "@/contexts/auth";
+import useAuthActions from "@/hooks/useAuthActions";
 
 type Props = {
   isAnonymous: boolean;
@@ -10,13 +10,13 @@ type Props = {
 };
 
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
-  const { token, setToken, setCurrentUser, currentUser } = useAuth();
+  const { token, setToken, setCurrentUser } = useAuth();
   const {
     // authentication,
     getTokenInCookie,
     updateTokenInCookie,
-    getCurrentUser,
-  } = useUser();
+  } = useAuthActions();
+  const { data: currentUser } = useCurrentUser();
   const { push } = useRouter();
   const [pageDone, setPageDone] = useState(false);
 
@@ -40,20 +40,19 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
   }, []);
 
   useEffect(() => {
-    async function fetch() {
-      if (token === null) {
-        updateTokenInCookie();
-        setCurrentUser(null);
-      } else if (token === undefined) {
-      } else {
-        updateTokenInCookie(token);
-        const user = await getCurrentUser();
-        setCurrentUser(user);
+    if (token === null) {
+      updateTokenInCookie();
+      setCurrentUser(null);
+    } else if (token === undefined) {
+      // 等待 token 初始化
+    } else {
+      updateTokenInCookie(token);
+      // currentUser 會由 useCurrentUser SWR hook 自動獲取
+      if (currentUser) {
+        setCurrentUser(currentUser);
       }
     }
-
-    fetch();
-  }, [token]);
+  }, [token, currentUser]);
 
   useEffect(() => {
     if (token === null && !isAnonymous) {

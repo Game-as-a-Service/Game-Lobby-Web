@@ -1,4 +1,4 @@
-import type { Room } from "@/requests/rooms";
+import type { Room } from "@/api";
 
 import Image from "@/components/shared/Image";
 import Button, { ButtonSize } from "@/components/shared/Button";
@@ -10,13 +10,13 @@ interface RoomsCardProps {
 }
 
 function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
-  const { handleJoinRoom } = useJoinRoom(room.id);
+  const { trigger: handleJoinRoom } = useJoinRoom();
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
 
   const handleClick = () => {
     onClick();
     if (room.isLocked) return;
-    handleJoinRoom().catch(() => {});
+    handleJoinRoom({ roomId: room.id });
   };
 
   return (
@@ -24,7 +24,7 @@ function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
       <div className="flex p-4 gap-4 text-primary-50">
         <Image
           className="w-16 h-16 rounded-lg object-cover"
-          src={room.game.imgUrl}
+          src={room.game.img}
           alt={room.game.name}
           width={68}
           height={68}

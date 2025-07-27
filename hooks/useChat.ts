@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { MessageType } from "@/components/shared/Chat/ChatMessages";
 import { useChatroom } from "@/contexts/chatroom";
 import { useSocketCore } from "@/contexts/socket";
-import useUser from "./useUser";
+import useRoom from "./useRoom";
 
 export default function useChat() {
   const { lastMessage, sendChatMessage, joinChatroom, leaveChatroom } =
@@ -10,7 +10,7 @@ export default function useChat() {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const { socket } = useSocketCore();
   const [messageList, setMessageList] = useState<MessageType[]>([]);
-  const { getRoomId } = useUser();
+  const { getRoomId } = useRoom();
   const roomId = getRoomId();
 
   const toggleChatVisibility = () => {

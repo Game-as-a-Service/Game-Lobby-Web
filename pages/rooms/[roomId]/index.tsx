@@ -7,85 +7,63 @@ import Image from "@/components/shared/Image";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import GameWindow from "@/components/rooms/GameWindow";
-import useRequest from "@/hooks/useRequest";
-import useRoom from "@/hooks/useRoom";
 import { useAuth } from "@/contexts/auth";
 import usePopup from "@/hooks/usePopup";
 import { useSocketCore } from "@/contexts/socket";
 import { SOCKET_EVENT } from "@/contexts/socket";
+import type { Player } from "@/api";
 import {
-  getRoomInfoEndpoint,
-  kickUser,
-  closeRoom,
-  RoomInfo,
-  leaveRoom,
-  playerReady,
-  startGame,
-} from "@/requests/rooms";
-import { GameType, getAllGamesEndpoint } from "@/requests/games";
-import useUser from "@/hooks/useUser";
+  useRoom as useRoomDetail,
+  useKickPlayer,
+  useCloseRoom,
+  useLeaveRoom,
+  useStartGame,
+} from "@/features/room/hooks";
+import useAuthActions from "@/hooks/useAuthActions";
+import useRoomCookie from "@/hooks/useRoom";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-
-type User = Omit<RoomInfo.User, "isReady">;
+import { useGames } from "@/features/game";
 
 export default function Room() {
-  const {
-    roomInfo,
-    initializeRoom,
-    addPlayer,
-    removePlayer,
-    updateHost,
-    updateRoomStatus,
-    updateUserReadyStatus,
-    cleanUpRoom,
-  } = useRoom();
-  const isFirstReady = useRef(true);
   const { socket } = useSocketCore();
   const { currentUser, token, setToken } = useAuth();
-  const { authentication, updateRoomId, updateGameUrl, getGameUrl } = useUser();
+  const { authentication } = useAuthActions();
+  const { updateRoomId, updateGameUrl, getGameUrl } = useRoomCookie();
   const { Popup, firePopup } = usePopup();
-  const { fetch } = useRequest();
   const { query, replace } = useRouter();
-  const [gameUrl, setGameUrl] = useState(getGameUrl);
-  const [gameList, setGameList] = useState<GameType[]>([]);
   const roomId = query.roomId as string;
-  const player = roomInfo.players.find(
-    (player) => player.id === currentUser?.id
-  );
-  const isHost = roomInfo.host.id === currentUser?.id;
-  const gameInfo = gameList.find((game) => game.id === roomInfo.game.id);
 
-  useEffect(() => {
-    fetch(getAllGamesEndpoint()).then(setGameList);
-  }, [fetch]);
+  // SWR hooks for data fetching
+  const { data: roomInfo, mutate: mutateRoom } = useRoomDetail(roomId);
+  const { data: gameList } = useGames();
+  const { trigger: kickPlayer } = useKickPlayer();
+  const { trigger: closeRoom } = useCloseRoom();
+  const { trigger: leaveRoom } = useLeaveRoom();
+  const { trigger: startGame } = useStartGame();
 
+  const [gameUrl, setGameUrl] = useState(getGameUrl);
+  const isHost = roomInfo?.host.id === currentUser?.id;
+  const gameInfo = gameList?.find((game) => game.id === roomInfo?.game.id);
+
+  // 房間數據會由 useRoomDetail SWR hook 自動獲取
   useEffect(() => {
-    async function getRoomInfo() {
-      try {
-        const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
-        initializeRoom(roomInfo);
-      } catch (err) {
-        updateRoomId();
-        replace("/rooms");
-      }
+    if (!roomInfo && roomId) {
+      // 如果房間不存在，返回房間列表
+      updateRoomId();
+      replace("/rooms");
     }
-
-    getRoomInfo();
-
-    return () => {
-      cleanUpRoom();
-    };
-  }, [fetch, initializeRoom, cleanUpRoom, roomId]);
+  }, [roomInfo, roomId, updateRoomId, replace]);
 
   useEffect(() => {
     if (!socket || !currentUser?.id) return;
 
-    socket.on(SOCKET_EVENT.USER_JOINED, ({ user }: { user: User }) => {
-      addPlayer(user);
+    socket.on(SOCKET_EVENT.USER_JOINED, () => {
+      // 重新獲取房間數據
+      mutateRoom();
     });
 
-    socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: User }) => {
+    socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: Player }) => {
       if (user.id === currentUser.id) {
         updateRoomId();
         firePopup({
@@ -93,19 +71,13 @@ export default function Room() {
           onConfirm: () => replace("/"),
         });
       }
-      removePlayer(user.id);
+      // 重新獲取房間數據
+      mutateRoom();
     });
 
-    socket.on(SOCKET_EVENT.USER_READY, ({ user }: { user: User }) => {
-      updateUserReadyStatus({ ...user, isReady: true });
-    });
-
-    socket.on(SOCKET_EVENT.USER_NOT_READY, ({ user }: { user: User }) => {
-      updateUserReadyStatus({ ...user, isReady: false });
-    });
-
-    socket.on(SOCKET_EVENT.HOST_CHANGED, ({ user }: { user: User }) => {
-      updateHost(user.id);
+    socket.on(SOCKET_EVENT.HOST_CHANGED, () => {
+      // 重新獲取房間數據
+      mutateRoom();
     });
 
     socket.on(
@@ -114,21 +86,22 @@ export default function Room() {
         if (!token) return;
         const authResult = await authentication(token);
         const newGameUrl = `${gameUrl}?token=${authResult.token}`;
-        updateRoomStatus("PLAYING");
         setToken(authResult.token);
         setGameUrl(newGameUrl);
         updateGameUrl(newGameUrl);
+        // 重新獲取房間數據
+        mutateRoom();
       }
     );
 
     socket.on(SOCKET_EVENT.GAME_ENDED, () => {
-      updateRoomStatus("WAITING");
       setGameUrl("");
       updateGameUrl();
       firePopup({
         title: `遊戲已結束!`,
       });
-      fetch(getRoomInfoEndpoint(roomId)).then(initializeRoom);
+      // 重新獲取房間數據
+      mutateRoom();
     });
 
     socket.on(SOCKET_EVENT.ROOM_CLOSED, () => {
@@ -138,6 +111,15 @@ export default function Room() {
         onConfirm: () => replace("/"),
       });
     });
+
+    return () => {
+      socket.off(SOCKET_EVENT.USER_JOINED);
+      socket.off(SOCKET_EVENT.USER_LEFT);
+      socket.off(SOCKET_EVENT.HOST_CHANGED);
+      socket.off(SOCKET_EVENT.GAME_STARTED);
+      socket.off(SOCKET_EVENT.GAME_ENDED);
+      socket.off(SOCKET_EVENT.ROOM_CLOSED);
+    };
   }, [
     token,
     socket,
@@ -145,22 +127,19 @@ export default function Room() {
     roomId,
     updateRoomId,
     updateGameUrl,
-    addPlayer,
-    removePlayer,
-    updateUserReadyStatus,
-    updateHost,
-    updateRoomStatus,
     replace,
     firePopup,
-    fetch,
-    initializeRoom,
+    authentication,
+    mutateRoom,
+    setToken,
   ]);
 
   // Event: kick user
-  async function handleClickKick(user: User) {
+  async function handleClickKick(user: Player) {
     const handleKickUser = async () => {
       try {
-        await fetch(kickUser({ roomId, userId: user.id }));
+        await kickPlayer({ roomId, userId: user.id });
+        mutateRoom(); // 重新獲取房間數據
       } catch (err) {
         firePopup({ title: `error!` });
       }
@@ -177,7 +156,7 @@ export default function Room() {
   function handleClickClose() {
     const handleCloseRoom = async () => {
       try {
-        await fetch(closeRoom(roomId));
+        await closeRoom({ roomId });
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -197,7 +176,7 @@ export default function Room() {
   const handleLeave = () => {
     const leave = async () => {
       try {
-        await fetch(leaveRoom(roomId));
+        await leaveRoom({ roomId });
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -218,20 +197,20 @@ export default function Room() {
   const handleStart = async () => {
     try {
       if (!token) return;
-      const allReady = roomInfo.players.every((player) => player.isReady);
-      if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
-      await fetch(startGame(roomId));
+      await startGame({ roomId });
     } catch (err) {
       firePopup({ title: `error!` });
     }
   };
 
-  useEffect(() => {
-    if (!player?.isReady && roomId && isFirstReady.current) {
-      fetch(playerReady(roomId));
-      isFirstReady.current = false;
-    }
-  }, [player?.isReady, roomId, fetch, isFirstReady]);
+  // 如果房間數據還在加載，顯示加載狀態
+  if (!roomInfo) {
+    return (
+      <section className="px-4 flex items-center justify-center h-[calc(100dvh-104px)]">
+        <div>加載中...</div>
+      </section>
+    );
+  }
 
   return (
     <section className="px-4">

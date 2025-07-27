@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import Avatar from "@/components/shared/Avatar";
-import type { UserInfo } from "@/requests/users";
+import type { User as UserInfo } from "@/api";
 
 type User = Pick<UserInfo, "id" | "nickname">;
 type System = { id: "SYSTEM"; nickname: "SYSTEM" };

@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@svgr/webpack": "8.1.0",
-    "axios": "1.8.2",
     "clsx": "1.2.1",
     "http-proxy-middleware": "2.0.9",
     "i18next": "23.7.6",
@@ -40,6 +39,7 @@
     "sharp": "0.32.6",
     "socket.io": "4.7.2",
     "socket.io-client": "4.7.2",
+    "swr": "^2.3.4",
     "tailwind-merge": "1.14.0"
   },
   "devDependencies": {

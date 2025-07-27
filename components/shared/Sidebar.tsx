@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 
 import Icon, { IconName } from "@/components/shared/Icon";
 import { useAuth } from "@/contexts/auth";
-import useUser from "@/hooks/useUser";
+import useAuthActions from "@/hooks/useAuthActions";
+import useRoom from "@/hooks/useRoom";
 import { cn } from "@/lib/utils";
 
 enum SidebarRoutes {
@@ -25,7 +26,8 @@ interface SidebarProps {
 export default function Sidebar({ className }: SidebarProps) {
   const { pathname } = useRouter();
   const { currentUser } = useAuth();
-  const { logout, getRoomId } = useUser();
+  const { logout } = useAuthActions();
+  const { getRoomId } = useRoom();
   const roomId = getRoomId();
 
   const routes: RouteProps[] = [

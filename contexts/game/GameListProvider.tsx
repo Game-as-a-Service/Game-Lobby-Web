@@ -1,15 +1,10 @@
-import { getAllGamesEndpoint, type GameType } from "@/requests/games";
-import { PropsWithChildren, useEffect, useState } from "react";
-import useRequest from "@/hooks/useRequest";
+import { PropsWithChildren } from "react";
+import { useGames } from "@/features/game";
 import GameListContext from "./GameListContext";
 
 function GameListProvider({ children }: PropsWithChildren) {
-  const { fetch } = useRequest();
-  const [gameList, setGameList] = useState<GameType[]>([]);
-
-  useEffect(() => {
-    fetch(getAllGamesEndpoint()).then(setGameList);
-  }, [fetch]);
+  // 使用簡化的 API hook
+  const { data: gameList } = useGames();
 
   return (
     <GameListContext.Provider value={gameList}>

@@ -1,6 +1,6 @@
 import React, { useEffect, FC, useState, useRef } from "react";
 import SocketContext, { SOCKET_EVENT } from "./SocketContext";
-import useAuth from "../auth/useAuth";
+import { useAuth } from "../auth";
 import useHistory from "../history/useHistory";
 import { WebSocketHistoryType } from "../history/HistoryContext";
 import { Socket } from "socket.io-client";
