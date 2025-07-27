@@ -37,7 +37,6 @@ function UserInfoForm({
     try {
       const result = await updateUser({
         nickname: data.nickname.trim(),
-        avatar: data.avatar,
       });
       toast({ state: "success", children: "修改成功" });
       setCurrentUser(result);

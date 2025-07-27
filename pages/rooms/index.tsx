@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "@/components/shared/Image";
 import Modal from "@/components/shared/Modal";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { useGameList } from "@/contexts/game";
+import { useGames } from "@/features/game";
 import { JoinLockRoomForm, RoomCard } from "@/features/room";
 import { useRooms } from "@/features/room/hooks";
 import type { Room, RoomStatus } from "@/api";
@@ -18,7 +18,7 @@ const RoomTypeMap = {
 };
 
 function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
-  const gameList = useGameList();
+  const { data: gameList = [] } = useGames();
   const [room, setRoom] = useState<Room | null>(null);
 
   const {

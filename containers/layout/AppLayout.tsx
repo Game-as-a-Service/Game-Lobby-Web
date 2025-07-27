@@ -7,7 +7,6 @@ import useChat from "@/hooks/useChat";
 import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
-import { GameListProvider } from "@/contexts/game";
 import { useSocketCore } from "@/contexts/socket";
 
 type SocketConnectionStatus =
@@ -101,7 +100,7 @@ function AppLayout({ children }: React.PropsWithChildren) {
   }, [socketService]);
 
   return (
-    <GameListProvider>
+    <>
       <Head>
         <title>遊戲微服務大平台</title>
       </Head>
@@ -154,7 +153,7 @@ function AppLayout({ children }: React.PropsWithChildren) {
           </div>
         )}
       </div>
-    </GameListProvider>
+    </>
   );
 }
 
