@@ -11,11 +11,7 @@ type Props = {
 
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
   const { token, setToken, setCurrentUser } = useAuth();
-  const {
-    // authentication,
-    getTokenInCookie,
-    updateTokenInCookie,
-  } = useAuthActions();
+  const { getTokenInCookie, updateTokenInCookie } = useAuthActions();
   const { data: currentUser } = useCurrentUser();
   const { push } = useRouter();
   const [pageDone, setPageDone] = useState(false);
@@ -25,12 +21,6 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
       const jwt = getTokenInCookie();
       if (jwt) {
         setToken(jwt);
-        // The `authentication` is needed when the token is expired
-        // TODO: Put it back after clarify the refresh workflow
-        // const res = await authentication(jwt);
-        // if (res.token) {
-        //   setToken(res.token);
-        // }
       } else {
         setToken(null);
       }
@@ -44,10 +34,8 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
       updateTokenInCookie();
       setCurrentUser(null);
     } else if (token === undefined) {
-      // 等待 token 初始化
     } else {
       updateTokenInCookie(token);
-      // currentUser 會由 useCurrentUser SWR hook 自動獲取
       if (currentUser) {
         setCurrentUser(currentUser);
       }
@@ -62,7 +50,7 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
     } else if (isAnonymous) {
       setPageDone(true);
     }
-  }, [token, currentUser, isAnonymous]);
+  }, [token, currentUser, isAnonymous, push]);
 
   return pageDone ? <>{children}</> : <></>;
 };

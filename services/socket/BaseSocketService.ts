@@ -134,7 +134,7 @@ export abstract class BaseSocketService {
   private attachSocketListener(event: string): void {
     if (!this.socket) return;
 
-    this.socket.on(event, (data: any) => {
+    this.socket.on(event, (data: unknown) => {
       const handlers = this.eventHandlers.get(event);
       if (handlers) {
         handlers.forEach((handler) => handler(data));

@@ -20,7 +20,7 @@ function UserInfoForm({
   onSuccess,
   onCancel,
 }: Readonly<UserInfoFormProps>) {
-  const { trigger: updateUser, isMutating } = useUpdateUser();
+  const { updateUser, isLoading: isMutating } = useUpdateUser();
   const toast = useToast();
   const { setCurrentUser } = useAuth();
   const [data, setData] = useState<User>(userInfo);
@@ -41,7 +41,7 @@ function UserInfoForm({
       toast({ state: "success", children: "修改成功" });
       setCurrentUser(result);
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         const message = error.message || "請求失敗";
         toast(

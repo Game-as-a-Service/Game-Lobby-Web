@@ -3,6 +3,7 @@
  */
 
 import type { Game } from "../games/type";
+import type { QueryParams } from "../fetcher";
 
 export interface Player {
   id: string;
@@ -28,7 +29,7 @@ export interface Page {
   perPage: number;
 }
 
-export interface GetRoomsQuery {
+export interface GetRoomsQuery extends QueryParams {
   status: string;
   public?: boolean;
   keyword?: string;

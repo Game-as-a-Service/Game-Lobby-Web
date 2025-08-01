@@ -11,7 +11,7 @@ interface JoinLockRoomFormProps extends PropsWithChildren {
 
 function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
   const { t } = useTranslation();
-  const { trigger: joinRoom } = useJoinRoom();
+  const { joinRoom } = useJoinRoom();
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -24,9 +24,8 @@ function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
     event.preventDefault();
     setErrorMessage("");
     try {
-      await joinRoom({ roomId: id, data: { password } });
-    } catch (error: any) {
-      /// 待調整重構
+      await joinRoom(id, { password });
+    } catch (error: unknown) {
       if (error instanceof Error) {
         const msg = error.message || "加入房間失敗";
         setErrorMessage(t(msg.replaceAll(" ", "_")));

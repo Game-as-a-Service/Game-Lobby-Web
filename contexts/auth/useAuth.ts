@@ -1,21 +1,13 @@
-import { useContext } from "react";
-import useSWR, { mutate } from "swr";
-import useSWRMutation from "swr/mutation";
+import { useContext, useState, useCallback } from "react";
 import AuthContext from "./AuthContext";
 import {
   authApi,
   usersApi,
-  userKeys,
-  authKeys,
   isAuthError,
   type User,
   type LoginRequest,
   type UpdateUserRequest,
 } from "@/api";
-
-// ========================
-// 基礎 Hook
-// ========================
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -25,85 +17,121 @@ export const useAuth = () => {
   return context;
 };
 
-// ========================
-// SWR Hooks
-// ========================
-
 /**
  * 獲取當前用戶資訊
  */
 export const useCurrentUser = () => {
-  const { token } = useAuth();
-
-  return useSWR<User>(token ? userKeys.current() : null, {
-    revalidateOnFocus: false,
-    shouldRetryOnError: (error) => !isAuthError(error),
-  });
+  const { currentUser } = useAuth();
+  return {
+    data: currentUser,
+    error: null,
+    isLoading: false,
+  };
 };
-
-// ========================
-// Mutation Hooks
-// ========================
 
 /**
  * 更新用戶資訊
  */
 export const useUpdateUser = () => {
-  const { token } = useAuth();
+  const { token, setCurrentUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  return useSWRMutation(
-    userKeys.current(),
-    async (_key: readonly string[], { arg }: { arg: UpdateUserRequest }) => {
-      if (!token) throw new Error("No token available");
-      return usersApi.updateCurrentUser(token, arg);
+  const updateUser = useCallback(
+    async (data: UpdateUserRequest) => {
+      if (!token) {
+        throw new Error("No token available");
+      }
+
+      try {
+        setIsLoading(true);
+        setError(null);
+        const updatedUser = await usersApi.updateCurrentUser(token, data);
+        setCurrentUser(updatedUser);
+        return updatedUser;
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      } finally {
+        setIsLoading(false);
+      }
     },
-    {
-      onSuccess: (data) => {
-        // 更新 cache
-        mutate(userKeys.current(), data, false);
-      },
-    }
+    [token, setCurrentUser]
   );
+
+  return {
+    updateUser,
+    isLoading,
+    error,
+  };
 };
 
 /**
  * 獲取第三方登入 URL
  */
 export const useGetLoginUrl = () => {
-  return useSWRMutation(
-    authKeys.login(""),
-    async (_key: readonly string[], { arg }: { arg: LoginRequest }) => {
-      return authApi.getLoginUrl(arg);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const trigger = useCallback(async (params: LoginRequest) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const result = await authApi.getLoginUrl(params);
+      return result;
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  );
+  }, []);
+
+  return {
+    trigger,
+    isLoading,
+    error,
+  };
 };
 
 /**
  * 獲取 Mock Token
  */
 export const useGetMockToken = () => {
-  return useSWRMutation(authKeys.token(), async () => {
-    return authApi.getMockToken();
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const trigger = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const result = await authApi.getMockToken();
+      return result;
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return {
+    trigger,
+    isLoading,
+    error,
+  };
 };
 
 /**
  * 登出
  */
 export const useLogout = () => {
-  const { setToken } = useAuth();
+  const { setToken, setCurrentUser } = useAuth();
 
-  const logout = async () => {
-    // 清除 token
+  const logout = useCallback(async () => {
     setToken(null);
-
-    // 清除所有相關的 cache
-    mutate(
-      (key) => Array.isArray(key) && (key[0] === "users" || key[0] === "rooms"),
-      undefined,
-      { revalidate: false }
-    );
-  };
+    setCurrentUser(null);
+  }, [setToken, setCurrentUser]);
 
   return { logout };
 };

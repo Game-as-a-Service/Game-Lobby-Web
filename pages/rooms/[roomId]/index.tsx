@@ -13,7 +13,7 @@ import { useSocketCore } from "@/contexts/socket";
 import { SOCKET_EVENT } from "@/contexts/socket";
 import type { Player } from "@/api";
 import {
-  useRoom as useRoomDetail,
+  useRoom,
   useKickPlayer,
   useCloseRoom,
   useLeaveRoom,
@@ -34,22 +34,19 @@ export default function Room() {
   const { query, replace } = useRouter();
   const roomId = query.roomId as string;
 
-  // SWR hooks for data fetching
-  const { data: roomInfo, mutate: mutateRoom } = useRoomDetail(roomId);
+  const { data: roomInfo, refetch: mutateRoom } = useRoom(roomId);
   const { data: gameList } = useGames();
-  const { trigger: kickPlayer } = useKickPlayer();
-  const { trigger: closeRoom } = useCloseRoom();
-  const { trigger: leaveRoom } = useLeaveRoom();
-  const { trigger: startGame } = useStartGame();
+  const { kickPlayer } = useKickPlayer();
+  const { closeRoom } = useCloseRoom();
+  const { leaveRoom } = useLeaveRoom();
+  const { startGame } = useStartGame();
 
   const [gameUrl, setGameUrl] = useState(getGameUrl);
   const isHost = roomInfo?.host.id === currentUser?.id;
   const gameInfo = gameList?.find((game) => game.id === roomInfo?.game.id);
 
-  // 房間數據會由 useRoomDetail SWR hook 自動獲取
   useEffect(() => {
     if (!roomInfo && roomId) {
-      // 如果房間不存在，返回房間列表
       updateRoomId();
       replace("/rooms");
     }
@@ -59,8 +56,7 @@ export default function Room() {
     if (!socket || !currentUser?.id) return;
 
     socket.on(SOCKET_EVENT.USER_JOINED, () => {
-      // 重新獲取房間數據
-      mutateRoom();
+      mutateRoom?.();
     });
 
     socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: Player }) => {
@@ -71,13 +67,11 @@ export default function Room() {
           onConfirm: () => replace("/"),
         });
       }
-      // 重新獲取房間數據
-      mutateRoom();
+      mutateRoom?.();
     });
 
     socket.on(SOCKET_EVENT.HOST_CHANGED, () => {
-      // 重新獲取房間數據
-      mutateRoom();
+      mutateRoom?.();
     });
 
     socket.on(
@@ -89,8 +83,7 @@ export default function Room() {
         setToken(authResult.token);
         setGameUrl(newGameUrl);
         updateGameUrl(newGameUrl);
-        // 重新獲取房間數據
-        mutateRoom();
+        mutateRoom?.();
       }
     );
 
@@ -100,8 +93,7 @@ export default function Room() {
       firePopup({
         title: `遊戲已結束!`,
       });
-      // 重新獲取房間數據
-      mutateRoom();
+      mutateRoom?.();
     });
 
     socket.on(SOCKET_EVENT.ROOM_CLOSED, () => {
@@ -134,12 +126,11 @@ export default function Room() {
     setToken,
   ]);
 
-  // Event: kick user
   async function handleClickKick(user: Player) {
     const handleKickUser = async () => {
       try {
-        await kickPlayer({ roomId, userId: user.id });
-        mutateRoom(); // 重新獲取房間數據
+        await kickPlayer(roomId, user.id);
+        mutateRoom?.();
       } catch (err) {
         firePopup({ title: `error!` });
       }
@@ -152,11 +143,10 @@ export default function Room() {
     });
   }
 
-  // Event: close room
   function handleClickClose() {
     const handleCloseRoom = async () => {
       try {
-        await closeRoom({ roomId });
+        await closeRoom(roomId);
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -172,11 +162,10 @@ export default function Room() {
     });
   }
 
-  // Event: leave room
   const handleLeave = () => {
     const leave = async () => {
       try {
-        await leaveRoom({ roomId });
+        await leaveRoom(roomId);
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -197,7 +186,7 @@ export default function Room() {
   const handleStart = async () => {
     try {
       if (!token) return;
-      await startGame({ roomId });
+      await startGame(roomId);
     } catch (err) {
       firePopup({ title: `error!` });
     }
@@ -224,8 +213,8 @@ export default function Room() {
           <div className="relative w-full h-[280px] overflow-hidden">
             {roomInfo.currentPlayers && (
               <Image
-                src={gameInfo?.img || gameDefaultCoverImg.src}
-                alt={gameInfo?.name || "default game cover"}
+                src={gameInfo?.imageUrl || gameDefaultCoverImg.src}
+                alt={gameInfo?.displayName || "default game cover"}
                 priority
                 fill
                 className="object-cover"

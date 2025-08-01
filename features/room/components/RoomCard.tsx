@@ -10,13 +10,13 @@ interface RoomsCardProps {
 }
 
 function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
-  const { trigger: handleJoinRoom } = useJoinRoom();
+  const { joinRoom: handleJoinRoom } = useJoinRoom();
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
 
   const handleClick = () => {
     onClick();
     if (room.isLocked) return;
-    handleJoinRoom({ roomId: room.id });
+    handleJoinRoom(room.id);
   };
 
   return (

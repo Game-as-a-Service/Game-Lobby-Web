@@ -2,6 +2,8 @@
  * Games module type definitions
  */
 
+import type { QueryParams } from "../fetcher";
+
 export interface Game {
   id: string;
   name: string;
@@ -64,6 +66,6 @@ export interface UpdateGameCommentRequest {
   comment: string;
 }
 
-export interface FindGameRegistrationsQuery {
+export interface FindGameRegistrationsQuery extends QueryParams {
   sort_by?: string;
 }

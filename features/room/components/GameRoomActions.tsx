@@ -5,24 +5,24 @@ import { useRouter } from "next/router";
 import { useToast } from "@/components/shared/Toast";
 import useRoom from "@/hooks/useRoom";
 import { useFastJoinGame } from "@/features/game/hooks";
-import type { Game } from "@/api";
+import type { GameRegistration } from "@/api";
 import Icon from "@/components/shared/Icon";
 import Modal from "@/components/shared/Modal";
 import { cn } from "@/lib/utils";
 import CreateRoomForm from "./CreateRoomForm";
 
-interface GameRoomActions extends Game {
+interface GameRoomActions extends GameRegistration {
   tabIndex?: number;
 }
 
 function GameRoomActions({
   id,
-  name,
+  displayName,
   minPlayers,
   maxPlayers,
   tabIndex,
 }: Readonly<GameRoomActions>) {
-  const { trigger: fastJoinGame, isMutating } = useFastJoinGame();
+  const { fastJoinGame, isLoading: isMutating } = useFastJoinGame();
   const toast = useToast();
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
@@ -32,10 +32,10 @@ function GameRoomActions({
 
   const handleFastJoin = async () => {
     try {
-      const result = await fastJoinGame({ gameId: id });
+      const result = await fastJoinGame(id);
       router.push(`/rooms/${result.roomId}`);
       updateRoomId(result.roomId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         toast(
           { state: "error", children: error.message || "快速加入失敗" },
@@ -106,7 +106,7 @@ function GameRoomActions({
                 開設新房間
               </button>
               <Modal
-                title={`開新房間: ${name}`}
+                title={`開新房間: ${displayName}`}
                 isOpen={showCreateRoomModal}
                 onClose={() => setShowCreateRoomModal(false)}
                 size="medium"

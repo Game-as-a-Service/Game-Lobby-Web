@@ -10,7 +10,7 @@ export class ApiError extends Error {
     message: string,
     public status?: number,
     public code?: string,
-    public data?: any
+    public data?: unknown
   ) {
     super(message);
     this.name = "ApiError";
@@ -120,15 +120,32 @@ export const createAuthenticatedFetcher = (token?: string | null) => {
   };
 };
 
-export const isAuthError = (error: any): boolean => {
+export const isAuthError = (error: unknown): boolean => {
   return error instanceof ApiError && error.status === 401;
 };
 
-export const isNetworkError = (error: any): boolean => {
+export const isNetworkError = (error: unknown): boolean => {
   return error instanceof ApiError && !error.status;
 };
 
-export const formatQueryParams = (params: Record<string, any>): string => {
+type QueryParamValue = string | number | boolean | undefined | null;
+
+/**
+ * 查詢參數類型，支持任何可序列化為查詢字符串的對象
+ */
+export type QueryParams = Record<string, QueryParamValue>;
+
+/**
+ * 將查詢參數對象轉換為 URL 查詢字符串
+ * 支持任何具有字符串鍵的對象，自動過濾 undefined 和 null 值
+ *
+ * @example
+ * ```typescript
+ * const params = { page: 1, limit: 10, search: 'test' };
+ * const queryString = formatQueryParams(params); // "page=1&limit=10&search=test"
+ * ```
+ */
+export const formatQueryParams = <T extends QueryParams>(params: T): string => {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {

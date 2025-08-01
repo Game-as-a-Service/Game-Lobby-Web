@@ -1,4 +1,4 @@
-import type { Game } from "@/api";
+import type { GameRegistration } from "@/api";
 
 import { GetStaticProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -21,7 +21,7 @@ function CarouselCard({
   showIndex,
   index,
   ...gameProps
-}: Readonly<CarouselItemProps<Game>>) {
+}: Readonly<CarouselItemProps<GameRegistration>>) {
   return (
     <GameCardDetailed {...gameProps}>
       <GameRoomActions tabIndex={index === showIndex ? 0 : -1} {...gameProps} />

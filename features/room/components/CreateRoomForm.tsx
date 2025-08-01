@@ -53,7 +53,7 @@ function CreateRoomForm({
     minPlayers,
     maxPlayers,
   });
-  const { trigger: createRoom } = useCreateRoom();
+  const { createRoom } = useCreateRoom();
   const router = useRouter();
   const { t } = useTranslation();
   const [isLockRoom, setIsLockRoom] = useState(false);

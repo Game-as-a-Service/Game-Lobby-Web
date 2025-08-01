@@ -8,7 +8,6 @@ const useRoom = (init?: RoomState) => {
   const [room, setRoom] = useState<RoomState | undefined>(init);
   const { roomIdOperator, gameUrlOperator } = useCookie();
 
-  // Room cookie operations
   const getRoomId = useCallback(() => {
     return roomIdOperator.get();
   }, [roomIdOperator]);
@@ -24,7 +23,6 @@ const useRoom = (init?: RoomState) => {
     [roomIdOperator]
   );
 
-  // Game URL cookie operations
   const getGameUrl = useCallback(() => {
     return gameUrlOperator.get() || "";
   }, [gameUrlOperator]);

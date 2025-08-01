@@ -34,7 +34,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
   if (isLoading) return <div className="my-5">Loading...</div>;
   if (error) return <div className="my-5">Error loading rooms</div>;
 
-  const rooms = roomsResponse?.data || [];
+  const rooms = roomsResponse?.rooms || [];
 
   return (
     <>
@@ -45,7 +45,8 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
             game: {
               ...room.game,
               imgUrl:
-                gameList.find((game) => game.id === room.game.id)?.img || "",
+                gameList?.find((game) => game.id === room.game.id)?.imageUrl ||
+                "",
             },
           }))
           .map((room) => (
