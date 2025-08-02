@@ -1,17 +1,14 @@
-import React, { useEffect, FC, useState, useRef } from "react";
-import SocketContext, { SOCKET_EVENT } from "./SocketContext";
-import { useAuth } from "../auth";
-import useHistory from "../history/useHistory";
-import { WebSocketHistoryType } from "../history/HistoryContext";
+import React, { useEffect, FC, useState } from "react";
 import { Socket } from "socket.io-client";
 import socketService from "@/services/socket";
+import SocketContext from "./SocketContext";
+import { useAuth } from "../auth";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const SocketProvider: FC<Props> = ({ children }) => {
-  const { addWsHistory } = useHistory();
   const { token } = useAuth();
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -32,54 +29,6 @@ export const SocketProvider: FC<Props> = ({ children }) => {
       setSocket(null);
     };
   }, [token]);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    // Connect event
-    socketService.onConnect(() => {
-      addWsHistory({
-        type: WebSocketHistoryType.CONNECTION,
-        event: "CONNECT",
-        message: "",
-      });
-    });
-
-    // Disconnect event
-    socketService.onDisconnect(() => {
-      addWsHistory({
-        type: WebSocketHistoryType.CONNECTION,
-        event: "DISCONNECT",
-        message: "",
-      });
-    });
-
-    // Any event received
-    socket.onAny((event: keyof typeof SOCKET_EVENT, data) => {
-      addWsHistory({
-        type: WebSocketHistoryType.RECEIVE,
-        event,
-        message: data,
-      });
-    });
-
-    // Any event sent
-    socket.onAnyOutgoing((event: keyof typeof SOCKET_EVENT, data) => {
-      addWsHistory({
-        type: WebSocketHistoryType.SEND,
-        event,
-        message: data,
-      });
-    });
-
-    return () => {
-      socket
-        .off(SOCKET_EVENT.CONNECT)
-        .offAny()
-        .offAnyOutgoing()
-        .off(SOCKET_EVENT.DISCONNECT);
-    };
-  }, [socket, addWsHistory]);
 
   return (
     <SocketContext.Provider value={{ socketService, socket }}>

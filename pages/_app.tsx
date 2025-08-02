@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import { NextPage } from "next";
-import { FC, PropsWithChildren, ReactElement } from "react";
 import { appWithTranslation } from "next-i18next";
 import Head from "next/head";
 
@@ -10,12 +9,10 @@ import "@/scripts/whyDidYouRender";
 
 import getAppLayout from "@/containers/layout/AppLayout";
 import { AuthProvider } from "@/contexts/auth";
-import { HistoryProvider } from "@/contexts/history";
 import { SocketProvider } from "@/contexts/socket";
 import { ChatroomProvider } from "@/contexts/chatroom";
 import Startup from "@/containers/util/Startup";
 import SWRConfigProvider from "@/containers/util/SWRConfigProvider";
-import HistoryList from "@/components/util/history/HistoryList";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
 
@@ -36,14 +33,6 @@ function App({ Component, pageProps }: AppWithProps) {
 
   const getLayout = Component.getLayout ?? getAppLayout;
 
-  const getHistory = (children: ReactElement) => {
-    return isProduction ? (
-      children
-    ) : (
-      <HistoryProvider>{children}</HistoryProvider>
-    );
-  };
-
   return (
     <>
       <Head>
@@ -52,16 +41,13 @@ function App({ Component, pageProps }: AppWithProps) {
       <ToastQueueProvider>
         <AuthProvider>
           <SWRConfigProvider>
-            {getHistory(
-              <SocketProvider>
-                <ChatroomProvider>
-                  <Startup isAnonymous={isAnonymous}>
-                    {getLayout(<Component {...pageProps} />)}
-                    {!isProduction && <HistoryList />}
-                  </Startup>
-                </ChatroomProvider>
-              </SocketProvider>
-            )}
+            <SocketProvider>
+              <ChatroomProvider>
+                <Startup isAnonymous={isAnonymous}>
+                  {getLayout(<Component {...pageProps} />)}
+                </Startup>
+              </ChatroomProvider>
+            </SocketProvider>
           </SWRConfigProvider>
         </AuthProvider>
       </ToastQueueProvider>
