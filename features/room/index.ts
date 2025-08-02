@@ -1,2 +1,6 @@
-export * from "./components";
-export * from "./hooks";
+export {
+  CreateRoomForm,
+  GameRoomActions,
+  JoinLockRoomForm,
+  RoomCard,
+} from "./components";

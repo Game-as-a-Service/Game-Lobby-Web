@@ -1,14 +1,26 @@
 import { useState } from "react";
-import { GetStaticProps } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Button from "@/components/shared/Button";
+import SearchBar from "@/components/shared/SearchBar";
 import Image from "@/components/shared/Image";
 import Modal from "@/components/shared/Modal";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
-import { useGames } from "@/features/game";
+import {
+  useFindGameRegistrations,
+  useGetRooms,
+  type GetRoomsParams,
+  type RoomViewModel,
+  type Game,
+} from "@/services/api";
 import { JoinLockRoomForm, RoomCard } from "@/features/room";
-import { useRooms } from "@/features/room/hooks";
-import type { Room, RoomStatus } from "@/api";
+
+type RoomStatus = "WAITING" | "PLAYING";
+
+// 擴展 Game 類型以包含 imgUrl
+type EnhancedGame = Game & { imgUrl?: string };
+type EnhancedRoom = Omit<RoomViewModel, "game"> & { game: EnhancedGame };
 
 type RoomType = RoomStatus;
 
@@ -18,14 +30,14 @@ const RoomTypeMap = {
 };
 
 function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
-  const { data: gameList = [] } = useGames();
-  const [room, setRoom] = useState<Room | null>(null);
+  const { data: gameList = [] } = useFindGameRegistrations();
+  const [room, setRoom] = useState<EnhancedRoom | null>(null);
 
   const {
     data: roomsResponse,
     error,
     isLoading,
-  } = useRooms({
+  } = useGetRooms({
     status: tabKey,
     page: 0,
     perPage: 20,
@@ -40,15 +52,18 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
     <>
       <ul className="grid grid-cols-3 gap-5 my-5">
         {rooms
-          .map((room) => ({
-            ...room,
-            game: {
-              ...room.game,
-              imgUrl:
-                gameList?.find((game) => game.id === room.game.id)?.imageUrl ||
-                "",
-            },
-          }))
+          .map((room) => {
+            const gameDetail = gameList?.find(
+              (game) => game.id === room.game.id
+            );
+            return {
+              ...room,
+              game: {
+                ...room.game,
+                imgUrl: gameDetail?.img || "",
+              },
+            };
+          })
           .map((room) => (
             <li key={room.id}>
               <RoomCard
@@ -73,7 +88,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
             <div className="flex mb-4 gap-4 text-primary-50">
               <Image
                 className="w-12 h-12 rounded-lg object-cover"
-                src={room.game.img || "/images/game-default-cover.png"}
+                src={room.game.imgUrl || "/images/game-default-cover.png"}
                 alt={room.game.name}
                 width={48}
                 height={48}
@@ -90,7 +105,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<RoomType>>) {
   );
 }
 
-const Rooms = () => {
+const Rooms: NextPage = () => {
   const { t } = useTranslation();
 
   const tabs: TabItemType<RoomType>[] = [

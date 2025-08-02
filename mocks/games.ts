@@ -1,4 +1,4 @@
-import { Game } from "@/api";
+import { GameRegistrationViewModel as Game } from "@/services/api";
 const mock_gameList: Game[] = [
   {
     id: "123456",

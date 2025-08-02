@@ -1,4 +1,4 @@
-import { Player, Room } from "@/api";
+import { Player, GetRoomViewModel as Room } from "@/services/api";
 import { UserCard } from "@/features/user";
 import { generateUUID } from "@/lib/utils";
 

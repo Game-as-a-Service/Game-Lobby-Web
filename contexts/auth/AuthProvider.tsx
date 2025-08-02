@@ -1,41 +1,52 @@
 import { FC, ReactNode, useState, useEffect, useCallback } from "react";
-import { authApi, usersApi, isAuthError } from "@/api";
-import type { User } from "@/api";
+import {
+  useGetUser,
+  useAuthenticate,
+  type GetUserViewModel as User,
+} from "@/services/api";
 import AuthContext from "./AuthContext";
+import useCookie from "@/hooks/useCookie";
 
-type Props = {
+export interface AuthProviderProps {
   children: ReactNode;
-};
+}
 
-const AuthProvider: FC<Props> = ({ children }) => {
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null | undefined>();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  // 獲取當前用戶資訊
-  const fetchCurrentUser = useCallback(async (authToken: string) => {
-    try {
-      setLoading(true);
-      const user = await usersApi.getCurrentUser(authToken);
-      setCurrentUser(user);
-    } catch (error) {
-      if (isAuthError(error)) {
-        setToken(null);
-        setCurrentUser(null);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // 建構 JWT 參數用於 API 呼叫
+  const jwtParams = token ? { principal: { tokenValue: token } } : null;
 
-  // 當 token 改變時獲取用戶資訊
+  // 使用 useGetUser hook 獲取當前用戶資訊
+  const { data: userData, error: userError } = useGetUser({
+    swr: {
+      enabled: !!token,
+      onError: (error: any) => {
+        // 如果是認證錯誤，清除 token 和用戶資訊
+        if (error?.status === 401) {
+          setToken(null);
+          setCurrentUser(null);
+        }
+      },
+    },
+  });
+
+  // 當 API 返回用戶資料時更新 currentUser
   useEffect(() => {
-    if (token) {
-      fetchCurrentUser(token);
-    } else {
+    if (userData) {
+      setCurrentUser(userData);
+    } else if (userError) {
       setCurrentUser(null);
     }
-  }, [token, fetchCurrentUser]);
+  }, [userData, userError]);
+
+  // 當 token 被清除時，也清除用戶資訊
+  useEffect(() => {
+    if (!token) {
+      setCurrentUser(null);
+    }
+  }, [token]);
 
   const updateCurrentUser = (user: User | null) => {
     setCurrentUser(user);

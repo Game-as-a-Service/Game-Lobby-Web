@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { Room, Player, User } from "@/api";
+import {
+  GetRoomViewModel as Room,
+  Player,
+  GetUserViewModel as User,
+} from "@/services/api";
 import useCookie from "./useCookie";
 
 export type RoomState = Room;

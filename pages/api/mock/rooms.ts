@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { mock_rooms, mock_createRoomResponse } from "@/mocks/room";
-import { GetRoomsResponse, Room } from "@/api";
+import {
+  GetRoomsViewModel as GetRoomsResponse,
+  RoomViewModel as Room,
+} from "@/services/api";
 
 export default function handler(
   req: NextApiRequest,

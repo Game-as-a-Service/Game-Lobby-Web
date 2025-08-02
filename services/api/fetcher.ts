@@ -6,8 +6,7 @@ import cookie from "js-cookie";
  */
 
 // API 基礎配置
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.gaas.waterballsa.tw";
+const API_BASE_URL = "/api/internal";
 
 // 自定義錯誤類
 export class ApiError extends Error {
@@ -24,7 +23,11 @@ export class ApiError extends Error {
 // 從認證 context 或 storage 獲取 JWT token
 const getJwtToken = (): string | null => {
   if (typeof window !== "undefined") {
-    return cookie.get("_token") || null;
+    try {
+      return JSON.parse(cookie.get("_token") || "{}") as string;
+    } catch (error) {
+      return null;
+    }
   }
   return null;
 };

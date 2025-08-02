@@ -4,25 +4,28 @@ import Button, { ButtonSize } from "@/components/shared/Button";
 import { useRouter } from "next/router";
 import { useToast } from "@/components/shared/Toast";
 import useRoom from "@/hooks/useRoom";
-import { useFastJoinGame } from "@/features/game/hooks";
-import type { GameRegistration } from "@/api";
+import {
+  useFastJoinRoom,
+  type GameRegistrationViewModel,
+} from "@/services/api";
 import Icon from "@/components/shared/Icon";
 import Modal from "@/components/shared/Modal";
 import { cn } from "@/lib/utils";
 import CreateRoomForm from "./CreateRoomForm";
 
-interface GameRoomActions extends GameRegistration {
+interface GameRoomActions extends GameRegistrationViewModel {
   tabIndex?: number;
 }
 
 function GameRoomActions({
   id,
-  displayName,
+  name,
   minPlayers,
   maxPlayers,
   tabIndex,
 }: Readonly<GameRoomActions>) {
-  const { fastJoinGame, isLoading: isMutating } = useFastJoinGame();
+  const fastJoinMutation = useFastJoinRoom();
+  const { trigger: fastJoinGame, isMutating } = fastJoinMutation;
   const toast = useToast();
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
@@ -32,7 +35,7 @@ function GameRoomActions({
 
   const handleFastJoin = async () => {
     try {
-      const result = await fastJoinGame(id);
+      const result = await fastJoinGame({ gameId: id });
       router.push(`/rooms/${result.roomId}`);
       updateRoomId(result.roomId);
     } catch (error: unknown) {
@@ -106,7 +109,7 @@ function GameRoomActions({
                 開設新房間
               </button>
               <Modal
-                title={`開新房間: ${displayName}`}
+                title={`開新房間: ${name}`}
                 isOpen={showCreateRoomModal}
                 onClose={() => setShowCreateRoomModal(false)}
                 size="medium"

@@ -1,22 +1,28 @@
-import type { Room } from "@/api";
+import { useState, useCallback } from "react";
+import type { RoomViewModel, Game } from "@/services/api";
 
 import Image from "@/components/shared/Image";
 import Button, { ButtonSize } from "@/components/shared/Button";
-import { useJoinRoom } from "../hooks";
+import { useJoinRoom } from "@/services/api";
+
+// 擴展 Game 類型以包含 img 屬性
+type EnhancedGame = Game & { img?: string };
+type EnhancedRoom = Omit<RoomViewModel, "game"> & { game: EnhancedGame };
 
 interface RoomsCardProps {
-  room: Room;
+  room: EnhancedRoom;
   onClick: () => void;
 }
 
 function RoomCard({ room, onClick }: Readonly<RoomsCardProps>) {
-  const { joinRoom: handleJoinRoom } = useJoinRoom();
+  const joinRoomMutation = useJoinRoom(room.id);
+  const { trigger: handleJoinRoom } = joinRoomMutation;
   const lackTotalPlayers = room.maxPlayers - room.currentPlayers;
 
   const handleClick = () => {
     onClick();
     if (room.isLocked) return;
-    handleJoinRoom(room.id);
+    handleJoinRoom({});
   };
 
   return (

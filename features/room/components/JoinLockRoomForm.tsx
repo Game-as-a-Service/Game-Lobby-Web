@@ -1,9 +1,10 @@
 import { FormEvent, PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@/components/shared/Button";
+import Modal from "@/components/shared/Modal";
 import Icon from "@/components/shared/Icon";
 import InputOTP from "@/components/shared/InputOTP";
-import { useJoinRoom } from "../hooks";
+import { useJoinRoom } from "@/services/api";
 
 interface JoinLockRoomFormProps extends PropsWithChildren {
   id: string;
@@ -11,7 +12,8 @@ interface JoinLockRoomFormProps extends PropsWithChildren {
 
 function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
   const { t } = useTranslation();
-  const { joinRoom } = useJoinRoom();
+  const joinRoomMutation = useJoinRoom(id);
+  const { trigger: joinRoom } = joinRoomMutation;
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -24,7 +26,7 @@ function JoinLockRoomForm({ id, children }: Readonly<JoinLockRoomFormProps>) {
     event.preventDefault();
     setErrorMessage("");
     try {
-      await joinRoom(id, { password });
+      await joinRoom({ password });
     } catch (error: unknown) {
       if (error instanceof Error) {
         const msg = error.message || "加入房間失敗";

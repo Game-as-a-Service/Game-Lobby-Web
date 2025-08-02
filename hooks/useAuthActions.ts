@@ -1,54 +1,19 @@
 import { useCallback } from "react";
-import {
-  useAuth,
-  useGetLoginUrl,
-  useGetMockToken,
-  useLogout,
-} from "@/contexts/auth";
-import { authApi } from "@/api";
+import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/auth";
 import useCookie from "./useCookie";
-import type { LoginRequest } from "@/api";
 
 const useAuthActions = () => {
-  const { setToken: setTokenCtx } = useAuth();
+  const { setToken, setCurrentUser } = useAuth();
   const { tokenOperator } = useCookie();
-
-  const { trigger: getLoginUrlTrigger } = useGetLoginUrl();
-  const { trigger: getMockTokenTrigger } = useGetMockToken();
-  const { logout: logoutAction } = useLogout();
-
-  const getLoginEndpoint = useCallback(
-    async (type: LoginRequest["type"]) => {
-      return await getLoginUrlTrigger({ type });
-    },
-    [getLoginUrlTrigger]
-  );
-
-  const getMockToken = useCallback(async () => {
-    return await getMockTokenTrigger();
-  }, [getMockTokenTrigger]);
-
-  const authentication = useCallback(async (token: string) => {
-    return await authApi.authenticate({ token });
-  }, []);
-
-  const login = useCallback(
-    (token: string) => {
-      setTokenCtx(token);
-    },
-    [setTokenCtx]
-  );
-
-  const logout = useCallback(async () => {
-    await logoutAction();
-  }, [logoutAction]);
+  const router = useRouter();
 
   const getTokenInCookie = useCallback(() => {
     return tokenOperator.get();
   }, [tokenOperator]);
 
   const updateTokenInCookie = useCallback(
-    (token?: string) => {
+    (token: string | null) => {
       if (token) {
         tokenOperator.set(token);
       } else {
@@ -58,14 +23,46 @@ const useAuthActions = () => {
     [tokenOperator]
   );
 
+  const logout = useCallback(() => {
+    setToken(null);
+    setCurrentUser(null);
+    tokenOperator.remove();
+    router.push("/login");
+  }, [setToken, setCurrentUser, tokenOperator, router]);
+
+  const authentication = useCallback(
+    async (token: string) => {
+      setToken(token);
+      updateTokenInCookie(token);
+      return { token };
+    },
+    [setToken, updateTokenInCookie]
+  );
+
+  const login = useCallback(
+    async (token: string) => {
+      await authentication(token);
+      router.push("/");
+    },
+    [authentication, router]
+  );
+
+  const getMockToken = useCallback(() => {
+    return { token: "mock-jwt-token" };
+  }, []);
+
+  const getLoginEndpoint = useCallback((type?: string) => {
+    return { url: "/api/mock/login" };
+  }, []);
+
   return {
-    getLoginEndpoint,
-    getMockToken,
-    authentication,
-    login,
-    logout,
     getTokenInCookie,
     updateTokenInCookie,
+    logout,
+    authentication,
+    login,
+    getMockToken,
+    getLoginEndpoint,
   };
 };
 

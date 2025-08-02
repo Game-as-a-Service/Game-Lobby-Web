@@ -1,21 +1,21 @@
 import { PropsWithChildren } from "react";
 
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
-import { GameRegistration } from "@/api";
+import { GameRegistrationViewModel as GameRegistration } from "@/services/api";
 import Image from "@/components/shared/Image";
 
 function GameCardSimple({
   children,
-  imageUrl,
-  displayName,
+  img,
+  name,
 }: PropsWithChildren<GameRegistration>) {
   return (
     <div className="group">
       <div className="relative aspect-game-cover flex items-end justify-end">
         <picture className="overflow-hidden">
           <Image
-            src={imageUrl || gameDefaultCoverImg.src}
-            alt={displayName}
+            src={img || gameDefaultCoverImg.src}
+            alt={name}
             className="object-cover"
             fill
           />
@@ -24,7 +24,7 @@ function GameCardSimple({
           {children}
         </div>
       </div>
-      <h2>{displayName}</h2>
+      <h2>{name}</h2>
     </div>
   );
 }

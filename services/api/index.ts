@@ -385,33 +385,13 @@ export type GetRoomsParams = {
   perPage: number;
 };
 
-export type CreateRoomBody = {
-  request?: CreateRoomRequest;
-};
-
 export type CreateRoom200 = { [key: string]: unknown };
-
-export type FastJoinRoomBody = {
-  request?: FastJoinRoomRequest;
-};
-
-export type JoinRoomBody = {
-  request?: JoinRoomRequest;
-};
 
 export type FindGameRegistrationsParams = {
   sort_by?: string;
 };
 
 export type RegisterGame200 = { [key: string]: unknown };
-
-export type CommentGameBody = {
-  request?: CommentGameRequest;
-};
-
-export type UpdateGameCommentBody = {
-  request?: UpdateGameCommentRequest;
-};
 
 export type HomeParams = {
   client: OAuth2AuthorizedClient;
@@ -696,7 +676,7 @@ export const useGetRooms = <TError = PlatformViewModel | PlatformViewModel>(
 };
 
 export const createRoom = (
-  createRoomBody: CreateRoomBody,
+  createRoomRequest: CreateRoomRequest,
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
   return orvalFetcher<CreateRoom200>(
@@ -704,7 +684,7 @@ export const createRoom = (
       url: `/rooms`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: createRoomBody,
+      data: createRoomRequest,
     },
     options
   );
@@ -713,7 +693,10 @@ export const createRoom = (
 export const getCreateRoomMutationFetcher = (
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
-  return (_: Key, { arg }: { arg: CreateRoomBody }): Promise<CreateRoom200> => {
+  return (
+    _: Key,
+    { arg }: { arg: CreateRoomRequest }
+  ): Promise<CreateRoom200> => {
     return createRoom(arg, options);
   };
 };
@@ -731,7 +714,7 @@ export const useCreateRoom = <
     Awaited<ReturnType<typeof createRoom>>,
     TError,
     Key,
-    CreateRoomBody,
+    CreateRoomRequest,
     Awaited<ReturnType<typeof createRoom>>
   > & { swrKey?: string };
   request?: SecondParameter<typeof orvalFetcher>;
@@ -750,7 +733,7 @@ export const useCreateRoom = <
 };
 
 export const fastJoinRoom = (
-  fastJoinRoomBody: FastJoinRoomBody,
+  fastJoinRoomRequest: FastJoinRoomRequest,
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
   return orvalFetcher<FastJoinRoomViewModel>(
@@ -758,7 +741,7 @@ export const fastJoinRoom = (
       url: `/rooms:fastJoin`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: fastJoinRoomBody,
+      data: fastJoinRoomRequest,
     },
     options
   );
@@ -769,7 +752,7 @@ export const getFastJoinRoomMutationFetcher = (
 ) => {
   return (
     _: Key,
-    { arg }: { arg: FastJoinRoomBody }
+    { arg }: { arg: FastJoinRoomRequest }
   ): Promise<FastJoinRoomViewModel> => {
     return fastJoinRoom(arg, options);
   };
@@ -788,7 +771,7 @@ export const useFastJoinRoom = <
     Awaited<ReturnType<typeof fastJoinRoom>>,
     TError,
     Key,
-    FastJoinRoomBody,
+    FastJoinRoomRequest,
     Awaited<ReturnType<typeof fastJoinRoom>>
   > & { swrKey?: string };
   request?: SecondParameter<typeof orvalFetcher>;
@@ -912,7 +895,7 @@ export const useEndGame = <TError = PlatformViewModel | PlatformViewModel>(
 
 export const joinRoom = (
   roomId: string,
-  joinRoomBody: JoinRoomBody,
+  joinRoomRequest: JoinRoomRequest,
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
   return orvalFetcher<PlatformViewModel>(
@@ -920,7 +903,7 @@ export const joinRoom = (
       url: `/rooms/${roomId}/players`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: joinRoomBody,
+      data: joinRoomRequest,
     },
     options
   );
@@ -932,7 +915,7 @@ export const getJoinRoomMutationFetcher = (
 ) => {
   return (
     _: Key,
-    { arg }: { arg: JoinRoomBody }
+    { arg }: { arg: JoinRoomRequest }
   ): Promise<PlatformViewModel> => {
     return joinRoom(roomId, arg, options);
   };
@@ -952,7 +935,7 @@ export const useJoinRoom = <TError = PlatformViewModel | PlatformViewModel>(
       Awaited<ReturnType<typeof joinRoom>>,
       TError,
       Key,
-      JoinRoomBody,
+      JoinRoomRequest,
       Awaited<ReturnType<typeof joinRoom>>
     > & { swrKey?: string };
     request?: SecondParameter<typeof orvalFetcher>;
@@ -1190,7 +1173,7 @@ export const useRegisterGame = <
 };
 
 export const commentGame = (
-  commentGameBody: CommentGameBody,
+  commentGameRequest: CommentGameRequest,
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
   return orvalFetcher<PlatformViewModel>(
@@ -1198,7 +1181,7 @@ export const commentGame = (
       url: `/comments`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: commentGameBody,
+      data: commentGameRequest,
     },
     options
   );
@@ -1209,7 +1192,7 @@ export const getCommentGameMutationFetcher = (
 ) => {
   return (
     _: Key,
-    { arg }: { arg: CommentGameBody }
+    { arg }: { arg: CommentGameRequest }
   ): Promise<PlatformViewModel> => {
     return commentGame(arg, options);
   };
@@ -1228,7 +1211,7 @@ export const useCommentGame = <
     Awaited<ReturnType<typeof commentGame>>,
     TError,
     Key,
-    CommentGameBody,
+    CommentGameRequest,
     Awaited<ReturnType<typeof commentGame>>
   > & { swrKey?: string };
   request?: SecondParameter<typeof orvalFetcher>;
@@ -1248,7 +1231,7 @@ export const useCommentGame = <
 
 export const updateGameComment = (
   gameId: string,
-  updateGameCommentBody: UpdateGameCommentBody,
+  updateGameCommentRequest: UpdateGameCommentRequest,
   options?: SecondParameter<typeof orvalFetcher>
 ) => {
   return orvalFetcher<PlatformViewModel>(
@@ -1256,7 +1239,7 @@ export const updateGameComment = (
       url: `/comments/games/${gameId}`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      data: updateGameCommentBody,
+      data: updateGameCommentRequest,
     },
     options
   );
@@ -1268,7 +1251,7 @@ export const getUpdateGameCommentMutationFetcher = (
 ) => {
   return (
     _: Key,
-    { arg }: { arg: UpdateGameCommentBody }
+    { arg }: { arg: UpdateGameCommentRequest }
   ): Promise<PlatformViewModel> => {
     return updateGameComment(gameId, arg, options);
   };
@@ -1292,7 +1275,7 @@ export const useUpdateGameComment = <
       Awaited<ReturnType<typeof updateGameComment>>,
       TError,
       Key,
-      UpdateGameCommentBody,
+      UpdateGameCommentRequest,
       Awaited<ReturnType<typeof updateGameComment>>
     > & { swrKey?: string };
     request?: SecondParameter<typeof orvalFetcher>;

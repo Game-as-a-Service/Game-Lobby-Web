@@ -1,4 +1,4 @@
-import type { User as UserInfo } from "@/api";
+import type { GetUserViewModel as UserInfo } from "@/services/api";
 
 import Avatar from "../Avatar";
 

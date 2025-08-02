@@ -47,9 +47,42 @@ export default defineConfig({
 
             if (schema.properties) {
               const newProperties = { ...schema.properties };
+
+              // 移除不需要的參數
               unwantedParams.forEach((param) => {
                 delete newProperties[param];
               });
+
+              // 處理 request 屬性提升
+              if (newProperties.request) {
+                // 檢查是否只有 request 屬性（或者加上一些已被移除的 unwanted params）
+                const remainingKeys = Object.keys(newProperties);
+                const onlyHasRequest =
+                  remainingKeys.length === 1 && remainingKeys[0] === "request";
+
+                if (onlyHasRequest) {
+                  // 情況1: request 有 properties（嵌套物件）
+                  if (newProperties.request.properties) {
+                    // 清空現有屬性，用 request 的屬性替代
+                    schema.properties = newProperties.request.properties;
+
+                    // 處理 required 屬性
+                    if (newProperties.request.required) {
+                      schema.required = newProperties.request.required;
+                    } else {
+                      delete schema.required;
+                    }
+                  }
+                  // 情況2: request 是 $ref 引用
+                  else if (newProperties.request.$ref) {
+                    // 直接將 schema 替換為引用的內容
+                    return newProperties.request;
+                  }
+
+                  return schema;
+                }
+              }
+
               schema.properties = newProperties;
 
               if (schema.required) {

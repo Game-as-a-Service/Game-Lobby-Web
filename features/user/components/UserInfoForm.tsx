@@ -3,7 +3,7 @@ import { useState, FormEvent, useRef } from "react";
 import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
 import { useUpdateUser } from "@/contexts/auth/useAuth";
-import type { User } from "@/api";
+import type { GetUserViewModel as User } from "@/services/api";
 import { useToast } from "@/components/shared/Toast";
 import { useAuth } from "@/contexts/auth/useAuth";
 

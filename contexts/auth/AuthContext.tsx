@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import { User } from "@/api";
+import { GetUserViewModel as User } from "@/services/api";
 
 interface IAuthContext {
   token: string | null | undefined;

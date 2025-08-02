@@ -12,7 +12,7 @@ type Props = {
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
   const { token, setToken, setCurrentUser } = useAuth();
   const { getTokenInCookie, updateTokenInCookie } = useAuthActions();
-  const { data: currentUser } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { push } = useRouter();
   const [pageDone, setPageDone] = useState(false);
 
@@ -31,7 +31,7 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
 
   useEffect(() => {
     if (token === null) {
-      updateTokenInCookie();
+      updateTokenInCookie(null);
       setCurrentUser(null);
     } else if (token === undefined) {
     } else {

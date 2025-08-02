@@ -1,14 +1,14 @@
 import { PropsWithChildren } from "react";
 
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
-import { GameRegistration } from "@/api";
+import { GameRegistrationViewModel as GameRegistration } from "@/services/api";
 import Icon from "@/components/shared/Icon";
 import Image from "@/components/shared/Image";
 
 function GameCardDetailed({
   children,
-  imageUrl,
-  displayName,
+  img,
+  name,
   createdOn,
   maxPlayers,
   minPlayers,
@@ -17,8 +17,8 @@ function GameCardDetailed({
     <div className="flex text-white mx-10 px-11 gap-4">
       <div className="relative flex items-end justify-end flex-[60%]">
         <Image
-          src={imageUrl || gameDefaultCoverImg.src}
-          alt={displayName}
+          src={img || gameDefaultCoverImg.src}
+          alt={name}
           className="object-cover"
           fill
         />
@@ -26,7 +26,7 @@ function GameCardDetailed({
       </div>
       <div className="flex-[40%] p-4 rounded-lg bg-primary-50/8">
         <div className="text-xs text-primary-300">Game Name</div>
-        <div className="text-xl text-primary-100">{displayName}</div>
+        <div className="text-xl text-primary-100">{name}</div>
         <div className="flex gap-6 mb-2 text-xs text-primary-300">
           <div className="flex-1 flex items-center gap-1.5">
             <span>4.8</span>
@@ -45,13 +45,8 @@ function GameCardDetailed({
         <div className="mb-3">
           <ul className="flex gap-3">
             <li className="relative w-16 h-10">
-              {imageUrl && (
-                <Image
-                  src={imageUrl}
-                  alt={displayName}
-                  className="object-cover"
-                  fill
-                />
+              {img && (
+                <Image src={img} alt={name} className="object-cover" fill />
               )}
             </li>
           </ul>

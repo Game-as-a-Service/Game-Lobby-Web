@@ -6,8 +6,7 @@ import Input from "@/components/shared/Input";
 import InputOTP, { InputOTPRef } from "@/components/shared/InputOTP";
 import Icon from "@/components/shared/Icon";
 import SelectBoxGroup from "@/components/shared/SelectBoxGroup";
-import { CreateRoomRequest } from "@/api";
-import { useCreateRoom } from "@/features/room/hooks";
+import { useCreateRoom, type CreateRoomRequest } from "@/services/api";
 
 const items = [
   {
@@ -53,7 +52,7 @@ function CreateRoomForm({
     minPlayers,
     maxPlayers,
   });
-  const { createRoom } = useCreateRoom();
+  const createRoomMutation = useCreateRoom();
   const router = useRouter();
   const { t } = useTranslation();
   const [isLockRoom, setIsLockRoom] = useState(false);
@@ -90,7 +89,7 @@ function CreateRoomForm({
       return;
     }
 
-    const result = (await createRoom(roomForm)) as any;
+    const result = (await createRoomMutation.trigger(roomForm)) as any;
     router.push(`/rooms/${result?.id || "unknown"}`);
   };
 

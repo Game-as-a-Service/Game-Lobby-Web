@@ -11,7 +11,7 @@ import Icon, { IconName } from "@/components/shared/Icon";
 import { useAuth } from "@/contexts/auth";
 import useAuthActions from "@/hooks/useAuthActions";
 import { getEnv } from "@/lib/env";
-import { LoginRequest } from "@/api";
+import { LoginParams as LoginRequest } from "@/services/api";
 
 import { NextPageWithProps } from "./_app";
 import { BoxFancy } from "@/components/shared/BoxFancy";

@@ -1,31 +1,44 @@
 import { useEffect, useRef, useState } from "react";
-import { GetStaticProps, GetStaticPaths } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
-import Image from "@/components/shared/Image";
+import { useTranslation } from "next-i18next";
+import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+import GameWindow from "@/components/rooms/GameWindow";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
-import GameWindow from "@/components/rooms/GameWindow";
+import Button from "@/components/shared/Button";
 import { useAuth } from "@/contexts/auth";
 import usePopup from "@/hooks/usePopup";
 import { useSocketCore } from "@/contexts/socket";
 import { SOCKET_EVENT } from "@/contexts/socket";
-import type { Player } from "@/api";
+import Modal from "@/components/shared/Modal";
+import { CreateRoomForm, JoinLockRoomForm } from "@/features/room";
 import {
-  useRoom,
+  useGetRoom,
+  useFindGameRegistrations,
+  useJoinRoom,
+  useLeaveRoom,
   useKickPlayer,
   useCloseRoom,
-  useLeaveRoom,
+  useReadyForRoom,
+  useCancelReadyForRoom,
   useStartGame,
-} from "@/features/room/hooks";
+  type GetRoomViewModel as Room,
+  type Player,
+} from "@/services/api";
 import useAuthActions from "@/hooks/useAuthActions";
 import useRoomCookie from "@/hooks/useRoom";
-import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+import { UserCard } from "@/features/user";
+import Image from "@/components/shared/Image";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { useGames } from "@/features/game";
 
-export default function Room() {
+const RoomDetailPage: NextPage = () => {
   const { socket } = useSocketCore();
   const { currentUser, token, setToken } = useAuth();
   const { authentication } = useAuthActions();
@@ -34,12 +47,12 @@ export default function Room() {
   const { query, replace } = useRouter();
   const roomId = query.roomId as string;
 
-  const { data: roomInfo, refetch: mutateRoom } = useRoom(roomId);
-  const { data: gameList } = useGames();
-  const { kickPlayer } = useKickPlayer();
-  const { closeRoom } = useCloseRoom();
-  const { leaveRoom } = useLeaveRoom();
-  const { startGame } = useStartGame();
+  const { data: roomInfo, mutate: mutateRoom } = useGetRoom(roomId);
+  const { data: gameList } = useFindGameRegistrations();
+  const kickPlayerMutation = useKickPlayer(roomId, "");
+  const closeRoomMutation = useCloseRoom(roomId);
+  const leaveRoomMutation = useLeaveRoom(roomId);
+  const startGameMutation = useStartGame(roomId);
 
   const [gameUrl, setGameUrl] = useState(getGameUrl);
   const isHost = roomInfo?.host.id === currentUser?.id;
@@ -129,7 +142,7 @@ export default function Room() {
   async function handleClickKick(user: Player) {
     const handleKickUser = async () => {
       try {
-        await kickPlayer(roomId, user.id);
+        await kickPlayerMutation.trigger();
         mutateRoom?.();
       } catch (err) {
         firePopup({ title: `error!` });
@@ -146,7 +159,7 @@ export default function Room() {
   function handleClickClose() {
     const handleCloseRoom = async () => {
       try {
-        await closeRoom(roomId);
+        await closeRoomMutation.trigger();
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -165,7 +178,7 @@ export default function Room() {
   const handleLeave = () => {
     const leave = async () => {
       try {
-        await leaveRoom(roomId);
+        await leaveRoomMutation.trigger();
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -186,7 +199,7 @@ export default function Room() {
   const handleStart = async () => {
     try {
       if (!token) return;
-      await startGame(roomId);
+      await startGameMutation.trigger();
     } catch (err) {
       firePopup({ title: `error!` });
     }
@@ -213,8 +226,8 @@ export default function Room() {
           <div className="relative w-full h-[280px] overflow-hidden">
             {roomInfo.currentPlayers && (
               <Image
-                src={gameInfo?.imageUrl || gameDefaultCoverImg.src}
-                alt={gameInfo?.displayName || "default game cover"}
+                src={gameInfo?.img || gameDefaultCoverImg.src}
+                alt={gameInfo?.name || "default game cover"}
                 priority
                 fill
                 className="object-cover"
@@ -257,7 +270,7 @@ export default function Room() {
       <Popup />
     </section>
   );
-}
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -265,6 +278,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
+
+export default RoomDetailPage;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
