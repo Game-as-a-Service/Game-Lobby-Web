@@ -47,7 +47,7 @@ const RoomDetailPage: NextPage = () => {
   const { query, replace } = useRouter();
   const roomId = query.roomId as string;
 
-  const { data: roomInfo, mutate: mutateRoom } = useGetRoom(roomId);
+  const { data: roomInfo, mutate: mutateRoom, isLoading } = useGetRoom(roomId);
   const { data: gameList } = useFindGameRegistrations();
   const kickPlayerMutation = useKickPlayer(roomId, "");
   const closeRoomMutation = useCloseRoom(roomId);
@@ -59,11 +59,11 @@ const RoomDetailPage: NextPage = () => {
   const gameInfo = gameList?.find((game) => game.id === roomInfo?.game.id);
 
   useEffect(() => {
-    if (!roomInfo && roomId) {
+    if (!isLoading && !roomInfo && roomId) {
       updateRoomId();
       replace("/rooms");
     }
-  }, [roomInfo, roomId, updateRoomId, replace]);
+  }, [isLoading, roomInfo, roomId, updateRoomId, replace]);
 
   useEffect(() => {
     if (!socket || !currentUser?.id) return;
