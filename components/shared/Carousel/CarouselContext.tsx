@@ -8,10 +8,10 @@ import {
   TItem,
 } from "./Carousel.type";
 
-const CarouselContext = createContext<ICarouselContext | null>(null);
-const CarouselDispatchContext = createContext<TCarouselDispatchContext | null>(
-  null
-);
+// 創建單一的 Context 實例
+const CarouselStateContext = createContext<ICarouselContext<any> | null>(null);
+const CarouselDispatchContext =
+  createContext<TCarouselDispatchContext<any> | null>(null);
 
 const initialState: ICarouselContext = {
   items: [],
@@ -64,22 +64,24 @@ const reducer = <Item extends TItem>(
   }
 };
 
-export const useCarousel = () => {
-  const hook = useContext(CarouselContext);
+export const useCarousel = <Item extends TItem>(): ICarouselContext<Item> => {
+  const hook = useContext(CarouselStateContext);
   if (!hook) {
     throw new Error("useCarousel must be used within a CarouselProvider.");
   }
-  return hook;
+  return hook as ICarouselContext<Item>;
 };
 
-export const useCarouselDispatch = () => {
+export const useCarouselDispatch = <
+  Item extends TItem,
+>(): TCarouselDispatchContext<Item> => {
   const hook = useContext(CarouselDispatchContext);
   if (!hook) {
     throw new Error(
       "useCarouselDispatch must be used within a CarouselProvider."
     );
   }
-  return hook;
+  return hook as TCarouselDispatchContext<Item>;
 };
 
 export function CarouselProvider<Item extends TItem>({
@@ -103,12 +105,10 @@ export function CarouselProvider<Item extends TItem>({
   }, [items]);
 
   return (
-    <CarouselContext.Provider value={state as ICarouselContext}>
-      <CarouselDispatchContext.Provider
-        value={dispatch as TCarouselDispatchContext}
-      >
+    <CarouselStateContext.Provider value={state}>
+      <CarouselDispatchContext.Provider value={dispatch}>
         {children}
       </CarouselDispatchContext.Provider>
-    </CarouselContext.Provider>
+    </CarouselStateContext.Provider>
   );
 }
