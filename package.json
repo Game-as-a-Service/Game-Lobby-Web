@@ -27,7 +27,10 @@
     "knip": "knip --no-exit-code",
     "bundlewatch": "bundlewatch --config .bundlewatch.config.js",
     "icon-format": "prettier --write \"**/shared/Icon/**/*.(ts|tsx)\"",
-    "icon-convert": "tsx scripts/iconConverter && tsx scripts/generateIconExports && yarn icon-format"
+    "icon-convert": "tsx scripts/iconConverter && tsx scripts/generateIconExports && yarn icon-format",
+    "api:generate": "orval --config orval.config.ts",
+    "api:generate:watch": "orval --config orval.config.ts --watch",
+    "api:clean": "rm -f services/api/index.ts"
   },
   "dependencies": {
     "@svgr/webpack": "8.1.0",
@@ -82,6 +85,7 @@
     "knip": "5.43.6",
     "lint-staged": "14.0.1",
     "node-html-parser": "6.1.13",
+    "orval": "^7.3.0",
     "postcss": "8.4.31",
     "prettier": "3.0.0",
     "shell-quote": "1.8.1",

@@ -1,7 +1,7 @@
 import { SOCKET_EVENT } from "@/contexts/socket";
 import { BaseSocketService, SocketEventHandler } from "./BaseSocketService";
 import { Socket } from "socket.io-client";
-import { Player } from "@/api";
+import { Player } from "@/services/api";
 
 export type RoomUser = Player;
 export type UserReadyPayload = Pick<Player, "id">;

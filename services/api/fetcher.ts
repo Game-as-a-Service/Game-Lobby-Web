@@ -1,163 +1,128 @@
+import cookie from "js-cookie";
+
 /**
- * Unified API Fetcher utility
+ * Orval 專用的簡化 fetcher
+ * 自動處理 JWT 認證和基本錯誤處理
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api/internal";
-const DEFAULT_TIMEOUT = 10000;
+// API 基礎配置
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.gaas.waterballsa.tw";
 
+// 自定義錯誤類
 export class ApiError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public code?: string,
-    public data?: unknown
+    public data?: any
   ) {
     super(message);
     this.name = "ApiError";
   }
 }
 
-export interface ApiResponse<T = any> {
-  data?: T;
-  message?: string;
-  success?: boolean;
-  timestamp?: string;
-  errorCode?: string;
+// 從認證 context 或 storage 獲取 JWT token
+const getJwtToken = (): string | null => {
+  if (typeof window !== "undefined") {
+    return cookie.get("_token") || null;
+  }
+  return null;
+};
+
+// Orval 請求配置接口
+interface OrvalRequestConfig {
+  url: string;
+  method: string;
+  params?: Record<string, any>;
+  data?: any;
+  headers?: Record<string, string>;
 }
 
-export interface PaginatedResponse<T = any> {
-  data?: T[];
-  total?: number;
-  page?: number;
-  perPage?: number;
-  rooms?: T[]; // Pagination structure in Swagger
-}
-
-interface FetcherOptions extends RequestInit {
-  timeout?: number;
-  baseURL?: string;
-}
-
-export const fetcher = async <T = any>(
-  url: string,
-  options: FetcherOptions = {}
+// Orval 自定義 fetcher 函數
+export const orvalFetcher = async <T>(
+  config: OrvalRequestConfig,
+  options?: RequestInit
 ): Promise<T> => {
-  const {
-    timeout = DEFAULT_TIMEOUT,
-    baseURL = BASE_URL,
-    ...fetchOptions
-  } = options;
+  // 構建完整 URL
+  let fullUrl = config.url.startsWith("http")
+    ? config.url
+    : `${API_BASE_URL}${config.url}`;
 
-  // Create timeout control
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  // 處理查詢參數
+  if (config.params) {
+    const searchParams = new URLSearchParams();
+    Object.entries(config.params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, String(value));
+      }
+    });
+    if (searchParams.toString()) {
+      fullUrl += `?${searchParams.toString()}`;
+    }
+  }
 
+  // 獲取 JWT token
+  const token = getJwtToken();
+
+  // 設置請求頭
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...config.headers,
+    ...(options?.headers as Record<string, string>),
+  };
+
+  // 如果有 token，添加 Authorization header
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  // 發送請求
   try {
-    const fullUrl = url.startsWith("http") ? url : `${baseURL}${url}`;
-
     const response = await fetch(fullUrl, {
-      ...fetchOptions,
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        ...fetchOptions.headers,
-      },
+      method: config.method || "GET",
+      headers,
+      body: config.data ? JSON.stringify(config.data) : undefined,
+      ...options,
     });
 
-    clearTimeout(timeoutId);
-
+    // 處理非 2xx 狀態碼
     if (!response.ok) {
-      const errorData = (await response.json().catch(() => ({
-        message: "Request failed",
-      }))) as any;
+      let errorData: any = {};
+
+      // 嘗試解析錯誤響應
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { message: `HTTP ${response.status}` };
+      }
 
       throw new ApiError(
-        errorData?.message || `HTTP ${response.status}`,
+        errorData?.message || `Request failed with status ${response.status}`,
         response.status,
-        errorData?.code,
         errorData
       );
     }
 
-    // Check if there's content
+    // 處理無內容響應（如 204 No Content）
     const contentType = response.headers.get("content-type");
     if (!contentType?.includes("application/json")) {
-      return null as T;
+      return {} as T;
     }
 
     return response.json() as Promise<T>;
   } catch (error) {
-    clearTimeout(timeoutId);
-
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw new ApiError("Request timeout", 408, "TIMEOUT");
-    }
-
+    // 重新拋出 ApiError
     if (error instanceof ApiError) {
       throw error;
     }
 
+    // 處理網絡錯誤
     throw new ApiError(
-      error instanceof Error ? error.message : "Request failed"
+      error instanceof Error ? error.message : "Network error occurred",
+      undefined,
+      error
     );
   }
 };
 
-export const createAuthenticatedFetcher = (token?: string | null) => {
-  return <T = any>(url: string, options: FetcherOptions = {}): Promise<T> => {
-    const headers: Record<string, string> = {
-      ...((options.headers as Record<string, string>) || {}),
-    };
-
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    return fetcher<T>(url, {
-      ...options,
-      headers,
-    });
-  };
-};
-
-export const isAuthError = (error: unknown): boolean => {
-  return error instanceof ApiError && error.status === 401;
-};
-
-export const isNetworkError = (error: unknown): boolean => {
-  return error instanceof ApiError && !error.status;
-};
-
-type QueryParamValue = string | number | boolean | undefined | null;
-
-/**
- * 查詢參數類型，支持任何可序列化為查詢字符串的對象
- */
-export type QueryParams = Record<string, QueryParamValue>;
-
-/**
- * 將查詢參數對象轉換為 URL 查詢字符串
- * 支持任何具有字符串鍵的對象，自動過濾 undefined 和 null 值
- *
- * @example
- * ```typescript
- * const params = { page: 1, limit: 10, search: 'test' };
- * const queryString = formatQueryParams(params); // "page=1&limit=10&search=test"
- * ```
- */
-export const formatQueryParams = <T extends QueryParams>(params: T): string => {
-  const searchParams = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      searchParams.set(key, String(value));
-    }
-  });
-
-  return searchParams.toString();
-};
-
-/**
- * Legacy alias for createAuthenticatedFetcher for backward compatibility
- */
-export const createApiFetcher = createAuthenticatedFetcher;
+export default orvalFetcher;
