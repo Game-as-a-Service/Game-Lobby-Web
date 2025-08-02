@@ -8,15 +8,38 @@ import cookie from "js-cookie";
 // API 基礎配置
 const API_BASE_URL = "/api/internal";
 
+// API 錯誤回應格式接口
+export interface ApiErrorResponse {
+  timestamp: string;
+  errorCode: string;
+  message: string;
+}
+
 // 自定義錯誤類
 export class ApiError extends Error {
   constructor(
     message: string,
     public status?: number,
+    public errorCode?: string,
+    public timestamp?: string,
     public data?: any
   ) {
     super(message);
     this.name = "ApiError";
+  }
+
+  // 靜態方法：從 API 錯誤回應創建 ApiError 實例
+  static fromApiResponse(
+    response: ApiErrorResponse,
+    status?: number
+  ): ApiError {
+    return new ApiError(
+      response.message,
+      status,
+      response.errorCode,
+      response.timestamp,
+      response
+    );
   }
 }
 
@@ -99,9 +122,23 @@ export const orvalFetcher = async <T>(
         errorData = { message: `HTTP ${response.status}` };
       }
 
+      // 檢查是否為標準 API 錯誤格式
+      if (
+        errorData &&
+        typeof errorData.timestamp === "string" &&
+        typeof errorData.errorCode === "string" &&
+        typeof errorData.message === "string"
+      ) {
+        // 使用標準 API 錯誤格式創建 ApiError
+        throw ApiError.fromApiResponse(errorData, response.status);
+      }
+
+      // 處理非標準錯誤格式
       throw new ApiError(
         errorData?.message || `Request failed with status ${response.status}`,
         response.status,
+        undefined,
+        undefined,
         errorData
       );
     }
@@ -122,6 +159,8 @@ export const orvalFetcher = async <T>(
     // 處理網絡錯誤
     throw new ApiError(
       error instanceof Error ? error.message : "Network error occurred",
+      undefined,
+      undefined,
       undefined,
       error
     );

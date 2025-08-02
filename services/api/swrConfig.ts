@@ -5,7 +5,7 @@ import { ApiError } from "./fetcher";
 export const swrConfig: SWRConfiguration = {
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
-  revalidateOnMount: false,
+  revalidateOnMount: true,
   errorRetryCount: 0,
   errorRetryInterval: 0,
   dedupingInterval: 2000,
