@@ -1,199 +1,192 @@
-# API 服務使用指南
+# API Services
 
-## Orval 整合
+這個目錄包含了所有與 API 相關的服務和配置。
 
-本專案使用 [Orval](https://orval.dev/) 來自動生成 TypeScript API 客戶端代碼，直接從後端 Swagger API 文檔生成。
+## 文件結構
 
-### 快速開始
+- `fetcher.ts` - Orval 自定義 fetcher，處理 JWT 認證和錯誤處理
+- `index.ts` - 自動生成的 API hooks（由 Orval 生成）
+- `swrConfig.ts` - SWR 全局配置和工具函數
+- `README.md` - 這個文件
 
-1. **生成 API 代碼**：
+## SWR 配置使用指南
 
-   ```bash
-   npm run api:generate
-   ```
+### 基本使用
 
-2. **監聽模式生成**（開發時使用）：
+項目已經在 `_app.tsx` 中配置了全局 SWRConfig，所以你可以直接使用 Orval 生成的 hooks：
 
-   ```bash
-   npm run api:generate:watch
-   ```
+```typescript
+import { useGetUser, useGetRooms } from "@/services/api";
 
-3. **清理生成的代碼**：
-   ```bash
-   npm run api:clean
-   ```
+const MyComponent = () => {
+  // 使用全局配置
+  const { data: user, error, isLoading } = useGetUser();
 
-### 配置說明
-
-- **Swagger 來源**：`https://api.gaas.waterballsa.tw/swagger-ui/api-docs`
-- **生成模式**：單文件模式，包含所有類型和 hooks
-- **生成文件**：`services/api/index.ts`
-- **HTTP 客戶端**：使用自定義 fetch（不使用 axios）
-- **數據獲取**：整合 SWR hooks
-- **類型推斷**：完整的 TypeScript 類型安全，無需手動標註
-
-### 使用範例
-
-```tsx
-import { useGetRooms, useCreateRoom, useGetUser } from "@/services/api";
-
-// 1. 獲取房間列表
-const RoomsComponent = () => {
-  const { data, error, isLoading } = useGetRooms({
-    status: "waiting",
+  const { data: rooms } = useGetRooms({
+    status: "active",
     page: 1,
     perPage: 10,
-    public: true,
   });
-
-  if (isLoading) return <div>載入中...</div>;
-  if (error) return <div>錯誤: {error.message}</div>;
 
   return (
     <div>
-      {data?.rooms?.map((room) => (
-        <div key={room.id}>
-          <h3>{room.name}</h3>
-          <p>遊戲: {room.game.name}</p>
-          <p>
-            人數: {room.currentPlayers}/{room.maxPlayers}
-          </p>
-        </div>
-      ))}
+      {isLoading && <div>載入中...</div>}
+      {error && <div>錯誤: {error.message}</div>}
+      {user && <div>歡迎, {user.nickname}</div>}
     </div>
   );
 };
+```
 
-// 2. 創建房間
-const CreateRoomComponent = () => {
-  const { trigger: createRoom, isMutating } = useCreateRoom();
+### 使用特定配置
 
-  const handleCreateRoom = async () => {
-    try {
-      await createRoom({
-        jwt: { tokenValue: "your-jwt-token" },
-        request: {
-          name: "新房間",
-          gameId: "game-123",
-          maxPlayers: 4,
-          minPlayers: 2,
-        },
-      });
-    } catch (error) {
-      console.error("創建失敗:", error);
+如果需要為特定的 API 調用使用不同的配置：
+
+```typescript
+import { useGetUser } from "@/services/api";
+import { swrConfigs } from "@/services/api/swrConfig";
+
+const UserProfile = () => {
+  // 使用靜態配置 - 不會自動重新驗證
+  const { data: user } = useGetUser({
+    swr: swrConfigs.static,
+  });
+
+  return <div>{user?.nickname}</div>;
+};
+
+const ChatRoom = () => {
+  // 使用實時配置 - 快速更新
+  const { data: rooms } = useGetRooms(
+    { status: "active", page: 1, perPage: 10 },
+    { swr: swrConfigs.realtime }
+  );
+
+  return <div>房間數量: {rooms?.rooms.length}</div>;
+};
+```
+
+### 錯誤處理
+
+你可以使用提供的工具函數來處理錯誤：
+
+```typescript
+import { useGetUser } from "@/services/api";
+import { isApiError, getErrorMessage } from "@/services/api/swrConfig";
+
+const MyComponent = () => {
+  const { data, error } = useGetUser();
+
+  if (error) {
+    if (isApiError(error)) {
+      // API 錯誤 - 有狀態碼和詳細信息
+      console.log("API 錯誤狀態:", error.status);
+      console.log("錯誤數據:", error.data);
     }
-  };
 
-  return (
-    <button onClick={handleCreateRoom} disabled={isMutating}>
-      {isMutating ? "創建中..." : "創建房間"}
-    </button>
-  );
+    const message = getErrorMessage(error);
+    return <div>發生錯誤: {message}</div>;
+  }
+
+  return <div>{data?.nickname}</div>;
 };
-
-// 3. 獲取用戶資訊
-const UserComponent = () => {
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useGetUser({
-    principal: { tokenValue: "your-jwt-token" },
-  });
-
-  if (isLoading) return <div>載入中...</div>;
-  if (error) return <div>錯誤: {error.message}</div>;
-
-  return (
-    <div>
-      <h2>{user?.nickname}</h2>
-      <p>Email: {user?.email}</p>
-    </div>
-  );
-};
-```
-
-### 認證設置
-
-API 客戶端會自動從以下來源獲取認證 token：
-
-1. localStorage 中的 `authToken`
-2. localStorage 中的 `token`
-
-JWT token 會自動注入到所有需要認證的 API 請求的 Authorization header 中。
-
-**自動處理的功能**：
-
-- ✅ JWT token 自動注入
-- ✅ 查詢參數自動處理
-- ✅ 請求/響應錯誤處理
-- ✅ Content-Type 自動設置
-- ✅ 完整的 TypeScript 類型安全
-
-您可以在 `services/api/fetcher.ts` 中修改認證邏輯。
-
-### 環境變數
-
-確保設置以下環境變數：
-
-```env
-# .env.local 或 .env.development
-NEXT_PUBLIC_API_BASE_URL=https://api.gaas.waterballsa.tw
-```
-
-### 目錄結構
-
-```
-services/api/
-├── index.ts          # orval 生成的所有 API hooks 和類型（不要手動編輯）
-├── fetcher.ts        # 自定義 fetch 客戶端
-└── README.md         # 使用文檔
 ```
 
 ### 自定義配置
 
-如需修改 API 生成配置，請編輯 `orval.config.ts`：
+創建你自己的配置：
 
-- 修改輸出目錄
-- 調整操作名稱格式
-- 添加自定義 hooks
-- 配置錯誤處理
+```typescript
+import { createConfiguredSWR } from "@/services/api/swrConfig";
+import { useGetRooms } from "@/services/api";
 
-### 生成的 API Hooks
+const MyComponent = () => {
+  // 創建自定義配置
+  const customConfig = createConfiguredSWR({
+    refreshInterval: 30000, // 30 秒刷新一次
+    revalidateOnFocus: false, // 不在聚焦時重新驗證
+  });
 
-主要的 API hooks 包括：
+  const { data } = useGetRooms(
+    { status: "active", page: 1, perPage: 10 },
+    { swr: customConfig }
+  );
 
-- `useGetUser` - 獲取用戶資訊
-- `useUpdateUser` - 更新用戶資訊
-- `useGetRooms` - 獲取房間列表
-- `useCreateRoom` - 創建房間
-- `useJoinRoom` - 加入房間
-- `useStartGame` - 開始遊戲
-- `useEndGame` - 結束遊戲
-- `useFastJoinRoom` - 快速加入房間
-- `useFindGameRegistrations` - 查找遊戲註冊
-- `useUpdateGameRegistration` - 更新遊戲註冊
-
-### 常見問題
-
-**Q: 如何添加新的 API endpoint？**
-A: 後端更新 Swagger 文檔後，運行 `npm run api:generate` 即可自動生成新的客戶端代碼。
-
-**Q: 生成的代碼可以手動修改嗎？**
-A: 不建議。所有生成的代碼都會在下次運行 `api:generate` 時被覆蓋。
-
-**Q: 如何處理認證錯誤？**
-A: 檢查錯誤狀態碼，401 表示認證失敗：
-
-```tsx
-import { ApiError } from "@/services/api/orval-fetcher";
-
-// 在錯誤處理中
-if (error instanceof ApiError && error.status === 401) {
-  // 重新導向到登入頁面
-  router.push("/login");
-}
+  return <div>房間列表</div>;
+};
 ```
 
-**Q: 如何自動重新生成 API？**
-A: 使用監聽模式：`npm run api:generate:watch`，當 swagger 文檔更新時會自動重新生成。
+## 可用的配置預設
+
+### 1. `swrConfig` (默認)
+
+- 平衡的配置，適合大多數用途
+- 包含錯誤重試、去重、焦點重新驗證等
+
+### 2. `swrConfigs.realtime`
+
+- 適用於快速變化的數據（如聊天室狀態）
+- 1 秒自動刷新
+- 較短的去重間隔
+
+### 3. `swrConfigs.static`
+
+- 適用於靜態數據（如用戶設置）
+- 不自動刷新
+- 不在焦點時重新驗證
+
+### 4. `swrConfigs.once`
+
+- 適用於一次性數據
+- 完全禁用重新驗證
+
+### 5. `swrConfigs.cacheFirst`
+
+- 緩存優先策略
+- 只在網絡重連時更新
+
+## 最佳實踐
+
+1. **使用類型安全的錯誤處理**：
+
+   ```typescript
+   if (isApiError(error)) {
+     // 處理 API 錯誤
+   }
+   ```
+
+2. **根據數據特性選擇配置**：
+
+   - 用戶資料：`static`
+   - 聊天訊息：`realtime`
+   - 遊戲列表：`default`
+
+3. **利用 SWR 的緩存機制**：
+
+   ```typescript
+   // 相同的 key 會共享緩存
+   const { data: user1 } = useGetUser(); // 第一次請求
+   const { data: user2 } = useGetUser(); // 使用緩存
+   ```
+
+4. **手動重新驗證**：
+
+   ```typescript
+   const { data, mutate } = useGetUser();
+
+   // 手動刷新數據
+   const handleRefresh = () => {
+     mutate();
+   };
+   ```
+
+## 環境差異
+
+- **開發環境**：更頻繁的重新驗證，詳細的日誌
+- **生產環境**：較少的重新驗證，5 分鐘自動刷新
+
+## 故障排除
+
+1. **數據不更新**：檢查是否使用了 `static` 配置
+2. **請求過於頻繁**：檢查 `refreshInterval` 設置
+3. **錯誤重試過多**：調整 `errorRetryCount` 和 `shouldRetryOnError`

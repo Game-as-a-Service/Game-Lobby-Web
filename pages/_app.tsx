@@ -14,6 +14,7 @@ import { HistoryProvider } from "@/contexts/history";
 import { SocketProvider } from "@/contexts/socket";
 import { ChatroomProvider } from "@/contexts/chatroom";
 import Startup from "@/containers/util/Startup";
+import SWRConfigProvider from "@/containers/util/SWRConfigProvider";
 import HistoryList from "@/components/util/history/HistoryList";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
@@ -50,16 +51,18 @@ function App({ Component, pageProps }: AppWithProps) {
       </Head>
       <ToastQueueProvider>
         <AuthProvider>
-          {getHistory(
-            <SocketProvider>
-              <ChatroomProvider>
-                <Startup isAnonymous={isAnonymous}>
-                  {getLayout(<Component {...pageProps} />)}
-                  {!isProduction && <HistoryList />}
-                </Startup>
-              </ChatroomProvider>
-            </SocketProvider>
-          )}
+          <SWRConfigProvider>
+            {getHistory(
+              <SocketProvider>
+                <ChatroomProvider>
+                  <Startup isAnonymous={isAnonymous}>
+                    {getLayout(<Component {...pageProps} />)}
+                    {!isProduction && <HistoryList />}
+                  </Startup>
+                </ChatroomProvider>
+              </SocketProvider>
+            )}
+          </SWRConfigProvider>
         </AuthProvider>
       </ToastQueueProvider>
     </>
