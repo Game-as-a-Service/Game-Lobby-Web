@@ -1,4 +1,4 @@
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT } from "@/contexts/socket";
 import { BaseSocketService, SocketEventHandler } from "./BaseSocketService";
 import { Socket } from "socket.io-client";
 import { GameStartedPayload } from "./RoomSocketService";

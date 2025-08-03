@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT } from "@/contexts/socket";
 
 /**
  * Interface representing a socket event handler function
@@ -134,7 +134,7 @@ export abstract class BaseSocketService {
   private attachSocketListener(event: string): void {
     if (!this.socket) return;
 
-    this.socket.on(event, (data: any) => {
+    this.socket.on(event, (data: unknown) => {
       const handlers = this.eventHandlers.get(event);
       if (handlers) {
         handlers.forEach((handler) => handler(data));

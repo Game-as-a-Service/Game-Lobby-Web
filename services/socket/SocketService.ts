@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import { createSocket, SOCKET_EVENT } from "@/contexts/SocketContext";
+import { createSocket, SOCKET_EVENT } from "@/contexts/socket";
 import {
   RoomSocketService,
   createRoomSocketService,

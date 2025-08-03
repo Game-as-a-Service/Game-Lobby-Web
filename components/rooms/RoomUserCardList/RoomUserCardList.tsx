@@ -1,11 +1,11 @@
-import { RoomInfo } from "@/requests/rooms";
+import { Player, GetRoomViewModel as Room } from "@/services/api";
 import { UserCard } from "@/features/user";
 import { generateUUID } from "@/lib/utils";
 
 type RoomUserCardListProps = {
-  roomInfo: RoomInfo.Room;
+  roomInfo: Room;
   currentUserId: string | undefined;
-  onKickUser?: (User: Omit<RoomInfo.User, "isReady">) => void;
+  onKickUser?: (User: Player) => void;
 };
 
 function RoomUserCardList({

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
-import { GameType } from "@/requests/games";
+import { GameRegistrationViewModel as GameRegistration } from "@/services/api";
 import Icon from "@/components/shared/Icon";
 import Image from "@/components/shared/Image";
 
@@ -12,7 +12,7 @@ function GameCardDetailed({
   createdOn,
   maxPlayers,
   minPlayers,
-}: PropsWithChildren<GameType>) {
+}: PropsWithChildren<GameRegistration>) {
   return (
     <div className="flex text-white mx-10 px-11 gap-4">
       <div className="relative flex items-end justify-end flex-[60%]">

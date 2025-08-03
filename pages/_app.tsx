@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import { NextPage } from "next";
-import { FC, PropsWithChildren, ReactElement } from "react";
 import { appWithTranslation } from "next-i18next";
 import Head from "next/head";
 
@@ -8,16 +7,15 @@ import "@/styles/reset.css";
 import "@/styles/global.css";
 import "@/scripts/whyDidYouRender";
 
-import AxiosProvider from "@/containers/provider/AxiosProvider";
 import getAppLayout from "@/containers/layout/AppLayout";
-import AuthProvider from "@/containers/provider/AuthProvider";
+import { AuthProvider } from "@/contexts/auth";
+import { SocketProvider } from "@/contexts/socket";
+import { ChatroomProvider } from "@/contexts/chatroom";
+import { UIProvider } from "@/contexts/ui";
 import Startup from "@/containers/util/Startup";
-import HistoryProvider from "@/containers/provider/HistoryProvider";
-import HistoryList from "@/components/util/history/HistoryList";
+import SWRConfigProvider from "@/containers/util/SWRConfigProvider";
 import { Env, getEnv } from "@/lib/env";
 import { ToastQueueProvider } from "@/components/shared/Toast";
-import { SocketProvider } from "@/containers/provider/SocketProvider";
-import ChatroomContextProvider from "@/containers/provider/ChatroomProvider";
 
 export type NextPageWithProps<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactElement;
@@ -36,34 +34,25 @@ function App({ Component, pageProps }: AppWithProps) {
 
   const getLayout = Component.getLayout ?? getAppLayout;
 
-  const getHistory = (children: ReactElement) => {
-    return isProduction ? (
-      children
-    ) : (
-      <HistoryProvider>{children}</HistoryProvider>
-    );
-  };
-
   return (
     <>
       <Head>
         <title>遊戲微服務大平台</title>
       </Head>
       <ToastQueueProvider>
-        <AxiosProvider>
-          <AuthProvider>
-            {getHistory(
-              <SocketProvider>
-                <ChatroomContextProvider>
+        <AuthProvider>
+          <SWRConfigProvider>
+            <SocketProvider>
+              <ChatroomProvider>
+                <UIProvider>
                   <Startup isAnonymous={isAnonymous}>
                     {getLayout(<Component {...pageProps} />)}
-                    {!isProduction && <HistoryList />}
                   </Startup>
-                </ChatroomContextProvider>
-              </SocketProvider>
-            )}
-          </AuthProvider>
-        </AxiosProvider>
+                </UIProvider>
+              </ChatroomProvider>
+            </SocketProvider>
+          </SWRConfigProvider>
+        </AuthProvider>
       </ToastQueueProvider>
     </>
   );

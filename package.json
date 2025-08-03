@@ -2,6 +2,10 @@
   "name": "game-lobby-web",
   "version": "0.2.0",
   "private": true,
+  "engines": {
+    "node": ">=20.19.4",
+    "yarn": ">=1.22.0"
+  },
   "scripts": {
     "dev": "next dev -p 3030",
     "build": "next build",
@@ -23,11 +27,13 @@
     "knip": "knip --no-exit-code",
     "bundlewatch": "bundlewatch --config .bundlewatch.config.js",
     "icon-format": "prettier --write \"**/shared/Icon/**/*.(ts|tsx)\"",
-    "icon-convert": "tsx scripts/iconConverter && tsx scripts/generateIconExports && yarn icon-format"
+    "icon-convert": "tsx scripts/iconConverter && tsx scripts/generateIconExports && yarn icon-format",
+    "api:generate": "orval --config orval.config.ts",
+    "api:generate:watch": "orval --config orval.config.ts --watch",
+    "api:clean": "rm -f services/api/index.ts"
   },
   "dependencies": {
     "@svgr/webpack": "8.1.0",
-    "axios": "1.8.2",
     "clsx": "1.2.1",
     "http-proxy-middleware": "2.0.9",
     "i18next": "23.7.6",
@@ -40,6 +46,7 @@
     "sharp": "0.32.6",
     "socket.io": "4.7.2",
     "socket.io-client": "4.7.2",
+    "swr": "^2.3.4",
     "tailwind-merge": "1.14.0"
   },
   "devDependencies": {
@@ -78,6 +85,7 @@
     "knip": "5.43.6",
     "lint-staged": "14.0.1",
     "node-html-parser": "6.1.13",
+    "orval": "^7.3.0",
     "postcss": "8.4.31",
     "prettier": "3.0.0",
     "shell-quote": "1.8.1",

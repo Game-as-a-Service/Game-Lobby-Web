@@ -2,6 +2,21 @@
 
 The frontend of the Game as a Service lobby.
 
+## Prerequisites
+
+- **Node.js**: >= 20.19.4
+- **Yarn**: >= 1.22.0
+
+### 使用 nvm 管理 Node.js 版本（推薦）
+
+```bash
+# 安裝指定的 Node.js 版本
+nvm install
+
+# 使用指定的 Node.js 版本
+nvm use
+```
+
 ## Commands
 
 ```bash

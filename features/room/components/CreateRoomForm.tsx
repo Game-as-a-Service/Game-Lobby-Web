@@ -1,13 +1,12 @@
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import useRequest from "@/hooks/useRequest";
 import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
 import InputOTP, { InputOTPRef } from "@/components/shared/InputOTP";
 import Icon from "@/components/shared/Icon";
 import SelectBoxGroup from "@/components/shared/SelectBoxGroup";
-import { createRoomEndpoint, CreateRoomFormType } from "@/requests/rooms";
+import { useCreateRoom, type CreateRoomRequest } from "@/services/api";
 
 const items = [
   {
@@ -39,7 +38,7 @@ interface CreateRoomFormProps {
   onCancel: () => void;
 }
 
-type CreateRoomFormErrors = Partial<Record<keyof CreateRoomFormType, string>>;
+type CreateRoomFormErrors = Partial<Record<keyof CreateRoomRequest, string>>;
 
 function CreateRoomForm({
   gameId,
@@ -47,13 +46,13 @@ function CreateRoomForm({
   maxPlayers,
   onCancel,
 }: Readonly<CreateRoomFormProps>) {
-  const [roomForm, setRoomForm] = useState<CreateRoomFormType>({
+  const [roomForm, setRoomForm] = useState<CreateRoomRequest>({
     name: "",
     gameId,
     minPlayers,
     maxPlayers,
   });
-  const { fetch } = useRequest();
+  const createRoomMutation = useCreateRoom();
   const router = useRouter();
   const { t } = useTranslation();
   const [isLockRoom, setIsLockRoom] = useState(false);
@@ -62,9 +61,9 @@ function CreateRoomForm({
   const [errors, setErrors] = useState<CreateRoomFormErrors>({});
 
   const handleChange =
-    <T extends keyof CreateRoomFormType>(key: T) =>
-    (value: CreateRoomFormType[T]) => {
-      setRoomForm((pre) => ({
+    <T extends keyof CreateRoomRequest>(key: T) =>
+    (value: CreateRoomRequest[T]) => {
+      setRoomForm((pre: CreateRoomRequest) => ({
         ...pre,
         [key]: value,
       }));
@@ -90,15 +89,18 @@ function CreateRoomForm({
       return;
     }
 
-    const result = await fetch(createRoomEndpoint(roomForm));
-    router.push(`/rooms/${result.id}`);
+    const result = (await createRoomMutation.trigger(roomForm)) as any;
+    router.push(`/rooms/${result?.id || "unknown"}`);
   };
 
   useEffect(() => {
     if (isLockRoom) {
       passwordInputRef.current?.focus();
     } else {
-      setRoomForm((pre) => ({ ...pre, password: undefined }));
+      setRoomForm((pre: CreateRoomRequest) => ({
+        ...pre,
+        password: undefined,
+      }));
     }
   }, [isLockRoom]);
 

@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import useAuth from "@/hooks/context/useAuth";
-import useUser from "@/hooks/useUser";
+import { useAuth, useCurrentUser } from "@/contexts/auth";
+import useAuthActions from "@/hooks/useAuthActions";
 
 type Props = {
   isAnonymous: boolean;
@@ -10,13 +10,9 @@ type Props = {
 };
 
 const Startup: FC<Props> = ({ children, isAnonymous }) => {
-  const { token, setToken, setCurrentUser, currentUser } = useAuth();
-  const {
-    // authentication,
-    getTokenInCookie,
-    updateTokenInCookie,
-    getCurrentUser,
-  } = useUser();
+  const { token, setToken, setCurrentUser } = useAuth();
+  const { getTokenInCookie, updateTokenInCookie } = useAuthActions();
+  const { currentUser } = useCurrentUser();
   const { push } = useRouter();
   const [pageDone, setPageDone] = useState(false);
 
@@ -25,12 +21,6 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
       const jwt = getTokenInCookie();
       if (jwt) {
         setToken(jwt);
-        // The `authentication` is needed when the token is expired
-        // TODO: Put it back after clarify the refresh workflow
-        // const res = await authentication(jwt);
-        // if (res.token) {
-        //   setToken(res.token);
-        // }
       } else {
         setToken(null);
       }
@@ -40,20 +30,17 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
   }, []);
 
   useEffect(() => {
-    async function fetch() {
-      if (token === null) {
-        updateTokenInCookie();
-        setCurrentUser(null);
-      } else if (token === undefined) {
-      } else {
-        updateTokenInCookie(token);
-        const user = await getCurrentUser();
-        setCurrentUser(user);
+    if (token === null) {
+      updateTokenInCookie(null);
+      setCurrentUser(null);
+    } else if (token === undefined) {
+    } else {
+      updateTokenInCookie(token);
+      if (currentUser) {
+        setCurrentUser(currentUser);
       }
     }
-
-    fetch();
-  }, [token]);
+  }, [token, currentUser]);
 
   useEffect(() => {
     if (token === null && !isAnonymous) {
@@ -63,7 +50,7 @@ const Startup: FC<Props> = ({ children, isAnonymous }) => {
     } else if (isAnonymous) {
       setPageDone(true);
     }
-  }, [token, currentUser, isAnonymous]);
+  }, [token, currentUser, isAnonymous, push]);
 
   return pageDone ? <>{children}</> : <></>;
 };

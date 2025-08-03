@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import Header from "@/components/shared/Header";
 import Sidebar from "@/components/shared/Sidebar";
 import Chat from "@/components/shared/Chat";
-import useChat from "@/hooks/useChat";
-import Head from "next/head";
 import SearchBar from "@/components/shared/SearchBar";
 import { useToast } from "@/components/shared/Toast";
-import { GameListProvider } from "@/features/game";
-import useSocketCore from "@/hooks/context/useSocketCore";
+import { useSocketCore } from "@/contexts/socket";
+import { useUI } from "@/contexts/ui";
+import useChat from "@/hooks/useChat";
+import { cn } from "@/lib/utils";
 
 type SocketConnectionStatus =
   | "connecting"
@@ -56,25 +57,21 @@ function AppLayout({ children }: React.PropsWithChildren) {
   const toast = useToast();
   const router = useRouter();
   const {
-    roomId,
-    messageList,
     isChatVisible,
-    openChat,
-    toggleChatVisibility,
-    sendChatMessage,
-  } = useChat();
-  const roomPathname = "/rooms/[roomId]";
-  const isSearchBarVisible = ["/", "/rooms"].includes(router.pathname);
-  const { socketService } = useSocketCore();
+    isSearchBarVisible,
+    isSidebarVisible,
+    isHeaderVisible,
+    isUIVisible,
+    toggleChat,
+  } = useUI();
 
+  const { roomId, messageList, sendChatMessage } = useChat();
+
+  const { socketService } = useSocketCore();
   const [socketStatus, setSocketStatus] =
     useState<SocketConnectionStatus>("connecting");
 
-  useEffect(() => {
-    if (router.pathname === roomPathname) {
-      openChat();
-    }
-  }, [router.pathname, openChat]);
+  const roomPathname = "/rooms/[roomId]";
 
   useEffect(() => {
     const socketInstance = socketService.getSocket();
@@ -101,22 +98,41 @@ function AppLayout({ children }: React.PropsWithChildren) {
   }, [socketService]);
 
   return (
-    <GameListProvider>
+    <>
       <Head>
         <title>遊戲微服務大平台</title>
       </Head>
+
+      {/* 只在非全螢幕且 UI 可見時顯示 Header */}
       <Header
-        className="fixed top-0 inset-x-0 z-40"
+        className={cn(
+          "fixed top-0 inset-x-0 z-40 opacity-0 transition-opacity",
+          isUIVisible && isHeaderVisible && "opacity-100"
+        )}
         isChatVisible={isChatVisible}
-        onClickChatButton={toggleChatVisibility}
+        onClickChatButton={toggleChat}
         socketStatusIndicator={<SocketStatusIndicator status={socketStatus} />}
       />
+
       <div className="pl-2 pt-20 flex grow">
-        <div className="shrink-0 w-18">
-          <Sidebar className="fixed top-20 bottom-6 z-30" />
+        {/* 只在非全螢幕且 UI 可見時顯示 Sidebar */}
+        <div
+          className={cn(
+            "shrink-0 basis-0 transition-[flex-basis]",
+            isUIVisible && isSidebarVisible && "basis-[72px]"
+          )}
+        >
+          <Sidebar
+            className={cn(
+              "fixed top-20 bottom-6 z-30 -translate-x-20 transition-transform",
+              isUIVisible && isSidebarVisible && "translate-x-0"
+            )}
+          />
         </div>
-        <main className="grow pb-4 overflow-x-hidden">
-          {isSearchBarVisible && (
+
+        <main className="grow pb-4">
+          {/* 只在非全螢幕且 UI 可見時顯示 SearchBar */}
+          {isUIVisible && isSearchBarVisible && (
             <div className="flex justify-center mb-6">
               <SearchBar
                 onSubmit={() =>
@@ -138,23 +154,29 @@ function AppLayout({ children }: React.PropsWithChildren) {
           )}
           {children}
         </main>
-        {isChatVisible && (
-          <div className="shrink-0 w-80 mr-4">
-            <Chat
-              className="fixed top-20 bottom-6 z-30"
-              roomId={roomId}
-              friendList={[]}
-              lobbyMessages={[]}
-              roomMessages={messageList}
-              defaultTarget={
-                router.pathname === roomPathname ? "room" : "lobby"
-              }
-              onSubmit={sendChatMessage}
-            />
-          </div>
-        )}
+
+        {/* 只在非全螢幕且 UI 可見且 Chat 開啟時顯示 */}
+        <div
+          className={cn(
+            "shrink-0 basis-0 mr-0 transition-[flex-basis]",
+            isChatVisible && "basis-80 mr-4"
+          )}
+        >
+          <Chat
+            className={cn(
+              "fixed top-20 bottom-6 z-30 translate-x-4 transition-transform",
+              isChatVisible && "translate-x-0"
+            )}
+            roomId={roomId}
+            friendList={[]}
+            lobbyMessages={[]}
+            roomMessages={messageList}
+            defaultTarget={router.pathname === roomPathname ? "room" : "lobby"}
+            onSubmit={sendChatMessage}
+          />
+        </div>
       </div>
-    </GameListProvider>
+    </>
   );
 }
 

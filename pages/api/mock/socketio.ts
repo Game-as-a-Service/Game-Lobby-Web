@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Server as NetServer, Socket } from "net";
 import { Server as SocketIOServer, Server as ServerIO } from "socket.io";
 import { Server as HttpServer } from "http";
-import { SOCKET_EVENT, SOCKET_URL } from "@/contexts/SocketContext";
+import { SOCKET_EVENT, SOCKET_URL } from "@/contexts/socket";
 
 export type NextApiResponseServerIO = NextApiResponse & {
   socket: Socket & {
@@ -85,24 +85,6 @@ const socketio = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
               user: {
                 id: "mock-currentUser-uid",
                 nickname: "mock currentUser",
-              },
-              roomId: message.to,
-            });
-            break;
-          case SOCKET_EVENT.USER_READY:
-            socket.emit(SOCKET_EVENT.USER_READY, {
-              user: {
-                id: "mock_user_id",
-                nickname: "mock_user",
-              },
-              roomId: message.to,
-            });
-            break;
-          case SOCKET_EVENT.USER_NOT_READY:
-            socket.emit(SOCKET_EVENT.USER_NOT_READY, {
-              user: {
-                id: "mock_user_id",
-                nickname: "mock_user",
               },
               roomId: message.to,
             });

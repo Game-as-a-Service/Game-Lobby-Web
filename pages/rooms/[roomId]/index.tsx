@@ -1,91 +1,78 @@
 import { useEffect, useRef, useState } from "react";
-import { GetStaticProps, GetStaticPaths } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
-import Image from "@/components/shared/Image";
+import { useTranslation } from "next-i18next";
+import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+import { GameWindow } from "@/features/game";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
-import GameWindow from "@/components/rooms/GameWindow";
-import useRequest from "@/hooks/useRequest";
-import useRoom from "@/hooks/useRoom";
-import useAuth from "@/hooks/context/useAuth";
+import Button from "@/components/shared/Button";
+import { useAuth } from "@/contexts/auth";
 import usePopup from "@/hooks/usePopup";
-import useSocketCore from "@/hooks/context/useSocketCore";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { useSocketCore } from "@/contexts/socket";
+import { SOCKET_EVENT } from "@/contexts/socket";
+import Modal from "@/components/shared/Modal";
+import { CreateRoomForm, JoinLockRoomForm } from "@/features/room";
 import {
-  getRoomInfoEndpoint,
-  kickUser,
-  closeRoom,
-  RoomInfo,
-  leaveRoom,
-  playerReady,
-  startGame,
-} from "@/requests/rooms";
-import { GameType, getAllGamesEndpoint } from "@/requests/games";
-import useUser from "@/hooks/useUser";
-import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
+  useGetRoom,
+  useFindGameRegistrations,
+  useJoinRoom,
+  useLeaveRoom,
+  useKickPlayer,
+  useCloseRoom,
+  useReadyForRoom,
+  useCancelReadyForRoom,
+  useStartGame,
+  type GetRoomViewModel as Room,
+  type Player,
+} from "@/services/api";
+import useAuthActions from "@/hooks/useAuthActions";
+import useRoomCookie from "@/hooks/useRoom";
+import { UserCard } from "@/features/user";
+import Image from "@/components/shared/Image";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 
-type User = Omit<RoomInfo.User, "isReady">;
-
-export default function Room() {
-  const {
-    roomInfo,
-    initializeRoom,
-    addPlayer,
-    removePlayer,
-    updateHost,
-    updateRoomStatus,
-    updateUserReadyStatus,
-    cleanUpRoom,
-  } = useRoom();
-  const isFirstReady = useRef(true);
+const RoomDetailPage: NextPage = () => {
   const { socket } = useSocketCore();
   const { currentUser, token, setToken } = useAuth();
-  const { authentication, updateRoomId, updateGameUrl, getGameUrl } = useUser();
+  const { authentication } = useAuthActions();
+  const { updateRoomId, updateGameUrl, getGameUrl } = useRoomCookie();
   const { Popup, firePopup } = usePopup();
-  const { fetch } = useRequest();
   const { query, replace } = useRouter();
-  const [gameUrl, setGameUrl] = useState(getGameUrl);
-  const [gameList, setGameList] = useState<GameType[]>([]);
   const roomId = query.roomId as string;
-  const player = roomInfo.players.find(
-    (player) => player.id === currentUser?.id
-  );
-  const isHost = roomInfo.host.id === currentUser?.id;
-  const gameInfo = gameList.find((game) => game.id === roomInfo.game.id);
+
+  const { data: roomInfo, mutate: mutateRoom, isLoading } = useGetRoom(roomId);
+  const { data: gameList } = useFindGameRegistrations();
+  const kickPlayerMutation = useKickPlayer(roomId, "");
+  const closeRoomMutation = useCloseRoom(roomId);
+  const leaveRoomMutation = useLeaveRoom(roomId);
+  const startGameMutation = useStartGame(roomId);
+
+  const [gameUrl, setGameUrl] = useState(getGameUrl);
+  const isHost = roomInfo?.host.id === currentUser?.id;
+  const gameInfo = gameList?.find((game) => game.id === roomInfo?.game.id);
 
   useEffect(() => {
-    fetch(getAllGamesEndpoint()).then(setGameList);
-  }, [fetch]);
-
-  useEffect(() => {
-    async function getRoomInfo() {
-      try {
-        const roomInfo = await fetch(getRoomInfoEndpoint(roomId));
-        initializeRoom(roomInfo);
-      } catch (err) {
-        updateRoomId();
-        replace("/rooms");
-      }
+    if (!isLoading && !roomInfo && roomId) {
+      updateRoomId();
+      replace("/rooms");
     }
-
-    getRoomInfo();
-
-    return () => {
-      cleanUpRoom();
-    };
-  }, [fetch, initializeRoom, cleanUpRoom, roomId]);
+  }, [isLoading, roomInfo, roomId, updateRoomId, replace]);
 
   useEffect(() => {
     if (!socket || !currentUser?.id) return;
 
-    socket.on(SOCKET_EVENT.USER_JOINED, ({ user }: { user: User }) => {
-      addPlayer(user);
+    socket.on(SOCKET_EVENT.USER_JOINED, () => {
+      mutateRoom?.();
     });
 
-    socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: User }) => {
+    socket.on(SOCKET_EVENT.USER_LEFT, ({ user }: { user: Player }) => {
       if (user.id === currentUser.id) {
         updateRoomId();
         firePopup({
@@ -93,19 +80,11 @@ export default function Room() {
           onConfirm: () => replace("/"),
         });
       }
-      removePlayer(user.id);
+      mutateRoom?.();
     });
 
-    socket.on(SOCKET_EVENT.USER_READY, ({ user }: { user: User }) => {
-      updateUserReadyStatus({ ...user, isReady: true });
-    });
-
-    socket.on(SOCKET_EVENT.USER_NOT_READY, ({ user }: { user: User }) => {
-      updateUserReadyStatus({ ...user, isReady: false });
-    });
-
-    socket.on(SOCKET_EVENT.HOST_CHANGED, ({ user }: { user: User }) => {
-      updateHost(user.id);
+    socket.on(SOCKET_EVENT.HOST_CHANGED, () => {
+      mutateRoom?.();
     });
 
     socket.on(
@@ -114,21 +93,20 @@ export default function Room() {
         if (!token) return;
         const authResult = await authentication(token);
         const newGameUrl = `${gameUrl}?token=${authResult.token}`;
-        updateRoomStatus("PLAYING");
         setToken(authResult.token);
         setGameUrl(newGameUrl);
         updateGameUrl(newGameUrl);
+        mutateRoom?.();
       }
     );
 
     socket.on(SOCKET_EVENT.GAME_ENDED, () => {
-      updateRoomStatus("WAITING");
       setGameUrl("");
       updateGameUrl();
       firePopup({
         title: `遊戲已結束!`,
       });
-      fetch(getRoomInfoEndpoint(roomId)).then(initializeRoom);
+      mutateRoom?.();
     });
 
     socket.on(SOCKET_EVENT.ROOM_CLOSED, () => {
@@ -138,6 +116,15 @@ export default function Room() {
         onConfirm: () => replace("/"),
       });
     });
+
+    return () => {
+      socket.off(SOCKET_EVENT.USER_JOINED);
+      socket.off(SOCKET_EVENT.USER_LEFT);
+      socket.off(SOCKET_EVENT.HOST_CHANGED);
+      socket.off(SOCKET_EVENT.GAME_STARTED);
+      socket.off(SOCKET_EVENT.GAME_ENDED);
+      socket.off(SOCKET_EVENT.ROOM_CLOSED);
+    };
   }, [
     token,
     socket,
@@ -145,22 +132,18 @@ export default function Room() {
     roomId,
     updateRoomId,
     updateGameUrl,
-    addPlayer,
-    removePlayer,
-    updateUserReadyStatus,
-    updateHost,
-    updateRoomStatus,
     replace,
     firePopup,
-    fetch,
-    initializeRoom,
+    authentication,
+    mutateRoom,
+    setToken,
   ]);
 
-  // Event: kick user
-  async function handleClickKick(user: User) {
+  async function handleClickKick(user: Player) {
     const handleKickUser = async () => {
       try {
-        await fetch(kickUser({ roomId, userId: user.id }));
+        await kickPlayerMutation.trigger();
+        mutateRoom?.();
       } catch (err) {
         firePopup({ title: `error!` });
       }
@@ -173,11 +156,10 @@ export default function Room() {
     });
   }
 
-  // Event: close room
   function handleClickClose() {
     const handleCloseRoom = async () => {
       try {
-        await fetch(closeRoom(roomId));
+        await closeRoomMutation.trigger();
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -187,17 +169,16 @@ export default function Room() {
     };
 
     firePopup({
-      title: `確定要將房間關閉？`,
+      title: "確定要將房間關閉嗎？",
       showCancelButton: true,
       onConfirm: handleCloseRoom,
     });
   }
 
-  // Event: leave room
   const handleLeave = () => {
     const leave = async () => {
       try {
-        await fetch(leaveRoom(roomId));
+        await leaveRoomMutation.trigger();
         replace("/rooms");
         updateRoomId();
         updateGameUrl();
@@ -207,9 +188,7 @@ export default function Room() {
     };
 
     firePopup({
-      title: isHost
-        ? `當您離開房間後，房主的位子將會自動移交給其他成員，若房間內沒有成員則會自動關閉房間，是否確定要離開房間？`
-        : `是否確定要離開房間？`,
+      title: gameUrl ? "確定離開遊戲嗎？" : "確定離開房間嗎？",
       showCancelButton: true,
       onConfirm: leave,
     });
@@ -218,20 +197,20 @@ export default function Room() {
   const handleStart = async () => {
     try {
       if (!token) return;
-      const allReady = roomInfo.players.every((player) => player.isReady);
-      if (!allReady) return firePopup({ title: "尚有玩家未準備就緒" });
-      await fetch(startGame(roomId));
+      await startGameMutation.trigger();
     } catch (err) {
       firePopup({ title: `error!` });
     }
   };
 
-  useEffect(() => {
-    if (!player?.isReady && roomId && isFirstReady.current) {
-      fetch(playerReady(roomId));
-      isFirstReady.current = false;
-    }
-  }, [player?.isReady, roomId, fetch, isFirstReady]);
+  // 如果房間數據還在加載，顯示加載狀態
+  if (!roomInfo) {
+    return (
+      <section className="px-4 flex items-center justify-center h-[calc(100dvh-104px)]">
+        <div>加載中...</div>
+      </section>
+    );
+  }
 
   return (
     <section className="px-4">
@@ -239,6 +218,7 @@ export default function Room() {
         <GameWindow
           className="h-[calc(100dvh-104px)] w-full"
           gameUrl={gameUrl}
+          onLeaveGame={handleLeave}
         />
       ) : (
         <>
@@ -289,7 +269,7 @@ export default function Room() {
       <Popup />
     </section>
   );
-}
+};
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -297,6 +277,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
+
+export default RoomDetailPage;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

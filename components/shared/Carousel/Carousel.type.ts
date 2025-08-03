@@ -1,7 +1,9 @@
 import { Dispatch, FC, Key, PropsWithChildren } from "react";
 import { IconName } from "@/components/shared/Icon";
 
-export type TItem = Record<string, unknown> & { id: Key };
+export interface TItem {
+  id: Key;
+}
 
 export type CarouselItemProps<Item extends TItem> = Item & {
   showIndex: number;
@@ -17,7 +19,6 @@ export interface ICarouselContext<Item extends TItem = TItem> {
 
 export interface CarouselProps<Item extends TItem = TItem> {
   items: ICarouselContext<Item>["items"];
-  maxWidth?: number;
   Component: ICarouselContext<Item>["Component"];
   renderKey?: ICarouselContext<Item>["renderKey"];
 }

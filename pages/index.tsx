@@ -1,13 +1,16 @@
-import type { GameType } from "@/requests/games";
-
-import { GetStaticProps } from "next";
+import type { GetStaticProps, NextPage } from "next";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
+import { useState } from "react";
 import Carousel from "@/components/shared/Carousel";
 import Tabs, { TabItemType } from "@/components/shared/Tabs";
 import { CarouselItemProps } from "@/components/shared/Carousel/Carousel.type";
-import { GameCardDetailed, GameCardSimple, useGameList } from "@/features/game";
+import { GameCardDetailed, GameCardSimple } from "@/features/game";
 import { GameRoomActions } from "@/features/room";
+import {
+  useFindGameRegistrations,
+  type GameRegistrationViewModel,
+} from "@/services/api";
 
 enum TabKey {
   HOT = "hot",
@@ -21,7 +24,7 @@ function CarouselCard({
   showIndex,
   index,
   ...gameProps
-}: Readonly<CarouselItemProps<GameType>>) {
+}: Readonly<CarouselItemProps<GameRegistrationViewModel>>) {
   return (
     <GameCardDetailed {...gameProps}>
       <GameRoomActions tabIndex={index === showIndex ? 0 : -1} {...gameProps} />
@@ -30,14 +33,14 @@ function CarouselCard({
 }
 
 function TabPaneContent({ tabKey }: Readonly<TabItemType<TabKey>>) {
-  const gameList = useGameList();
+  const { data: gameList } = useFindGameRegistrations();
 
   if ([TabKey.HOT, TabKey.NEW].includes(tabKey)) {
     const data =
       tabKey === TabKey.HOT
         ? gameList
         : gameList
-            .concat()
+            ?.concat()
             .sort(
               (a, b) =>
                 new Date(b.createdOn).getTime() -
@@ -46,7 +49,7 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<TabKey>>) {
 
     return (
       <ul className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
-        {data.map((game) => (
+        {data?.map((game) => (
           <li key={game.id}>
             <GameCardSimple {...game}>
               <GameRoomActions {...game} />
@@ -60,8 +63,9 @@ function TabPaneContent({ tabKey }: Readonly<TabItemType<TabKey>>) {
   return <div className="mt-6">實作中...</div>;
 }
 
-export default function Home() {
-  const gameList = useGameList();
+const HomePage: NextPage = () => {
+  const { t } = useTranslation();
+  const { data: games = [], isLoading } = useFindGameRegistrations();
 
   const tabs: TabItemType<TabKey>[] = [
     { tabKey: TabKey.HOT, label: "熱門遊戲" },
@@ -74,14 +78,16 @@ export default function Home() {
   return (
     <div className="max-w-[1036px] mx-auto px-6">
       <div>
-        <Carousel items={gameList} Component={CarouselCard} />
+        <Carousel items={games || []} Component={CarouselCard} />
       </div>
       <div className="mt-6">
         <Tabs tabs={tabs} renderTabPaneContent={TabPaneContent} />
       </div>
     </div>
   );
-}
+};
+
+export default HomePage;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

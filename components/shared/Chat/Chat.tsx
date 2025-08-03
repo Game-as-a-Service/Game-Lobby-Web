@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Icon from "@/components/shared/Icon";
 import { cn } from "@/lib/utils";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth";
 import ChatHeader, { ChatTab } from "./ChatHeader";
 import ChatMessages from "./ChatMessages";
 import ChatFriendList, { FriendType, getTargetUser } from "./ChatFriendList";

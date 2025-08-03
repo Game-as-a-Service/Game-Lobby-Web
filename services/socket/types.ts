@@ -7,7 +7,42 @@
  */
 
 import { Socket } from "socket.io-client";
-import { SOCKET_EVENT } from "@/contexts/SocketContext";
+import { SOCKET_EVENT } from "@/contexts/socket";
+
+/**
+ * Socket event data types
+ */
+export interface PlayerJoinData {
+  user: {
+    id: string;
+    nickname: string;
+  };
+}
+
+export interface PlayerLeaveData {
+  user: {
+    id: string;
+    nickname: string;
+  };
+}
+
+export interface GameStartedData {
+  gameUrl: string;
+}
+
+export interface ChatMessageData {
+  id: string;
+  message: string;
+  user: {
+    id: string;
+    nickname: string;
+  };
+  timestamp: string;
+}
+
+export interface GameEndedData {
+  reason?: string;
+}
 
 /**
  * Base interface for all socket services
@@ -71,28 +106,22 @@ export interface IRoomSocketService
   leaveRoom(): void;
 
   /**
-   * Set the player's ready status
-   * @param isReady Whether the player is ready
-   */
-  setReady(isReady: boolean): void;
-
-  /**
    * Register a handler for player joined events
    * @param handler The callback handler
    */
-  onPlayerJoin(handler: (data: any) => void): void;
+  onPlayerJoin(handler: (data: PlayerJoinData) => void): void;
 
   /**
    * Register a handler for player left events
    * @param handler The callback handler
    */
-  onPlayerLeave(handler: (data: any) => void): void;
+  onPlayerLeave(handler: (data: PlayerLeaveData) => void): void;
 
   /**
    * Register a handler for game started events
    * @param handler The callback handler
    */
-  onGameStarted(handler: (data: any) => void): void;
+  onGameStarted(handler: (data: GameStartedData) => void): void;
 }
 
 /**
@@ -122,7 +151,7 @@ export interface IChatSocketService
    * Register a handler for new message events
    * @param handler The callback handler
    */
-  onMessage(handler: (data: any) => void): void;
+  onMessage(handler: (data: ChatMessageData) => void): void;
 }
 
 /**
@@ -135,13 +164,13 @@ export interface IGameSocketService
    * Register a handler for game started events
    * @param handler The callback handler
    */
-  onGameStarted(handler: (data: any) => void): void;
+  onGameStarted(handler: (data: GameStartedData) => void): void;
 
   /**
    * Register a handler for game ended events
    * @param handler The callback handler
    */
-  onGameEnded(handler: (data: any) => void): void;
+  onGameEnded(handler: (data: GameEndedData) => void): void;
 
   /**
    * Register a handler for custom game-specific events
@@ -157,7 +186,6 @@ export interface IGameSocketService
 export interface Player {
   id: string;
   name: string;
-  isReady: boolean;
   isHost: boolean;
 }
 
@@ -216,5 +244,5 @@ export interface GameEndedPayload {
 export interface SocketErrorResponse {
   code: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }

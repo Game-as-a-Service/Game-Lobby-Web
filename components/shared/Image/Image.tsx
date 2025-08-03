@@ -21,6 +21,7 @@ function Image({
     }
     onError?.(e);
   };
+
   return (
     <picture>
       <img

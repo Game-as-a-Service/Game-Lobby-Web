@@ -1,10 +1,14 @@
 import { PropsWithChildren } from "react";
 
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
-import { GameType } from "@/requests/games";
+import { GameRegistrationViewModel as GameRegistration } from "@/services/api";
 import Image from "@/components/shared/Image";
 
-function GameCardSimple({ children, img, name }: PropsWithChildren<GameType>) {
+function GameCardSimple({
+  children,
+  img,
+  name,
+}: PropsWithChildren<GameRegistration>) {
   return (
     <div className="group">
       <div className="relative aspect-game-cover flex items-end justify-end">

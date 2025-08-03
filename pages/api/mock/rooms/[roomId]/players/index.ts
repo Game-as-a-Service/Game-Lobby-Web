@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { wait } from "@/lib/utils";
 import { mock_rooms } from "@/mocks/room";
-import { RoomType } from "@/requests/rooms";
-
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,9 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { roomId } = req.query;
-    const data = mock_rooms(RoomType.WAITING).find(
-      (room) => room.id === roomId
-    );
+    const data = mock_rooms("WAITING").find((room) => room.id === roomId);
 
     await wait(800);
 

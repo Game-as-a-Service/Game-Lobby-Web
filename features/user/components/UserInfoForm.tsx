@@ -1,30 +1,29 @@
 import { useState, FormEvent, useRef } from "react";
-import { AxiosError } from "axios";
 
 import Button from "@/components/shared/Button";
 import Input from "@/components/shared/Input";
-import useRequest from "@/hooks/useRequest";
-import { UserInfo, putUserinfoEndpoint } from "@/requests/users";
+import { useUpdateUser } from "@/contexts/auth/useAuth";
+import type { GetUserViewModel as User } from "@/services/api";
 import { useToast } from "@/components/shared/Toast";
-import useAuth from "@/hooks/context/useAuth";
+import { useAuth } from "@/contexts/auth/useAuth";
 
 interface UserInfoFormProps {
-  userInfo: UserInfo;
+  userInfo: User;
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-type UserInfoFormErrors = Partial<Record<keyof UserInfo, string>>;
+type UserInfoFormErrors = Partial<Record<keyof User, string>>;
 
 function UserInfoForm({
   userInfo,
   onSuccess,
   onCancel,
 }: Readonly<UserInfoFormProps>) {
-  const { fetch } = useRequest();
+  const { updateUser, isLoading: isMutating } = useUpdateUser();
   const toast = useToast();
   const { setCurrentUser } = useAuth();
-  const [data, setData] = useState<UserInfo>(userInfo);
+  const [data, setData] = useState<User>(userInfo);
   const [errors, setErrors] = useState<UserInfoFormErrors>({});
   const nicknameInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,20 +35,17 @@ function UserInfoForm({
     }
 
     try {
-      const result = await fetch(
-        putUserinfoEndpoint({
-          ...data,
-          nickname: data.nickname.trim(),
-        }),
-        { toast: { show: false } }
-      );
+      const result = await updateUser({
+        nickname: data.nickname.trim(),
+      });
       toast({ state: "success", children: "修改成功" });
       setCurrentUser(result);
       onSuccess();
-    } catch (error) {
-      if (error instanceof AxiosError) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const message = error.message || "請求失敗";
         toast(
-          { state: "error", children: error.response?.data.message },
+          { state: "error", children: message },
           {
             position: "bottom-left",
           }
@@ -109,10 +105,11 @@ function UserInfoForm({
           variant="secondary"
           onClick={onCancel}
           className="w-36 py-2.5"
+          disabled={isMutating}
         >
           取消修改
         </Button>
-        <Button type="submit" className="w-36 py-2.5">
+        <Button type="submit" className="w-36 py-2.5" disabled={isMutating}>
           儲存修改
         </Button>
       </footer>

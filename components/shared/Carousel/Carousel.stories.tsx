@@ -2,14 +2,17 @@ import { useEffect } from "react";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import Carousel from "./Carousel";
+import type { TItem } from "./Carousel.type";
 
-const Card = (props: any) => (
+type CardProps = { name: string } & TItem;
+
+const Card = (props: CardProps) => (
   <div className="text-white mx-12 px-12 py-8 border border-white rounded-md text-8xl font-mono">
     {props.name}
   </div>
 );
 
-const meta: Meta<typeof Carousel> = {
+const meta: Meta<typeof Carousel<CardProps>> = {
   title: "Data Display/Carousel",
   component: Carousel,
   tags: ["autodocs"],
@@ -19,7 +22,7 @@ const meta: Meta<typeof Carousel> = {
 
       useEffect(() => {
         const handleResize = () => {
-          setArgs({ maxWidth: window.innerWidth - 60 });
+          setArgs({});
         };
 
         handleResize();

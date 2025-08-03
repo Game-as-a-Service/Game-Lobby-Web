@@ -6,7 +6,7 @@ import Avatar from "./index";
 // bypass the optimization on images
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => {
+  default: (props: { src: string; [key: string]: unknown }) => {
     const { src, ...rest } = props;
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return <img src={src} {...rest} />;
