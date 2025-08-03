@@ -11,6 +11,7 @@ import getAppLayout from "@/containers/layout/AppLayout";
 import { AuthProvider } from "@/contexts/auth";
 import { SocketProvider } from "@/contexts/socket";
 import { ChatroomProvider } from "@/contexts/chatroom";
+import { UIProvider } from "@/contexts/ui";
 import Startup from "@/containers/util/Startup";
 import SWRConfigProvider from "@/containers/util/SWRConfigProvider";
 import { Env, getEnv } from "@/lib/env";
@@ -43,9 +44,11 @@ function App({ Component, pageProps }: AppWithProps) {
           <SWRConfigProvider>
             <SocketProvider>
               <ChatroomProvider>
-                <Startup isAnonymous={isAnonymous}>
-                  {getLayout(<Component {...pageProps} />)}
-                </Startup>
+                <UIProvider>
+                  <Startup isAnonymous={isAnonymous}>
+                    {getLayout(<Component {...pageProps} />)}
+                  </Startup>
+                </UIProvider>
               </ChatroomProvider>
             </SocketProvider>
           </SWRConfigProvider>

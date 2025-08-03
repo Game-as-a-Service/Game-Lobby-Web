@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/shared/Icon";
 import useAutoReset from "@/hooks/useAutoReset";
 import { cn } from "@/lib/utils";
+import { useUI } from "@/contexts/ui";
 
 type GameWindowProps = {
   className?: string;
   gameUrl: string;
-  onShowUI?: () => void;
-  onShowChat?: () => void;
-  onFullScreen?: () => void;
   onReportQuestion?: () => void;
   onLeaveGame?: () => void;
 };
@@ -16,9 +14,6 @@ type GameWindowProps = {
 const GameWindow = ({
   className,
   gameUrl,
-  onShowUI,
-  onShowChat,
-  onFullScreen,
   onReportQuestion,
   onLeaveGame,
 }: Readonly<GameWindowProps>) => {
@@ -30,21 +25,37 @@ const GameWindow = ({
   );
   const toolBarRef = useRef<HTMLDivElement>(null);
 
+  const stopPropagation =
+    (callback: () => void) => (event?: React.MouseEvent) => {
+      event?.stopPropagation();
+      callback();
+    };
+
+  const {
+    isUIVisible,
+    isChatVisible,
+    isFullscreen,
+    toggleUI,
+    toggleChat,
+    toggleFullscreen,
+    resetUI,
+  } = useUI();
+
   const buttons = [
     {
       icon: "ShowUi",
-      label: "顯示UI",
-      onClick: onShowUI,
+      label: isUIVisible ? "隱藏UI" : "顯示UI",
+      onClick: stopPropagation(toggleUI),
     },
     {
       icon: "ShowChat",
-      label: "顯示聊天室",
-      onClick: onShowChat,
+      label: isChatVisible ? "隱藏聊天室" : "顯示聊天室",
+      onClick: stopPropagation(toggleChat),
     },
     {
       icon: "FullScreen",
-      label: "視窗全螢幕",
-      onClick: onFullScreen,
+      label: isFullscreen ? "視窗模式" : "全螢幕模式",
+      onClick: stopPropagation(toggleFullscreen),
     },
     {
       icon: "ReportQuestion",
@@ -98,6 +109,10 @@ const GameWindow = ({
       setIsShowToolBar(true);
     }
   }, [setIsShowToolBar, isExtendToolBar]);
+
+  useEffect(() => {
+    return () => resetUI();
+  }, [resetUI]);
 
   return (
     <div className="relative">
