@@ -123,9 +123,12 @@ const GameWindow = ({
 
       {/* Backdrop - 只在工具列展開時顯示 */}
       {isExtendToolBar && (
-        <div
-          className="absolute inset-0"
+        <button
+          className="absolute inset-0 bg-transparent border-none cursor-default"
           onClick={() => setIsExtendToolBar(false)}
+          onKeyDown={(e) => handleKeyDown(e, () => setIsExtendToolBar(false))}
+          tabIndex={0}
+          aria-label="關閉工具列"
         />
       )}
 
@@ -148,6 +151,10 @@ const GameWindow = ({
         )}
         onMouseMove={handleShowToolBar}
         onClick={() => setIsExtendToolBar(true)}
+        onKeyDown={(e) => handleKeyDown(e, () => setIsExtendToolBar(true))}
+        tabIndex={isExtendToolBar ? -1 : 0}
+        role={isExtendToolBar ? "toolbar" : "button"}
+        aria-label={isExtendToolBar ? "遊戲工具列" : "展開工具列"}
       >
         <div
           className={cn(
