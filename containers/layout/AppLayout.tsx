@@ -114,7 +114,7 @@ function AppLayout({ children }: React.PropsWithChildren) {
         <div className="shrink-0 w-18">
           <Sidebar className="fixed top-20 bottom-6 z-30" />
         </div>
-        <main className="grow pb-4 overflow-x-hidden">
+        <main className="grow pb-4">
           {isSearchBarVisible && (
             <div className="flex justify-center mb-6">
               <SearchBar

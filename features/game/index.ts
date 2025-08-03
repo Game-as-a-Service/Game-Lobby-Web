@@ -1,1 +1,1 @@
-export { GameCardDetailed, GameCardSimple } from "./components";
+export * from "./components";

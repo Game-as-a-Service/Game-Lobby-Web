@@ -1,1 +1,1 @@
-export { UserCard, UserInfoForm } from "./components";
+export * from "./components";

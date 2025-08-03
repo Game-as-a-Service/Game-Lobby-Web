@@ -1,6 +1,1 @@
-export {
-  CreateRoomForm,
-  GameRoomActions,
-  JoinLockRoomForm,
-  RoomCard,
-} from "./components";
+export * from "./components";

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import gameDefaultCoverImg from "@/public/images/game-default-cover.png";
-import GameWindow from "@/components/rooms/GameWindow";
+import { GameWindow } from "@/features/game";
 import RoomUserCardList from "@/components/rooms/RoomUserCardList";
 import RoomButtonGroup from "@/components/rooms/RoomButtonGroup";
 import Button from "@/components/shared/Button";
@@ -169,7 +169,7 @@ const RoomDetailPage: NextPage = () => {
     };
 
     firePopup({
-      title: `確定要將房間關閉？`,
+      title: "確定要將房間關閉嗎？",
       showCancelButton: true,
       onConfirm: handleCloseRoom,
     });
@@ -188,9 +188,7 @@ const RoomDetailPage: NextPage = () => {
     };
 
     firePopup({
-      title: isHost
-        ? `當您離開房間後，房主的位子將會自動移交給其他成員，若房間內沒有成員則會自動關閉房間，是否確定要離開房間？`
-        : `是否確定要離開房間？`,
+      title: gameUrl ? "確定離開遊戲嗎？" : "確定離開房間嗎？",
       showCancelButton: true,
       onConfirm: leave,
     });
@@ -220,6 +218,7 @@ const RoomDetailPage: NextPage = () => {
         <GameWindow
           className="h-[calc(100dvh-104px)] w-full"
           gameUrl={gameUrl}
+          onLeaveGame={handleLeave}
         />
       ) : (
         <>
