@@ -35,7 +35,7 @@
   "dependencies": {
     "@svgr/webpack": "8.1.0",
     "clsx": "1.2.1",
-    "http-proxy-middleware": "2.0.9",
+    "http-proxy-middleware": "3.0.5",
     "i18next": "23.7.6",
     "js-cookie": "3.0.5",
     "next": "14.2.32",
